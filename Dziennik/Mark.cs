@@ -22,6 +22,13 @@ namespace Dziennik
             set { m_addDate = value; OnPropertyChanged("AddDate"); }
         }
 
+        private DateTime m_lastChangeDate;
+        public DateTime LastChangeDate
+        {
+            get { return m_lastChangeDate; }
+            set { m_lastChangeDate = value; OnPropertyChanged("LastChangeDate"); }
+        }
+
         //private int m_weight;
         //public int Weight
         //{

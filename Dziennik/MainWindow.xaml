@@ -1,38 +1,38 @@
 ﻿<Window x:Class="Dziennik.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
+        xmlns:my="clr-namespace:Dziennik.WPFControls"
+        Title="MainWindow" Height="350" Width="900">
     <Grid>
-        <DataGrid ItemsSource="{Binding Students}"  AutoGenerateColumns="False" Margin="37,41,45,54">
+        <DataGrid ItemsSource="{Binding Students}"
+                  CanUserAddRows="False"
+                  CanUserSortColumns="False"
+                  SelectionMode="Single"
+                  IsReadOnly="True"
+                  AutoGenerateColumns="False"
+                  Margin="37,41,45,54">
             <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Imię" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Nazwisko" Binding="{Binding Surname}"/>
                 <DataGridHyperlinkColumn Header="Email" Binding="{Binding Email}"/>
-                <DataGridTemplateColumn Header="Oceny">
+                <DataGridTemplateColumn Header="Oceny (1)">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="20"/>
-                                </Grid.ColumnDefinitions>
-                                <ListBox Grid.Column="0" ItemsSource="{Binding Marks}">
-                                    <ListBox.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <StackPanel Orientation="Horizontal" Visibility="Visible"/>
-                                        </ItemsPanelTemplate>
-                                    </ListBox.ItemsPanel>
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Value}"/>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-                                <Button Grid.Column="1" Content="+"/>
-                            </Grid>
+                            <my:MarksControl MarksSource="{Binding MarksFirst}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Średnia (1)" Binding="{Binding AverageMarkFirst}"/>
+                <DataGridTemplateColumn Header="Oceny (2)">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <my:MarksControl MarksSource="{Binding MarksSecond}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Średnia (2)" Binding="{Binding AverageMarkSecond}"/>
+                <DataGridTextColumn Header="Średnia (roczna)" Binding="{Binding AverageMarkAll}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
