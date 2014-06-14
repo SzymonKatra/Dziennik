@@ -23,6 +23,7 @@ namespace Dziennik
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = new MainViewModel();
         }
     }
 }
