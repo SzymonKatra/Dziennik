@@ -1,7 +1,10 @@
 ﻿<Window x:Class="Dziennik.MainWindow"
+        Name="root"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:my="clr-namespace:Dziennik.WPFControls"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
+        xmlns:c="clr-namespace:Dziennik.CommandUtils"
         Title="MainWindow" Height="350" Width="900">
     <Grid>
         <DataGrid ItemsSource="{Binding Students}"
@@ -19,7 +22,16 @@
                 <DataGridTemplateColumn Header="Oceny (1)">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <my:MarksControl MarksSource="{Binding MarksFirst}"/>
+                            <my:MarksControl MarksSource="{Binding MarksFirst}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="AddMark">
+                                        <c:EventToCommand Command="{Binding DataContext.AddMarkCommand, ElementName=root}" CommandParametr="{Binding}"/>
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="EditMark">
+                                        <c:EventToCommand Command="{Binding DataContext.EditMarkCommand, ElementName=root}" PassEventArgs="True"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </my:MarksControl>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

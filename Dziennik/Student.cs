@@ -5,11 +5,65 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace Dziennik
 {
     public class Student : ObservableObject
     {
+        public Student()
+        {
+            m_marksFirst.CollectionChanged += m_marksFirst_CollectionChanged;
+            m_marksSecond.CollectionChanged += m_marksSecond_CollectionChanged;
+        }
+
+        private void m_marksFirst_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            SubscribeMarksIfNeed(e, MarkPropertyFirstChanged);
+            RaiseOnChangedMarkFirst();
+        }
+        private void MarkPropertyFirstChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Value")
+            {
+                RaiseOnChangedMarkFirst();
+            }
+        }
+
+        private void m_marksSecond_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            SubscribeMarksIfNeed(e, MarkPropertySecondChanged);
+            RaiseOnChangedMarkSecond();
+        }
+        private void MarkPropertySecondChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Value")
+            {
+                RaiseOnChangedMarkSecond();
+            }
+        }
+
+        private void SubscribeMarksIfNeed(NotifyCollectionChangedEventArgs e, PropertyChangedEventHandler handler)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (Mark x in e.NewItems)
+                {
+                    x.PropertyChanged += handler;
+                }
+            }
+        }
+        private void RaiseOnChangedMarkFirst()
+        {
+            OnPropertyChanged("AverageMarkFirst");
+            OnPropertyChanged("AverageMarkAll");
+        }
+        private void RaiseOnChangedMarkSecond()
+        {
+            OnPropertyChanged("AverageMarkSecond");
+            OnPropertyChanged("AverageMarkAll");
+        }
+
         private int m_id;
         public int Id
         {

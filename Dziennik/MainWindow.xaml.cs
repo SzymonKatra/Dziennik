@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Dziennik.WPFControls;
 
 namespace Dziennik
 {
@@ -23,7 +24,15 @@ namespace Dziennik
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new MainViewModel();
+            m_viewModel = new MainViewModel();
+            this.DataContext = m_viewModel;
         }
+
+        private MainViewModel m_viewModel;
+        public MainViewModel ViewModel
+        {
+            get { return m_viewModel; }
+        }
+        
     }
 }
