@@ -14,8 +14,8 @@ namespace Dziennik
     {
         public MainViewModel()
         {
-            m_addMarkCommand = new RelayCommand<Student>(AddMark, (x) => { return true; });
-            m_editMarkCommand = new RelayCommand<EditMarkEventArgs>(EditMark, (x) => { return true; });
+            m_addMarkCommand = new RelayCommand<object>(AddMark, (x) => { return true; });
+            m_editMarkCommand = new RelayCommand<object>(EditMark, (x) => { return true; });
 
             Student s;
 
@@ -65,24 +65,37 @@ namespace Dziennik
             get { return m_students; }
         }
 
-        private RelayCommand<Student> m_addMarkCommand;
+        private Student m_selectedStudent;
+        public Student SelectedStudent
+        {
+            get { return m_selectedStudent; }
+            set { m_selectedStudent = value; OnPropertyChanged("SelectedStudent"); }
+        }
+
+        private Mark m_selectedMark;
+        public Mark SelectedMark
+        {
+            get { return m_selectedMark; }
+            set { m_selectedMark = value; OnPropertyChanged("SelectedMark"); }
+        }
+
+        private RelayCommand<object> m_addMarkCommand;
         public ICommand AddMarkCommand
         {
             get { return m_addMarkCommand; }
         }
-        private RelayCommand<EditMarkEventArgs> m_editMarkCommand;
+        private RelayCommand<object> m_editMarkCommand;
         public ICommand EditMarkCommand
         {
             get { return m_editMarkCommand; }
         }
 
-        public void AddMark(Student context)
+        public void AddMark(object e)
         {
             Console.WriteLine("add mark ");
         }
-        public void EditMark(EditMarkEventArgs e)
+        public void EditMark(object e)
         {
-            Console.WriteLine(e.Handled);
         }
     }
 }

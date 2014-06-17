@@ -43,11 +43,18 @@ namespace Dziennik.WPFControls
             AddHandler(TextBlock.MouseLeftButtonDownEvent, new MouseButtonEventHandler(TextBlock_MouseLeftButtonDown), true); //because adding handler via xaml doesn't catch double click
         }
 
-        public static readonly DependencyProperty MarksSourceProperty = DependencyProperty.Register("MarksSource", typeof(ObservableCollection<Mark>), typeof(MarksControl), new FrameworkPropertyMetadata(null));
+        public static readonly DependencyProperty MarksSourceProperty = DependencyProperty.Register("MarksSource", typeof(ObservableCollection<Mark>), typeof(MarksControl), new PropertyMetadata(null));
         public ObservableCollection<Mark> MarksSource
         {
             get { return (ObservableCollection<Mark>)GetValue(MarksSourceProperty); }
             set { SetValue(MarksSourceProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedMarkProperty = DependencyProperty.Register("SelectedMark", typeof(Mark), typeof(MarksControl), new PropertyMetadata(null));
+        public Mark SelectedMark
+        {
+            get { return (Mark)GetValue(SelectedMarkProperty); }
+            set { SetValue(SelectedMarkProperty, value); }
         }
 
         //public static readonly DependencyProperty CommandAddMarkProperty = DependencyProperty.Register("CommandAddMark", typeof(ICommand), typeof(MarksControl), new FrameworkPropertyMetadata(null));
@@ -86,6 +93,11 @@ namespace Dziennik.WPFControls
             }
 
             e.Handled = true;
+        }
+
+        private void listBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            ((ListBox)sender).SelectedItem = null;
         }
     }
 }

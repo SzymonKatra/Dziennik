@@ -59,16 +59,28 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CommandUtils\RelayCommand.cs" />
+    <Compile Include="Dialogs\EditMarkWindow.xaml.cs">
+      <DependentUpon>EditMarkWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EventArgs.cs" />
     <Compile Include="CommandUtils\EventToCommand.cs" />
     <Compile Include="Mark.cs" />
+    <Compile Include="Model\Semester.cs" />
+    <Compile Include="ViewModel\MarkViewModel.cs" />
+    <Compile Include="Model\Mark.cs" />
+    <Compile Include="Model\Student.cs" />
     <Compile Include="ObservableObject.cs" />
     <Compile Include="Student.cs" />
     <Compile Include="MainViewModel.cs" />
-    <Compile Include="ViewEvent.cs" />
+    <Compile Include="ViewModel\SemesterViewModel.cs" />
+    <Compile Include="ViewModel\StudentViewModel.cs" />
     <Compile Include="WPFControls\MarksControl.xaml.cs">
       <DependentUpon>MarksControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="Dialogs\EditMarkWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

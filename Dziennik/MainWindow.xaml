@@ -13,7 +13,8 @@
                   SelectionMode="Single"
                   IsReadOnly="True"
                   AutoGenerateColumns="False"
-                  Margin="37,41,45,54">
+                  Margin="37,41,45,54"
+                  SelectedItem="{Binding SelectedStudent, Mode=TwoWay}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Imię" Binding="{Binding Name}"/>
@@ -22,13 +23,13 @@
                 <DataGridTemplateColumn Header="Oceny (1)">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <my:MarksControl MarksSource="{Binding MarksFirst}">
+                            <my:MarksControl MarksSource="{Binding MarksFirst}" SelectedMark="{Binding DataContext.SelectedMark, ElementName=root, Mode=TwoWay}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="AddMark">
-                                        <c:EventToCommand Command="{Binding DataContext.AddMarkCommand, ElementName=root}" CommandParametr="{Binding}"/>
+                                        <c:EventToCommand Command="{Binding DataContext.AddMarkCommand, ElementName=root}" HandleRouted="HandleAfter"/>
                                     </i:EventTrigger>
                                     <i:EventTrigger EventName="EditMark">
-                                        <c:EventToCommand Command="{Binding DataContext.EditMarkCommand, ElementName=root}" PassEventArgs="True"/>
+                                        <c:EventToCommand Command="{Binding DataContext.EditMarkCommand, ElementName=root}" HandleRouted="HandleAfter"/>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </my:MarksControl>

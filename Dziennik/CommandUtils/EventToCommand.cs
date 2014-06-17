@@ -89,9 +89,9 @@ namespace Dziennik.CommandUtils
             set { SetValue(ToggleIsEnabledProperty, value); }
         }
 
-        public static DependencyProperty HandleRoutedProperty = DependencyProperty.Register("HandleRouted", typeof(HowHandleRouted), typeof(EventToCommand), new PropertyMetadata(HowHandleRouted.HandleAfter));
+        public static DependencyProperty HandleRoutedProperty = DependencyProperty.Register("HandleRouted", typeof(HowHandleRouted), typeof(EventToCommand), new PropertyMetadata(HowHandleRouted.DontHandle));
         /// <summary>
-        /// Default HowHandleRouted.HandleAfter
+        /// Default HowHandleRouted.DontHandle
         /// </summary>
         public HowHandleRouted HandleRouted
         {

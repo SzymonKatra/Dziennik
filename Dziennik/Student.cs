@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 
-namespace Dziennik
+namespace Dziennik.x
 {
     public class Student : ObservableObject
     {
