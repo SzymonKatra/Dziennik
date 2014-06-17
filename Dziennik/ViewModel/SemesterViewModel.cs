@@ -58,30 +58,36 @@ namespace Dziennik.ViewModel
                     break;
 
                 case NotifyCollectionChangedAction.Move:
+                    if (e.OldItems == null || e.OldItems.Count < 1) return;
+                    MarkViewModel movedMvm = (MarkViewModel)e.OldItems[0];
+                    m_model.Marks.RemoveAt(e.OldStartingIndex);
+                    m_model.Marks.Insert(e.NewStartingIndex, movedMvm.Model);
                     break;
 
                 case NotifyCollectionChangedAction.Remove:
                     if (e.OldItems == null) return;
-                    int removeIndex = e.OldStartingIndex;
-                    if (removeIndex < 0)
+                    if (e.OldStartingIndex >= 0) m_model.Marks.RemoveAt(e.OldStartingIndex); else
                     {
                         foreach (MarkViewModel mvm in e.OldItems) m_model.Marks.Remove(mvm.Model);
-                    }
-                    else
-                    {
-                        foreach(MarkViewModel mvm in e.OldItems)
-                        {
-                        }
                     }
                     break;
 
                 case NotifyCollectionChangedAction.Replace:
-                    for (int i = 0; i < e.OldItems.Count; i++)
+                    if (e.OldItems == null || e.NewItems == null || e.NewItems.Count < 1) return;
+                    if (e.OldStartingIndex >= 0) m_model.Marks[e.OldStartingIndex] = ((MarkViewModel)e.NewItems[0]).Model; else
                     {
+                        for (int i = 0; i < e.OldStartingIndex; i++)
+                        {
+                            MarkViewModel oldMvm = (MarkViewModel)e.OldItems[i];
+                            MarkViewModel newMvm = (MarkViewModel)e.NewItems[i];
+                            int index = m_model.Marks.IndexOf(oldMvm.Model);
+                            if (index >= 0) m_model.Marks[index] = newMvm.Model;
+                        }
                     }
                     break;
 
                 case NotifyCollectionChangedAction.Reset:
+                    m_model.Marks.Clear();
                     break;
             }
         }
