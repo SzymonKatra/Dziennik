@@ -23,7 +23,7 @@
                 <DataGridTemplateColumn Header="Oceny (1)">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <my:MarksControl MarksSource="{Binding MarksFirst}" SelectedMark="{Binding DataContext.SelectedMark, ElementName=root, Mode=TwoWay}">
+                            <my:MarksControl MarksSource="{Binding FirstSemester.Marks}" SelectedMark="{Binding DataContext.SelectedMark, ElementName=root, Mode=TwoWay}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="AddMark">
                                         <c:EventToCommand Command="{Binding DataContext.AddMarkCommand, ElementName=root}" HandleRouted="HandleAfter"/>
@@ -40,7 +40,7 @@
                 <DataGridTemplateColumn Header="Oceny (2)">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <my:MarksControl MarksSource="{Binding MarksSecond}"/>
+                            <my:MarksControl MarksSource="{Binding SecondSemester.Marks}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

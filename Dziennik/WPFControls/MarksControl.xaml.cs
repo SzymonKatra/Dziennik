@@ -12,19 +12,20 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Dziennik.ViewModel;
 
 namespace Dziennik.WPFControls
 {
     public class EditMarkEventArgs : RoutedEventArgs
     {
-        private Mark m_value;
-        public Mark Value
+        private MarkViewModel m_value;
+        public MarkViewModel Value
         {
             get { return m_value; }
             set { m_value = value; }
         }
 
-        public EditMarkEventArgs(Mark value)
+        public EditMarkEventArgs(MarkViewModel value)
             : base(MarksControl.EditMarkEvent)
         {
             m_value = value;
@@ -43,17 +44,17 @@ namespace Dziennik.WPFControls
             AddHandler(TextBlock.MouseLeftButtonDownEvent, new MouseButtonEventHandler(TextBlock_MouseLeftButtonDown), true); //because adding handler via xaml doesn't catch double click
         }
 
-        public static readonly DependencyProperty MarksSourceProperty = DependencyProperty.Register("MarksSource", typeof(ObservableCollection<Mark>), typeof(MarksControl), new PropertyMetadata(null));
-        public ObservableCollection<Mark> MarksSource
+        public static readonly DependencyProperty MarksSourceProperty = DependencyProperty.Register("MarksSource", typeof(ObservableCollection<MarkViewModel>), typeof(MarksControl), new PropertyMetadata(null));
+        public ObservableCollection<MarkViewModel> MarksSource
         {
-            get { return (ObservableCollection<Mark>)GetValue(MarksSourceProperty); }
+            get { return (ObservableCollection<MarkViewModel>)GetValue(MarksSourceProperty); }
             set { SetValue(MarksSourceProperty, value); }
         }
 
-        public static readonly DependencyProperty SelectedMarkProperty = DependencyProperty.Register("SelectedMark", typeof(Mark), typeof(MarksControl), new PropertyMetadata(null));
-        public Mark SelectedMark
+        public static readonly DependencyProperty SelectedMarkProperty = DependencyProperty.Register("SelectedMark", typeof(MarkViewModel), typeof(MarksControl), new PropertyMetadata(null));
+        public MarkViewModel SelectedMark
         {
-            get { return (Mark)GetValue(SelectedMarkProperty); }
+            get { return (MarkViewModel)GetValue(SelectedMarkProperty); }
             set { SetValue(SelectedMarkProperty, value); }
         }
 
@@ -86,9 +87,9 @@ namespace Dziennik.WPFControls
         {
             if (e.ClickCount == 2)
             {
-                if (listBox.SelectedItem is Mark)
+                if (listBox.SelectedItem is MarkViewModel)
                 {
-                    RaiseEvent(new EditMarkEventArgs((Mark)listBox.SelectedItem));
+                    RaiseEvent(new EditMarkEventArgs((MarkViewModel)listBox.SelectedItem));
                 }
             }
 

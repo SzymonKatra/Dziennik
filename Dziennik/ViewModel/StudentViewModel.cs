@@ -15,6 +15,9 @@ namespace Dziennik.ViewModel
         public StudentViewModel(Student student)
         {
             m_model = student;
+
+            m_firstSemester = new SemesterViewModel(m_model.FirstSemester);
+            m_secondSemester = new SemesterViewModel(m_model.SecondSemester);
         }
 
         private Student m_model;
@@ -43,17 +46,17 @@ namespace Dziennik.ViewModel
             get { return m_model.Email; }
             set { m_model.Email = value; OnPropertyChanged("Email"); }
         }
-
-        private ObservableCollection<MarkViewModel> m_firstMarks = new ObservableCollection<MarkViewModel>();
-        public ObservableCollection<MarkViewModel> FirstMarks
+        private SemesterViewModel m_firstSemester;
+        public SemesterViewModel FirstSemester
         {
-            get { return m_firstMarks; }
+            get { return m_firstSemester; }
+            set { m_firstSemester = value; m_model.FirstSemester = value.Model; OnPropertyChanged("FirstSemester"); }
         }
-
-        private ObservableCollection<MarkViewModel> m_secondMarks = new ObservableCollection<MarkViewModel>();
-        public ObservableCollection<MarkViewModel> SecondMarks
+        private SemesterViewModel m_secondSemester;
+        public SemesterViewModel SecondSemester
         {
-            get { return m_secondMarks; }
+            get { return m_secondSemester; }
+            set { m_secondSemester = value; m_model.FirstSemester = value.Model; OnPropertyChanged("SecondSemester"); }
         }
 
         public decimal YearEndingMark

@@ -6,7 +6,7 @@ using Dziennik.Model;
 
 namespace Dziennik.ViewModel
 {
-    public class MarkViewModel : ObservableObject
+    public class MarkViewModel : ObservableObject, IViewModelExposable<Mark>
     {
         public MarkViewModel()
             : this(new Mark())

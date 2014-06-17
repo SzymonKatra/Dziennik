@@ -64,13 +64,13 @@
     </Compile>
     <Compile Include="EventArgs.cs" />
     <Compile Include="CommandUtils\EventToCommand.cs" />
-    <Compile Include="Mark.cs" />
+    <Compile Include="IViewModelExposable.cs" />
     <Compile Include="Model\Semester.cs" />
+    <Compile Include="SynchronizedObservableCollection.cs" />
     <Compile Include="ViewModel\MarkViewModel.cs" />
     <Compile Include="Model\Mark.cs" />
     <Compile Include="Model\Student.cs" />
     <Compile Include="ObservableObject.cs" />
-    <Compile Include="Student.cs" />
     <Compile Include="MainViewModel.cs" />
     <Compile Include="ViewModel\SemesterViewModel.cs" />
     <Compile Include="ViewModel\StudentViewModel.cs" />
