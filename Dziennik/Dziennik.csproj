@@ -66,7 +66,9 @@
     <Compile Include="CommandUtils\EventToCommand.cs" />
     <Compile Include="IViewModelExposable.cs" />
     <Compile Include="Model\Semester.cs" />
+    <Compile Include="PerItemObservableCollection.cs" />
     <Compile Include="SynchronizedObservableCollection.cs" />
+    <Compile Include="SynchronizedPerItemObservableCollection.cs" />
     <Compile Include="ViewModel\MarkViewModel.cs" />
     <Compile Include="Model\Mark.cs" />
     <Compile Include="Model\Student.cs" />

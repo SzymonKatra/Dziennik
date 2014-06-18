@@ -7,7 +7,7 @@ using Dziennik.Model;
 
 namespace Dziennik.ViewModel
 {
-    public class SemesterViewModel : ObservableObject
+    public class SemesterViewModel : ObservableObject, IViewModelExposable<Semester>
     {
         public SemesterViewModel()
             : this(new Semester())
@@ -30,7 +30,7 @@ namespace Dziennik.ViewModel
         public SynchronizedObservableCollection<MarkViewModel, Mark> Marks
         {
             get { return m_marks; }
-            //set { m_marks = value; OnPropertyChanged("Marks"); }
+            set { m_marks = value; m_model.Marks = value.ModelCollection; OnPropertyChanged("Marks"); }
         }
         public decimal EndingMark
         {

@@ -11,6 +11,7 @@ namespace Dziennik.Model
         public List<Mark> Marks
         {
             get { return m_marks; }
+            set { m_marks = value; }
         }
 
         private decimal m_endingMark;

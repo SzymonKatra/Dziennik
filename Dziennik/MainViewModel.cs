@@ -94,6 +94,14 @@ namespace Dziennik
         public void AddMark(object e)
         {
             Console.WriteLine("add mark ");
+            //var mark0 = SelectedStudent.FirstSemester.Marks[0];
+            //SelectedStudent.FirstSemester.Marks[0] = SelectedStudent.FirstSemester.Marks[1];
+            //SelectedStudent.FirstSemester.Marks[1] = mark0;
+            SelectedStudent.FirstSemester.Marks = new SynchronizedObservableCollection<MarkViewModel, Model.Mark>(new List<Model.Mark>(), (m) => { return new MarkViewModel(m); });
+            SelectedStudent.FirstSemester.Marks.Add(new MarkViewModel() { Value = 5M });
+            SelectedStudent.FirstSemester.Marks.Add(new MarkViewModel() { Value = 2.5M });
+            SelectedStudent.FirstSemester.Marks.Add(new MarkViewModel() { Value = 6M });
+            SelectedStudent.FirstSemester.Marks.Add(new MarkViewModel() { Value = 1M });
         }
         public void EditMark(object e)
         {

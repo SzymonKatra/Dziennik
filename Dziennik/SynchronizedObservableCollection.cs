@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 namespace Dziennik
 {
@@ -11,39 +12,74 @@ namespace Dziennik
     /// </summary>
     /// <typeparam name="T">ViewModel type</typeparam>
     /// <typeparam name="M">Model type</typeparam>
-    public class SynchronizedObservableCollection<VM, M> : ObservableCollection<VM> where VM : IViewModelExposable<M>
+    public class SynchronizedObservableCollection<VM, M> : SynchronizedObservableCollection<VM, M, System.Collections.Generic.List<M>>
+                                                           where VM : IViewModelExposable<M>
+    {
+        public SynchronizedObservableCollection(System.Collections.Generic.List<M> modelCollection, Func<M, VM> createViewModelFunc)
+            : base(modelCollection, createViewModelFunc)
+        {
+        }
+    }
+
+    /// <summary>
+    /// ObservableCollection which is synchronised with Model collection
+    /// </summary>
+    /// <typeparam name="T">ViewModel type</typeparam>
+    /// <typeparam name="M">Model type</typeparam>
+    /// <typeparam name="MC">Model collection</typeparam>
+    public class SynchronizedObservableCollection<VM, M, MC> : ObservableCollection<VM>
+                                                               where VM : IViewModelExposable<M>
+                                                               where MC : System.Collections.Generic.IList<M>
     {
         protected SynchronizedObservableCollection()
         {
         }
-        public SynchronizedObservableCollection(System.Collections.Generic.IList<M> modelCollection, Func<M, VM> createViewModelFunc)
+        public SynchronizedObservableCollection(MC modelCollection, Func<M, VM> createViewModelFunc)
         {
-            m_modelCollection = modelCollection;
+            //m_modelCollection = modelCollection;
 
-            if (m_modelCollection.Count > 0)
-            {
-                foreach(M model in m_modelCollection)
-                {
-                    this.Add(createViewModelFunc(model));
-                }
-            }
+            //if (m_modelCollection.Count > 0)
+            //{
+            //    foreach(M model in m_modelCollection)
+            //    {
+            //        this.Add(createViewModelFunc(model));
+            //    }
+            //}
+            ConstructorImpl(this, modelCollection, createViewModelFunc);
         }
-        public static SynchronizedObservableCollection<VM, M> CreateFastCopy(System.Collections.Generic.IList<M> modelCollection, Action<System.Collections.Generic.IList<M>, ObservableCollection<VM>> modelToViewModelCopyAction)
+        public static SynchronizedObservableCollection<VM, M, MC> CreateFastCopy(MC modelCollection, Action<MC, ObservableCollection<VM>> modelToViewModelCopyAction)
         {
-            SynchronizedObservableCollection<VM, M> result = new SynchronizedObservableCollection<VM, M>();
+            SynchronizedObservableCollection<VM, M, MC> result = new SynchronizedObservableCollection<VM, M, MC>();
 
-            result.m_modelCollection = modelCollection;
-
-            if (result.m_modelCollection.Count > 0) modelToViewModelCopyAction(result.m_modelCollection, result);
+            CreateFastCopyImpl(result, modelCollection, modelToViewModelCopyAction);
+            //result.m_modelCollection = modelCollection;
+            //if (result.m_modelCollection.Count > 0) modelToViewModelCopyAction(result.m_modelCollection, result);
 
             return result;
         }
 
-        private System.Collections.Generic.IList<M> m_modelCollection;
-        public System.Collections.Generic.IList<M> ModelCollection
+        protected static void ConstructorImpl(SynchronizedObservableCollection<VM, M, MC> target, MC modelCollection, Func<M, VM> createViewModelFunc)
+        {
+            target.m_modelCollection = modelCollection;
+
+            if (target.m_modelCollection.Count > 0)
+            {
+                foreach (M model in target.m_modelCollection)
+                {
+                    target.Add(createViewModelFunc(model));
+                }
+            }
+        }
+        protected static void CreateFastCopyImpl(SynchronizedObservableCollection<VM, M, MC> target, MC modelCollection, Action<MC, ObservableCollection<VM>> modelToViewModelCopyAction)
+        {
+            target.m_modelCollection = modelCollection;
+            if (target.m_modelCollection.Count > 0) modelToViewModelCopyAction(target.m_modelCollection, target);
+        }
+
+        private MC m_modelCollection;
+        public MC ModelCollection
         {
             get { return m_modelCollection; }
-            protected set { m_modelCollection = value; }
         }
 
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
@@ -79,7 +115,7 @@ namespace Dziennik
         }
         protected virtual void OnMove(NotifyCollectionChangedEventArgs e)
         {
-            if (e.OldItems == null || e.OldStartingIndex < 1) return;
+            if (e.OldItems == null || e.OldItems.Count < 1) return;
             VM viewModelItem = (VM)e.OldItems[0];
             m_modelCollection.RemoveAt(e.OldStartingIndex);
             m_modelCollection.Insert(e.NewStartingIndex, viewModelItem.Model);
@@ -87,6 +123,7 @@ namespace Dziennik
         protected virtual void OnRemove(NotifyCollectionChangedEventArgs e)
         {
             if (e.OldItems == null) return;
+            Debug.Assert(e.OldStartingIndex >= 0 && e.OldItems.Count > 1, "SynchronizedObservableCollection.OnRemove - OldStartingIndex valid while OldItems.Count > 1");
             if (e.OldStartingIndex >= 0)
             {
                 m_modelCollection.RemoveAt(e.OldStartingIndex);
@@ -102,6 +139,7 @@ namespace Dziennik
         protected virtual void OnReplace(NotifyCollectionChangedEventArgs e)
         {
             if (e.OldItems == null || e.NewItems == null || e.NewItems.Count < 1) return;
+            Debug.Assert(e.OldStartingIndex >= 0 && e.OldItems.Count > 1, "SynchronizedObservableCollection.OnReplace - OldStartingIndex valid while NewItems.Count > 1");
             if (e.OldStartingIndex >= 0)
             {
                 m_modelCollection[e.OldStartingIndex] = ((VM)e.NewItems[0]).Model;
@@ -122,7 +160,15 @@ namespace Dziennik
         }
         protected virtual void OnReset(NotifyCollectionChangedEventArgs e)
         {
+            //Reset != Clear. Reset == treat it as new list
+
             m_modelCollection.Clear();
+
+            if (this.Count > 0)
+            {
+                Debug.Assert(this.Count > 0, "SynchronizedObservableCollection.OnReset - Count > 0 while resetting collection");
+                foreach (VM viewModelItem in this) m_modelCollection.Add(viewModelItem.Model);
+            }
         }
     }
 }
