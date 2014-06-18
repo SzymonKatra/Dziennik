@@ -123,7 +123,6 @@ namespace Dziennik
         protected virtual void OnRemove(NotifyCollectionChangedEventArgs e)
         {
             if (e.OldItems == null) return;
-            Debug.Assert(e.OldStartingIndex >= 0 && e.OldItems.Count > 1, "SynchronizedObservableCollection.OnRemove - OldStartingIndex valid while OldItems.Count > 1");
             if (e.OldStartingIndex >= 0)
             {
                 m_modelCollection.RemoveAt(e.OldStartingIndex);
@@ -139,7 +138,7 @@ namespace Dziennik
         protected virtual void OnReplace(NotifyCollectionChangedEventArgs e)
         {
             if (e.OldItems == null || e.NewItems == null || e.NewItems.Count < 1) return;
-            Debug.Assert(e.OldStartingIndex >= 0 && e.OldItems.Count > 1, "SynchronizedObservableCollection.OnReplace - OldStartingIndex valid while NewItems.Count > 1");
+
             if (e.OldStartingIndex >= 0)
             {
                 m_modelCollection[e.OldStartingIndex] = ((VM)e.NewItems[0]).Model;

@@ -36,7 +36,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Średnia (1)" Binding="{Binding AverageMarkFirst}"/>
+                <DataGridTextColumn Header="Średnia (1)" Binding="{Binding FirstSemester.AverageMark}"/>
                 <DataGridTemplateColumn Header="Oceny (2)">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -44,7 +44,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Średnia (2)" Binding="{Binding AverageMarkSecond}"/>
+                <DataGridTextColumn Header="Średnia (2)" Binding="{Binding SecondSemester.AverageMark}"/>
                 <DataGridTextColumn Header="Średnia (roczna)" Binding="{Binding AverageMarkAll}"/>
             </DataGrid.Columns>
         </DataGrid>

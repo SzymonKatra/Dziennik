@@ -18,6 +18,9 @@ namespace Dziennik.ViewModel
 
             m_firstSemester = new SemesterViewModel(m_model.FirstSemester);
             m_secondSemester = new SemesterViewModel(m_model.SecondSemester);
+
+            m_firstSemester.MarksChanged += SemesterMarksChanged;
+            m_secondSemester.MarksChanged += SemesterMarksChanged;
         }
 
         private Student m_model;
@@ -50,19 +53,58 @@ namespace Dziennik.ViewModel
         public SemesterViewModel FirstSemester
         {
             get { return m_firstSemester; }
-            set { m_firstSemester = value; m_model.FirstSemester = value.Model; OnPropertyChanged("FirstSemester"); }
+            set
+            {
+                m_firstSemester.MarksChanged -= SemesterMarksChanged;
+
+                m_firstSemester = value;
+
+                m_firstSemester.MarksChanged += SemesterMarksChanged;
+
+                m_model.FirstSemester = value.Model;
+                OnPropertyChanged("FirstSemester");
+            }
         }
         private SemesterViewModel m_secondSemester;
         public SemesterViewModel SecondSemester
         {
             get { return m_secondSemester; }
-            set { m_secondSemester = value; m_model.FirstSemester = value.Model; OnPropertyChanged("SecondSemester"); }
+            set
+            {
+                m_secondSemester.MarksChanged -= SemesterMarksChanged;
+
+                m_secondSemester = value;
+
+                m_secondSemester.MarksChanged += SemesterMarksChanged;
+
+                m_model.FirstSemester = value.Model;
+                OnPropertyChanged("SecondSemester");
+            }
         }
 
+        public decimal AverageMarkAll
+        {
+            get
+            {
+                if (m_firstSemester.Marks.Count + m_secondSemester.Marks.Count <= 0) return 0M;
+
+                decimal sum = 0M;
+
+                foreach (MarkViewModel item in m_firstSemester.Marks) sum += item.Value;
+                foreach (MarkViewModel item in m_secondSemester.Marks) sum += item.Value;
+
+                return decimal.Round(sum / (decimal)(m_firstSemester.Marks.Count + m_secondSemester.Marks.Count), 2);
+            }
+        }
         public decimal YearEndingMark
         {
             get { return m_model.YearEndingMark; }
             set { m_model.YearEndingMark = value; OnPropertyChanged("YearEndingMark"); }
+        }
+
+        private void SemesterMarksChanged(object sender, EventArgs e)
+        {
+            OnPropertyChanged("AverageMarkAll");
         }
     }
 }

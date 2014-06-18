@@ -28,6 +28,10 @@ namespace Dziennik
         }
     }
 
+    /// <summary>
+    /// Collection which can notify about changed propety of item in this collection via event in class
+    /// </summary>
+    /// <typeparam name="T">Type</typeparam>
     public class PerItemObservableCollection<T> : ObservableCollection<T>
                                                   where T : INotifyPropertyChanged
     {
@@ -56,15 +60,15 @@ namespace Dziennik
             base.OnCollectionChanged(e);
         }
 
+        private void item_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            OnItemPropertyInCollectionChanged(new ItemPropertyInCollectionChangedEventArgs<T>((T)sender, e));
+        }
+
         protected virtual void OnItemPropertyInCollectionChanged(ItemPropertyInCollectionChangedEventArgs<T> e)
         {
             EventHandler<ItemPropertyInCollectionChangedEventArgs<T>> handler = ItemPropertyInCollectionChanged;
             if (handler != null) handler(this, e);
-        }
-
-        private void item_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            OnItemPropertyInCollectionChanged(new ItemPropertyInCollectionChangedEventArgs<T>((T)sender, e));
         }
     }
 }

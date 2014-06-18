@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Dziennik.WPFControls;
 using Dziennik.CommandUtils;
 using Dziennik.ViewModel;
+using System.ComponentModel;
 
 namespace Dziennik
 {
@@ -97,7 +98,7 @@ namespace Dziennik
             //var mark0 = SelectedStudent.FirstSemester.Marks[0];
             //SelectedStudent.FirstSemester.Marks[0] = SelectedStudent.FirstSemester.Marks[1];
             //SelectedStudent.FirstSemester.Marks[1] = mark0;
-            SelectedStudent.FirstSemester.Marks = new SynchronizedObservableCollection<MarkViewModel, Model.Mark>(new List<Model.Mark>(), (m) => { return new MarkViewModel(m); });
+            SelectedStudent.FirstSemester.Marks = new SynchronizedPerItemObservableCollection<MarkViewModel, Model.Mark>(new List<Model.Mark>(), (m) => { return new MarkViewModel(m); });
             SelectedStudent.FirstSemester.Marks.Add(new MarkViewModel() { Value = 5M });
             SelectedStudent.FirstSemester.Marks.Add(new MarkViewModel() { Value = 2.5M });
             SelectedStudent.FirstSemester.Marks.Add(new MarkViewModel() { Value = 6M });
@@ -105,7 +106,8 @@ namespace Dziennik
         }
         public void EditMark(object e)
         {
-            SelectedStudent.FirstSemester.Marks.Remove(SelectedMark);
+            //SelectedStudent.FirstSemester.Marks.Remove(SelectedMark);
+            SelectedStudent.FirstSemester.Marks[1] = new MarkViewModel() { Value = 5 };
         }
     }
 }

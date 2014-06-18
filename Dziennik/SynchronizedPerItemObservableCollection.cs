@@ -7,6 +7,26 @@ using System.Text;
 
 namespace Dziennik
 {
+    /// <summary>
+    /// ObservableCollection which is synchronised with Model collection and can notify about changed property of item in this collection via event in class
+    /// </summary>
+    /// <typeparam name="T">ViewModel type</typeparam>
+    /// <typeparam name="M">Model type</typeparam>
+    public class SynchronizedPerItemObservableCollection<VM, M> : SynchronizedPerItemObservableCollection<VM, M, System.Collections.Generic.List<M>>
+                                                                  where VM : IViewModelExposable<M>, INotifyPropertyChanged
+    {
+        public SynchronizedPerItemObservableCollection(System.Collections.Generic.List<M> modelCollection, Func<M, VM> createViewModelFunc)
+            : base(modelCollection, createViewModelFunc)
+        {
+        }
+    }
+
+    /// <summary>
+    /// ObservableCollection which is synchronised with Model collection and can notify about changed property of item in this collection via event in class
+    /// </summary>
+    /// <typeparam name="T">ViewModel type</typeparam>
+    /// <typeparam name="M">Model type</typeparam>
+    /// <typeparam name="MC">Model collection</typeparam>
     public class SynchronizedPerItemObservableCollection<VM, M, MC> : SynchronizedObservableCollection<VM, M, MC>
                                                                       where VM : IViewModelExposable<M>, INotifyPropertyChanged
                                                                       where MC : System.Collections.Generic.IList<M>
@@ -53,15 +73,15 @@ namespace Dziennik
             base.OnCollectionChanged(e);
         }
 
+        private void item_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            OnItemPropertyInCollectionChanged(new ItemPropertyInCollectionChangedEventArgs<VM>((VM)sender, e));
+        }
+
         protected virtual void OnItemPropertyInCollectionChanged(ItemPropertyInCollectionChangedEventArgs<VM> e)
         {
             EventHandler<ItemPropertyInCollectionChangedEventArgs<VM>> handler = ItemPropertyInCollectionChanged;
             if (handler != null) handler(this, e);
-        }
-
-        private void item_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            OnItemPropertyInCollectionChanged(new ItemPropertyInCollectionChangedEventArgs<VM>((VM)sender, e));
         }
     }
 }
