@@ -13,8 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Dziennik.WPFControls;
+using Dziennik.WindowViewModel;
 
-namespace Dziennik
+namespace Dziennik.View
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -24,15 +25,21 @@ namespace Dziennik
         public MainWindow()
         {
             InitializeComponent();
+
             m_viewModel = new MainViewModel();
+            m_viewModel.EditMarkDialog += m_viewModel_EditMarkDialog;
+
             this.DataContext = m_viewModel;
         }
 
         private MainViewModel m_viewModel;
-        public MainViewModel ViewModel
+
+        private void m_viewModel_EditMarkDialog(object sender, WindowViewModel.EditMarkEventArgs e)
         {
-            get { return m_viewModel; }
+            EditMarkWindow editMarkWindow = new EditMarkWindow(e.Mark);
+            editMarkWindow.Owner = this;
+            editMarkWindow.ShowDialog();
+            e.Save = editMarkWindow.Result;
         }
-        
     }
 }

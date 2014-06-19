@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Dziennik.Model
 {
-    public class Student
+    public sealed class Student
     {
         private int m_id;
         public int Id

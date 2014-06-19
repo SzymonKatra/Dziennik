@@ -6,7 +6,7 @@ using Dziennik.Model;
 
 namespace Dziennik.ViewModel
 {
-    public class StudentViewModel : ObservableObject, IViewModelExposable<Student>
+    public sealed class StudentViewModel : ObservableObject, IViewModelExposable<Student>
     {
         public StudentViewModel()
             : this(new Student())
@@ -19,8 +19,8 @@ namespace Dziennik.ViewModel
             m_firstSemester = new SemesterViewModel(m_model.FirstSemester);
             m_secondSemester = new SemesterViewModel(m_model.SecondSemester);
 
-            m_firstSemester.MarksChanged += SemesterMarksChanged;
-            m_secondSemester.MarksChanged += SemesterMarksChanged;
+            SemesterSubscribe(m_firstSemester);
+            SemesterSubscribe(m_secondSemester);
         }
 
         private Student m_model;
@@ -55,11 +55,11 @@ namespace Dziennik.ViewModel
             get { return m_firstSemester; }
             set
             {
-                m_firstSemester.MarksChanged -= SemesterMarksChanged;
+                SemesterUnsubscribe(m_firstSemester);
 
                 m_firstSemester = value;
 
-                m_firstSemester.MarksChanged += SemesterMarksChanged;
+                SemesterSubscribe(m_firstSemester);
 
                 m_model.FirstSemester = value.Model;
                 OnPropertyChanged("FirstSemester");
@@ -71,11 +71,11 @@ namespace Dziennik.ViewModel
             get { return m_secondSemester; }
             set
             {
-                m_secondSemester.MarksChanged -= SemesterMarksChanged;
+                SemesterUnsubscribe(m_secondSemester);
 
                 m_secondSemester = value;
 
-                m_secondSemester.MarksChanged += SemesterMarksChanged;
+                SemesterSubscribe(m_secondSemester);
 
                 m_model.FirstSemester = value.Model;
                 OnPropertyChanged("SecondSemester");
@@ -93,7 +93,7 @@ namespace Dziennik.ViewModel
                 foreach (MarkViewModel item in m_firstSemester.Marks) sum += item.Value;
                 foreach (MarkViewModel item in m_secondSemester.Marks) sum += item.Value;
 
-                return decimal.Round(sum / (decimal)(m_firstSemester.Marks.Count + m_secondSemester.Marks.Count), 2);
+                return decimal.Round(sum / (decimal)(m_firstSemester.Marks.Count + m_secondSemester.Marks.Count), GlobalConfig.DecimalRoundingPoints);
             }
         }
         public decimal YearEndingMark
@@ -105,6 +105,15 @@ namespace Dziennik.ViewModel
         private void SemesterMarksChanged(object sender, EventArgs e)
         {
             OnPropertyChanged("AverageMarkAll");
+        }
+
+        private void SemesterSubscribe(SemesterViewModel semester)
+        {
+            semester.MarksChanged += SemesterMarksChanged;
+        }
+        private void SemesterUnsubscribe(SemesterViewModel semester)
+        {
+            semester.MarksChanged -= SemesterMarksChanged;
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Dziennik.Model
 {
-    public class Semester
+    public sealed class Semester
     {
         private List<Mark> m_marks = new List<Mark>();
         public List<Mark> Marks

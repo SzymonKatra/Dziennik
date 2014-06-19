@@ -6,6 +6,18 @@ using System.Windows.Input;
 
 namespace Dziennik.CommandUtils
 {
+    public class RelayCommand : RelayCommand<object>
+    {
+        public RelayCommand(Action<object> execute)
+            : base(execute)
+        {
+        }
+        public RelayCommand(Action<object> execute, Predicate<object> canExecute)
+            : base(execute, canExecute)
+        {
+        }
+    }
+
     public class RelayCommand<T> : ICommand
     {
         public RelayCommand(Action<T> execute)
@@ -25,7 +37,7 @@ namespace Dziennik.CommandUtils
 
         public bool CanExecute(object parameter)
         {
-            if (m_execute == null) return true;
+            if (m_canExecute == null) return true;
             if (parameter == null && typeof(T).IsValueType)
             {
                 return m_canExecute(default(T));

@@ -5,8 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d"
              d:DesignHeight="20" d:DesignWidth="100">
-    <UserControl.Resources>
-    </UserControl.Resources>
     <Grid DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}" HorizontalAlignment="Left">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -20,7 +18,7 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Value}" ToolTipService.ToolTip="{Binding Value}" ToolTipService.InitialShowDelay="1"/>
+                    <TextBlock Text="{Binding Value}" ToolTipService.ToolTip="{Binding ToolTipFormatted}" ToolTipService.InitialShowDelay="1"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

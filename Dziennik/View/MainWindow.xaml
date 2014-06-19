@@ -1,11 +1,13 @@
-﻿<Window x:Class="Dziennik.MainWindow"
+﻿<Window x:Class="Dziennik.View.MainWindow"
         Name="root"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:base="clr-namespace:Dziennik"
         xmlns:my="clr-namespace:Dziennik.WPFControls"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
         xmlns:c="clr-namespace:Dziennik.CommandUtils"
-        Title="MainWindow" Height="350" Width="900">
+        Title="MainWindow" Height="350" Width="900"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <DataGrid ItemsSource="{Binding Students}"
                   CanUserAddRows="False"
@@ -23,16 +25,7 @@
                 <DataGridTemplateColumn Header="Oceny (1)">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <my:MarksControl MarksSource="{Binding FirstSemester.Marks}" SelectedMark="{Binding DataContext.SelectedMark, ElementName=root, Mode=TwoWay}">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="AddMark">
-                                        <c:EventToCommand Command="{Binding DataContext.AddMarkCommand, ElementName=root}" HandleRouted="HandleAfter"/>
-                                    </i:EventTrigger>
-                                    <i:EventTrigger EventName="EditMark">
-                                        <c:EventToCommand Command="{Binding DataContext.EditMarkCommand, ElementName=root}" HandleRouted="HandleAfter"/>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </my:MarksControl>
+                            <base:BoundMarksControl MarksSource="{Binding FirstSemester.Marks}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -40,7 +33,7 @@
                 <DataGridTemplateColumn Header="Oceny (2)">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <my:MarksControl MarksSource="{Binding SecondSemester.Marks}"/>
+                            <base:BoundMarksControl MarksSource="{Binding SecondSemester.Marks}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

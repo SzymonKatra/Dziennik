@@ -7,7 +7,7 @@ using Dziennik.Model;
 
 namespace Dziennik.ViewModel
 {
-    public class SemesterViewModel : ObservableObject, IViewModelExposable<Semester>
+    public sealed class SemesterViewModel : ObservableObject, IViewModelExposable<Semester>
     {
         public SemesterViewModel()
             : this(new Semester())
@@ -18,8 +18,7 @@ namespace Dziennik.ViewModel
             m_model = semester;
 
             m_marks = new SynchronizedPerItemObservableCollection<MarkViewModel, Mark>(m_model.Marks, (m) => { return new MarkViewModel(m); });
-            m_marks.CollectionChanged += m_marks_CollectionChanged;
-            m_marks.ItemPropertyInCollectionChanged += m_marks_ItemPropertyInCollectionChanged;
+            MarksSubscribe();
         }
 
         private Semester m_model;
@@ -36,13 +35,11 @@ namespace Dziennik.ViewModel
             get { return m_marks; }
             set
             {
-                m_marks.CollectionChanged -= m_marks_CollectionChanged;
-                m_marks.ItemPropertyInCollectionChanged -= m_marks_ItemPropertyInCollectionChanged;
+                MarksUnsubscribe();
 
                 m_marks = value;
 
-                m_marks.CollectionChanged += m_marks_CollectionChanged;
-                m_marks.ItemPropertyInCollectionChanged += m_marks_ItemPropertyInCollectionChanged;
+                MarksSubscribe();
 
                 m_model.Marks = value.ModelCollection;
                 OnPropertyChanged("Marks");
@@ -58,7 +55,7 @@ namespace Dziennik.ViewModel
 
                 foreach (MarkViewModel item in m_marks) sum += item.Value;
 
-                return decimal.Round(sum / (decimal)m_marks.Count, 2);
+                return decimal.Round(sum / (decimal)m_marks.Count, GlobalConfig.DecimalRoundingPoints);
             }
         }
         public decimal EndingMark
@@ -81,10 +78,21 @@ namespace Dziennik.ViewModel
             OnMarksChanged(EventArgs.Empty);
         }
 
-        protected virtual void OnMarksChanged(EventArgs e)
+        private void OnMarksChanged(EventArgs e)
         {
             EventHandler handler = MarksChanged;
             if (handler != null) handler(this, e);
+        }
+
+        private void MarksSubscribe()
+        {
+            m_marks.CollectionChanged += m_marks_CollectionChanged;
+            m_marks.ItemPropertyInCollectionChanged += m_marks_ItemPropertyInCollectionChanged;
+        }
+        private void MarksUnsubscribe()
+        {
+            m_marks.CollectionChanged -= m_marks_CollectionChanged;
+            m_marks.ItemPropertyInCollectionChanged -= m_marks_ItemPropertyInCollectionChanged;
         }
     }
 }
