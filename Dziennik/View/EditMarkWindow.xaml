@@ -26,7 +26,7 @@
             <Button Grid.Column="1" Grid.Row="0" Content="Anuluj" Margin="10,5,10,5" Command="{Binding CancelCommand}"/>
         </Grid>
 
-        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Value, Mode=TwoWay}" Margin="10,5,10,5"/>
+        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding ValueInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Margin="10,5,10,5"/>
         <TextBox Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Description, Mode=TwoWay}" Margin="10,5,10,5"/>
     </Grid>
 </Window>

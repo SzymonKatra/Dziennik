@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using Dziennik.ViewModel;
 using Dziennik.CommandUtils;
+using System.ComponentModel;
+using System.Globalization;
 
 namespace Dziennik.WindowViewModel
 {
-    public sealed class EditMarkViewModel : ObservableObject
+    public sealed class EditMarkViewModel : ObservableObject, IDataErrorInfo
     {
         public EditMarkViewModel(MarkViewModel mark)
         {
@@ -15,6 +17,8 @@ namespace Dziennik.WindowViewModel
 
             m_value = m_mark.Value;
             m_description = m_mark.Description;
+
+            m_valueInput = m_value.ToString(CultureInfo.InvariantCulture);
 
             m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
@@ -33,6 +37,13 @@ namespace Dziennik.WindowViewModel
         {
             get { return m_value; }
             set { m_value = value; OnPropertyChanged("Value"); m_okCommand.RaiseCanExecuteChanged(); }
+        }
+        private bool m_valueInputValid = false;
+        private string m_valueInput;
+        public string ValueInput
+        {
+            get { return m_valueInput.ToString(); }
+            set { m_valueInput = value; OnPropertyChanged("ValueInput"); }
         }
 
         private string m_description;
@@ -65,12 +76,47 @@ namespace Dziennik.WindowViewModel
         }
         public bool CanOk(object e)
         {
-            return (m_value >= 1M && m_value <= 6M);
+            return (m_valueInputValid && m_value >= 1M && m_value <= 6M);
         }
         public void Cancel(object e)
         {
             m_result = false;
             GlobalConfig.Dialogs.CloseDialog(this);
+        }
+
+        public string Error
+        {
+            get { return string.Empty; }
+        }
+        public string this[string columnName]
+        {
+            get
+            {
+                switch(columnName)
+                {
+                    case "ValueInput": return ValidateValueInput();
+                }
+
+                return string.Empty;
+            }
+        }
+
+        private string ValidateValueInput()
+        {
+            decimal result;
+
+            if (!decimal.TryParse(m_valueInput, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out result))
+            {
+                m_valueInputValid = false;
+                m_okCommand.RaiseCanExecuteChanged();
+                return "Wprowadź poprawną liczbę, np. 4.5";
+            }
+
+            m_valueInputValid = true;
+            Value = result;
+            m_okCommand.RaiseCanExecuteChanged();
+
+            return string.Empty;
         }
     }
 }
