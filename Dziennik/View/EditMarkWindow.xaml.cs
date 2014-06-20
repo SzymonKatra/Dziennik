@@ -20,28 +20,17 @@ namespace Dziennik.View
     /// </summary>
     public partial class EditMarkWindow : Window
     {
-        public EditMarkWindow(MarkViewModel mark)
+        public EditMarkWindow(EditMarkViewModel viewModel)
         {
             InitializeComponent();
 
-            m_viewModel = new EditMarkViewModel(mark);
-            m_viewModel.DialogClose += m_viewModel_DialogClose;
+            m_viewModel = viewModel;
 
             this.DataContext = m_viewModel;
+
+            GlobalConfig.Dialogs.Register(this, m_viewModel);
         }
 
         private EditMarkViewModel m_viewModel;
-
-        private bool m_result;
-        public bool Result
-        {
-            get { return m_result; }
-        }
-
-        private void m_viewModel_DialogClose(object sender, EditMarkDialogCloseEventArgs e)
-        {
-            m_result = e.Save;
-            this.Close();
-        }
     }
 }

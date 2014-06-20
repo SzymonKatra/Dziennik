@@ -27,19 +27,12 @@ namespace Dziennik.View
             InitializeComponent();
 
             m_viewModel = new MainViewModel();
-            m_viewModel.EditMarkDialog += m_viewModel_EditMarkDialog;
 
             this.DataContext = m_viewModel;
+
+            GlobalConfig.Dialogs.Register(this, m_viewModel);
         }
 
         private MainViewModel m_viewModel;
-
-        private void m_viewModel_EditMarkDialog(object sender, WindowViewModel.EditMarkEventArgs e)
-        {
-            EditMarkWindow editMarkWindow = new EditMarkWindow(e.Mark);
-            editMarkWindow.Owner = this;
-            editMarkWindow.ShowDialog();
-            e.Save = editMarkWindow.Result;
-        }
     }
 }

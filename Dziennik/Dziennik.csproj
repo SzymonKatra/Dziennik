@@ -62,6 +62,7 @@
       <DependentUpon>BoundMarksControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="CommandUtils\RelayCommand.cs" />
+    <Compile Include="DialogService.cs" />
     <Compile Include="View\EditMarkWindow.xaml.cs">
       <DependentUpon>EditMarkWindow.xaml</DependentUpon>
     </Compile>

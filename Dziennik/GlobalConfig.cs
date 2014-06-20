@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
+using Dziennik.WindowViewModel;
+using Dziennik.View;
 
 namespace Dziennik
 {
@@ -9,5 +12,15 @@ namespace Dziennik
     {
         public static readonly int DecimalRoundingPoints = 2;
         public static readonly string DateTimeFormat = "dd.MM.yyyy HH:mm";
+
+        public static readonly DialogService Dialogs;
+
+        static GlobalConfig()
+        {
+            Dictionary<Type, Func<object, Window>> windowViewModelMappings = new Dictionary<Type, Func<object, Window>>();
+            windowViewModelMappings.Add(typeof(EditMarkViewModel), (vm) => { return new EditMarkWindow((EditMarkViewModel)vm); });
+
+            Dialogs = new DialogService(windowViewModelMappings);
+        }
     }
 }

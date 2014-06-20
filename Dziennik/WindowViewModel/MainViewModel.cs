@@ -12,28 +12,6 @@ using System.ComponentModel;
 
 namespace Dziennik.WindowViewModel
 {
-    public class EditMarkEventArgs : EventArgs
-    {
-        private MarkViewModel m_mark;
-        public MarkViewModel Mark
-        {
-            get { return m_mark; }
-            set { m_mark = value; }
-        }
-
-        private bool m_save;
-        public bool Save
-        {
-            get { return m_save; }
-            set { m_save = value; }
-        }
-
-        public EditMarkEventArgs(MarkViewModel mark)
-        {
-            m_mark = mark;
-        }
-    }
-
     public sealed class MainViewModel : ObservableObject
     {
         public MainViewModel()
@@ -115,14 +93,12 @@ namespace Dziennik.WindowViewModel
             get { return m_editMarkCommand; }
         }
 
-        public event EventHandler<EditMarkEventArgs> EditMarkDialog;
-
         public void AddMark(ObservableCollection<MarkViewModel> e)
         {
             MarkViewModel mark = new MarkViewModel();
-            EditMarkEventArgs eResult = new EditMarkEventArgs(mark);
-            OnEditMarkDialog(eResult);
-            if (eResult.Save)
+            EditMarkViewModel dialogViewModel = new EditMarkViewModel(mark);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+            if(dialogViewModel.Result)
             {
                 mark.AddDate = DateTime.Now;
                 e.Add(mark);
@@ -130,13 +106,7 @@ namespace Dziennik.WindowViewModel
         }
         public void EditMark(object e)
         {
-            OnEditMarkDialog(new EditMarkEventArgs(m_selectedMark));
-        }
-
-        private void OnEditMarkDialog(EditMarkEventArgs e)
-        {
-            EventHandler<EditMarkEventArgs> handler = EditMarkDialog;
-            if (handler != null) handler(this, e);
+            GlobalConfig.Dialogs.ShowDialog(this, new EditMarkViewModel(m_selectedMark));
         }
     }
 }
