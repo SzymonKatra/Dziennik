@@ -15,7 +15,13 @@ namespace Dziennik.WindowViewModel
     public sealed class MainViewModel : ObservableObject
     {
         public MainViewModel()
+            : this(new SchoolClassViewModel())
         {
+        }
+        public MainViewModel(SchoolClassViewModel viewModel)
+        {
+            m_viewModel = viewModel;
+
             m_addMarkCommand = new RelayCommand<ObservableCollection<MarkViewModel>>(AddMark);
             m_editMarkCommand = new RelayCommand<object>(EditMark);
 
@@ -28,7 +34,7 @@ namespace Dziennik.WindowViewModel
             s.Email = "eaaa";
             s.FirstSemester.Marks.Add(new MarkViewModel() { Value = 5M });
             s.FirstSemester.Marks.Add(new MarkViewModel() { Value = 3.5M });
-            m_students.Add(s);
+            viewModel.Students.Add(s);
 
             s = new StudentViewModel();
             s.Id = 1;
@@ -37,7 +43,7 @@ namespace Dziennik.WindowViewModel
             s.Email = "eccc";
             s.FirstSemester.Marks.Add(new MarkViewModel() { Value = 3M });
             s.SecondSemester.Marks.Add(new MarkViewModel() { Value = 2.5M });
-            m_students.Add(s);
+            viewModel.Students.Add(s);
 
             s = new StudentViewModel();
             s.Id = 4;
@@ -47,7 +53,7 @@ namespace Dziennik.WindowViewModel
             s.FirstSemester.Marks.Add(new MarkViewModel() { Value = 4M });
             s.SecondSemester.Marks.Add(new MarkViewModel() { Value = 4.5M });
             s.FirstSemester.Marks.Add(new MarkViewModel() { Value = 2.5M });
-            m_students.Add(s);
+            viewModel.Students.Add(s);
 
             s = new StudentViewModel();
             s.Id = 2;
@@ -57,15 +63,17 @@ namespace Dziennik.WindowViewModel
             s.FirstSemester.Marks.Add(new MarkViewModel() { Value = 1M });
             s.FirstSemester.Marks.Add(new MarkViewModel() { Value = 6M });
             s.SecondSemester.Marks.Add(new MarkViewModel() { Value = 6M });
-            m_students.Add(s);
+            viewModel.Students.Add(s);
 
-            m_students = new ObservableCollection<StudentViewModel>(m_students.OrderBy(x => x.Id));
+            viewModel.Students.ModelCollection.Sort((x, y) => { return x.Id.CompareTo(y.Id);});
+            viewModel.Students.ResynchronizeWithModel();
         }
 
-        private ObservableCollection<StudentViewModel> m_students = new ObservableCollection<StudentViewModel>();
-        public ObservableCollection<StudentViewModel> Students
+        private SchoolClassViewModel m_viewModel;
+        public SchoolClassViewModel ViewModel
         {
-            get { return m_students; }
+            get { return m_viewModel; }
+            set { m_viewModel = value; OnPropertyChanged("ViewModel"); }
         }
 
         private StudentViewModel m_selectedStudent;

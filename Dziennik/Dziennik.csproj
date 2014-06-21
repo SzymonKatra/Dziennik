@@ -58,11 +58,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BoundMarksControl.xaml.cs">
-      <DependentUpon>BoundMarksControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="CommandUtils\RelayCommand.cs" />
     <Compile Include="DialogService.cs" />
+    <Compile Include="Model\SchoolClass.cs" />
+    <Compile Include="ViewModel\SchoolClassViewModel.cs" />
     <Compile Include="View\EditMarkWindow.xaml.cs">
       <DependentUpon>EditMarkWindow.xaml</DependentUpon>
     </Compile>
@@ -85,10 +84,6 @@
     <Compile Include="WPFControls\MarksControl.xaml.cs">
       <DependentUpon>MarksControl.xaml</DependentUpon>
     </Compile>
-    <Page Include="BoundMarksControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\EditMarkWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

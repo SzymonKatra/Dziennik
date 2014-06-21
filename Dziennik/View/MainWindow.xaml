@@ -9,7 +9,7 @@
         Title="MainWindow" Height="350" Width="900"
         WindowStartupLocation="CenterScreen">
     <Grid>
-        <DataGrid ItemsSource="{Binding Students}"
+        <DataGrid ItemsSource="{Binding ViewModel.Students}"
                   CanUserAddRows="False"
                   CanUserSortColumns="False"
                   SelectionMode="Single"
@@ -25,7 +25,9 @@
                 <DataGridTemplateColumn Header="Oceny (1)">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <base:BoundMarksControl MarksSource="{Binding FirstSemester.Marks}"/>
+                            <my:MarksControl MarksSource="{Binding FirstSemester.Marks}" SelectedMark="{Binding DataContext.SelectedMark, ElementName=root, Mode=TwoWay}"
+                                             CommandAddMark="{Binding DataContext.AddMarkCommand, ElementName=root}" CommandParametrAddMark="{Binding FirstSemester.Marks}"
+                                             CommandEditMark="{Binding DataContext.EditMarkCommand, ElementName=root}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -33,7 +35,9 @@
                 <DataGridTemplateColumn Header="Oceny (2)">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <base:BoundMarksControl MarksSource="{Binding SecondSemester.Marks}"/>
+                            <my:MarksControl MarksSource="{Binding SecondSemester.Marks}" SelectedMark="{Binding DataContext.SelectedMark, ElementName=root, Mode=TwoWay}"
+                                             CommandAddMark="{Binding DataContext.AddMarkCommand, ElementName=root}" CommandParametrAddMark="{Binding SecondSemester.Marks}"
+                                             CommandEditMark="{Binding DataContext.EditMarkCommand, ElementName=root}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

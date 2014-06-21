@@ -8,7 +8,9 @@ using System.Text;
 namespace Dziennik
 {
     /// <summary>
-    /// ObservableCollection which is synchronised with Model collection and can notify about changed property of item in this collection via event in class
+    /// ObservableCollection which is synchronised with Model collection and can notify about changed property of item in this collection via event in class.
+    /// Remember that synchronization is only in one-way. Changes made in ViewModel appears in Model but not vice versa.
+    /// To synchronize ViewModel with Model use ResynchronizeWithModel method, but in general you should make changes only in ViewModel.
     /// </summary>
     /// <typeparam name="T">ViewModel type</typeparam>
     /// <typeparam name="M">Model type</typeparam>
@@ -22,7 +24,9 @@ namespace Dziennik
     }
 
     /// <summary>
-    /// ObservableCollection which is synchronised with Model collection and can notify about changed property of item in this collection via event in class
+    /// ObservableCollection which is synchronised with Model collection and can notify about changed property of item in this collection via event in class.
+    /// Remember that synchronization is only in one-way. Changes made in ViewModel appears in Model but not vice versa.
+    /// To synchronize ViewModel with Model use ResynchronizeWithModel method, but in general you should make changes only in ViewModel.
     /// </summary>
     /// <typeparam name="T">ViewModel type</typeparam>
     /// <typeparam name="M">Model type</typeparam>
