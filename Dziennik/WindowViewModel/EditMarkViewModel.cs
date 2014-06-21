@@ -76,7 +76,7 @@ namespace Dziennik.WindowViewModel
         }
         public bool CanOk(object e)
         {
-            return (m_valueInputValid && m_value >= 1M && m_value <= 6M);
+            return m_valueInputValid;
         }
         public void Cancel(object e)
         {
@@ -109,7 +109,14 @@ namespace Dziennik.WindowViewModel
             {
                 m_valueInputValid = false;
                 m_okCommand.RaiseCanExecuteChanged();
-                return "Wprowadź poprawną liczbę, np. 4.5";
+                return "Wprowadź poprawną liczbę. Oddziel liczby kropką (.)";
+            }
+
+            if(result <1M || result > 6M)
+            {
+                m_valueInputValid = false;
+                m_okCommand.RaiseCanExecuteChanged();
+                return "Wprowadź ocenę z zakresu <1; 6>";
             }
 
             m_valueInputValid = true;

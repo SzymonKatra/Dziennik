@@ -98,9 +98,9 @@ namespace Dziennik.WindowViewModel
             MarkViewModel mark = new MarkViewModel();
             EditMarkViewModel dialogViewModel = new EditMarkViewModel(mark);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
-            if(dialogViewModel.Result)
+            if (dialogViewModel.Result)
             {
-                mark.AddDate = DateTime.Now;
+                mark.AddDate = mark.LastChangeDate;
                 e.Add(mark);
             }
         }
