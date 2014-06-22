@@ -16,12 +16,6 @@
     </i:Interaction.Triggers>
     
     <DockPanel>
-        <StatusBar DockPanel.Dock="Bottom">
-            <StatusBarItem>
-                <TextBlock Text="{Binding CurrentStatus}"/>
-            </StatusBarItem>
-        </StatusBar>
-
         <TabControl DockPanel.Dock="Top" ItemsSource="{Binding OpenedSchoolClasses}">
             <TabControl.ItemTemplate>
                 <DataTemplate>

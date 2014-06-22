@@ -26,6 +26,7 @@ namespace Dziennik.Controls
             m_addMarkCommand = new RelayCommand<ObservableCollection<MarkViewModel>>(AddMark);
             m_editMarkCommand = new RelayCommand<ObservableCollection<MarkViewModel>>(EditMark);
             m_saveCommand = new RelayCommand(Save);
+            m_addStudentCommand = new RelayCommand(AddStudent);
             m_editStudentCommand = new RelayCommand(EditStudent);
 
             StudentViewModel s;
@@ -113,6 +114,12 @@ namespace Dziennik.Controls
             get { return m_saveCommand; }
         }
 
+        private RelayCommand m_addStudentCommand;
+        public ICommand AddStudentCommand
+        {
+            get { return m_addStudentCommand; }
+        }
+
         private RelayCommand m_editStudentCommand;
         public ICommand EditStudentCommand
         {
@@ -123,6 +130,7 @@ namespace Dziennik.Controls
         {
             MarkViewModel mark = new MarkViewModel();
             EditMarkViewModel dialogViewModel = new EditMarkViewModel(mark);
+            dialogViewModel.IsAddingMode = true;
             GlobalConfig.Dialogs.ShowDialog(m_dialogOwnerViewModel, dialogViewModel);
             if (dialogViewModel.Result == EditMarkViewModel.EditMarkResult.Ok)
             {
@@ -134,7 +142,7 @@ namespace Dziennik.Controls
         {
             EditMarkViewModel dialogViewModel = new EditMarkViewModel(m_selectedMark);
             GlobalConfig.Dialogs.ShowDialog(m_dialogOwnerViewModel, dialogViewModel);
-            if(dialogViewModel.Result == EditMarkViewModel.EditMarkResult.RemoveMark)
+            if (dialogViewModel.Result == EditMarkViewModel.EditMarkResult.RemoveMark)
             {
                 e.Remove(m_selectedMark);
             }
@@ -144,10 +152,40 @@ namespace Dziennik.Controls
             Console.WriteLine("SchoolClassControlViewModel.Save()");
             //TODO: saving
         }
+        private void AddStudent(object e)
+        {
+            StudentViewModel student = new StudentViewModel();
+            student.Id = m_viewModel.Students[m_viewModel.Students.Count - 1].Id + 1;
+
+            EditStudentViewModel dialogViewModel = new EditStudentViewModel(student);
+            dialogViewModel.IsAddingMode = true;
+            GlobalConfig.Dialogs.ShowDialog(m_dialogOwnerViewModel, dialogViewModel);
+
+            if (dialogViewModel.Result == EditStudentViewModel.EditStudentResult.Ok)
+            {
+                m_viewModel.Students.Add(student);
+                //m_viewModel.Students.Insert(student.Id, student);
+                //for (int i = student.Id + 1; i < m_viewModel.Students.Count; i++)
+                //{
+                //    m_viewModel.Students[i].Id++;
+                //}
+            }
+        }
         private void EditStudent(object e)
         {
             EditStudentViewModel dialogViewModel = new EditStudentViewModel(m_selectedStudent);
             GlobalConfig.Dialogs.ShowDialog(m_dialogOwnerViewModel, dialogViewModel);
+            if(dialogViewModel.Result == EditStudentViewModel.EditStudentResult.RemoveStudentCompletly)
+            {
+                int index = m_viewModel.Students.IndexOf(m_selectedStudent);
+                if (index < 0) return;
+                for (int i = index + 1; i < m_viewModel.Students.Count; i++)
+                {
+                    m_viewModel.Students[i].Id--;
+                }
+
+                m_viewModel.Students.RemoveAt(index);
+            }
         }
     }
 }

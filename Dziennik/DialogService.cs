@@ -29,6 +29,9 @@ namespace Dziennik
 
         public void Register(Window view, object viewModel, bool unregisterOnClose = true)
         {
+            if (m_registeredViews.ContainsKey(viewModel)) throw new ArgumentException("This ViewModel is already registered");
+            if (m_registeredViews.ContainsValue(view)) throw new ArgumentException("This View is already registered");
+
             m_registeredViews.Add(viewModel, view);
             if (unregisterOnClose) view.Closed += view_Closed;
         }

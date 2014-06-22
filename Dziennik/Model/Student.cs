@@ -35,6 +35,13 @@ namespace Dziennik.Model
             set { m_email = value; }
         }
 
+        private string m_additionalInformation;
+        public string AdditionalInformation
+        {
+            get { return m_additionalInformation; }
+            set { m_additionalInformation = value; }
+        }
+
         private Semester m_firstSemester = new Semester();
         public Semester FirstSemester
         {

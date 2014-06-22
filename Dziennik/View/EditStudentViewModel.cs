@@ -6,15 +6,25 @@ using Dziennik.ViewModel;
 using System.ComponentModel;
 using Dziennik.CommandUtils;
 using System.Windows.Input;
+using Dziennik.Controls;
 
 namespace Dziennik.View
 {
-    public class EditStudentViewModel : ObservableObject, IDataErrorInfo
+    public sealed class EditStudentViewModel : ObservableObject, IDataErrorInfo
     {
+        public enum EditStudentResult
+        {
+            Ok,
+            Cancel,
+            RemoveStudentCreateHole,
+            RemoveStudentCompletly,
+        }
+
         public EditStudentViewModel(StudentViewModel student)
         {
             m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
+            m_removeStudentCommand = new RelayCommand(RemoveStudent, CanRemoveStudent);
 
             m_student = student;
 
@@ -22,16 +32,24 @@ namespace Dziennik.View
             m_name = student.Name;
             m_surname = student.Surname;
             m_email = student.Email;
+            m_additionalInformation = student.AdditionalInformation;
 
             m_idInput = m_id.ToString();
         }
 
         private StudentViewModel m_student;
 
-        private bool m_result;
-        public bool Result
+        private EditStudentResult m_result;
+        public EditStudentResult Result
         {
             get { return m_result; }
+        }
+
+        private bool m_isAddingMode = false;
+        public bool IsAddingMode
+        {
+            get { return m_isAddingMode; }
+            set { m_isAddingMode = value; OnPropertyChanged("IsAddingMode"); m_removeStudentCommand.RaiseCanExecuteChanged(); }
         }
 
         private int m_id;
@@ -64,6 +82,13 @@ namespace Dziennik.View
             set { m_email = value; OnPropertyChanged("Email"); }
         }
 
+        private string m_additionalInformation;
+        public string AdditionalInformation
+        {
+            get { return m_additionalInformation; }
+            set { m_additionalInformation = value; OnPropertyChanged("AdditionalInformation"); }
+        }
+
         private RelayCommand m_okCommand;
         public ICommand OkCommand
         {
@@ -76,14 +101,29 @@ namespace Dziennik.View
             get { return m_cancelCommand; }
         }
 
+        private RelayCommand m_removeStudentCommand;
+        public ICommand RemoveStudentCommand
+        {
+            get { return m_removeStudentCommand; }
+        }
+
         private void Ok(object e)
         {
-            m_student.Id = m_id;
+            //if(m_isAddingMode && m_student.Id!=m_id)
+            //{
+            //    if(MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this),"Nr ucznia został ręcznie zmieniony na inny i prawdopodobnie nie będzie zachowana kolejność"+Environment.NewLine+"Jeśli ten sam numer będzie posiadał inny uczeń to wszyscy znajdujący się poniżej uczniowie dostaną numer o 1 wyższy"+Environment.NewLine+"Czy chcesz kontynuować?", "Dziennik", MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes)
+            //    {
+            //        return;
+            //    }
+            //}
+
+            //m_student.Id = m_id;
             m_student.Name = m_name;
             m_student.Surname = m_surname;
             m_student.Email = m_email;
+            m_student.AdditionalInformation = m_additionalInformation;
 
-            m_result = true;
+            m_result = EditStudentResult.Ok;
             GlobalConfig.Dialogs.CloseDialog(this);
         }
         private bool CanOk(object e)
@@ -92,8 +132,28 @@ namespace Dziennik.View
         }
         private void Cancel(object e)
         {
-            m_result = false;
+            m_result = EditStudentResult.Cancel;
             GlobalConfig.Dialogs.CloseDialog(this);
+        }
+        private void RemoveStudent(object e)
+        {
+            if(MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this),"Czy na pewno chcesz usunąć ucznia?"+Environment.NewLine+"Na liście powstanie luka","Dziennik",MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes)
+            {
+                return;
+            }
+
+            m_student.Name = "----------";
+            m_student.Surname = "----------";
+            m_student.Email = "----------";
+            m_student.FirstSemester.Marks.Clear();
+            m_student.SecondSemester.Marks.Clear();
+
+            m_result = EditStudentResult.RemoveStudentCreateHole;
+            GlobalConfig.Dialogs.CloseDialog(this);
+        }
+        private bool CanRemoveStudent(object e)
+        {
+            return !m_isAddingMode;
         }
 
         public string Error

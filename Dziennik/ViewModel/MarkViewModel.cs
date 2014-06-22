@@ -27,7 +27,26 @@ namespace Dziennik.ViewModel
         public decimal Value
         {
             get { return m_model.Value; }
-            set { m_model.Value = value; OnPropertyChanged("Value"); OnPropertyChanged("ToolTipFormatted"); }
+            set
+            {
+                m_model.Value = value;
+                OnPropertyChanged("Value");
+                OnPropertyChanged("IsValueValid");
+                OnPropertyChanged("DisplayedMark");
+                OnPropertyChanged("ToolTipFormatted");
+            }
+        }
+        public string Note
+        {
+            get { return m_model.Note; }
+            set
+            {
+                m_model.Note = value;
+                OnPropertyChanged("Note");
+                OnPropertyChanged("IsValueValid");
+                OnPropertyChanged("DisplayedMark");
+                OnPropertyChanged("ToolTipFormatted");
+            }
         }
         public DateTime AddDate
         {
@@ -45,16 +64,35 @@ namespace Dziennik.ViewModel
             set { m_model.Description = value; OnPropertyChanged("Description"); OnPropertyChanged("ToolTipFormatted"); }
         }
 
+        public bool IsValueValid
+        {
+            get
+            {
+                return string.IsNullOrWhiteSpace(Note);
+            }
+        }
+        public string DisplayedMark
+        {
+            get
+            {
+                if (IsValueValid)
+                {
+                    return this.Value.ToString(CultureInfo.InvariantCulture);
+                }
+                else return this.Note;
+            }
+        }
         public string ToolTipFormatted
         {
             get
             {
-                return string.Format("Ocena: {1}{0}Opis: {2}{0}Data dodania: {3}{0}Ostatnia zmiana: {4}",
+                return string.Format("{5}: {1}{0}Opis: {2}{0}Data dodania: {3}{0}Ostatnia zmiana: {4}",
                                      Environment.NewLine,
-                                     this.Value.ToString(CultureInfo.InvariantCulture),
+                                     this.DisplayedMark,
                                      this.Description,
                                      this.AddDate.ToString(GlobalConfig.DateTimeFormat),
-                                     this.LastChangeDate.ToString(GlobalConfig.DateTimeFormat));
+                                     this.LastChangeDate.ToString(GlobalConfig.DateTimeFormat),
+                                     (IsValueValid ? "Ocena" : "Uwaga"));
             }
         }
     }

@@ -31,13 +31,6 @@ namespace Dziennik.View
             set { m_openedSchoolClasses = value; OnPropertyChanged("OpenedSchoolClasses"); }
         }
 
-        private string m_currentStatus = "Gotowy";
-        public string CurrentStatus
-        {
-            get { return m_currentStatus; }
-            set { m_currentStatus = value; OnPropertyChanged("CurrentStatus"); }
-        }
-
         private RelayCommand m_saveAllCommand;
         public ICommand SaveAllCommand
         {

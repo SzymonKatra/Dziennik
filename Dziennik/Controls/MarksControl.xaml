@@ -18,7 +18,7 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Value}" ToolTipService.ToolTip="{Binding ToolTipFormatted}" ToolTipService.InitialShowDelay="1"/>
+                    <TextBlock Text="{Binding DisplayedMark}" ToolTipService.ToolTip="{Binding ToolTipFormatted}" ToolTipService.InitialShowDelay="1"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

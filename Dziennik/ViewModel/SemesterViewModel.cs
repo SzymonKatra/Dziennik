@@ -53,15 +53,20 @@ namespace Dziennik.ViewModel
 
                 decimal sum = 0M;
 
-                foreach (MarkViewModel item in m_marks) sum += item.Value;
+                foreach (MarkViewModel item in m_marks) if (item.IsValueValid) sum += item.Value;
 
-                return decimal.Round(sum / (decimal)m_marks.Count, GlobalConfig.DecimalRoundingPoints);
+                return decimal.Round(sum / (decimal)CountValidMarks(), GlobalConfig.DecimalRoundingPoints);
             }
         }
         public decimal EndingMark
         {
             get { return m_model.EndingMark; }
             set { m_model.EndingMark = value; OnPropertyChanged("EndingMark"); }
+        }
+
+        public int CountValidMarks()
+        {
+            return m_marks.Count((m) => { return m.IsValueValid; });
         }
 
         private void m_marks_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

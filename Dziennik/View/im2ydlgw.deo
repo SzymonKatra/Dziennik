@@ -82,7 +82,7 @@ namespace Dziennik.View
         public bool NoteSelected
         {
             get { return m_noteSelected; }
-            set { m_noteSelected = value; OnPropertyChanged("NoteSelected"); m_okCommand.RaiseCanExecuteChanged(); }
+            set { m_noteSelected = value; OnPropertyChanged("NoteSelected"); }
         }
 
         private RelayCommand m_okCommand;

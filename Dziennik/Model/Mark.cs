@@ -14,6 +14,13 @@ namespace Dziennik.Model
             set { m_value = value; }
         }
 
+        private string m_note;
+        public string Note
+        {
+            get { return m_note; }
+            set { m_note = value; }
+        }
+
         private DateTime m_addDate;
         public DateTime AddDate
         {

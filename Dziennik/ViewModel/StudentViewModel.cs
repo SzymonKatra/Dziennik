@@ -49,6 +49,11 @@ namespace Dziennik.ViewModel
             get { return m_model.Email; }
             set { m_model.Email = value; OnPropertyChanged("Email"); }
         }
+        public string AdditionalInformation
+        {
+            get { return m_model.AdditionalInformation; }
+            set { m_model.AdditionalInformation = value; OnPropertyChanged("AdditionalInformation"); }
+        }
         private SemesterViewModel m_firstSemester;
         public SemesterViewModel FirstSemester
         {
@@ -90,10 +95,10 @@ namespace Dziennik.ViewModel
 
                 decimal sum = 0M;
 
-                foreach (MarkViewModel item in m_firstSemester.Marks) sum += item.Value;
-                foreach (MarkViewModel item in m_secondSemester.Marks) sum += item.Value;
+                foreach (MarkViewModel item in m_firstSemester.Marks) if (item.IsValueValid) sum += item.Value;
+                foreach (MarkViewModel item in m_secondSemester.Marks) if (item.IsValueValid) sum += item.Value;
 
-                return decimal.Round(sum / (decimal)(m_firstSemester.Marks.Count + m_secondSemester.Marks.Count), GlobalConfig.DecimalRoundingPoints);
+                return decimal.Round(sum / (decimal)(m_firstSemester.CountValidMarks() + m_secondSemester.CountValidMarks()), GlobalConfig.DecimalRoundingPoints);
             }
         }
         public decimal YearEndingMark
