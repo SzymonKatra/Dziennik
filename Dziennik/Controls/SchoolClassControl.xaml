@@ -25,7 +25,7 @@
                         <DataTemplate>
                             <my:MarksControl MarksSource="{Binding FirstSemester.Marks}" SelectedMark="{Binding DataContext.SelectedMark, ElementName=root, Mode=TwoWay}"
                                              CommandAddMark="{Binding DataContext.AddMarkCommand, ElementName=root}" CommandParametrAddMark="{Binding FirstSemester.Marks}"
-                                             CommandEditMark="{Binding DataContext.EditMarkCommand, ElementName=root}"/>
+                                             CommandEditMark="{Binding DataContext.EditMarkCommand, ElementName=root}" CommandParametrEditMark="{Binding FirstSemester.Marks}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -35,7 +35,7 @@
                         <DataTemplate>
                             <my:MarksControl MarksSource="{Binding SecondSemester.Marks}" SelectedMark="{Binding DataContext.SelectedMark, ElementName=root, Mode=TwoWay}"
                                              CommandAddMark="{Binding DataContext.AddMarkCommand, ElementName=root}" CommandParametrAddMark="{Binding SecondSemester.Marks}"
-                                             CommandEditMark="{Binding DataContext.EditMarkCommand, ElementName=root}"/>
+                                             CommandEditMark="{Binding DataContext.EditMarkCommand, ElementName=root}" CommandParametrEditMark="{Binding SecondSemester.Marks}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

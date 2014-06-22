@@ -13,7 +13,7 @@
         <ListBox Name="listBox" Grid.Column="0" ItemsSource="{Binding MarksSource}" SelectedItem="{Binding SelectedMark, Mode=TwoWay}" LostFocus="listBox_LostFocus">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal" Visibility="Visible"/>
+                    <StackPanel Orientation="Horizontal"/>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>

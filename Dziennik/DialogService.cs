@@ -34,19 +34,32 @@ namespace Dziennik
         }
         public void Unregister(Window view)
         {
-            m_registeredViews.Remove(m_registeredViews.First((kvp) => { return (kvp.Value == view); }));
+            m_registeredViews.Remove(m_registeredViews.First((kvp) => { return (kvp.Value == view); }).Key);
+        }
+        public void UnregisterViaViewModel(object viewModel)
+        {
+            m_registeredViews.Remove(viewModel);
+        }
+
+        public Window GetWindow(object viewModel)
+        {
+            if (!m_registeredViews.ContainsKey(viewModel)) throw new ArgumentException("ViewModel not registered");
+            return m_registeredViews[viewModel];
+        }
+        public object GetViewModel(Window view)
+        {
+            if (!m_registeredViews.ContainsValue(view)) throw new ArgumentException("View not registered");
+            return m_registeredViews.First(kvp => { return (kvp.Value == view); }).Key;
         }
 
         public bool? ShowDialog(object ownerViewModel, object viewModel)
         {
-            if (!m_registeredViews.ContainsKey(ownerViewModel)) throw new ArgumentException("Owner not registered");
-
             Type viewModelType = viewModel.GetType();
 
-            if (!m_windowViewModelMappings.ContainsKey(viewModelType)) throw new ArgumentException("No function to create view attached to this type of ViewModel");
+            if (!m_windowViewModelMappings.ContainsKey(viewModelType)) throw new ArgumentException("No function to create View attached to this type of ViewModel");
 
             Window dialogView = m_windowViewModelMappings[viewModelType](viewModel);
-            dialogView.Owner = m_registeredViews[ownerViewModel];
+            dialogView.Owner = GetWindow(ownerViewModel);
 
             m_openedDialogs.Add(viewModel, dialogView);
 
@@ -58,7 +71,7 @@ namespace Dziennik
         }
         public void CloseDialog(object viewModel)
         {
-            if (!m_openedDialogs.ContainsKey(viewModel)) throw new ArgumentException("No opened views for this ViewModel");
+            if (!m_openedDialogs.ContainsKey(viewModel)) throw new ArgumentException("No opened View for this ViewModel");
 
             m_openedDialogs[viewModel].Close();
         }

@@ -24,7 +24,7 @@ namespace Dziennik.Controls
             m_viewModel.Name = "Klasa";
 
             m_addMarkCommand = new RelayCommand<ObservableCollection<MarkViewModel>>(AddMark);
-            m_editMarkCommand = new RelayCommand(EditMark);
+            m_editMarkCommand = new RelayCommand<ObservableCollection<MarkViewModel>>(EditMark);
             m_saveCommand = new RelayCommand(Save);
             m_editStudentCommand = new RelayCommand(EditStudent);
 
@@ -101,7 +101,7 @@ namespace Dziennik.Controls
             get { return m_addMarkCommand; }
         }
 
-        private RelayCommand m_editMarkCommand;
+        private RelayCommand<ObservableCollection<MarkViewModel>> m_editMarkCommand;
         public ICommand EditMarkCommand
         {
             get { return m_editMarkCommand; }
@@ -124,15 +124,20 @@ namespace Dziennik.Controls
             MarkViewModel mark = new MarkViewModel();
             EditMarkViewModel dialogViewModel = new EditMarkViewModel(mark);
             GlobalConfig.Dialogs.ShowDialog(m_dialogOwnerViewModel, dialogViewModel);
-            if (dialogViewModel.Result)
+            if (dialogViewModel.Result == EditMarkViewModel.EditMarkResult.Ok)
             {
                 mark.AddDate = mark.LastChangeDate;
                 e.Add(mark);
             }
         }
-        private void EditMark(object e)
+        private void EditMark(ObservableCollection<MarkViewModel> e)
         {
-            GlobalConfig.Dialogs.ShowDialog(m_dialogOwnerViewModel, new EditMarkViewModel(m_selectedMark));
+            EditMarkViewModel dialogViewModel = new EditMarkViewModel(m_selectedMark);
+            GlobalConfig.Dialogs.ShowDialog(m_dialogOwnerViewModel, dialogViewModel);
+            if(dialogViewModel.Result == EditMarkViewModel.EditMarkResult.RemoveMark)
+            {
+                e.Remove(m_selectedMark);
+            }
         }
         private void Save(object e)
         {
@@ -141,7 +146,8 @@ namespace Dziennik.Controls
         }
         private void EditStudent(object e)
         {
-
+            EditStudentViewModel dialogViewModel = new EditStudentViewModel(m_selectedStudent);
+            GlobalConfig.Dialogs.ShowDialog(m_dialogOwnerViewModel, dialogViewModel);
         }
     }
 }

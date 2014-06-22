@@ -18,9 +18,13 @@ namespace Dziennik.View
     /// </summary>
     public partial class EditStudentWindow : Window
     {
-        public EditStudentWindow()
+        public EditStudentWindow(EditStudentViewModel viewModel)
         {
             InitializeComponent();
+
+            this.DataContext = viewModel;
+
+            GlobalConfig.Dialogs.Register(this, viewModel);
         }
     }
 }

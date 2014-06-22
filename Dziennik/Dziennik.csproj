@@ -59,6 +59,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CommandUtils\RelayCommand.cs" />
+    <Compile Include="Controls\MessageBoxSuper.xaml.cs">
+      <DependentUpon>MessageBoxSuper.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DialogService.cs" />
     <Compile Include="Model\SchoolClass.cs" />
     <Compile Include="ViewModel\SchoolClassViewModel.cs" />
@@ -78,6 +81,7 @@
     <Compile Include="Model\Student.cs" />
     <Compile Include="ObservableObject.cs" />
     <Compile Include="View\EditMarkViewModel.cs" />
+    <Compile Include="View\EditStudentViewModel.cs" />
     <Compile Include="View\EditStudentWindow.xaml.cs">
       <DependentUpon>EditStudentWindow.xaml</DependentUpon>
     </Compile>
@@ -91,6 +95,10 @@
       <DependentUpon>SchoolClassControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SchoolClassControlViewModel.cs" />
+    <Page Include="Controls\MessageBoxSuper.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\EditMarkWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

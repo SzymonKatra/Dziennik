@@ -6,11 +6,20 @@ using Dziennik.ViewModel;
 using Dziennik.CommandUtils;
 using System.ComponentModel;
 using System.Globalization;
+using System.Windows.Input;
+using Dziennik.Controls;
 
 namespace Dziennik.View
 {
     public sealed class EditMarkViewModel : ObservableObject, IDataErrorInfo
     {
+        public enum EditMarkResult
+        {
+            Ok,
+            Cancel,
+            RemoveMark,
+        }
+
         public EditMarkViewModel(MarkViewModel mark)
         {
             m_mark = mark;
@@ -22,10 +31,11 @@ namespace Dziennik.View
 
             m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
+            m_removeMarkCommand = new RelayCommand(RemoveMark);
         }
 
-        private bool m_result;
-        public bool Result
+        private EditMarkResult m_result;
+        public EditMarkResult Result
         {
             get { return m_result; }
         }
@@ -33,16 +43,11 @@ namespace Dziennik.View
         private MarkViewModel m_mark;
 
         private decimal m_value;
-        public decimal Value
-        {
-            get { return m_value; }
-            set { m_value = value; OnPropertyChanged("Value"); m_okCommand.RaiseCanExecuteChanged(); }
-        }
         private bool m_valueInputValid = false;
         private string m_valueInput;
         public string ValueInput
         {
-            get { return m_valueInput.ToString(); }
+            get { return m_valueInput; }
             set { m_valueInput = value; OnPropertyChanged("ValueInput"); }
         }
 
@@ -54,33 +59,49 @@ namespace Dziennik.View
         }
 
         private RelayCommand m_okCommand;
-        public RelayCommand OkCommand
+        public ICommand OkCommand
         {
             get { return m_okCommand; }
         }
 
         private RelayCommand m_cancelCommand;
-        public RelayCommand CancelCommand
+        public ICommand CancelCommand
         {
             get { return m_cancelCommand; }
         }
 
-        public void Ok(object e)
+        private RelayCommand m_removeMarkCommand;
+        public ICommand RemoveMarkCommand
+        {
+            get { return m_removeMarkCommand; }
+        }
+
+        private void Ok(object e)
         {
             m_mark.Value = m_value;
             m_mark.Description = m_description;
             m_mark.LastChangeDate = DateTime.Now;
 
-            m_result = true;
+            m_result = EditMarkResult.Ok;
             GlobalConfig.Dialogs.CloseDialog(this);
         }
-        public bool CanOk(object e)
+        private bool CanOk(object e)
         {
             return m_valueInputValid;
         }
-        public void Cancel(object e)
+        private void Cancel(object e)
         {
-            m_result = false;
+            m_result = EditMarkResult.Cancel;
+            GlobalConfig.Dialogs.CloseDialog(this);
+        }
+        private void RemoveMark(object e)
+        {
+            if(MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Czy na pewno chcesz usunąć ocenę?", "Dziennik", MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes)
+            {
+                return;
+            }
+
+            m_result = EditMarkResult.RemoveMark;
             GlobalConfig.Dialogs.CloseDialog(this);
         }
 
@@ -119,8 +140,9 @@ namespace Dziennik.View
                 return "Wprowadź ocenę z zakresu <1; 6>";
             }
 
+            m_value = result;
+
             m_valueInputValid = true;
-            Value = result;
             m_okCommand.RaiseCanExecuteChanged();
 
             return string.Empty;
