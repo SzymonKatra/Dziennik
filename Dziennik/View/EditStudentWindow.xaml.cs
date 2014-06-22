@@ -10,22 +10,17 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Dziennik.ViewModel;
 
 namespace Dziennik.View
 {
     /// <summary>
-    /// Interaction logic for EditMarkWindow.xaml
+    /// Interaction logic for EditStudentWindow.xaml
     /// </summary>
-    public partial class EditMarkWindow : Window
+    public partial class EditStudentWindow : Window
     {
-        public EditMarkWindow(EditMarkViewModel viewModel)
+        public EditStudentWindow()
         {
             InitializeComponent();
-
-            this.DataContext = viewModel;
-
-            GlobalConfig.Dialogs.Register(this, viewModel);
         }
     }
 }

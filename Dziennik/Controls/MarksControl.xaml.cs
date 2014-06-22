@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Dziennik.ViewModel;
 
-namespace Dziennik.WPFControls
+namespace Dziennik.Controls
 {
     public class EditMarkEventArgs : RoutedEventArgs
     {

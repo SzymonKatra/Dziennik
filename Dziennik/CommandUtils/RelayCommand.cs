@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Input;
+using System.Diagnostics;
 
 namespace Dziennik.CommandUtils
 {
@@ -50,14 +51,23 @@ namespace Dziennik.CommandUtils
         public void Execute(object parameter)
         {
             if (m_execute == null) return;
+
+            T param;
+
             if (parameter == null && typeof(T).IsValueType)
             {
-                m_execute(default(T));
+                param = default(T);
             }
             else
             {
-                m_execute((T)parameter);
+                param = (T)parameter;
             }
+
+            if (CanExecute(param))
+            {
+                m_execute(param);
+            }
+            else Debug.Assert(true, "RelayCommand - CanExecute == false while calling Execute method. m_execute not raised");
         }
         public void RaiseCanExecuteChanged()
         {

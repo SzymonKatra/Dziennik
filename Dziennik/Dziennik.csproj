@@ -77,14 +77,25 @@
     <Compile Include="Model\Mark.cs" />
     <Compile Include="Model\Student.cs" />
     <Compile Include="ObservableObject.cs" />
-    <Compile Include="WindowViewModel\EditMarkViewModel.cs" />
-    <Compile Include="WindowViewModel\MainViewModel.cs" />
+    <Compile Include="View\EditMarkViewModel.cs" />
+    <Compile Include="View\EditStudentWindow.xaml.cs">
+      <DependentUpon>EditStudentWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainViewModel.cs" />
     <Compile Include="ViewModel\SemesterViewModel.cs" />
     <Compile Include="ViewModel\StudentViewModel.cs" />
-    <Compile Include="WPFControls\MarksControl.xaml.cs">
+    <Compile Include="Controls\MarksControl.xaml.cs">
       <DependentUpon>MarksControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SchoolClassControl.xaml.cs">
+      <DependentUpon>SchoolClassControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SchoolClassControlViewModel.cs" />
     <Page Include="View\EditMarkWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\EditStudentWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -100,7 +111,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="WPFControls\MarksControl.xaml">
+    <Page Include="Controls\MarksControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SchoolClassControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

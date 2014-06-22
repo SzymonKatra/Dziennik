@@ -3,26 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="EditMarkWindow" Height="200" Width="300"
         WindowStartupLocation="CenterOwner">
-
-    <Window.Resources>
-        <Style TargetType="{x:Type TextBox}">
-            <Style.Triggers>
-                <Trigger Property="Validation.HasError" Value="True">
-                    <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self},  Path=(Validation.Errors).CurrentItem.ErrorContent}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Resources>
-
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="70"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height=".2*"/>
-            <RowDefinition Height=".6*"/>
-            <RowDefinition Height=".2*"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Ocena"/>
@@ -37,7 +26,7 @@
             <Button Grid.Column="1" Grid.Row="0" Content="Anuluj" Margin="10,5,10,5" Command="{Binding CancelCommand}"/>
         </Grid>
 
-        <TextBox Name="txOcena" Grid.Column="1" Grid.Row="0" Text="{Binding ValueInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Margin="10,5,10,5"/>
-        <TextBox Name="txDesc" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Description, Mode=TwoWay}" Margin="10,5,10,5"/>
+        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding ValueInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}" Margin="10,5,10,5"/>
+        <TextBox Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Description, Mode=TwoWay}" Margin="10,5,10,5"/>
     </Grid>
 </Window>

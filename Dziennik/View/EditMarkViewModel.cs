@@ -7,7 +7,7 @@ using Dziennik.CommandUtils;
 using System.ComponentModel;
 using System.Globalization;
 
-namespace Dziennik.WindowViewModel
+namespace Dziennik.View
 {
     public sealed class EditMarkViewModel : ObservableObject, IDataErrorInfo
     {

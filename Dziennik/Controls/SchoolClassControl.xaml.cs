@@ -9,23 +9,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Dziennik.ViewModel;
 
-namespace Dziennik.View
+namespace Dziennik.Controls
 {
     /// <summary>
-    /// Interaction logic for EditMarkWindow.xaml
+    /// Interaction logic for SchoolClassControl.xaml
     /// </summary>
-    public partial class EditMarkWindow : Window
+    public partial class SchoolClassControl : UserControl
     {
-        public EditMarkWindow(EditMarkViewModel viewModel)
+        public SchoolClassControl()
         {
             InitializeComponent();
-
-            this.DataContext = viewModel;
-
-            GlobalConfig.Dialogs.Register(this, viewModel);
         }
     }
 }

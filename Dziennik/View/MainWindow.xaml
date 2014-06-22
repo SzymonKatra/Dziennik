@@ -3,47 +3,47 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:base="clr-namespace:Dziennik"
-        xmlns:my="clr-namespace:Dziennik.WPFControls"
+        xmlns:my="clr-namespace:Dziennik.Controls"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
         xmlns:c="clr-namespace:Dziennik.CommandUtils"
         Title="MainWindow" Height="350" Width="900"
         WindowStartupLocation="CenterScreen">
-    <Grid>
-        <DataGrid ItemsSource="{Binding ViewModel.Students}"
-                  CanUserAddRows="False"
-                  CanUserSortColumns="False"
-                  SelectionMode="Single"
-                  IsReadOnly="True"
-                  AutoGenerateColumns="False"
-                  Margin="37,41,45,54"
-                  SelectedItem="{Binding SelectedStudent, Mode=TwoWay}">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
-                <DataGridTextColumn Header="Imię" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Nazwisko" Binding="{Binding Surname}"/>
-                <DataGridHyperlinkColumn Header="Email" Binding="{Binding Email}"/>
-                <DataGridTemplateColumn Header="Oceny (1)">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <my:MarksControl MarksSource="{Binding FirstSemester.Marks}" SelectedMark="{Binding DataContext.SelectedMark, ElementName=root, Mode=TwoWay}"
-                                             CommandAddMark="{Binding DataContext.AddMarkCommand, ElementName=root}" CommandParametrAddMark="{Binding FirstSemester.Marks}"
-                                             CommandEditMark="{Binding DataContext.EditMarkCommand, ElementName=root}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Średnia (1)" Binding="{Binding FirstSemester.AverageMark}"/>
-                <DataGridTemplateColumn Header="Oceny (2)">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <my:MarksControl MarksSource="{Binding SecondSemester.Marks}" SelectedMark="{Binding DataContext.SelectedMark, ElementName=root, Mode=TwoWay}"
-                                             CommandAddMark="{Binding DataContext.AddMarkCommand, ElementName=root}" CommandParametrAddMark="{Binding SecondSemester.Marks}"
-                                             CommandEditMark="{Binding DataContext.EditMarkCommand, ElementName=root}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Średnia (2)" Binding="{Binding SecondSemester.AverageMark}"/>
-                <DataGridTextColumn Header="Średnia (roczna)" Binding="{Binding AverageMarkAll}"/>
-            </DataGrid.Columns>
-        </DataGrid>
-    </Grid>
+    
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <c:EventToCommand Command="{Binding SaveAllCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    
+    <DockPanel>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Text="{Binding CurrentStatus}"/>
+            </StatusBarItem>
+        </StatusBar>
+
+        <TabControl DockPanel.Dock="Top" ItemsSource="{Binding OpenedSchoolClasses}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding ViewModel.Name}"/>
+                        <Button Grid.Column="1" Grid.Row="0" Width="12" Height="12" Margin="5,0,0,0" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                Command="{Binding DataContext.CloseTabCommand, ElementName=root}" CommandParameter="{Binding}">
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="10" Padding="0" Margin="0,0,0,2" Text="x"/>
+                        </Button>
+                    </Grid>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <my:SchoolClassControl DataContext="{Binding}"/>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+    </DockPanel>
 </Window>

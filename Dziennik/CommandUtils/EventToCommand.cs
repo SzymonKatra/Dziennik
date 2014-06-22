@@ -55,8 +55,8 @@ namespace Dziennik.CommandUtils
             set { SetValue(CommandProperty, value); }
         }
 
-        #region CommandParametrProperty
-        public static readonly DependencyProperty CommandParametrProperty = DependencyProperty.Register("CommandParametr", typeof(object), typeof(EventToCommand), new PropertyMetadata(null, (s, e) =>
+        #region CommandParameterProperty
+        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register("CommandParameter", typeof(object), typeof(EventToCommand), new PropertyMetadata(null, (s, e) =>
                                                                             {
                                                                                 EventToCommand sender = s as EventToCommand;
                                                                                 if (sender == null) return;
@@ -66,10 +66,10 @@ namespace Dziennik.CommandUtils
         /// <summary>
         /// Default null
         /// </summary>
-        public object CommandParametr
+        public object CommandParameter
         {
-            get { return (object)GetValue(CommandParametrProperty); }
-            set { SetValue(CommandParametrProperty, value); }
+            get { return (object)GetValue(CommandParameterProperty); }
+            set { SetValue(CommandParameterProperty, value); }
         }
 
         #region ToggleIsEnabledProperty
@@ -114,20 +114,20 @@ namespace Dziennik.CommandUtils
             base.OnAttached();
             CheckCanExecute();
         }
-        protected override void Invoke(object parametr)
+        protected override void Invoke(object parameter)
         {
             CheckCanExecute();
             FrameworkElement element = GetAssociatedObjectAsFrameworkElement();
             if (element == null || !element.IsEnabled/* || Command == null*/) return;
 
-            object passParam = CommandParametr;
-            if (passParam == null && PassEventArgs) passParam = parametr;
+            object passParam = CommandParameter;
+            if (passParam == null && PassEventArgs) passParam = parameter;
 
-            if (HandleRouted == HowHandleRouted.HandleBefore) TryHandleRoutedEvent(parametr);
+            if (HandleRouted == HowHandleRouted.HandleBefore) TryHandleRoutedEvent(parameter);
 
             if (Command != null) Command.Execute(passParam);
 
-            if (HandleRouted == HowHandleRouted.HandleAfter) TryHandleRoutedEvent(parametr);
+            if (HandleRouted == HowHandleRouted.HandleAfter) TryHandleRoutedEvent(parameter);
         }
 
         private void TryHandleRoutedEvent(object parametr)
@@ -140,7 +140,7 @@ namespace Dziennik.CommandUtils
             FrameworkElement element = GetAssociatedObjectAsFrameworkElement();
             if (ToggleIsEnabled && element != null && Command != null)
             {
-                element.IsEnabled = Command.CanExecute(CommandParametr);
+                element.IsEnabled = Command.CanExecute(CommandParameter);
             }
         }
         private FrameworkElement GetAssociatedObjectAsFrameworkElement()

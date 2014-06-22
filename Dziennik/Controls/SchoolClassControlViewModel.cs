@@ -2,28 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using Dziennik.ViewModel;
+using Dziennik.CommandUtils;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Dziennik.WPFControls;
-using Dziennik.CommandUtils;
-using Dziennik.ViewModel;
-using System.ComponentModel;
+using Dziennik.View;
 
-namespace Dziennik.WindowViewModel
+namespace Dziennik.Controls
 {
-    public sealed class MainViewModel : ObservableObject
+    public sealed class SchoolClassControlViewModel : ObservableObject
     {
-        public MainViewModel()
-            : this(new SchoolClassViewModel())
+        public SchoolClassControlViewModel(object dialogOwnerViewModel)
+            : this(dialogOwnerViewModel, new SchoolClassViewModel())
         {
         }
-        public MainViewModel(SchoolClassViewModel viewModel)
+        public SchoolClassControlViewModel(object dialogOwnerViewModel, SchoolClassViewModel viewModel)
         {
+            m_dialogOwnerViewModel = dialogOwnerViewModel;
             m_viewModel = viewModel;
 
+            m_viewModel.Name = "Klasa";
+
             m_addMarkCommand = new RelayCommand<ObservableCollection<MarkViewModel>>(AddMark);
-            m_editMarkCommand = new RelayCommand<object>(EditMark);
+            m_editMarkCommand = new RelayCommand(EditMark);
+            m_saveCommand = new RelayCommand(Save);
+            m_editStudentCommand = new RelayCommand(EditStudent);
 
             StudentViewModel s;
 
@@ -65,9 +68,11 @@ namespace Dziennik.WindowViewModel
             s.SecondSemester.Marks.Add(new MarkViewModel() { Value = 6M });
             viewModel.Students.Add(s);
 
-            viewModel.Students.ModelCollection.Sort((x, y) => { return x.Id.CompareTo(y.Id);});
+            viewModel.Students.ModelCollection.Sort((x, y) => { return x.Id.CompareTo(y.Id); });
             viewModel.Students.ResynchronizeWithModel();
         }
+
+        private object m_dialogOwnerViewModel;
 
         private SchoolClassViewModel m_viewModel;
         public SchoolClassViewModel ViewModel
@@ -95,26 +100,48 @@ namespace Dziennik.WindowViewModel
         {
             get { return m_addMarkCommand; }
         }
-        private RelayCommand<object> m_editMarkCommand;
+
+        private RelayCommand m_editMarkCommand;
         public ICommand EditMarkCommand
         {
             get { return m_editMarkCommand; }
         }
 
-        public void AddMark(ObservableCollection<MarkViewModel> e)
+        private RelayCommand m_saveCommand;
+        public ICommand SaveCommand
+        {
+            get { return m_saveCommand; }
+        }
+
+        private RelayCommand m_editStudentCommand;
+        public ICommand EditStudentCommand
+        {
+            get { return m_editStudentCommand; }
+        }
+
+        private void AddMark(ObservableCollection<MarkViewModel> e)
         {
             MarkViewModel mark = new MarkViewModel();
             EditMarkViewModel dialogViewModel = new EditMarkViewModel(mark);
-            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+            GlobalConfig.Dialogs.ShowDialog(m_dialogOwnerViewModel, dialogViewModel);
             if (dialogViewModel.Result)
             {
                 mark.AddDate = mark.LastChangeDate;
                 e.Add(mark);
             }
         }
-        public void EditMark(object e)
+        private void EditMark(object e)
         {
-            GlobalConfig.Dialogs.ShowDialog(this, new EditMarkViewModel(m_selectedMark));
+            GlobalConfig.Dialogs.ShowDialog(m_dialogOwnerViewModel, new EditMarkViewModel(m_selectedMark));
+        }
+        private void Save(object e)
+        {
+            Console.WriteLine("SchoolClassControlViewModel.Save()");
+            //TODO: saving
+        }
+        private void EditStudent(object e)
+        {
+
         }
     }
 }
