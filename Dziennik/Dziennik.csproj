@@ -67,6 +67,10 @@
     <Compile Include="DialogService.cs" />
     <Compile Include="Model\SchoolClass.cs" />
     <Compile Include="ViewModel\SchoolClassViewModel.cs" />
+    <Compile Include="View\ActionDialogViewModel.cs" />
+    <Compile Include="View\ActionDialogWindow.xaml.cs">
+      <DependentUpon>ActionDialogWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\EditMarkWindow.xaml.cs">
       <DependentUpon>EditMarkWindow.xaml</DependentUpon>
     </Compile>
@@ -98,6 +102,10 @@
     </Compile>
     <Compile Include="Controls\SchoolClassControlViewModel.cs" />
     <Page Include="Controls\MessageBoxSuper.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ActionDialogWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

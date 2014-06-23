@@ -124,9 +124,10 @@ namespace Dziennik.View
             }
             m_mark.Description = m_description;
             m_mark.LastChangeDate = DateTime.Now;
+            if (m_isAddingMode) m_mark.AddDate = m_mark.LastChangeDate;
 
             m_result = EditMarkResult.Ok;
-            GlobalConfig.Dialogs.CloseDialog(this);
+            GlobalConfig.Dialogs.Close(this);
         }
         private bool CanOk(object e)
         {
@@ -135,7 +136,7 @@ namespace Dziennik.View
         private void Cancel(object e)
         {
             m_result = EditMarkResult.Cancel;
-            GlobalConfig.Dialogs.CloseDialog(this);
+            GlobalConfig.Dialogs.Close(this);
         }
         private void RemoveMark(object e)
         {
@@ -145,7 +146,7 @@ namespace Dziennik.View
             }
 
             m_result = EditMarkResult.RemoveMark;
-            GlobalConfig.Dialogs.CloseDialog(this);
+            GlobalConfig.Dialogs.Close(this);
         }
         private bool CanRemoveMark(object e)
         {

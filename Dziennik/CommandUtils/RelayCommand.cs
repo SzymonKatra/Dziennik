@@ -67,7 +67,7 @@ namespace Dziennik.CommandUtils
             {
                 m_execute(param);
             }
-            else Debug.Assert(true, "RelayCommand - CanExecute == false while calling Execute method. m_execute not raised");
+            //else Debug.Assert(true, "RelayCommand - CanExecute == false while calling Execute method. m_execute not raised");
         }
         public void RaiseCanExecuteChanged()
         {

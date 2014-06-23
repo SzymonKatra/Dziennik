@@ -134,7 +134,6 @@ namespace Dziennik.Controls
             GlobalConfig.Dialogs.ShowDialog(m_dialogOwnerViewModel, dialogViewModel);
             if (dialogViewModel.Result == EditMarkViewModel.EditMarkResult.Ok)
             {
-                mark.AddDate = mark.LastChangeDate;
                 e.Add(mark);
             }
             if (dialogViewModel.Result != EditMarkViewModel.EditMarkResult.Cancel) m_saveCommand.Execute(null);
@@ -153,6 +152,10 @@ namespace Dziennik.Controls
         {
             Console.WriteLine("SchoolClassControlViewModel.Save()");
             //TODO: saving
+
+            ActionDialogViewModel dialogViewModel = new ActionDialogViewModel(SaveWorker, null, "Zapisywanie...");
+            GlobalConfig.Dialogs.ShowDialog(m_dialogOwnerViewModel, dialogViewModel);
+            Console.WriteLine("Zapisano");
         }
         private void AddStudent(object e)
         {
@@ -190,6 +193,13 @@ namespace Dziennik.Controls
                 m_viewModel.Students.RemoveAt(index);
             }
             if (dialogViewModel.Result != EditStudentViewModel.EditStudentResult.Cancel) m_saveCommand.Execute(null);
+        }
+
+        private void SaveWorker(ActionDialogViewModel dialog, object parameter)
+        {
+            System.Threading.Thread.Sleep(1000);
+            dialog.Content = "dupa";
+            System.Threading.Thread.Sleep(30000);
         }
     }
 }

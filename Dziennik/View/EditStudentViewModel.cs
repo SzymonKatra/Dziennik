@@ -124,7 +124,7 @@ namespace Dziennik.View
             m_student.AdditionalInformation = m_additionalInformation;
 
             m_result = EditStudentResult.Ok;
-            GlobalConfig.Dialogs.CloseDialog(this);
+            GlobalConfig.Dialogs.Close(this);
         }
         private bool CanOk(object e)
         {
@@ -133,7 +133,7 @@ namespace Dziennik.View
         private void Cancel(object e)
         {
             m_result = EditStudentResult.Cancel;
-            GlobalConfig.Dialogs.CloseDialog(this);
+            GlobalConfig.Dialogs.Close(this);
         }
         private void RemoveStudent(object e)
         {
@@ -149,7 +149,7 @@ namespace Dziennik.View
             m_student.SecondSemester.Marks.Clear();
 
             m_result = EditStudentResult.RemoveStudentCreateHole;
-            GlobalConfig.Dialogs.CloseDialog(this);
+            GlobalConfig.Dialogs.Close(this);
         }
         private bool CanRemoveStudent(object e)
         {

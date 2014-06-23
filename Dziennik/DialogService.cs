@@ -25,7 +25,7 @@ namespace Dziennik
         }
 
         private Dictionary<object, Window> m_registeredViews = new Dictionary<object, Window>();
-        private Dictionary<object, Window> m_openedDialogs = new Dictionary<object, Window>();
+        private Dictionary<object, Window> m_openedWindows = new Dictionary<object, Window>();
 
         public void Register(Window view, object viewModel, bool unregisterOnClose = true)
         {
@@ -57,6 +57,8 @@ namespace Dziennik
 
         public bool? ShowDialog(object ownerViewModel, object viewModel)
         {
+            if (m_openedWindows.ContainsKey(viewModel)) throw new ArgumentException("This ViewModel is already opened");
+
             Type viewModelType = viewModel.GetType();
 
             if (!m_windowViewModelMappings.ContainsKey(viewModelType)) throw new ArgumentException("No function to create View attached to this type of ViewModel");
@@ -64,19 +66,19 @@ namespace Dziennik
             Window dialogView = m_windowViewModelMappings[viewModelType](viewModel);
             dialogView.Owner = GetWindow(ownerViewModel);
 
-            m_openedDialogs.Add(viewModel, dialogView);
+            m_openedWindows.Add(viewModel, dialogView);
 
             bool? result = dialogView.ShowDialog();
 
-            m_openedDialogs.Remove(viewModel);
+            m_openedWindows.Remove(viewModel);
 
             return result;
         }
-        public void CloseDialog(object viewModel)
+        public void Close(object viewModel)
         {
-            if (!m_openedDialogs.ContainsKey(viewModel)) throw new ArgumentException("No opened View for this ViewModel");
+            if (!m_openedWindows.ContainsKey(viewModel)) throw new ArgumentException("No opened View for this ViewModel");
 
-            m_openedDialogs[viewModel].Close();
+            m_openedWindows[viewModel].Close();
         }
 
         private void view_Closed(object sender, EventArgs e)
