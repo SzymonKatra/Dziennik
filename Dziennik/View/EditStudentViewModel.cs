@@ -39,7 +39,7 @@ namespace Dziennik.View
 
         private StudentViewModel m_student;
 
-        private EditStudentResult m_result;
+        private EditStudentResult m_result = EditStudentResult.Cancel;
         public EditStudentResult Result
         {
             get { return m_result; }

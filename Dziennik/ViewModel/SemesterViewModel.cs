@@ -49,13 +49,14 @@ namespace Dziennik.ViewModel
         {
             get
             {
-                if (m_marks.Count <= 0) return 0M;
+                int validMarks = CountValidMarks();
+                if (validMarks <= 0) return 0M;
 
                 decimal sum = 0M;
 
                 foreach (MarkViewModel item in m_marks) if (item.IsValueValid) sum += item.Value;
 
-                return decimal.Round(sum / (decimal)CountValidMarks(), GlobalConfig.DecimalRoundingPoints);
+                return decimal.Round(sum / (decimal)validMarks, GlobalConfig.DecimalRoundingPoints);
             }
         }
         public decimal EndingMark

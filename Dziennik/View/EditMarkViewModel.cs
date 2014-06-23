@@ -38,7 +38,7 @@ namespace Dziennik.View
             m_removeMarkCommand = new RelayCommand(RemoveMark, CanRemoveMark);
         }
 
-        private EditMarkResult m_result;
+        private EditMarkResult m_result = EditMarkResult.Cancel;
         public EditMarkResult Result
         {
             get { return m_result; }
@@ -82,7 +82,14 @@ namespace Dziennik.View
         public bool NoteSelected
         {
             get { return m_noteSelected; }
-            set { m_noteSelected = value; OnPropertyChanged("NoteSelected"); m_okCommand.RaiseCanExecuteChanged(); }
+            set
+            {
+                m_noteSelected = value;
+                OnPropertyChanged("NoteSelected");
+                OnPropertyChanged("ValueInput"); // to remove red border if is error in textbox
+                OnPropertyChanged("NoteInput"); // validation returns string.Empty if textbox is not selected by radiobutton
+                m_okCommand.RaiseCanExecuteChanged();
+            }
         }
 
         private RelayCommand m_okCommand;
@@ -193,7 +200,7 @@ namespace Dziennik.View
             if (!m_noteSelected) return string.Empty;
             m_noteInputValid = false;
 
-            if (m_noteInput.Length< 1 || m_noteInput.Length > 2)
+            if (string.IsNullOrWhiteSpace(m_noteInput) || m_noteInput.Length < 1 || m_noteInput.Length > 2)
             {
                 m_okCommand.RaiseCanExecuteChanged();
                 return "Długość musi być równa 1 lub 2 znaki";

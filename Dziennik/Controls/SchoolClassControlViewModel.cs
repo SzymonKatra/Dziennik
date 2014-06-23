@@ -137,6 +137,7 @@ namespace Dziennik.Controls
                 mark.AddDate = mark.LastChangeDate;
                 e.Add(mark);
             }
+            if (dialogViewModel.Result != EditMarkViewModel.EditMarkResult.Cancel) m_saveCommand.Execute(null);
         }
         private void EditMark(ObservableCollection<MarkViewModel> e)
         {
@@ -146,6 +147,7 @@ namespace Dziennik.Controls
             {
                 e.Remove(m_selectedMark);
             }
+            if (dialogViewModel.Result != EditMarkViewModel.EditMarkResult.Cancel) m_saveCommand.Execute(null);
         }
         private void Save(object e)
         {
@@ -170,6 +172,7 @@ namespace Dziennik.Controls
                 //    m_viewModel.Students[i].Id++;
                 //}
             }
+            if (dialogViewModel.Result != EditStudentViewModel.EditStudentResult.Cancel) m_saveCommand.Execute(null);
         }
         private void EditStudent(object e)
         {
@@ -186,6 +189,7 @@ namespace Dziennik.Controls
 
                 m_viewModel.Students.RemoveAt(index);
             }
+            if (dialogViewModel.Result != EditStudentViewModel.EditStudentResult.Cancel) m_saveCommand.Execute(null);
         }
     }
 }

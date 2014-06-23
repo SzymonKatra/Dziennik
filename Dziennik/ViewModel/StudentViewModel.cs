@@ -91,14 +91,15 @@ namespace Dziennik.ViewModel
         {
             get
             {
-                if (m_firstSemester.Marks.Count + m_secondSemester.Marks.Count <= 0) return 0M;
+                int validMarks = m_firstSemester.CountValidMarks() + m_secondSemester.CountValidMarks();
+                if (validMarks <= 0) return 0M;
 
                 decimal sum = 0M;
 
                 foreach (MarkViewModel item in m_firstSemester.Marks) if (item.IsValueValid) sum += item.Value;
                 foreach (MarkViewModel item in m_secondSemester.Marks) if (item.IsValueValid) sum += item.Value;
 
-                return decimal.Round(sum / (decimal)(m_firstSemester.CountValidMarks() + m_secondSemester.CountValidMarks()), GlobalConfig.DecimalRoundingPoints);
+                return decimal.Round(sum / (decimal)validMarks, GlobalConfig.DecimalRoundingPoints);
             }
         }
         public decimal YearEndingMark
