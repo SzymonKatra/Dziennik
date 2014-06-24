@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Dziennik.Model
 {
-    public sealed class Student
+    public sealed class GlobalStudent
     {
         private int m_id;
         public int Id
@@ -40,27 +40,6 @@ namespace Dziennik.Model
         {
             get { return m_additionalInformation; }
             set { m_additionalInformation = value; }
-        }
-
-        private Semester m_firstSemester = new Semester();
-        public Semester FirstSemester
-        {
-            get { return m_firstSemester; }
-            set { m_firstSemester = value; }
-        }
-
-        private Semester m_secondSemester = new Semester();
-        public Semester SecondSemester
-        {
-            get { return m_secondSemester; }
-            set { m_secondSemester = value; }
-        }
-
-        private decimal m_yearEndingMark;
-        public decimal YearEndingMark
-        {
-            get { return m_yearEndingMark; }
-            set { m_yearEndingMark = value; }
         }
     }
 }

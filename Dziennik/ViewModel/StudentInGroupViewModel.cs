@@ -1,20 +1,20 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Dziennik.Model;
 
 namespace Dziennik.ViewModel
 {
-    public sealed class StudentViewModel : ObservableObject, IViewModelExposable<Student>
+    public sealed class StudentInGroupViewModel : ObservableObject, IViewModelExposable<StudentInGroup>
     {
-        public StudentViewModel()
-            : this(new Student())
+        public StudentInGroupViewModel()
+            : this(new StudentInGroup())
         {
         }
-        public StudentViewModel(Student student)
+        public StudentInGroupViewModel(StudentInGroup studentInGroup)
         {
-            m_model = student;
+            m_model = studentInGroup;
 
             m_firstSemester = new SemesterViewModel(m_model.FirstSemester);
             m_secondSemester = new SemesterViewModel(m_model.SecondSemester);
@@ -23,36 +23,28 @@ namespace Dziennik.ViewModel
             SemesterSubscribe(m_secondSemester);
         }
 
-        private Student m_model;
-        public Student Model
+        private StudentInGroup m_model;
+        public StudentInGroup Model
         {
             get { return m_model; }
         }
 
+        private SchoolClassViewModel m_schoolClass;
+        public SchoolClassViewModel SchoolClass
+        {
+            get { return m_schoolClass; }
+            set { m_schoolClass = value; }
+        }
+
+        public int GlobalId
+        {
+            get { return m_model.GlobalId; }
+            set { m_model.GlobalId = value; OnPropertyChanged("GlobalId"); }
+        }
         public int Id
         {
             get { return m_model.Id; }
             set { m_model.Id = value; OnPropertyChanged("Id"); }
-        }
-        public string Name
-        {
-            get { return m_model.Name; }
-            set { m_model.Name = value; OnPropertyChanged("Name"); }
-        }
-        public string Surname
-        {
-            get { return m_model.Surname; }
-            set { m_model.Surname = value; OnPropertyChanged("Surname"); }
-        }
-        public string Email
-        {
-            get { return m_model.Email; }
-            set { m_model.Email = value; OnPropertyChanged("Email"); }
-        }
-        public string AdditionalInformation
-        {
-            get { return m_model.AdditionalInformation; }
-            set { m_model.AdditionalInformation = value; OnPropertyChanged("AdditionalInformation"); }
         }
         private SemesterViewModel m_firstSemester;
         public SemesterViewModel FirstSemester
@@ -87,6 +79,12 @@ namespace Dziennik.ViewModel
             }
         }
 
+        private GlobalStudentViewModel m_globalStudent; // SchoolClassViewModel must synchronize it
+        public GlobalStudentViewModel GlobalStudent
+        {
+            get { return m_globalStudent; }
+            set { m_globalStudent = value; OnPropertyChanged("GlobalStudent"); }
+        }
         public decimal AverageMarkAll
         {
             get

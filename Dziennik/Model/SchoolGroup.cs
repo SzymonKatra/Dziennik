@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Dziennik.Model
 {
-    public sealed class SchoolClass
+    public sealed class SchoolGroup
     {
         private string m_name;
         public string Name
@@ -14,18 +14,11 @@ namespace Dziennik.Model
             set { m_name = value; }
         }
 
-        private List<GlobalStudent> m_students = new List<GlobalStudent>();
-        public List<GlobalStudent> Students
+        private List<StudentInGroup> m_students = new List<StudentInGroup>();
+        public List<StudentInGroup> Students
         {
             get { return m_students; }
             set { m_students = value; }
-        }
-
-        private List<SchoolGroup> m_groups = new List<SchoolGroup>();
-        public List<SchoolGroup> Groups
-        {
-            get { return m_groups; }
-            set { m_groups = value; }
         }
     }
 }

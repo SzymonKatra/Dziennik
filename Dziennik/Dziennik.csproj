@@ -61,12 +61,21 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CommandUtils\RelayCommand.cs" />
+    <Compile Include="CommonEventArgs.cs" />
     <Compile Include="Controls\MessageBoxSuper.xaml.cs">
       <DependentUpon>MessageBoxSuper.xaml</DependentUpon>
     </Compile>
     <Compile Include="DialogService.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="INotifyCollectionChangedSimple.cs" />
     <Compile Include="Model\SchoolClass.cs" />
+    <Compile Include="Model\SchoolGroup.cs" />
+    <Compile Include="Model\StudentInGroup.cs" />
+    <Compile Include="NotifyCollectionChangedSimpleEventArgs.cs" />
+    <Compile Include="ObservableCollectionNotifySimple.cs" />
     <Compile Include="ViewModel\SchoolClassViewModel.cs" />
+    <Compile Include="ViewModel\SchoolGroupViewModel.cs" />
+    <Compile Include="ViewModel\StudentInGroupViewModel.cs" />
     <Compile Include="View\ActionDialogViewModel.cs" />
     <Compile Include="View\ActionDialogWindow.xaml.cs">
       <DependentUpon>ActionDialogWindow.xaml</DependentUpon>
@@ -84,7 +93,7 @@
     <Compile Include="SynchronizedPerItemObservableCollection.cs" />
     <Compile Include="ViewModel\MarkViewModel.cs" />
     <Compile Include="Model\Mark.cs" />
-    <Compile Include="Model\Student.cs" />
+    <Compile Include="Model\GlobalStudent.cs" />
     <Compile Include="ObservableObject.cs" />
     <Compile Include="View\EditMarkViewModel.cs" />
     <Compile Include="View\EditStudentViewModel.cs" />
@@ -93,7 +102,7 @@
     </Compile>
     <Compile Include="View\MainViewModel.cs" />
     <Compile Include="ViewModel\SemesterViewModel.cs" />
-    <Compile Include="ViewModel\StudentViewModel.cs" />
+    <Compile Include="ViewModel\GlobalStudentViewModel.cs" />
     <Compile Include="Controls\MarksControl.xaml.cs">
       <DependentUpon>MarksControl.xaml</DependentUpon>
     </Compile>

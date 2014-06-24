@@ -11,12 +11,17 @@ namespace Dziennik.View
     public class ActionDialogViewModel : ObservableObject
     {
         public ActionDialogViewModel(Action<ActionDialogViewModel, object> workAction, object parameter, string content)
+            : this(workAction, parameter, content, content)
+        {
+        }
+        public ActionDialogViewModel(Action<ActionDialogViewModel, object> workAction, object parameter, string content, string title)
         {
             m_doWorkCommand = new RelayCommand(DoWork, CanDoWork);
-
+            
             m_workAction = workAction;
             m_parameter = parameter;
             m_content = content;
+            m_title = title;
         }
 
         private RelayCommand m_doWorkCommand;
@@ -38,10 +43,20 @@ namespace Dziennik.View
             set { m_content = value; OnPropertyChanged("Content"); }
         }
 
+        private string m_title;
+        public string Title
+        {
+            get { return m_title; }
+            set { m_title = value; OnPropertyChanged("Title"); }
+        }
+
         private void DoWork(object e)
         {
             m_executed = true;
-            if (m_workAction != null) m_workAction(this, m_parameter);
+            if (m_workAction != null)
+            {
+                m_workAction(this, m_parameter);
+            }
             GlobalConfig.Dialogs.Close(this);
         }
         private bool CanDoWork(object e)

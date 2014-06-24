@@ -29,48 +29,61 @@ namespace Dziennik.Controls
             m_addStudentCommand = new RelayCommand(AddStudent);
             m_editStudentCommand = new RelayCommand(EditStudent);
 
-            StudentViewModel s;
+            GlobalStudentViewModel s;
 
-            s = new StudentViewModel();
+            s = new GlobalStudentViewModel();
             s.Id = 3;
             s.Name = "aaaaaaaaaaaaaaaa";
             s.Surname = "bbb";
             s.Email = "eaaa";
-            s.FirstSemester.Marks.Add(new MarkViewModel() { Value = 5M });
-            s.FirstSemester.Marks.Add(new MarkViewModel() { Value = 3.5M });
             viewModel.Students.Add(s);
+            
 
-            s = new StudentViewModel();
+            s = new GlobalStudentViewModel();
             s.Id = 1;
             s.Name = "ccc";
             s.Surname = "ddd";
             s.Email = "eccc";
-            s.FirstSemester.Marks.Add(new MarkViewModel() { Value = 3M });
-            s.SecondSemester.Marks.Add(new MarkViewModel() { Value = 2.5M });
             viewModel.Students.Add(s);
 
-            s = new StudentViewModel();
+            s = new GlobalStudentViewModel();
             s.Id = 4;
             s.Name = "ggg";
             s.Surname = "hhh";
             s.Email = "eggg";
-            s.FirstSemester.Marks.Add(new MarkViewModel() { Value = 4M });
-            s.SecondSemester.Marks.Add(new MarkViewModel() { Value = 4.5M });
-            s.FirstSemester.Marks.Add(new MarkViewModel() { Value = 2.5M });
+           
             viewModel.Students.Add(s);
 
-            s = new StudentViewModel();
+            s = new GlobalStudentViewModel();
             s.Id = 2;
             s.Name = "eee";
             s.Surname = "fff";
             s.Email = "eeee";
-            s.FirstSemester.Marks.Add(new MarkViewModel() { Value = 1M });
-            s.FirstSemester.Marks.Add(new MarkViewModel() { Value = 6M });
-            s.SecondSemester.Marks.Add(new MarkViewModel() { Value = 6M });
             viewModel.Students.Add(s);
 
             viewModel.Students.ModelCollection.Sort((x, y) => { return x.Id.CompareTo(y.Id); });
             viewModel.Students.ResynchronizeWithModel();
+
+            SchoolGroupViewModel grp = new SchoolGroupViewModel();
+
+            StudentInGroupViewModel sg = new StudentInGroupViewModel();
+            sg.GlobalId = 1;
+            sg.Id = 1;
+            sg.FirstSemester.Marks.Add(new MarkViewModel() { Value = 4M });
+            sg.SecondSemester.Marks.Add(new MarkViewModel() { Value = 4.5M });
+            sg.FirstSemester.Marks.Add(new MarkViewModel() { Value = 2.5M });
+
+            grp.Students.Add(sg);
+
+            sg = new StudentInGroupViewModel();
+            sg.GlobalId = 2;
+            sg.Id = 2;
+            sg.FirstSemester.Marks.Add(new MarkViewModel() { Value = 2M });
+            sg.SecondSemester.Marks.Add(new MarkViewModel() { Value = 5.5M });
+            sg.FirstSemester.Marks.Add(new MarkViewModel() { Value = 4.5M });
+
+            grp.Students.Add(sg);
+            viewModel.Gropus.Add(grp);
         }
 
         private object m_dialogOwnerViewModel;
@@ -82,8 +95,8 @@ namespace Dziennik.Controls
             set { m_viewModel = value; OnPropertyChanged("ViewModel"); }
         }
 
-        private StudentViewModel m_selectedStudent;
-        public StudentViewModel SelectedStudent
+        private GlobalStudentViewModel m_selectedStudent;
+        public GlobalStudentViewModel SelectedStudent
         {
             get { return m_selectedStudent; }
             set { m_selectedStudent = value; OnPropertyChanged("SelectedStudent"); }
@@ -150,16 +163,20 @@ namespace Dziennik.Controls
         }
         private void Save(object e)
         {
-            Console.WriteLine("SchoolClassControlViewModel.Save()");
             //TODO: saving
 
-            ActionDialogViewModel dialogViewModel = new ActionDialogViewModel(SaveWorker, null, "Zapisywanie...");
+            ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
+            {
+                System.Threading.Thread.Sleep(1000);
+                d.Content = "heheszki";
+                System.Threading.Thread.Sleep(1000);
+            }
+            , null, "Zapisywanie...");
             GlobalConfig.Dialogs.ShowDialog(m_dialogOwnerViewModel, dialogViewModel);
-            Console.WriteLine("Zapisano");
         }
         private void AddStudent(object e)
         {
-            StudentViewModel student = new StudentViewModel();
+            GlobalStudentViewModel student = new GlobalStudentViewModel();
             student.Id = m_viewModel.Students[m_viewModel.Students.Count - 1].Id + 1;
 
             EditStudentViewModel dialogViewModel = new EditStudentViewModel(student);
@@ -197,9 +214,6 @@ namespace Dziennik.Controls
 
         private void SaveWorker(ActionDialogViewModel dialog, object parameter)
         {
-            System.Threading.Thread.Sleep(1000);
-            dialog.Content = "dupa";
-            System.Threading.Thread.Sleep(30000);
         }
     }
 }

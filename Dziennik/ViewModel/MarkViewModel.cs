@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Dziennik.Model;
 using System.Globalization;
+using System.Xml.Linq;
 
 namespace Dziennik.ViewModel
 {
@@ -94,6 +95,38 @@ namespace Dziennik.ViewModel
                                      this.LastChangeDate.ToString(GlobalConfig.DateTimeFormat),
                                      (IsValueValid ? "Ocena" : "Uwaga"));
             }
+        }
+
+        private const string XML_VALUE = "Value";
+        private const string XML_NOTE = "Note";
+        private const string XML_ADDDATE = "AddDate";
+        private const string XML_LASTCHANGEDATE = "LastChangeDate";
+        private const string XML_DESCRIPTION = "Description";
+        public XElement ToXml(string elementName)
+        {
+            XElement root = new XElement(elementName);
+
+            root.Add(new XElement(XML_VALUE, m_model.Value));
+            root.Add(new XElement(XML_NOTE, m_model.Note));
+            root.Add(new XElement(XML_ADDDATE, m_model.AddDate.ToBinary()));
+            root.Add(new XElement(XML_LASTCHANGEDATE, m_model.LastChangeDate.ToBinary()));
+            root.Add(new XElement(XML_DESCRIPTION, m_model.Description));
+
+            return root;
+        }
+        public MarkViewModel ParseXml(XElement element)
+        {
+            XElement root = element;
+
+            MarkViewModel result = new MarkViewModel();
+
+            result.m_model.Value = decimal.Parse(root.Element(XML_VALUE).ValueOrDefault("0"), CultureInfo.InvariantCulture);
+            result.m_model.Note = root.Element(XML_NOTE).ValueOrDefault(string.Empty);
+            result.m_model.AddDate = DateTime.FromBinary(long.Parse(root.Element(XML_ADDDATE).ValueOrDefault("0")));
+            result.m_model.LastChangeDate = DateTime.FromBinary(long.Parse(root.Element(XML_LASTCHANGEDATE).ValueOrDefault("0")));
+            result.m_model.Description = root.Element(XML_DESCRIPTION).ValueOrDefault(string.Empty);
+
+            return result;
         }
     }
 }
