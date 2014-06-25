@@ -221,7 +221,11 @@ namespace Dziennik.View
                 }
             }
 
-            if (!hasLetter) return "Wprowadź przynajmniej jedną literę";
+            if (!hasLetter)
+            {
+                m_okCommand.RaiseCanExecuteChanged();
+                return "Wprowadź przynajmniej jedną literę";
+            }
 
             m_note = m_noteInput;
             m_noteInputValid = true;

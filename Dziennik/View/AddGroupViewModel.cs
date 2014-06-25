@@ -18,6 +18,7 @@ namespace Dziennik.View
         {
             m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
+            m_selectStudentsCommand = new RelayCommand(SelectStudents);
 
             m_globalStudentCollection = globalStudentCollection;
         }
@@ -30,6 +31,7 @@ namespace Dziennik.View
 
         private ObservableCollection<GlobalStudentViewModel> m_globalStudentCollection;
 
+        private bool m_nameValid = false;
         private string m_name;
         public string Name
         {
@@ -65,6 +67,12 @@ namespace Dziennik.View
             get { return m_cancelCommand; }
         }
 
+        private RelayCommand m_selectStudentsCommand;
+        public ICommand SelectStudentsCommand
+        {
+            get { return m_selectStudentsCommand; }
+        }
+
         private void Ok(object param)
         {
             if (m_selectedStudents.Count <= 0)
@@ -92,13 +100,22 @@ namespace Dziennik.View
         }
         private bool CanOk(object param)
         {
-            return m_selectedStudentsInputValid;
+            return m_nameValid && m_selectedStudentsInputValid;
         }
         private void Cancel(object param)
         {
             m_result = null;
 
             GlobalConfig.Dialogs.Close(this);
+        }
+        private void SelectStudents(object param)
+        {
+            SelectStudentsViewModel dialogViewModel = new SelectStudentsViewModel(m_globalStudentCollection, m_selectedStudents);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+            if(dialogViewModel.Result)
+            {
+                SelectedStudentsInput = dialogViewModel.ResultSelectionString;
+            }
         }
 
         public string Error
@@ -109,8 +126,9 @@ namespace Dziennik.View
         {
             get
             {
-                switch(columnName)
+                switch (columnName)
                 {
+                    case "Name": return ValidateName();
                     case "SelectedStudentsInput": return ValidateSelectedStudentsInput();
                 }
 
@@ -118,57 +136,46 @@ namespace Dziennik.View
             }
         }
 
+        public string ValidateName()
+        {
+            m_nameValid = false;
+
+            if (string.IsNullOrWhiteSpace(m_name))
+            {
+                m_okCommand.RaiseCanExecuteChanged();
+                return "Wprowadź nazwę grupy";
+            }
+
+            m_nameValid = true;
+            m_okCommand.RaiseCanExecuteChanged();
+            return string.Empty;
+        }
         public string ValidateSelectedStudentsInput()
         {
             m_selectedStudentsInputValid = false;
-            m_selectedStudents.Clear();
 
-            if (string.IsNullOrWhiteSpace(m_selectedStudentsInput))
+            string error;
+            List<int> tempColl = SelectStudentsViewModel.ParseSelection(m_selectedStudentsInput, out error);
+            if (tempColl == null)
             {
-                m_selectedStudentsInputValid = true;
-                return string.Empty;
+                m_okCommand.RaiseCanExecuteChanged();
+                return error;
             }
-
-            try
-            {
-                string toParse = m_selectedStudentsInput.Replace(" ", "");
-                
-                string[] tokens = m_selectedStudentsInput.Split(',', ';');
-
-                foreach (string item in tokens)
-                {
-                    int result;
-                    if (int.TryParse(item, out result))
-                    {
-                        m_selectedStudents.Add(result);
-                        continue;
-                    }
-
-                    string[] rangeStr = item.Split('-');
-                    if (rangeStr.Length != 2) return "Nieprawidłowy format. Zakresy oddziel jednym myślnikiem(-)";
-
-                    int minRange;
-                    int maxRange;
-                    if (!int.TryParse(rangeStr[0], out minRange) || !int.TryParse(rangeStr[1], out maxRange)) return "Niedozwolone znaki";
-
-                    for (int i = minRange; i <= maxRange; i++) m_selectedStudents.Add(i);
-                }
-            }
-            catch
-            {
-                Debug.Assert(true, "Exception in AddGroupViewModel.ValidateSelectedStudentsInput");
-            }
+            m_selectedStudents = tempColl;
 
             foreach (int selStudent in m_selectedStudents)
             {
                 if (m_globalStudentCollection.FirstOrDefault((gs) => { return gs.Id == selStudent; }) == null)
                 {
+                    m_okCommand.RaiseCanExecuteChanged();
                     return string.Format("Ucznia o numerze {0} nie ma w bazie", selStudent);
                 }
             }
 
             m_selectedStudentsInputValid = true;
+            m_okCommand.RaiseCanExecuteChanged();
             return string.Empty;
         }
+       
     }
 }

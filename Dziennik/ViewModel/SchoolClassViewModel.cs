@@ -141,9 +141,12 @@ namespace Dziennik.ViewModel
         
         public GlobalStudentViewModel FindCorrespondingGlobalStudent(int globalId)
         {
-            if (m_students.Count >= globalId && m_students[globalId - 1].Id == globalId) return m_students[globalId - 1];
+            if (globalId > 0 && m_students.Count >= globalId && m_students[globalId - 1].Id == globalId) return m_students[globalId - 1];
 
-            return m_students.First((gs) => { return gs.Id == globalId; });
+            GlobalStudentViewModel result = m_students.FirstOrDefault((gs) => { return gs.Id == globalId; });
+
+            if (result == null) result = GlobalStudentViewModel.Dummy;
+            return result;
         }
     }
 }

@@ -22,6 +22,7 @@ namespace Dziennik.View
             m_saveCommand = new RelayCommand(Save);
             m_showGlobalStudentsListCommand = new RelayCommand(ShowGlobalStudentsList);
             m_addGroupCommand = new RelayCommand(AddGroup);
+            m_editGroupCommand = new RelayCommand(EditGroup, CanEditGroup);
 
             m_dialogOwnerViewModel = dialogOwnerViewModel;
             m_viewModel = viewModel;
@@ -115,7 +116,7 @@ namespace Dziennik.View
         public SchoolGroupViewModel SelectedGroup
         {
             get { return m_selectedGroup; }
-            set { m_selectedGroup = value; OnPropertyChanged("SelectedGroup"); }
+            set { m_selectedGroup = value; OnPropertyChanged("SelectedGroup"); m_editGroupCommand.RaiseCanExecuteChanged(); }
         }
 
         private RelayCommand<ObservableCollection<MarkViewModel>> m_addMarkCommand;
@@ -146,6 +147,12 @@ namespace Dziennik.View
         public ICommand AddGroupCommand
         {
             get { return m_addGroupCommand; }
+        }
+
+        private RelayCommand m_editGroupCommand;
+        public ICommand EditGroupCommand
+        {
+            get { return m_editGroupCommand; }
         }
 
         private void AddMark(ObservableCollection<MarkViewModel> param)
@@ -195,6 +202,20 @@ namespace Dziennik.View
                 SelectedGroup = dialogViewModel.Result;
                 m_saveCommand.Execute(null);
             }
+        }
+        private void EditGroup(object param)
+        {
+            EditGroupViewModel dialogViewModel = new EditGroupViewModel(m_selectedGroup, m_viewModel.Students);
+            GlobalConfig.Dialogs.ShowDialog(m_dialogOwnerViewModel, dialogViewModel);
+            if (dialogViewModel.Result == EditGroupViewModel.EditGroupResult.RemoveGroup)
+            {
+                m_viewModel.Groups.Remove(m_selectedGroup);
+                SelectedGroup = null;
+            }
+        }
+        private bool CanEditGroup(object param)
+        {
+            return m_selectedGroup != null;
         }
     }
 }

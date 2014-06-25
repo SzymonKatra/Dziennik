@@ -16,7 +16,8 @@
         <WrapPanel Grid.Row="0" Orientation="Horizontal">
             <Button Content="Wszyscy uczniowie" Margin="5,5,5,5" Command="{Binding ShowGlobalStudentsListCommand}"/>
             <Border Width="1" Margin="2" Background="#8888"/>
-            <ComboBox ItemsSource="{Binding ViewModel.Groups}" Margin="5,5,5,5" SelectedItem="{Binding SelectedGroup, Mode=TwoWay}" DisplayMemberPath="Name"/>
+            <ComboBox ItemsSource="{Binding ViewModel.Groups}" MaxWidth="100" Margin="5,5,5,5" SelectedItem="{Binding SelectedGroup, Mode=TwoWay}" DisplayMemberPath="Name"/>
+            <Button Content="Edytuj grupę" Margin="5,5,5,5" Command="{Binding EditGroupCommand}"/>
             <Button Content="Dodaj grupę" Margin="5,5,5,5" Command="{Binding AddGroupCommand}"/>
         </WrapPanel>
         <DataGrid Grid.Row="1"
@@ -31,7 +32,7 @@
                 <DataGridTextColumn Header="Nr" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Imię" Binding="{Binding GlobalStudent.Name}"/>
                 <DataGridTextColumn Header="Nazwisko" Binding="{Binding GlobalStudent.Surname}"/>
-                <DataGridHyperlinkColumn Header="Email" Binding="{Binding GlobalStudent.Email}"/>
+                <DataGridTextColumn Header="Email" Binding="{Binding GlobalStudent.Email}"/>
                 <DataGridTemplateColumn Header="Oceny (1)">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

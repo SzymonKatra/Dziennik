@@ -25,7 +25,7 @@
                 <DataGridTextColumn Header="Nr" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Imię" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Nazwisko" Binding="{Binding Surname}"/>
-                <DataGridHyperlinkColumn Header="Email" Binding="{Binding Email}"/>
+                <DataGridTextColumn Header="Email" Binding="{Binding Email}"/>
                 <DataGridTemplateColumn Header="Edytuj">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

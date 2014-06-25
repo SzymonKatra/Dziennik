@@ -48,5 +48,21 @@ namespace Dziennik.ViewModel
             get { return m_model.AdditionalInformation; }
             set { m_model.AdditionalInformation = value; OnPropertyChanged("AdditionalInformation"); }
         }
+
+        public static GlobalStudentViewModel Dummy
+        {
+            get
+            {
+                GlobalStudentViewModel result = new GlobalStudentViewModel();
+
+                result.Id = -1;
+                result.Name = "----------";
+                result.Surname = "----------";
+                result.Email = "----------";
+                result.AdditionalInformation = string.Empty;
+
+                return result;
+            }
+        }
     }
 }

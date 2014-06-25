@@ -1,0 +1,51 @@
+﻿<Window x:Class="Dziennik.View.EditGroupWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="EditGroupWindow" Height="300" Width="300"
+        WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="70"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        
+        <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Nazwa"/>
+        <TextBox Grid.Column="1" Grid.Row="0" Margin="10,5,10,5" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
+        
+        <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".5*"/>
+                <ColumnDefinition Width=".5*"/>
+            </Grid.ColumnDefinitions>
+            
+            <Button Grid.Column="0" Margin="10,5,10,5" Content="Dodaj ucznia" Command="{Binding AddStudentCommand}"/>
+            <Button Grid.Column="1" Margin="10,5,10,5" Content="Usuń uczniów" Command="{Binding RemoveStudentsCommand}"/>
+        </Grid>
+
+        <Grid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".65*"/>
+                <ColumnDefinition Width=".35*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="1" Margin="10,5,10,5" Content="Usuń grupę" Command="{Binding RemoveGroupCommand}"/>
+        </Grid>
+        
+        <Grid Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".6*"/>
+                <ColumnDefinition Width=".4*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Margin="10,5,10,5" Content="OK" Command="{Binding OkCommand}"/>
+            <Button Grid.Column="1" Margin="10,5,10,5" Content="Anuluj" Command="{Binding CancelCommand}"/>
+        </Grid>
+    </Grid>
+</Window>
