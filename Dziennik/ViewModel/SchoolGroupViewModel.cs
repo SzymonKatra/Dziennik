@@ -53,10 +53,18 @@ namespace Dziennik.ViewModel
         private void SubscribeStudents()
         {
             m_students.ItemPropertyInCollectionChanged += m_students_ItemPropertyInCollectionChanged;
+            m_students.Added += m_students_Added;
+            m_students.Removed += m_students_Removed;
+
+            m_students.RaiseAddedForAll();
         }
         private void UnsubscribeStudents()
         {
+            m_students.RaiseRemovedForAll();
+
             m_students.ItemPropertyInCollectionChanged -= m_students_ItemPropertyInCollectionChanged;
+            m_students.Added -= m_students_Added;
+            m_students.Removed -= m_students_Removed;
         }
 
         private void m_students_ItemPropertyInCollectionChanged(object sender, ItemPropertyInCollectionChangedEventArgs<StudentInGroupViewModel> e)
@@ -64,6 +72,21 @@ namespace Dziennik.ViewModel
             if (e.PropertyName == "GlobalId")
             {
                 OnStudentInGroupAttachedGlobalIdChanged(new CommonEventArgs<StudentInGroupViewModel>(e.Item));
+            }
+        }
+        
+        private void m_students_Added(object sender, NotifyCollectionChangedSimpleEventArgs<StudentInGroupViewModel> e)
+        {
+            foreach(StudentInGroupViewModel item in e.Items)
+            {
+                OnStudentInGroupAttachedGlobalIdChanged(new CommonEventArgs<StudentInGroupViewModel>(item));
+            }
+        }
+        private void m_students_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<StudentInGroupViewModel> e)
+        {
+            foreach (StudentInGroupViewModel item in e.Items)
+            {
+                item.GlobalStudent = null;
             }
         }
 

@@ -9,19 +9,22 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Dziennik.Controls
+namespace Dziennik.View
 {
     /// <summary>
-    /// Interaction logic for SchoolClassControl.xaml
+    /// Interaction logic for GlobalStudentsListWindow.xaml
     /// </summary>
-    public partial class SchoolClassControl : UserControl
+    public partial class GlobalStudentsListWindow : Window
     {
-        public SchoolClassControl()
+        public GlobalStudentsListWindow(GlobalStudentsListViewModel viewModel)
         {
             InitializeComponent();
+
+            this.DataContext = viewModel;
+
+            GlobalConfig.Dialogs.Register(this, viewModel);
         }
     }
 }

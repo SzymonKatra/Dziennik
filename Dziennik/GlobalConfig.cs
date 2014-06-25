@@ -20,6 +20,8 @@ namespace Dziennik
             windowViewModelMappings.Add(typeof(EditMarkViewModel), (vm) => { return new EditMarkWindow((EditMarkViewModel)vm); });
             windowViewModelMappings.Add(typeof(EditStudentViewModel), (vm) => { return new EditStudentWindow((EditStudentViewModel)vm); });
             windowViewModelMappings.Add(typeof(ActionDialogViewModel), (vm) => { return new ActionDialogWindow((ActionDialogViewModel)vm); });
+            windowViewModelMappings.Add(typeof(GlobalStudentsListViewModel), (vm) => { return new GlobalStudentsListWindow((GlobalStudentsListViewModel)vm); });
+            windowViewModelMappings.Add(typeof(AddGroupViewModel), (vm) => { return new AddGroupWindow((AddGroupViewModel)vm); });
 
             Dialogs = new DialogService(windowViewModelMappings);
         }

@@ -80,6 +80,10 @@
     <Compile Include="View\ActionDialogWindow.xaml.cs">
       <DependentUpon>ActionDialogWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\AddGroupViewModel.cs" />
+    <Compile Include="View\AddGroupWindow.xaml.cs">
+      <DependentUpon>AddGroupWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\EditMarkWindow.xaml.cs">
       <DependentUpon>EditMarkWindow.xaml</DependentUpon>
     </Compile>
@@ -100,16 +104,20 @@
     <Compile Include="View\EditStudentWindow.xaml.cs">
       <DependentUpon>EditStudentWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\GlobalStudentsListViewModel.cs" />
+    <Compile Include="View\GlobalStudentsListWindow.xaml.cs">
+      <DependentUpon>GlobalStudentsListWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\MainViewModel.cs" />
     <Compile Include="ViewModel\SemesterViewModel.cs" />
     <Compile Include="ViewModel\GlobalStudentViewModel.cs" />
     <Compile Include="Controls\MarksControl.xaml.cs">
       <DependentUpon>MarksControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\SchoolClassControl.xaml.cs">
+    <Compile Include="View\SchoolClassControl.xaml.cs">
       <DependentUpon>SchoolClassControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\SchoolClassControlViewModel.cs" />
+    <Compile Include="View\SchoolClassControlViewModel.cs" />
     <Page Include="Controls\MessageBoxSuper.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -118,11 +126,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\AddGroupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\EditMarkWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\EditStudentWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\GlobalStudentsListWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -142,7 +158,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\SchoolClassControl.xaml">
+    <Page Include="View\SchoolClassControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
