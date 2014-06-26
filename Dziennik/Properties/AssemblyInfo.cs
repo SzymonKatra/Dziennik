@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("Dziennik")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Szymon Katra")]
 [assembly: AssemblyProduct("Dziennik")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
