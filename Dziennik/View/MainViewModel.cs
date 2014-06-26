@@ -25,11 +25,6 @@ namespace Dziennik.View
             m_saveCommand = new RelayCommand(Save, CanSave);
             m_saveAllCommand = new RelayCommand(SaveAll);
             m_closeTabCommand = new RelayCommand<SchoolClassControlViewModel>(CloseTab);
-
-            LoadRegistry();
-
-            string[] args = Environment.GetCommandLineArgs();
-            if (args.Length >= 2) m_openFromPathCommand.Execute(args[1]);
         }
 
         private ObservableCollection<SchoolClassControlViewModel> m_openedSchoolClasses = new ObservableCollection<SchoolClassControlViewModel>();
@@ -155,6 +150,18 @@ namespace Dziennik.View
             get { return m_closeTabCommand; }
         }
 
+        public void Init()
+        {
+            ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
+            {
+                LoadRegistry();
+            }
+            , null, "Odczytywanie z ustawień rejestru...");
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length >= 2) m_openFromPathCommand.Execute(args[1]);
+        }
+
         private void Add(object param)
         {
             SchoolClassViewModel schoolClass = new SchoolClassViewModel();
@@ -180,45 +187,44 @@ namespace Dziennik.View
 
             if (result == true)
             {
-                ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
-                {
-                    m_openFromPathCommand.Execute(ofd.FileName);
-                }
-                , null, "Otwieranie...");
-                GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
-
+                m_openFromPathCommand.Execute(ofd.FileName);
             }
         }
         private void OpenFromPath(string path)
         {
-            if (!File.Exists(path))
+            ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
             {
-                MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Wybrany plik nie istnieje", "Dziennik", MessageBoxSuperPredefinedButtons.OK);
-            }
-
-            SchoolClassControlViewModel searchTab = m_openedSchoolClasses.FirstOrDefault((x) => { return x.ViewModel.Path == path; });
-            if (searchTab != null)
-            {
-                MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Ta klasa jest już otwarta", "Dziennik", MessageBoxSuperPredefinedButtons.OK);
-                SelectedClass = searchTab;
-                return;
-            }
-
-            using (FileStream stream = new FileStream(path, FileMode.Open))
-            {
-                SchoolClassViewModel schoolClass = null;
-                try
+                if (!File.Exists(path))
                 {
-                    schoolClass = SchoolClassViewModel.Deserialize(stream);
+                    MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Wybrany plik nie istnieje", "Dziennik", MessageBoxSuperPredefinedButtons.OK);
                 }
-                catch { MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Wystąpił błąd podczas odczytywania pliku", "Dziennik", MessageBoxSuperPredefinedButtons.OK); }
 
-                if (schoolClass == null) return;
-                schoolClass.Path = path;
-                SchoolClassControlViewModel tab = new SchoolClassControlViewModel(this, schoolClass);
-                m_openedSchoolClasses.Add(tab);
-                SelectedClass = tab;
+                SchoolClassControlViewModel searchTab = m_openedSchoolClasses.FirstOrDefault((x) => { return x.ViewModel.Path == path; });
+                if (searchTab != null)
+                {
+                    MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Ta klasa jest już otwarta", "Dziennik", MessageBoxSuperPredefinedButtons.OK);
+                    SelectedClass = searchTab;
+                    return;
+                }
+
+                using (FileStream stream = new FileStream(path, FileMode.Open))
+                {
+                    SchoolClassViewModel schoolClass = null;
+                    try
+                    {
+                        schoolClass = SchoolClassViewModel.Deserialize(stream);
+                    }
+                    catch { MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Wystąpił błąd podczas odczytywania pliku", "Dziennik", MessageBoxSuperPredefinedButtons.OK); }
+
+                    if (schoolClass == null) return;
+                    schoolClass.Path = path;
+                    SchoolClassControlViewModel tab = new SchoolClassControlViewModel(this, schoolClass);
+                    m_openedSchoolClasses.Add(tab);
+                    SelectedClass = tab;
+                }
             }
+            , null, path, "Otwieranie");
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);         
         }
         private void Edit(object param)
         {
@@ -258,7 +264,7 @@ namespace Dziennik.View
             {
                 SaveRegistry();
             }
-            , null, "Zapisywanie do rejestru...");
+            , null, "Zapisywanie ustawień do rejestru...");
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
         private void CloseTab(SchoolClassControlViewModel e)
@@ -310,7 +316,7 @@ namespace Dziennik.View
             {
                 string lastOpened = lastOpenedReg.ToString();
                 string[] tokens = lastOpened.Split(';');
-                foreach (string file in tokens) m_openFromPathCommand.Execute(file);
+                foreach (string file in tokens) if (!string.IsNullOrWhiteSpace(file)) m_openFromPathCommand.Execute(file);
             }
         }
         private void SaveRegistry()

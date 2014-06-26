@@ -30,6 +30,13 @@ namespace Dziennik.View
             this.DataContext = viewModel;
 
             GlobalConfig.Dialogs.Register(this, viewModel);
+
+            this.Loaded += MainWindow_Loaded;
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            ((MainViewModel)this.DataContext).Init();
         }
     }
 }
