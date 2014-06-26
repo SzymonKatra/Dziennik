@@ -11,6 +11,18 @@ namespace Dziennik
     {
         public static readonly int DecimalRoundingPoints = 2;
         public static readonly string DateTimeFormat = "dd.MM.yyyy HH:mm";
+        public static readonly string FileExtension = ".dzi";
+        public static readonly string FileDialogFilter = "Pliki dziennika (.dzi)|*.dzi|Dokumenty XML (.xml)|*.xml|Wszystkie pliki (*.*)|*.*";
+        public static readonly string RegistryKeyName = @"Software\Dziennik_Katra";
+        public static readonly string RegistryValueNameShowName = "ShowName";
+        public static readonly string RegistryValueNameShowSurname = "ShowSurname";
+        public static readonly string RegistryValueNameShowEmail = "ShowEmail";
+        public static readonly string RegistryValueNameShowFirstMarks = "ShowFirstMarks";
+        public static readonly string RegistryValueNameShowFirstAverage = "ShowFirstAverage";
+        public static readonly string RegistryValueNameShowSecondMarks = "ShowSecondMarks";
+        public static readonly string RegistryValueNameShowSecondAverage = "ShowSecondAverage";
+        public static readonly string RegistryValueNameShowEndingAverage = "ShowEndingAverage";
+        public static readonly string RegistryValueNameLastOpened = "LastOpened";
 
         public static readonly DialogService Dialogs;
 
@@ -25,6 +37,7 @@ namespace Dziennik
             windowViewModelMappings.Add(typeof(AddGroupViewModel), (vm) => { return new AddGroupWindow((AddGroupViewModel)vm); });
             windowViewModelMappings.Add(typeof(SelectStudentsViewModel), (vm) => { return new SelectStudentsWindow((SelectStudentsViewModel)vm); });
             windowViewModelMappings.Add(typeof(EditGroupViewModel), (vm) => { return new EditGroupWindow((EditGroupViewModel)vm); });
+            windowViewModelMappings.Add(typeof(EditClassViewModel), (vm) => { return new EditClassWindow((EditClassViewModel)vm); });
 
             Dialogs = new DialogService(windowViewModelMappings);
         }

@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Dziennik.Model
 {
+    [Serializable]
     public sealed class Mark
     {
         private decimal m_value;

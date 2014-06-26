@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Dziennik.Model
 {
+    [Serializable]
     public sealed class SchoolClass
     {
         private string m_name;

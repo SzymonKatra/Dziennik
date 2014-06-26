@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:my="clr-namespace:Dziennik.Controls"
+             xmlns:local="clr-namespace:Dziennik"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="800">
     <Grid>
@@ -12,6 +13,8 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        
+        <FrameworkElement x:Name="dummyElement" Visibility="Collapsed"/>
         
         <WrapPanel Grid.Row="0" Orientation="Horizontal">
             <Button Content="Wszyscy uczniowie" Margin="5,5,5,5" Command="{Binding ShowGlobalStudentsListCommand}"/>
@@ -30,10 +33,10 @@
                   SelectedItem="{Binding SelectedStudent, Mode=TwoWay}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Nr" Binding="{Binding Id}"/>
-                <DataGridTextColumn Header="Imię" Binding="{Binding GlobalStudent.Name}"/>
-                <DataGridTextColumn Header="Nazwisko" Binding="{Binding GlobalStudent.Surname}"/>
-                <DataGridTextColumn Header="Email" Binding="{Binding GlobalStudent.Email}"/>
-                <DataGridTemplateColumn Header="Oceny (1)">
+                <DataGridTextColumn Header="Imię" Binding="{Binding GlobalStudent.Name}" Visibility="{Binding Source={x:Reference dummyElement}, Path=DataContext.OwnerViewModel.ShowName, Converter={StaticResource convertBoolToVisibility}}"/>
+                <DataGridTextColumn Header="Nazwisko" Binding="{Binding GlobalStudent.Surname}" Visibility="{Binding Source={x:Reference dummyElement}, Path=DataContext.OwnerViewModel.ShowSurname, Converter={StaticResource convertBoolToVisibility}}"/>
+                <DataGridTextColumn Header="Email" Binding="{Binding GlobalStudent.Email}" Visibility="{Binding Source={x:Reference dummyElement}, Path=DataContext.OwnerViewModel.ShowEmail, Converter={StaticResource convertBoolToVisibility}}"/>
+                <DataGridTemplateColumn Header="Oceny (1)" Visibility="{Binding Source={x:Reference dummyElement}, Path=DataContext.OwnerViewModel.ShowFirstMarks, Converter={StaticResource convertBoolToVisibility}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <my:MarksControl MarksSource="{Binding FirstSemester.Marks}" SelectedMark="{Binding DataContext.SelectedMark, ElementName=root, Mode=TwoWay}"
@@ -42,8 +45,8 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Średnia (1)" Binding="{Binding FirstSemester.AverageMark}"/>
-                <DataGridTemplateColumn Header="Oceny (2)">
+                <DataGridTextColumn Header="Średnia (1)" Binding="{Binding FirstSemester.AverageMark}" Visibility="{Binding Source={x:Reference dummyElement}, Path=DataContext.OwnerViewModel.ShowFirstAverage, Converter={StaticResource convertBoolToVisibility}}"/>
+                <DataGridTemplateColumn Header="Oceny (2)" Visibility="{Binding Source={x:Reference dummyElement}, Path=DataContext.OwnerViewModel.ShowSecondMarks, Converter={StaticResource convertBoolToVisibility}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <my:MarksControl MarksSource="{Binding SecondSemester.Marks}" SelectedMark="{Binding DataContext.SelectedMark, ElementName=root, Mode=TwoWay}"
@@ -52,8 +55,8 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Średnia (2)" Binding="{Binding SecondSemester.AverageMark}"/>
-                <DataGridTextColumn Header="Średnia (roczna)" Binding="{Binding AverageMarkAll}"/>
+                <DataGridTextColumn Header="Średnia (2)" Binding="{Binding SecondSemester.AverageMark}" Visibility="{Binding Source={x:Reference dummyElement}, Path=DataContext.OwnerViewModel.ShowSecondAverage, Converter={StaticResource convertBoolToVisibility}}"/>
+                <DataGridTextColumn Header="Średnia (roczna)" Binding="{Binding AverageMarkAll}" Visibility="{Binding Source={x:Reference dummyElement}, Path=DataContext.OwnerViewModel.ShowEndingAverage, Converter={StaticResource convertBoolToVisibility}}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Dziennik.Model;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace Dziennik.ViewModel
 {
@@ -22,6 +24,8 @@ namespace Dziennik.ViewModel
             SubscribeStudents();
             SubscribeGroups();
         }
+
+        private static XmlSerializer s_serializer = new XmlSerializer(typeof(SchoolClass));
 
         private SchoolClass m_model;
         public SchoolClass Model
@@ -65,6 +69,13 @@ namespace Dziennik.ViewModel
                 m_model.Groups = value.ModelCollection;
                 OnPropertyChanged("Groups");
             }
+        }
+
+        private string m_path;
+        public string Path
+        {
+            get { return m_path; }
+            set { m_path = value; }
         }
 
         private void SubscribeStudents()
@@ -147,6 +158,15 @@ namespace Dziennik.ViewModel
 
             if (result == null) result = GlobalStudentViewModel.Dummy;
             return result;
+        }
+
+        public void Serialize(Stream outputStream)
+        {
+            s_serializer.Serialize(outputStream, m_model);
+        }
+        public static SchoolClassViewModel Deserialize(Stream inputStream)
+        {
+            return new SchoolClassViewModel((SchoolClass)s_serializer.Deserialize(inputStream));
         }
     }
 }

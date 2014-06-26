@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using Dziennik.Model;
+using System.Xml.Linq;
 
 namespace Dziennik.ViewModel
 {

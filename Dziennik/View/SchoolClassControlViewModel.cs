@@ -6,16 +6,18 @@ using Dziennik.ViewModel;
 using Dziennik.CommandUtils;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.IO;
+using Dziennik.Model;
 
 namespace Dziennik.View
 {
     public sealed class SchoolClassControlViewModel : ObservableObject
     {
-        public SchoolClassControlViewModel(object dialogOwnerViewModel)
+        public SchoolClassControlViewModel(MainViewModel dialogOwnerViewModel)
             : this(dialogOwnerViewModel, new SchoolClassViewModel())
         {
         }
-        public SchoolClassControlViewModel(object dialogOwnerViewModel, SchoolClassViewModel viewModel)
+        public SchoolClassControlViewModel(MainViewModel dialogOwnerViewModel, SchoolClassViewModel viewModel)
         {
             m_addMarkCommand = new RelayCommand<ObservableCollection<MarkViewModel>>(AddMark);
             m_editMarkCommand = new RelayCommand<ObservableCollection<MarkViewModel>>(EditMark);
@@ -24,72 +26,17 @@ namespace Dziennik.View
             m_addGroupCommand = new RelayCommand(AddGroup);
             m_editGroupCommand = new RelayCommand(EditGroup, CanEditGroup);
 
-            m_dialogOwnerViewModel = dialogOwnerViewModel;
+            m_ownerViewModel = dialogOwnerViewModel;
             m_viewModel = viewModel;
-
-            m_viewModel.Name = "Klasa";
-
-            GlobalStudentViewModel s;
-
-            s = new GlobalStudentViewModel();
-            s.Id = 3;
-            s.Name = "aaaaaaaaaaaaaaaa";
-            s.Surname = "bbb";
-            s.Email = "eaaa";
-            viewModel.Students.Add(s);
-            
-
-            s = new GlobalStudentViewModel();
-            s.Id = 1;
-            s.Name = "ccc";
-            s.Surname = "ddd";
-            s.Email = "eccc";
-            viewModel.Students.Add(s);
-
-            s = new GlobalStudentViewModel();
-            s.Id = 4;
-            s.Name = "ggg";
-            s.Surname = "hhh";
-            s.Email = "eggg";
-           
-            viewModel.Students.Add(s);
-
-            s = new GlobalStudentViewModel();
-            s.Id = 2;
-            s.Name = "eee";
-            s.Surname = "fff";
-            s.Email = "eeee";
-            viewModel.Students.Add(s);
-
-            viewModel.Students.ModelCollection.Sort((x, y) => { return x.Id.CompareTo(y.Id); });
-            viewModel.Students.ResynchronizeWithModel();
-
-            SchoolGroupViewModel grp = new SchoolGroupViewModel();
-            grp.Name = "fafa";
-
-            StudentInGroupViewModel sg = new StudentInGroupViewModel();
-            sg.GlobalId = 1;
-            sg.Id = 1;
-            sg.FirstSemester.Marks.Add(new MarkViewModel() { Value = 4M });
-            sg.SecondSemester.Marks.Add(new MarkViewModel() { Value = 4.5M });
-            sg.FirstSemester.Marks.Add(new MarkViewModel() { Value = 2.5M });
-
-            grp.Students.Add(sg);
-
-            sg = new StudentInGroupViewModel();
-            sg.GlobalId = 2;
-            sg.Id = 2;
-            sg.FirstSemester.Marks.Add(new MarkViewModel() { Value = 2M });
-            sg.SecondSemester.Marks.Add(new MarkViewModel() { Value = 5.5M });
-            sg.FirstSemester.Marks.Add(new MarkViewModel() { Value = 4.5M });
-
-            grp.Students.Add(sg);
-            viewModel.Groups.Add(grp);
-
-            //m_selectedGroup = grp;
         }
 
-        private object m_dialogOwnerViewModel;
+        private MainViewModel m_ownerViewModel;
+        public MainViewModel OwnerViewModel
+        {
+            get { return m_ownerViewModel; }
+        }
+
+        public System.Windows.Visibility Vis = System.Windows.Visibility.Hidden;
 
         private SchoolClassViewModel m_viewModel;
         public SchoolClassViewModel ViewModel
@@ -160,7 +107,7 @@ namespace Dziennik.View
             MarkViewModel mark = new MarkViewModel();
             EditMarkViewModel dialogViewModel = new EditMarkViewModel(mark);
             dialogViewModel.IsAddingMode = true;
-            GlobalConfig.Dialogs.ShowDialog(m_dialogOwnerViewModel, dialogViewModel);
+            GlobalConfig.Dialogs.ShowDialog(m_ownerViewModel, dialogViewModel);
             if (dialogViewModel.Result == EditMarkViewModel.EditMarkResult.Ok)
             {
                 param.Add(mark);
@@ -170,7 +117,7 @@ namespace Dziennik.View
         private void EditMark(ObservableCollection<MarkViewModel> param)
         {
             EditMarkViewModel dialogViewModel = new EditMarkViewModel(m_selectedMark);
-            GlobalConfig.Dialogs.ShowDialog(m_dialogOwnerViewModel, dialogViewModel);
+            GlobalConfig.Dialogs.ShowDialog(m_ownerViewModel, dialogViewModel);
             if (dialogViewModel.Result == EditMarkViewModel.EditMarkResult.RemoveMark)
             {
                 param.Remove(m_selectedMark);
@@ -181,21 +128,24 @@ namespace Dziennik.View
         {
             ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
             {
-                //TODO: saving
+                using (FileStream stream = new FileStream(m_viewModel.Path, System.IO.FileMode.Create))
+                {
+                    m_viewModel.Serialize(stream);
+                }
             }
             , null, "Zapisywanie...");
-            GlobalConfig.Dialogs.ShowDialog(m_dialogOwnerViewModel, dialogViewModel);
+            GlobalConfig.Dialogs.ShowDialog(m_ownerViewModel, dialogViewModel);
         }
         private void ShowGlobalStudentsList(object param)
         {
             GlobalStudentsListViewModel dialogViewModel = new GlobalStudentsListViewModel(m_viewModel.Students);
             dialogViewModel.NeedSave += (s, e) => { m_saveCommand.Execute(null); };
-            GlobalConfig.Dialogs.ShowDialog(m_dialogOwnerViewModel, dialogViewModel);
+            GlobalConfig.Dialogs.ShowDialog(m_ownerViewModel, dialogViewModel);
         }
         private void AddGroup(object param)
         {
             AddGroupViewModel dialogViewModel = new AddGroupViewModel(m_viewModel.Students);
-            GlobalConfig.Dialogs.ShowDialog(m_dialogOwnerViewModel, dialogViewModel);
+            GlobalConfig.Dialogs.ShowDialog(m_ownerViewModel, dialogViewModel);
             if (dialogViewModel.Result != null)
             {
                 m_viewModel.Groups.Add(dialogViewModel.Result);
@@ -206,7 +156,7 @@ namespace Dziennik.View
         private void EditGroup(object param)
         {
             EditGroupViewModel dialogViewModel = new EditGroupViewModel(m_selectedGroup, m_viewModel.Students);
-            GlobalConfig.Dialogs.ShowDialog(m_dialogOwnerViewModel, dialogViewModel);
+            GlobalConfig.Dialogs.ShowDialog(m_ownerViewModel, dialogViewModel);
             if (dialogViewModel.Result == EditGroupViewModel.EditGroupResult.RemoveGroup)
             {
                 m_viewModel.Groups.Remove(m_selectedGroup);

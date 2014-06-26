@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Dziennik.Model
 {
+    [Serializable]
     public sealed class GlobalStudent
     {
         private int m_id;

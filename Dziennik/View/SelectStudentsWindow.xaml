@@ -4,7 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
         xmlns:c="clr-namespace:Dziennik.CommandUtils"
-        Title="SelectStudentsWindow" Height="300" Width="500"
+        Title="Dziennik" Height="300" Width="500"
         WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
