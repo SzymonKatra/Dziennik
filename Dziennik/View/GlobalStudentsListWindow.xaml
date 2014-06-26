@@ -12,6 +12,7 @@
         
         <WrapPanel Grid.Row="0" Orientation="Horizontal">
             <Button Content="Dodaj ucznia" Margin="5,5,5,5" Command="{Binding AddStudentCommand}"/>
+            <Button Content="Dodaj automatycznie ze schowka" Margin="5,5,5,5" Command="{Binding AutoAddStudentsClipboardCommand}"/>
         </WrapPanel>
         <DataGrid Grid.Row="1"
                   ItemsSource="{Binding Students}"

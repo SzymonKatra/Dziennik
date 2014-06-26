@@ -27,6 +27,9 @@ namespace Dziennik.View
             m_closeTabCommand = new RelayCommand<SchoolClassControlViewModel>(CloseTab);
 
             LoadRegistry();
+
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length >= 2) m_openFromPathCommand.Execute(args[1]);
         }
 
         private ObservableCollection<SchoolClassControlViewModel> m_openedSchoolClasses = new ObservableCollection<SchoolClassControlViewModel>();
@@ -103,6 +106,13 @@ namespace Dziennik.View
             set { m_showEndingAverage = value; OnPropertyChanged("ShowEndingAverage"); }
         }
 
+        private bool m_autoSave = true;
+        public bool AutoSave
+        {
+            get { return m_autoSave; }
+            set { m_autoSave = value; OnPropertyChanged("AutoSave"); }
+        }
+
         private RelayCommand m_addCommand;
         public ICommand AddCommand
         {
@@ -125,7 +135,7 @@ namespace Dziennik.View
         public ICommand EditCommand
         {
             get { return m_editCommand; }
-        }
+        }  
 
         private RelayCommand m_saveCommand;
         public ICommand SaveCommand
@@ -156,6 +166,7 @@ namespace Dziennik.View
                 SchoolClassControlViewModel tab = new SchoolClassControlViewModel(this, schoolClass);
                 m_openedSchoolClasses.Add(tab);
                 SelectedClass = tab;
+                m_selectedClass.SaveCommand.Execute(null);
             }
         }
         private void Open(object param)
@@ -190,6 +201,7 @@ namespace Dziennik.View
             {
                 MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Ta klasa jest już otwarta", "Dziennik", MessageBoxSuperPredefinedButtons.OK);
                 SelectedClass = searchTab;
+                return;
             }
 
             using (FileStream stream = new FileStream(path, FileMode.Open))
@@ -224,7 +236,7 @@ namespace Dziennik.View
                 m_openedSchoolClasses.Remove(tab);
                 return;
             }
-            if (dialogViewModel.Result == EditClassViewModel.EditClassResult.Ok) m_selectedClass.SaveCommand.Execute(null);
+            if (dialogViewModel.Result == EditClassViewModel.EditClassResult.Ok) m_selectedClass.AutoSaveCommand.Execute(null);
         }
         private bool CanEdit(object param)
         {
@@ -240,7 +252,7 @@ namespace Dziennik.View
         }
         private void SaveAll(object param)
         {
-            foreach (SchoolClassControlViewModel tab in m_openedSchoolClasses) tab.SaveCommand.Execute(null);
+            foreach (SchoolClassControlViewModel tab in m_openedSchoolClasses) PromptSave(tab);
 
             ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
             {
@@ -251,8 +263,23 @@ namespace Dziennik.View
         }
         private void CloseTab(SchoolClassControlViewModel e)
         {
-            e.SaveCommand.Execute(null);
+            PromptSave(e);
+            
             m_openedSchoolClasses.Remove(e);
+        }
+        private void PromptSave(SchoolClassControlViewModel param)
+        {
+            if (m_autoSave)
+            {
+                param.SaveCommand.Execute(null);
+            }
+            else
+            {
+                if (MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Czy chcesz zapisać zmiany w klasie " + param.ViewModel.Name + "?", "Dziennik", MessageBoxSuperPredefinedButtons.YesNo) == MessageBoxSuperButton.Yes)
+                {
+                    param.SaveCommand.Execute(null);
+                }
+            }
         }
 
         private void LoadRegistry()
@@ -266,6 +293,7 @@ namespace Dziennik.View
             object showSecondMarksReg = key.GetValue(GlobalConfig.RegistryValueNameShowSecondMarks);
             object showSecondAverageReg = key.GetValue(GlobalConfig.RegistryValueNameShowSecondAverage);
             object showEndingAverageReg = key.GetValue(GlobalConfig.RegistryValueNameShowEndingAverage);
+            object autoSaveReg = key.GetValue(GlobalConfig.RegistryValueNameAutoSave);
             object lastOpenedReg = key.GetValue(GlobalConfig.RegistryValueNameLastOpened);
             key.Close();
 
@@ -277,6 +305,7 @@ namespace Dziennik.View
             if (showSecondMarksReg != null) bool.TryParse(showSecondMarksReg.ToString(), out m_showSecondMarks);
             if (showSecondAverageReg != null) bool.TryParse(showSecondAverageReg.ToString(), out m_showSecondAverage);
             if (showEndingAverageReg != null) bool.TryParse(showEndingAverageReg.ToString(), out m_showEndingAverage);
+            if (autoSaveReg != null) bool.TryParse(autoSaveReg.ToString(), out m_autoSave);
             if (lastOpenedReg != null)
             {
                 string lastOpened = lastOpenedReg.ToString();
@@ -295,13 +324,14 @@ namespace Dziennik.View
             key.SetValue(GlobalConfig.RegistryValueNameShowSecondMarks, m_showSecondMarks);
             key.SetValue(GlobalConfig.RegistryValueNameShowSecondAverage, m_showSecondAverage);
             key.SetValue(GlobalConfig.RegistryValueNameShowEndingAverage, m_showEndingAverage);
+            key.SetValue(GlobalConfig.RegistryValueNameAutoSave, m_autoSave);
             StringBuilder builder = new StringBuilder();
             foreach (SchoolClassControlViewModel item in m_openedSchoolClasses)
             {
                 builder.Append(item.ViewModel.Path);
                 builder.Append(";");
             }
-            builder.Remove(builder.Length - 1, 1); // remove last ;
+            if (builder.Length >= 1) builder.Remove(builder.Length - 1, 1); // remove last ;
             key.SetValue(GlobalConfig.RegistryValueNameLastOpened, builder.ToString());
             key.Close();
         }

@@ -21,6 +21,7 @@ namespace Dziennik.View
         {
             m_addMarkCommand = new RelayCommand<ObservableCollection<MarkViewModel>>(AddMark);
             m_editMarkCommand = new RelayCommand<ObservableCollection<MarkViewModel>>(EditMark);
+            m_autoSaveCommand = new RelayCommand(AutoSave);
             m_saveCommand = new RelayCommand(Save);
             m_showGlobalStudentsListCommand = new RelayCommand(ShowGlobalStudentsList);
             m_addGroupCommand = new RelayCommand(AddGroup);
@@ -78,6 +79,12 @@ namespace Dziennik.View
             get { return m_editMarkCommand; }
         }
 
+        private RelayCommand m_autoSaveCommand;
+        public ICommand AutoSaveCommand
+        {
+            get { return m_autoSaveCommand; }
+        }
+
         private RelayCommand m_saveCommand;
         public ICommand SaveCommand
         {
@@ -112,7 +119,7 @@ namespace Dziennik.View
             {
                 param.Add(mark);
             }
-            if (dialogViewModel.Result != EditMarkViewModel.EditMarkResult.Cancel) m_saveCommand.Execute(null);
+            if (dialogViewModel.Result != EditMarkViewModel.EditMarkResult.Cancel) m_autoSaveCommand.Execute(null);
         }
         private void EditMark(ObservableCollection<MarkViewModel> param)
         {
@@ -122,7 +129,11 @@ namespace Dziennik.View
             {
                 param.Remove(m_selectedMark);
             }
-            if (dialogViewModel.Result != EditMarkViewModel.EditMarkResult.Cancel) m_saveCommand.Execute(null);
+            if (dialogViewModel.Result != EditMarkViewModel.EditMarkResult.Cancel) m_autoSaveCommand.Execute(null);
+        }
+        private void AutoSave(object param)
+        {
+            if (m_ownerViewModel.AutoSave) m_saveCommand.Execute(null);
         }
         private void Save(object param)
         {
@@ -139,7 +150,7 @@ namespace Dziennik.View
         private void ShowGlobalStudentsList(object param)
         {
             GlobalStudentsListViewModel dialogViewModel = new GlobalStudentsListViewModel(m_viewModel.Students);
-            dialogViewModel.NeedSave += (s, e) => { m_saveCommand.Execute(null); };
+            dialogViewModel.NeedSave += (s, e) => { m_autoSaveCommand.Execute(null); };
             GlobalConfig.Dialogs.ShowDialog(m_ownerViewModel, dialogViewModel);
         }
         private void AddGroup(object param)
@@ -150,7 +161,7 @@ namespace Dziennik.View
             {
                 m_viewModel.Groups.Add(dialogViewModel.Result);
                 SelectedGroup = dialogViewModel.Result;
-                m_saveCommand.Execute(null);
+                m_autoSaveCommand.Execute(null);
             }
         }
         private void EditGroup(object param)
@@ -161,6 +172,7 @@ namespace Dziennik.View
             {
                 m_viewModel.Groups.Remove(m_selectedGroup);
                 SelectedGroup = null;
+                m_autoSaveCommand.Execute(null);
             }
         }
         private bool CanEditGroup(object param)

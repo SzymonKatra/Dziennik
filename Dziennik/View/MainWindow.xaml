@@ -41,14 +41,18 @@
 
             <Border Width="1" Margin="2" Background="#8888"/>
             
-            <CheckBox Content="Imię" VerticalAlignment="Center" IsChecked="{Binding ShowName, Mode=TwoWay}"/>
-            <CheckBox Content="Nazwisko" VerticalAlignment="Center" IsChecked="{Binding ShowSurname, Mode=TwoWay}"/>
-            <CheckBox Content="Email" VerticalAlignment="Center" IsChecked="{Binding ShowEmail, Mode=TwoWay}"/>
-            <CheckBox Content="Oceny (1)" VerticalAlignment="Center" IsChecked="{Binding ShowFirstMarks, Mode=TwoWay}"/>
-            <CheckBox Content="Średnia (1)" VerticalAlignment="Center" IsChecked="{Binding ShowFirstAverage, Mode=TwoWay}"/>
-            <CheckBox Content="Oceny (2)" VerticalAlignment="Center" IsChecked="{Binding ShowSecondMarks, Mode=TwoWay}"/>
-            <CheckBox Content="Średnia (2)" VerticalAlignment="Center" IsChecked="{Binding ShowSecondAverage, Mode=TwoWay}"/>
-            <CheckBox Content="Średnia (roczna)" VerticalAlignment="Center" IsChecked="{Binding ShowEndingAverage, Mode=TwoWay}"/>
+            <CheckBox Content="Imię" Margin="5,5,5,5" VerticalAlignment="Center" IsChecked="{Binding ShowName, Mode=TwoWay}"/>
+            <CheckBox Content="Nazwisko" Margin="5,5,5,5" VerticalAlignment="Center" IsChecked="{Binding ShowSurname, Mode=TwoWay}"/>
+            <CheckBox Content="Email" Margin="5,5,5,5" VerticalAlignment="Center" IsChecked="{Binding ShowEmail, Mode=TwoWay}"/>
+            <CheckBox Content="Oceny (1)" Margin="5,5,5,5" VerticalAlignment="Center" IsChecked="{Binding ShowFirstMarks, Mode=TwoWay}"/>
+            <CheckBox Content="Średnia (1)" Margin="5,5,5,5" VerticalAlignment="Center" IsChecked="{Binding ShowFirstAverage, Mode=TwoWay}"/>
+            <CheckBox Content="Oceny (2)" Margin="5,5,5,5" VerticalAlignment="Center" IsChecked="{Binding ShowSecondMarks, Mode=TwoWay}"/>
+            <CheckBox Content="Średnia (2)" Margin="5,5,5,5" VerticalAlignment="Center" IsChecked="{Binding ShowSecondAverage, Mode=TwoWay}"/>
+            <CheckBox Content="Średnia (roczna)" Margin="5,5,5,5" VerticalAlignment="Center" IsChecked="{Binding ShowEndingAverage, Mode=TwoWay}"/>
+
+            <Border Width="1" Margin="2" Background="#8888"/>
+
+            <CheckBox Content="Autozapis" Margin="5,5,5,5" VerticalAlignment="Center" IsChecked="{Binding AutoSave, Mode=TwoWay}"/>
         </WrapPanel>
         
         <TabControl Grid.Row="1" ItemsSource="{Binding OpenedSchoolClasses}" SelectedValue="{Binding SelectedClass, Mode=TwoWay}">

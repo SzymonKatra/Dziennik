@@ -22,6 +22,7 @@ namespace Dziennik
         public static readonly string RegistryValueNameShowSecondMarks = "ShowSecondMarks";
         public static readonly string RegistryValueNameShowSecondAverage = "ShowSecondAverage";
         public static readonly string RegistryValueNameShowEndingAverage = "ShowEndingAverage";
+        public static readonly string RegistryValueNameAutoSave = "AutoSave";
         public static readonly string RegistryValueNameLastOpened = "LastOpened";
 
         public static readonly DialogService Dialogs;

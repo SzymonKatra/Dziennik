@@ -86,6 +86,7 @@ namespace Dziennik.View
         {
             get { return m_choosePathCommand; }
         }
+        
 
         private void Ok(object param)
         {
@@ -145,6 +146,7 @@ namespace Dziennik.View
                 Path = sfd.FileName;
             }
         }
+        
 
         public string Error
         {
