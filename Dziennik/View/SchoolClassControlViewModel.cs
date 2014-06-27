@@ -37,8 +37,6 @@ namespace Dziennik.View
             get { return m_ownerViewModel; }
         }
 
-        public System.Windows.Visibility Vis = System.Windows.Visibility.Hidden;
-
         private SchoolClassViewModel m_viewModel;
         public SchoolClassViewModel ViewModel
         {

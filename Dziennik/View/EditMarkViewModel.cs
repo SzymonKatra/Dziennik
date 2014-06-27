@@ -178,10 +178,12 @@ namespace Dziennik.View
 
             decimal result;
 
-            if (!decimal.TryParse(m_valueInput, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out result))
+            string toParse = m_valueInput.Replace(',', '.');
+
+            if (!decimal.TryParse(toParse, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out result))
             {
                 m_okCommand.RaiseCanExecuteChanged();
-                return "Wprowadź poprawną liczbę. Oddziel liczby kropką (.)";
+                return "Wprowadź poprawną liczbę. Oddziel liczby kropką (.) lub przecinkiem(,)";
             }
 
             if(result <1M || result > 6M)

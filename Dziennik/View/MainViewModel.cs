@@ -303,15 +303,15 @@ namespace Dziennik.View
             object lastOpenedReg = key.GetValue(GlobalConfig.RegistryValueNameLastOpened);
             key.Close();
 
-            if (showNameReg != null) bool.TryParse(showNameReg.ToString(), out m_showName);
-            if (showSurnameReg != null) bool.TryParse(showSurnameReg.ToString(), out m_showSurname);
-            if (showEmailReg != null) bool.TryParse(showEmailReg.ToString(), out m_showEmail);
-            if (showFirstMarksReg != null) bool.TryParse(showFirstMarksReg.ToString(), out m_showFirstMarks);
-            if (showFirstAverageReg != null) bool.TryParse(showFirstAverageReg.ToString(), out m_showFirstAverage);
-            if (showSecondMarksReg != null) bool.TryParse(showSecondMarksReg.ToString(), out m_showSecondMarks);
-            if (showSecondAverageReg != null) bool.TryParse(showSecondAverageReg.ToString(), out m_showSecondAverage);
-            if (showEndingAverageReg != null) bool.TryParse(showEndingAverageReg.ToString(), out m_showEndingAverage);
-            if (autoSaveReg != null) bool.TryParse(autoSaveReg.ToString(), out m_autoSave);
+            if (showNameReg != null) ShowName= Ext.BoolParseOrDefault(showNameReg.ToString(), m_showName);
+            if (showSurnameReg != null) ShowSurname= Ext.BoolParseOrDefault(showSurnameReg.ToString(), m_showSurname);
+            if (showEmailReg != null) ShowEmail = Ext.BoolParseOrDefault(showEmailReg.ToString(), m_showEmail);
+            if (showFirstMarksReg != null) ShowFirstMarks = Ext.BoolParseOrDefault(showFirstMarksReg.ToString(), m_showFirstMarks);
+            if (showFirstAverageReg != null) ShowFirstAverage = Ext.BoolParseOrDefault(showFirstAverageReg.ToString(), m_showFirstAverage);
+            if (showSecondMarksReg != null) ShowSecondMarks = Ext.BoolParseOrDefault(showSecondMarksReg.ToString(), m_showSecondMarks);
+            if (showSecondAverageReg != null) ShowSecondAverage = Ext.BoolParseOrDefault(showSecondAverageReg.ToString(), m_showSecondAverage);
+            if (showEndingAverageReg != null) ShowEndingAverage = Ext.BoolParseOrDefault(showEndingAverageReg.ToString(), m_showEndingAverage);
+            if (autoSaveReg != null) AutoSave = Ext.BoolParseOrDefault(autoSaveReg.ToString(), m_autoSave);
             if (lastOpenedReg != null)
             {
                 string lastOpened = lastOpenedReg.ToString();
