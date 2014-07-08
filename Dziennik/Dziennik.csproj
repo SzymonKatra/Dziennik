@@ -66,6 +66,9 @@
     <Compile Include="Controls\DirectorySelector.xaml.cs">
       <DependentUpon>DirectorySelector.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\EndingMarkControl.xaml.cs">
+      <DependentUpon>EndingMarkControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\MessageBoxSuper.xaml.cs">
       <DependentUpon>MessageBoxSuper.xaml</DependentUpon>
     </Compile>
@@ -139,6 +142,10 @@
       <DependentUpon>SelectStudentsWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\DirectorySelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\EndingMarkControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

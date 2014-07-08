@@ -27,6 +27,7 @@ namespace Dziennik.View
 
             MainViewModel viewModel = new MainViewModel();
 
+            GlobalConfig.Main = viewModel;
             this.DataContext = viewModel;
 
             GlobalConfig.Dialogs.Register(this, viewModel);

@@ -13,14 +13,17 @@ namespace Dziennik.View
 {
     public sealed class GlobalStudentsListViewModel : ObservableObject
     {
-        public GlobalStudentsListViewModel(ObservableCollection<GlobalStudentViewModel> students)
+        public GlobalStudentsListViewModel(ObservableCollection<GlobalStudentViewModel> students, ICommand autoSaveCommand)
         {
             m_addStudentCommand = new RelayCommand(AddStudent);
             m_editStudentCommand = new RelayCommand(EditStudent);
             m_autoAddStudentsClipboardCommand = new RelayCommand(AutoAddStudentsClipboard);
 
             m_students = students;
+            m_autoSaveCommand = autoSaveCommand;
         }
+
+        private ICommand m_autoSaveCommand;
 
         private RelayCommand m_addStudentCommand;
         public ICommand AddStudentCommand
@@ -54,8 +57,6 @@ namespace Dziennik.View
             set { m_selectedStudent = value; OnPropertyChanged("SelectedStudent"); }
         }
 
-        public event EventHandler NeedSave;
-
         private void AddStudent(object e)
         {
             GlobalStudentViewModel student = new GlobalStudentViewModel();
@@ -74,7 +75,7 @@ namespace Dziennik.View
                 //    m_viewModel.Students[i].Id++;
                 //}
             }
-            if (dialogViewModel.Result != EditStudentViewModel.EditStudentResult.Cancel) OnNeedSave(EventArgs.Empty);
+            if (dialogViewModel.Result != EditStudentViewModel.EditStudentResult.Cancel) m_autoSaveCommand.Execute(this);
         }
         private void EditStudent(object e)
         {
@@ -91,10 +92,11 @@ namespace Dziennik.View
 
                 m_students.RemoveAt(index);
             }
-            if (dialogViewModel.Result != EditStudentViewModel.EditStudentResult.Cancel) OnNeedSave(EventArgs.Empty);
+            if (dialogViewModel.Result != EditStudentViewModel.EditStudentResult.Cancel) m_autoSaveCommand.Execute(this);
         }
         private void AutoAddStudentsClipboard(object param)
         {
+            if (MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Czy chcesz kontynuować?", "Dziennik", MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
             try
             {
                 if (Clipboard.ContainsData(DataFormats.Text))
@@ -131,12 +133,6 @@ namespace Dziennik.View
         private int GetNextStudentId()
         {
             return (m_students.Count <= 0 ? 1 : m_students[m_students.Count - 1].Id + 1);
-        }
-
-        private void OnNeedSave(EventArgs e)
-        {
-            EventHandler handler = NeedSave;
-            if (handler != null) handler(this, e);
         }
     }
 }

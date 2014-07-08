@@ -18,10 +18,8 @@ namespace Dziennik.View
     {
         public MainViewModel()
         {
-            m_addCommand = new RelayCommand(Add);
             m_openCommand = new RelayCommand(Open);
             m_openFromPathCommand = new RelayCommand<string>(OpenFromPath);
-            m_editCommand = new RelayCommand(Edit, CanEdit);
             m_saveCommand = new RelayCommand(Save, CanSave);
             m_saveAllCommand = new RelayCommand(SaveAll);
             m_closeTabCommand = new RelayCommand<SchoolClassControlViewModel>(CloseTab);
@@ -42,15 +40,8 @@ namespace Dziennik.View
             {
                 m_selectedClass = value;
                 OnPropertyChanged("SelectedClass");
-                m_editCommand.RaiseCanExecuteChanged();
                 m_saveCommand.RaiseCanExecuteChanged();
             }
-        }
-
-        private RelayCommand m_addCommand;
-        public ICommand AddCommand
-        {
-            get { return m_addCommand; }
         }
 
         private RelayCommand m_openCommand;
@@ -64,12 +55,6 @@ namespace Dziennik.View
         {
             get { return m_openFromPathCommand; }
         }
-
-        private RelayCommand m_editCommand;
-        public ICommand EditCommand
-        {
-            get { return m_editCommand; }
-        }  
 
         private RelayCommand m_saveCommand;
         public ICommand SaveCommand
@@ -95,6 +80,8 @@ namespace Dziennik.View
             get { return m_optionsCommand; }
         }
 
+        private bool m_schoolClassesDirectoryChanged = true;
+
         public void Init()
         {
             GlobalConfig.Notifier.PropertyChanged += Notifier_PropertyChanged;
@@ -105,29 +92,17 @@ namespace Dziennik.View
             }
             , null, "Odczytywanie z ustawień rejestru...");
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+
+            ReloadSchoolClasses();
             
             //string[] args = Environment.GetCommandLineArgs();
             //if (args.Length >= 2) m_openFromPathCommand.Execute(args[1]);
         }
         private void Notifier_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "SchoolClassesDirectory") ReloadSchoolClasses();
+            if (e.PropertyName == "SchoolClassesDirectory") m_schoolClassesDirectoryChanged = true;
         }
 
-        private void Add(object param)
-        {
-            SchoolClassViewModel schoolClass = new SchoolClassViewModel();
-            EditClassViewModel dialogViewModel = new EditClassViewModel(schoolClass);
-            dialogViewModel.IsAddingMode = true;
-            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
-            if (dialogViewModel.Result == EditClassViewModel.EditClassResult.Ok)
-            {
-                SchoolClassControlViewModel tab = new SchoolClassControlViewModel(this, schoolClass);
-                m_openedSchoolClasses.Add(tab);
-                SelectedClass = tab;
-                m_selectedClass.SaveCommand.Execute(null);
-            }
-        }
         private void Open(object param)
         {
             Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
@@ -170,7 +145,7 @@ namespace Dziennik.View
 
                     if (schoolClass == null) return;
                     schoolClass.Path = path;
-                    SchoolClassControlViewModel tab = new SchoolClassControlViewModel(this, schoolClass);
+                    SchoolClassControlViewModel tab = new SchoolClassControlViewModel(schoolClass);
                     m_openedSchoolClasses.Add(tab);
                     SelectedClass = tab;
 
@@ -182,28 +157,6 @@ namespace Dziennik.View
             }
             , null, path, "Otwieranie");
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);         
-        }
-        private void Edit(object param)
-        {
-            SchoolClassControlViewModel tab = m_selectedClass;
-            EditClassViewModel dialogViewModel = new EditClassViewModel(tab.ViewModel);
-            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
-            if (dialogViewModel.Result == EditClassViewModel.EditClassResult.RemoveClass)
-            {
-                if (System.IO.File.Exists(tab.ViewModel.Path))
-                {
-                    System.IO.File.Delete(tab.ViewModel.Path);
-                }
-
-                m_selectedClass = null;
-                m_openedSchoolClasses.Remove(tab);
-                return;
-            }
-            if (dialogViewModel.Result == EditClassViewModel.EditClassResult.Ok) m_selectedClass.AutoSaveCommand.Execute(null);
-        }
-        private bool CanEdit(object param)
-        {
-            return m_selectedClass != null;
         }
         private void Save(object param)
         {
@@ -246,17 +199,35 @@ namespace Dziennik.View
         }
         private void Options(object e)
         {
-            OptionsViewModel dialogViewModel = new OptionsViewModel();
+            OptionsViewModel dialogViewModel = new OptionsViewModel(m_openedSchoolClasses);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+            ActionDialogViewModel saveDialogViewModel = new ActionDialogViewModel((d, p) =>
+            {
+                GlobalConfig.Notifier.SaveRegistry();
+            }
+            , null, "Zapisywanie ustawień do rejestru...");
+            GlobalConfig.Dialogs.ShowDialog(this, saveDialogViewModel);
+            if (m_schoolClassesDirectoryChanged) ReloadSchoolClasses();
         }
 
+        private void CloseAllTabs()
+        {
+            foreach (SchoolClassControlViewModel tab in m_openedSchoolClasses) m_closeTabCommand.Execute(tab);
+        }
         private void ReloadSchoolClasses()
         {
-            IEnumerable<string> files = Directory.EnumerateFiles(GlobalConfig.Notifier.SchoolClassesDirectory);
+            try
+            {
+                CloseAllTabs();
 
-            var validFiles = from f in files where f.EndsWith(GlobalConfig.FileExtension) select f;
+                IEnumerable<string> files = Directory.EnumerateFiles(GlobalConfig.Notifier.SchoolClassesDirectory);
 
-            foreach (string file in validFiles) m_openFromPathCommand.Execute(file);
+                var validFiles = from f in files where f.EndsWith(GlobalConfig.FileExtension) select f;
+
+                foreach (string file in validFiles) m_openFromPathCommand.Execute(file);
+            }
+            catch { }
+            m_schoolClassesDirectoryChanged = false;
         }
     }
 }

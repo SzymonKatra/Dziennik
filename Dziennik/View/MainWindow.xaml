@@ -11,14 +11,6 @@
         Title="Dziennik" Height="350" Width="900"
         WindowStartupLocation="CenterScreen">
     
-    <Window.Resources>
-        <Style x:Key="imageButtonStyle" TargetType="Button">
-            <Setter Property="Margin" Value="5,5,5,5"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Background" Value="Transparent"/>
-        </Style>
-    </Window.Resources>
-    
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
             <c:EventToCommand Command="{Binding SaveAllCommand}"/>
@@ -32,15 +24,6 @@
         </Grid.RowDefinitions>
         
         <WrapPanel Grid.Row="0" Orientation="Horizontal">
-            <Button Style="{StaticResource imageButtonStyle}" ToolTip="Dodaj klasę" Command="{Binding AddCommand}">
-                <Image Source="{StaticResource img_add}"/>
-            </Button>
-            <Button Style="{StaticResource imageButtonStyle}"  ToolTip="Otwórz istniejącą klasę" Command="{Binding OpenCommand}">
-                <Image Source="{StaticResource img_open}"/>
-            </Button>
-            <Button Style="{StaticResource imageButtonStyle}"  ToolTip="Edytuj wybraną klasę"  Command="{Binding EditCommand}">
-                <Image Source="{StaticResource img_edit}"/>
-            </Button>
             <Button Style="{StaticResource imageButtonStyle}"  ToolTip="Zapisz zmiany w wybranej klasie" Command="{Binding SaveCommand}">
                 <Image Source="{StaticResource img_save}"/>
             </Button>

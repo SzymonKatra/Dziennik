@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Dziennik.View.EditClassWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Dziennik" Height="200" Width="300"
+        Title="Edytuj klasę" Height="300" Width="300"
         WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -9,6 +9,8 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
@@ -20,16 +22,38 @@
         <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
 
         <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="Ścieżka"/>
-        <Grid Grid.Column="1" Grid.Row="1" IsEnabled="False">
+        <Grid Grid.Column="1" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="30"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox Grid.Column="0" Text="{Binding Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
-            <Button Grid.Column="1" Margin="0,5,10,5" Content="..." Command="{Binding ChoosePathCommand}"/>
+            <TextBox Grid.Column="0" Text="{Binding Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}" IsReadOnly="True"/>
+            <Button Grid.Column="1" Margin="0,5,10,5" Content="..." Command="{Binding ChoosePathCommand}" IsEnabled="False"/>
         </Grid>
+
+        <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <ComboBox Grid.Column="0" Style="{StaticResource inputControlStyle}" ItemsSource="{Binding SchoolClass.Groups}" SelectedItem="{Binding SelectedGroup, Mode=TwoWay}" DisplayMemberPath="Name"/>
+            <WrapPanel Grid.Column="1">
+                <Button Style="{StaticResource imageButtonStyle}" Command="{Binding EditGroupCommand}">
+                    <Image Source="{StaticResource img_edit}"/>
+                </Button>
+                <Button Style="{StaticResource imageButtonStyle}" Command="{Binding AddGroupCommand}">
+                    <Image Source="{StaticResource img_add}"/>
+                </Button>
+            </WrapPanel>
+        </Grid>
+        
         <Grid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">
+            <Button Content="Wszyscy uczniowie" Margin="10,5,10,5" Command="{Binding ShowGlobalStudentsListCommand}"/>
+        </Grid>
+
+        <Grid Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width=".65*"/>
                 <ColumnDefinition Width=".35*"/>
@@ -38,7 +62,7 @@
             <Button Grid.Column="1" Margin="10,5,10,5" Content="Usuń klasę" Command="{Binding RemoveClassCommand}"/>
         </Grid>
 
-        <Grid Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2">
+        <Grid Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width=".6*"/>
                 <ColumnDefinition Width=".4*"/>

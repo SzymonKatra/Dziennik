@@ -192,6 +192,17 @@ namespace Dziennik
 
         public static readonly DialogService Dialogs;
 
+        private static MainViewModel m_main;
+        public static MainViewModel Main
+        {
+            get { return m_main; }
+            set
+            {
+                if (m_main != null) throw new InvalidOperationException("Main window already assigned");
+                m_main = value;
+            }
+        }
+
         static GlobalConfig()
         {
             Dictionary<Type, Func<object, Window>> windowViewModelMappings = new Dictionary<Type, Func<object, Window>>();
@@ -216,7 +227,6 @@ namespace Dziennik
         }
 
         //SINGLETON
-
         private static GlobalConfigNotifier m_notifier = null;
         public static GlobalConfigNotifier Notifier
         {

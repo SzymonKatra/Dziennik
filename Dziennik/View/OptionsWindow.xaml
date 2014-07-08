@@ -5,7 +5,7 @@
         xmlns:local="clr-namespace:Dziennik"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
         xmlns:c="clr-namespace:Dziennik.CommandUtils"
-        Title="OptionsWindow" Height="300" Width="300"
+        Title="Opcje" Height="350" Width="300"
         WindowStartupLocation="CenterOwner">
 
     <i:Interaction.Triggers>
@@ -20,7 +20,8 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="35"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
@@ -29,10 +30,27 @@
         <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="Katalog z klasami"/>
         <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="Katalog z archiwami"/>
 
-        <my:DirectorySelector Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" SelectedPath="{Binding SchoolClassesDirectory, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
-        <my:DirectorySelector Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" SelectedPath="{Binding SchoolClassesBackupDirectory, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
+        <my:DirectorySelector x:Name="dirSelect" Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" SelectedPath="{Binding SchoolClassesDirectory, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}" IsTextBoxReadOnly="True"/>
+        <my:DirectorySelector Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" SelectedPath="{Binding SchoolClassesBackupDirectory, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}" IsTextBoxReadOnly="True"/>
         
-        <WrapPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Orientation="Vertical">
+        <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <ComboBox Grid.Column="0" Style="{StaticResource inputControlStyle}" ItemsSource="{Binding OpenedSchoolClasses}" SelectedItem="{Binding SelectedClass, Mode=TwoWay}" DisplayMemberPath="ViewModel.Name"/>
+            <WrapPanel Grid.Column="1">
+                <Button Style="{StaticResource imageButtonStyle}" Command="{Binding EditClassCommand}">
+                    <Image Source="{StaticResource img_edit}"/>
+                </Button>
+                <Button Style="{StaticResource imageButtonStyle}" Command="{Binding AddClassCommand}">
+                    <Image Source="{StaticResource img_add}"/>
+                </Button>
+            </WrapPanel>
+        </Grid>
+        
+        <WrapPanel Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Orientation="Vertical">
             <CheckBox Content="Imię" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowName, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
             <CheckBox Content="Nazwisko" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowSurname, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
             <CheckBox Content="Email" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowEmail, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>

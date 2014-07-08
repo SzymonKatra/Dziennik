@@ -11,7 +11,7 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         
-        <TextBox Name="textBox" Grid.Column="0" Margin="0,0,5,0" Text="{Binding SelectedPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Name="textBox" Grid.Column="0" Margin="0,0,5,0" Text="{Binding SelectedPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding IsTextBoxReadOnly}"/>
         <Button Grid.Column="1" Width="15" Content="..." Click="Button_Click"/>
     </Grid>
 </UserControl>

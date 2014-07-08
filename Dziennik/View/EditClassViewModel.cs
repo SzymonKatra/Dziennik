@@ -20,19 +20,31 @@ namespace Dziennik.View
             RemoveClass,
         }
 
-        public EditClassViewModel(SchoolClassViewModel schoolClass)
+        public EditClassViewModel(SchoolClassViewModel schoolClass, ICommand autoSaveCommand)
         {
             m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
             m_removeClassCommand = new RelayCommand(RemoveClass, CanRemoveClass);
             m_choosePathCommand = new RelayCommand(ChoosePath);
+            m_showGlobalStudentsListCommand = new RelayCommand(ShowGlobalStudentsList);
+            m_addGroupCommand = new RelayCommand(AddGroup);
+            m_editGroupCommand = new RelayCommand(EditGroup, CanEditGroup);
 
             m_schoolClass = schoolClass;
             m_name = schoolClass.Name;
             m_path = schoolClass.Path;
+
+            m_autoSaveCommand = autoSaveCommand;
         }
 
-        private SchoolClassViewModel m_schoolClass;
+        private ICommand m_autoSaveCommand;   
+
+        private SchoolGroupViewModel m_selectedGroup;
+        public SchoolGroupViewModel SelectedGroup
+        {
+            get { return m_selectedGroup; }
+            set { m_selectedGroup = value; OnPropertyChanged("SelectedGroup"); m_editGroupCommand.RaiseCanExecuteChanged(); }
+        }
 
         private EditClassResult m_result = EditClassResult.Cancel;
         public EditClassResult Result
@@ -85,6 +97,30 @@ namespace Dziennik.View
         public ICommand ChoosePathCommand
         {
             get { return m_choosePathCommand; }
+        }
+
+        private RelayCommand m_addGroupCommand;
+        public ICommand AddGroupCommand
+        {
+            get { return m_addGroupCommand; }
+        }
+
+        private RelayCommand m_editGroupCommand;
+        public ICommand EditGroupCommand
+        {
+            get { return m_editGroupCommand; }
+        }
+
+        private RelayCommand m_showGlobalStudentsListCommand;
+        public ICommand ShowGlobalStudentsListCommand
+        {
+            get { return m_showGlobalStudentsListCommand; }
+        }
+
+        private SchoolClassViewModel m_schoolClass;
+        public SchoolClassViewModel SchoolClass
+        {
+            get { return m_schoolClass; }
         }
         
 
@@ -145,7 +181,38 @@ namespace Dziennik.View
             {
                 Path = sfd.FileName;
             }
-        }        
+        }
+        private void AddGroup(object param)
+        {
+            AddGroupViewModel dialogViewModel = new AddGroupViewModel(m_schoolClass.Students);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+            if (dialogViewModel.Result != null)
+            {
+                m_schoolClass.Groups.Add(dialogViewModel.Result);
+                SelectedGroup = dialogViewModel.Result;
+                m_autoSaveCommand.Execute(this);
+            }
+        }
+        private void EditGroup(object param)
+        {
+            EditGroupViewModel dialogViewModel = new EditGroupViewModel(m_selectedGroup, m_schoolClass.Students);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+            if (dialogViewModel.Result == EditGroupViewModel.EditGroupResult.RemoveGroup)
+            {
+                m_schoolClass.Groups.Remove(m_selectedGroup);
+                SelectedGroup = null;
+            }
+            if (dialogViewModel.Result != EditGroupViewModel.EditGroupResult.Cancel) m_autoSaveCommand.Execute(this);
+        }
+        private bool CanEditGroup(object param)
+        {
+            return m_selectedGroup != null;
+        }
+        private void ShowGlobalStudentsList(object param)
+        {
+            GlobalStudentsListViewModel dialogViewModel = new GlobalStudentsListViewModel(m_schoolClass.Students, m_autoSaveCommand);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+        }
 
         public string Error
         {

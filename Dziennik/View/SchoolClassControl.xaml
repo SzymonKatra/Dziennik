@@ -9,19 +9,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="800">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <WrapPanel Grid.Row="0" Orientation="Horizontal">
-            <Button Content="Wszyscy uczniowie" Margin="5,5,5,5" Command="{Binding ShowGlobalStudentsListCommand}"/>
-            <Border Width="1" Margin="2" Background="#8888"/>
-            
-            <Button Content="Edytuj grupę" Margin="5,5,5,5" Command="{Binding EditGroupCommand}"/>
-            <Button Content="Dodaj grupę" Margin="5,5,5,5" Command="{Binding AddGroupCommand}"/>
-        </WrapPanel>
-        <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding SelectedGroup.Students}"
+        <DataGrid ItemsSource="{Binding SelectedGroup.Students}"
                   CanUserAddRows="False"
                   CanUserSortColumns="False"
                   SelectionMode="Single"
@@ -43,6 +31,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Średnia (1)" Binding="{Binding FirstSemester.AverageMark}" Visibility="{Binding ShowFirstAverage, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
+                <DataGridTextColumn Header="Ocena śródroczna" Binding="{Binding HalfEndingMark}" Visibility="{Binding ShowHalfEndingMark, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
                 <DataGridTemplateColumn Header="Oceny (2)" Visibility="{Binding ShowSecondMarks, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -54,6 +43,7 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Średnia (2)" Binding="{Binding SecondSemester.AverageMark}" Visibility="{Binding ShowSecondAverage, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
                 <DataGridTextColumn Header="Średnia (roczna)" Binding="{Binding AverageMarkAll}" Visibility="{Binding ShowEndingAverage, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
+                <DataGridTextColumn Header="Ocena końcoworoczna" Binding="{Binding YearEndingMark}" Visibility="{Binding ShowYearEndingMark, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
