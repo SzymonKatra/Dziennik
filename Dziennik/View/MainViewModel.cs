@@ -25,6 +25,7 @@ namespace Dziennik.View
             m_saveCommand = new RelayCommand(Save, CanSave);
             m_saveAllCommand = new RelayCommand(SaveAll);
             m_closeTabCommand = new RelayCommand<SchoolClassControlViewModel>(CloseTab);
+            m_optionsCommand = new RelayCommand(Options);
         }
 
         private ObservableCollection<SchoolClassControlViewModel> m_openedSchoolClasses = new ObservableCollection<SchoolClassControlViewModel>();
@@ -42,70 +43,8 @@ namespace Dziennik.View
                 m_selectedClass = value;
                 OnPropertyChanged("SelectedClass");
                 m_editCommand.RaiseCanExecuteChanged();
+                m_saveCommand.RaiseCanExecuteChanged();
             }
-        }
-
-        private bool m_showName = true;
-        public bool ShowName
-        {
-            get { return m_showName; }
-            set { m_showName = value; OnPropertyChanged("ShowName"); }
-        }
-
-        private bool m_showSurname = true;
-        public bool ShowSurname
-        {
-            get { return m_showSurname; }
-            set { m_showSurname = value; OnPropertyChanged("ShowSurname"); }
-        }
-
-        private bool m_showEmail = true;
-        public bool ShowEmail
-        {
-            get { return m_showEmail; }
-            set { m_showEmail = value; OnPropertyChanged("ShowEmail"); }
-        }
-
-        private bool m_showFirstMarks = true;
-        public bool ShowFirstMarks
-        {
-            get { return m_showFirstMarks; }
-            set { m_showFirstMarks = value; OnPropertyChanged("ShowFirstMarks"); }
-        }
-
-        private bool m_showFirstAverage = true;
-        public bool ShowFirstAverage
-        {
-            get { return m_showFirstAverage; }
-            set { m_showFirstAverage = value; OnPropertyChanged("ShowFirstAverage"); }
-        }
-
-        private bool m_showSecondMarks = true;
-        public bool ShowSecondMarks
-        {
-            get { return m_showSecondMarks; }
-            set { m_showSecondMarks = value; OnPropertyChanged("ShowSecondMarks"); }
-        }
-
-        private bool m_showSecondAverage = true;
-        public bool ShowSecondAverage
-        {
-            get { return m_showSecondAverage; }
-            set { m_showSecondAverage = value; OnPropertyChanged("ShowSecondAverage"); }
-        }
-
-        private bool m_showEndingAverage = true;
-        public bool ShowEndingAverage
-        {
-            get { return m_showEndingAverage; }
-            set { m_showEndingAverage = value; OnPropertyChanged("ShowEndingAverage"); }
-        }
-
-        private bool m_autoSave = true;
-        public bool AutoSave
-        {
-            get { return m_autoSave; }
-            set { m_autoSave = value; OnPropertyChanged("AutoSave"); }
         }
 
         private RelayCommand m_addCommand;
@@ -150,16 +89,29 @@ namespace Dziennik.View
             get { return m_closeTabCommand; }
         }
 
+        private RelayCommand m_optionsCommand;
+        public ICommand OptionsCommand
+        {
+            get { return m_optionsCommand; }
+        }
+
         public void Init()
         {
+            GlobalConfig.Notifier.PropertyChanged += Notifier_PropertyChanged;
+
             ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
             {
-                LoadRegistry();
+                GlobalConfig.Notifier.LoadRegistry();
             }
             , null, "Odczytywanie z ustawień rejestru...");
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
-            string[] args = Environment.GetCommandLineArgs();
-            if (args.Length >= 2) m_openFromPathCommand.Execute(args[1]);
+            
+            //string[] args = Environment.GetCommandLineArgs();
+            //if (args.Length >= 2) m_openFromPathCommand.Execute(args[1]);
+        }
+        private void Notifier_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "SchoolClassesDirectory") ReloadSchoolClasses();
         }
 
         private void Add(object param)
@@ -168,7 +120,7 @@ namespace Dziennik.View
             EditClassViewModel dialogViewModel = new EditClassViewModel(schoolClass);
             dialogViewModel.IsAddingMode = true;
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
-            if(dialogViewModel.Result== EditClassViewModel.EditClassResult.Ok)
+            if (dialogViewModel.Result == EditClassViewModel.EditClassResult.Ok)
             {
                 SchoolClassControlViewModel tab = new SchoolClassControlViewModel(this, schoolClass);
                 m_openedSchoolClasses.Add(tab);
@@ -221,6 +173,11 @@ namespace Dziennik.View
                     SchoolClassControlViewModel tab = new SchoolClassControlViewModel(this, schoolClass);
                     m_openedSchoolClasses.Add(tab);
                     SelectedClass = tab;
+
+                    if (SelectedClass.ViewModel.Groups.Count > 0)
+                    {
+                        SelectedClass.SelectedGroup = SelectedClass.ViewModel.Groups[0];
+                    }
                 }
             }
             , null, path, "Otwieranie");
@@ -260,12 +217,12 @@ namespace Dziennik.View
         {
             foreach (SchoolClassControlViewModel tab in m_openedSchoolClasses) PromptSave(tab);
 
-            ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
-            {
-                SaveRegistry();
-            }
-            , null, "Zapisywanie ustawień do rejestru...");
-            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+            //ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
+            //{
+            //    GlobalConfig.Notifier.SaveRegistry();
+            //}
+            //, null, "Zapisywanie ustawień do rejestru...");
+            //GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
         private void CloseTab(SchoolClassControlViewModel e)
         {
@@ -275,71 +232,31 @@ namespace Dziennik.View
         }
         private void PromptSave(SchoolClassControlViewModel param)
         {
-            if (m_autoSave)
-            {
-                param.SaveCommand.Execute(null);
-            }
-            else
-            {
-                if (MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Czy chcesz zapisać zmiany w klasie " + param.ViewModel.Name + "?", "Dziennik", MessageBoxSuperPredefinedButtons.YesNo) == MessageBoxSuperButton.Yes)
-                {
-                    param.SaveCommand.Execute(null);
-                }
-            }
+            //if (GlobalConfig.Notifier.AutoSave)
+            //{
+            param.SaveCommand.Execute(null);
+            //}
+            //else
+            //{
+            //    if (MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Czy chcesz zapisać zmiany w klasie " + param.ViewModel.Name + "?", "Dziennik", MessageBoxSuperPredefinedButtons.YesNo) == MessageBoxSuperButton.Yes)
+            //    {
+            //        param.SaveCommand.Execute(null);
+            //    }
+            //}
+        }
+        private void Options(object e)
+        {
+            OptionsViewModel dialogViewModel = new OptionsViewModel();
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
 
-        private void LoadRegistry()
+        private void ReloadSchoolClasses()
         {
-            RegistryKey key = Registry.CurrentUser.CreateSubKey(GlobalConfig.RegistryKeyName);
-            object showNameReg = key.GetValue(GlobalConfig.RegistryValueNameShowName);
-            object showSurnameReg = key.GetValue(GlobalConfig.RegistryValueNameShowSurname);
-            object showEmailReg = key.GetValue(GlobalConfig.RegistryValueNameShowEmail);
-            object showFirstMarksReg = key.GetValue(GlobalConfig.RegistryValueNameShowFirstMarks);
-            object showFirstAverageReg = key.GetValue(GlobalConfig.RegistryValueNameShowFirstAverage);
-            object showSecondMarksReg = key.GetValue(GlobalConfig.RegistryValueNameShowSecondMarks);
-            object showSecondAverageReg = key.GetValue(GlobalConfig.RegistryValueNameShowSecondAverage);
-            object showEndingAverageReg = key.GetValue(GlobalConfig.RegistryValueNameShowEndingAverage);
-            object autoSaveReg = key.GetValue(GlobalConfig.RegistryValueNameAutoSave);
-            object lastOpenedReg = key.GetValue(GlobalConfig.RegistryValueNameLastOpened);
-            key.Close();
+            IEnumerable<string> files = Directory.EnumerateFiles(GlobalConfig.Notifier.SchoolClassesDirectory);
 
-            if (showNameReg != null) ShowName= Ext.BoolParseOrDefault(showNameReg.ToString(), m_showName);
-            if (showSurnameReg != null) ShowSurname= Ext.BoolParseOrDefault(showSurnameReg.ToString(), m_showSurname);
-            if (showEmailReg != null) ShowEmail = Ext.BoolParseOrDefault(showEmailReg.ToString(), m_showEmail);
-            if (showFirstMarksReg != null) ShowFirstMarks = Ext.BoolParseOrDefault(showFirstMarksReg.ToString(), m_showFirstMarks);
-            if (showFirstAverageReg != null) ShowFirstAverage = Ext.BoolParseOrDefault(showFirstAverageReg.ToString(), m_showFirstAverage);
-            if (showSecondMarksReg != null) ShowSecondMarks = Ext.BoolParseOrDefault(showSecondMarksReg.ToString(), m_showSecondMarks);
-            if (showSecondAverageReg != null) ShowSecondAverage = Ext.BoolParseOrDefault(showSecondAverageReg.ToString(), m_showSecondAverage);
-            if (showEndingAverageReg != null) ShowEndingAverage = Ext.BoolParseOrDefault(showEndingAverageReg.ToString(), m_showEndingAverage);
-            if (autoSaveReg != null) AutoSave = Ext.BoolParseOrDefault(autoSaveReg.ToString(), m_autoSave);
-            if (lastOpenedReg != null)
-            {
-                string lastOpened = lastOpenedReg.ToString();
-                string[] tokens = lastOpened.Split(';');
-                foreach (string file in tokens) if (!string.IsNullOrWhiteSpace(file)) m_openFromPathCommand.Execute(file);
-            }
-        }
-        private void SaveRegistry()
-        {
-            RegistryKey key = Registry.CurrentUser.CreateSubKey(GlobalConfig.RegistryKeyName);
-            key.SetValue(GlobalConfig.RegistryValueNameShowName, m_showName);
-            key.SetValue(GlobalConfig.RegistryValueNameShowSurname, m_showSurname);
-            key.SetValue(GlobalConfig.RegistryValueNameShowEmail, m_showEmail);
-            key.SetValue(GlobalConfig.RegistryValueNameShowFirstMarks, m_showFirstMarks);
-            key.SetValue(GlobalConfig.RegistryValueNameShowFirstAverage, m_showFirstAverage);
-            key.SetValue(GlobalConfig.RegistryValueNameShowSecondMarks, m_showSecondMarks);
-            key.SetValue(GlobalConfig.RegistryValueNameShowSecondAverage, m_showSecondAverage);
-            key.SetValue(GlobalConfig.RegistryValueNameShowEndingAverage, m_showEndingAverage);
-            key.SetValue(GlobalConfig.RegistryValueNameAutoSave, m_autoSave);
-            StringBuilder builder = new StringBuilder();
-            foreach (SchoolClassControlViewModel item in m_openedSchoolClasses)
-            {
-                builder.Append(item.ViewModel.Path);
-                builder.Append(";");
-            }
-            if (builder.Length >= 1) builder.Remove(builder.Length - 1, 1); // remove last ;
-            key.SetValue(GlobalConfig.RegistryValueNameLastOpened, builder.ToString());
-            key.Close();
+            var validFiles = from f in files where f.EndsWith(GlobalConfig.FileExtension) select f;
+
+            foreach (string file in validFiles) m_openFromPathCommand.Execute(file);
         }
     }
 }

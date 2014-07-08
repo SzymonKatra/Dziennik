@@ -131,12 +131,13 @@ namespace Dziennik.View
         }
         private void AutoSave(object param)
         {
-            if (m_ownerViewModel.AutoSave) m_saveCommand.Execute(null);
+            if (GlobalConfig.Notifier.AutoSave) m_saveCommand.Execute(null);
         }
         private void Save(object param)
         {
             ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
             {
+                Directory.CreateDirectory(Path.GetDirectoryName(m_viewModel.Path));
                 using (FileStream stream = new FileStream(m_viewModel.Path, System.IO.FileMode.Create))
                 {
                     m_viewModel.Serialize(stream);

@@ -77,7 +77,7 @@ namespace Dziennik
         public void Close(object viewModel)
         {
             if (!m_openedWindows.ContainsKey(viewModel)) throw new ArgumentException("No opened View for this ViewModel");
-
+            
             m_openedWindows[viewModel].Close();
         }
 

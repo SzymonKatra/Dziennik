@@ -121,7 +121,7 @@ namespace Dziennik.View
 
                 StudentInGroupViewModel studentInGroup = new StudentInGroupViewModel();
                 studentInGroup.GlobalId = selectedGlobalId;
-                studentInGroup.Id = m_schoolGroup.Students[m_schoolGroup.Students.Count - 1].Id + 1;
+                studentInGroup.Id = (m_schoolGroup.Students.Count <= 0 ? 1 : m_schoolGroup.Students[m_schoolGroup.Students.Count - 1].Id + 1);
                 m_schoolGroup.Students.Add(studentInGroup);
             }
         }

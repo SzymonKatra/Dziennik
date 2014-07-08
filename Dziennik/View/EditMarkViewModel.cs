@@ -161,7 +161,7 @@ namespace Dziennik.View
         {
             get
             {
-                switch(columnName)
+                switch (columnName)
                 {
                     case "ValueInput": return ValidateValueInput();
                     case "NoteInput": return ValidateNoteInput();

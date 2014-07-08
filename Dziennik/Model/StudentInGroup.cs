@@ -36,6 +36,13 @@ namespace Dziennik.Model
             set { m_secondSemester = value; }
         }
 
+        private decimal m_halfEndingMark;
+        public decimal HalfEndingMark
+        {
+            get { return m_halfEndingMark; }
+            set { m_halfEndingMark = value; }
+        }
+
         private decimal m_yearEndingMark;
         public decimal YearEndingMark
         {

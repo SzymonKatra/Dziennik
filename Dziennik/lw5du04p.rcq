@@ -1,0 +1,58 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows;
+using Dziennik.View;
+
+namespace Dziennik
+{
+    public class GlobalConfig
+    {
+        public static readonly int DecimalRoundingPoints = 2;
+        public static readonly string DateTimeFormat = "dd.MM.yyyy HH:mm";
+        public static readonly string FileExtension = ".dzi";
+        public static readonly string FileDialogFilter = "Pliki dziennika (.dzi)|*.dzi|Dokumenty XML (.xml)|*.xml|Wszystkie pliki (*.*)|*.*";
+        public static readonly string RegistryKeyName = @"Software\Dziennik_Katra";
+        public static readonly string RegistryValueNameShowName = "ShowName";
+        public static readonly string RegistryValueNameShowSurname = "ShowSurname";
+        public static readonly string RegistryValueNameShowEmail = "ShowEmail";
+        public static readonly string RegistryValueNameShowFirstMarks = "ShowFirstMarks";
+        public static readonly string RegistryValueNameShowFirstAverage = "ShowFirstAverage";
+        public static readonly string RegistryValueNameShowSecondMarks = "ShowSecondMarks";
+        public static readonly string RegistryValueNameShowSecondAverage = "ShowSecondAverage";
+        public static readonly string RegistryValueNameShowEndingAverage = "ShowEndingAverage";
+        public static readonly string RegistryValueNameAutoSave = "AutoSave";
+        public static readonly string RegistryValueNameLastOpened = "LastOpened";
+
+        public static readonly DialogService Dialogs;
+
+        static GlobalConfig()
+        {
+            Dictionary<Type, Func<object, Window>> windowViewModelMappings = new Dictionary<Type, Func<object, Window>>();
+
+            windowViewModelMappings.Add(typeof(EditMarkViewModel), (vm) => { return new EditMarkWindow((EditMarkViewModel)vm); });
+            windowViewModelMappings.Add(typeof(EditStudentViewModel), (vm) => { return new EditStudentWindow((EditStudentViewModel)vm); });
+            windowViewModelMappings.Add(typeof(ActionDialogViewModel), (vm) => { return new ActionDialogWindow((ActionDialogViewModel)vm); });
+            windowViewModelMappings.Add(typeof(GlobalStudentsListViewModel), (vm) => { return new GlobalStudentsListWindow((GlobalStudentsListViewModel)vm); });
+            windowViewModelMappings.Add(typeof(AddGroupViewModel), (vm) => { return new AddGroupWindow((AddGroupViewModel)vm); });
+            windowViewModelMappings.Add(typeof(SelectStudentsViewModel), (vm) => { return new SelectStudentsWindow((SelectStudentsViewModel)vm); });
+            windowViewModelMappings.Add(typeof(EditGroupViewModel), (vm) => { return new EditGroupWindow((EditGroupViewModel)vm); });
+            windowViewModelMappings.Add(typeof(EditClassViewModel), (vm) => { return new EditClassWindow((EditClassViewModel)vm); });
+
+            Dialogs = new DialogService(windowViewModelMappings);
+        }
+
+        //SINGLETON
+
+        private static GlobalConfig m_instance = null;
+        public static GlobalConfig Instance
+        {
+            get
+            {
+                if (m_instance == null) m_instance = new GlobalConfig();
+                return m_instance;
+            }
+        }
+    }
+}

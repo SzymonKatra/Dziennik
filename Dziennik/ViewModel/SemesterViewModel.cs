@@ -60,11 +60,6 @@ namespace Dziennik.ViewModel
                 return decimal.Round(sum / (decimal)validMarks, GlobalConfig.DecimalRoundingPoints);
             }
         }
-        public decimal EndingMark
-        {
-            get { return m_model.EndingMark; }
-            set { m_model.EndingMark = value; OnPropertyChanged("EndingMark"); }
-        }
 
         public int CountValidMarks()
         {

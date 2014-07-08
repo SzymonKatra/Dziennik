@@ -17,8 +17,8 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Nazwa"/>
-        <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Uczniowie"/>
+        <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="Nazwa"/>
+        <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="Uczniowie"/>
         <RadioButton Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="10,0,0,0" GroupName="NumerationType" Content="Numeruj od 1" IsChecked="{Binding RenumberFromOne, Mode=TwoWay}"/>
         <RadioButton Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="10,0,0,0" GroupName="NumerationType" Content="Zachowaj numery"/>
 
@@ -29,7 +29,7 @@
                 <ColumnDefinition Width="30"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox Grid.Column="0" Margin="10,5,10,5" Text="{Binding SelectedStudentsInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
+            <TextBox Grid.Column="0" Text="{Binding SelectedStudentsInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
             <Button Grid.Column="1" Margin="0,5,10,5" Content="..." Command="{Binding SelectStudentsCommand}"/>
         </Grid>
         

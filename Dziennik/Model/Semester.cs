@@ -14,12 +14,5 @@ namespace Dziennik.Model
             get { return m_marks; }
             set { m_marks = value; }
         }
-
-        private decimal m_endingMark;
-        public decimal EndingMark
-        {
-            get { return m_endingMark; }
-            set { m_endingMark = value; }
-        }
     }
 }

@@ -7,8 +7,17 @@
         xmlns:my="clr-namespace:Dziennik.View"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
         xmlns:c="clr-namespace:Dziennik.CommandUtils"
+        xmlns:local="clr-namespace:Dziennik"
         Title="Dziennik" Height="350" Width="900"
         WindowStartupLocation="CenterScreen">
+    
+    <Window.Resources>
+        <Style x:Key="imageButtonStyle" TargetType="Button">
+            <Setter Property="Margin" Value="5,5,5,5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+    </Window.Resources>
     
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
@@ -23,52 +32,36 @@
         </Grid.RowDefinitions>
         
         <WrapPanel Grid.Row="0" Orientation="Horizontal">
-            <Button Margin="5,5,5,5" BorderThickness="0" Background="Transparent" ToolTip="Dodaj klasę" Command="{Binding AddCommand}">
+            <Button Style="{StaticResource imageButtonStyle}" ToolTip="Dodaj klasę" Command="{Binding AddCommand}">
                 <Image Source="{StaticResource img_add}"/>
             </Button>
-            <Button Margin="5,5,5,5" BorderThickness="0" Background="Transparent" ToolTip="Otwórz istniejącą klasę" Command="{Binding OpenCommand}">
+            <Button Style="{StaticResource imageButtonStyle}"  ToolTip="Otwórz istniejącą klasę" Command="{Binding OpenCommand}">
                 <Image Source="{StaticResource img_open}"/>
             </Button>
-            <Button Margin="5,5,5,5" BorderThickness="0" Background="Transparent" ToolTip="Edytuj wybraną klasę"  Command="{Binding EditCommand}">
+            <Button Style="{StaticResource imageButtonStyle}"  ToolTip="Edytuj wybraną klasę"  Command="{Binding EditCommand}">
                 <Image Source="{StaticResource img_edit}"/>
             </Button>
-            <Button Margin="5,5,5,5" BorderThickness="0" Background="Transparent" ToolTip="Zapisz zmiany w wybranej klasie" Command="{Binding SaveCommand}">
+            <Button Style="{StaticResource imageButtonStyle}"  ToolTip="Zapisz zmiany w wybranej klasie" Command="{Binding SaveCommand}">
                 <Image Source="{StaticResource img_save}"/>
             </Button>
-            <Button Margin="5,5,5,5" BorderThickness="0" Background="Transparent" ToolTip="Zapisz zmiany we wszystkich klasach" Command="{Binding SaveAllCommand}">
+            <Button Style="{StaticResource imageButtonStyle}"  ToolTip="Zapisz zmiany we wszystkich klasach" Command="{Binding SaveAllCommand}">
                 <Image Source="{StaticResource img_save_all}"/>
             </Button>
-
-            <Border Width="1" Margin="2" Background="#8888"/>
-            
-            <CheckBox Content="Imię" Margin="5,5,5,5" VerticalAlignment="Center" IsChecked="{Binding ShowName, Mode=TwoWay}"/>
-            <CheckBox Content="Nazwisko" Margin="5,5,5,5" VerticalAlignment="Center" IsChecked="{Binding ShowSurname, Mode=TwoWay}"/>
-            <CheckBox Content="Email" Margin="5,5,5,5" VerticalAlignment="Center" IsChecked="{Binding ShowEmail, Mode=TwoWay}"/>
-            <CheckBox Content="Oceny (1)" Margin="5,5,5,5" VerticalAlignment="Center" IsChecked="{Binding ShowFirstMarks, Mode=TwoWay}"/>
-            <CheckBox Content="Średnia (1)" Margin="5,5,5,5" VerticalAlignment="Center" IsChecked="{Binding ShowFirstAverage, Mode=TwoWay}"/>
-            <CheckBox Content="Oceny (2)" Margin="5,5,5,5" VerticalAlignment="Center" IsChecked="{Binding ShowSecondMarks, Mode=TwoWay}"/>
-            <CheckBox Content="Średnia (2)" Margin="5,5,5,5" VerticalAlignment="Center" IsChecked="{Binding ShowSecondAverage, Mode=TwoWay}"/>
-            <CheckBox Content="Średnia (roczna)" Margin="5,5,5,5" VerticalAlignment="Center" IsChecked="{Binding ShowEndingAverage, Mode=TwoWay}"/>
-
-            <Border Width="1" Margin="2" Background="#8888"/>
-
-            <CheckBox Content="Autozapis" Margin="5,5,5,5" VerticalAlignment="Center" IsChecked="{Binding AutoSave, Mode=TwoWay}"/>
+            <Button Style="{StaticResource imageButtonStyle}"  ToolTip="Opcje" Command="{Binding OptionsCommand}">
+                <Image Source="{StaticResource img_options}"/>
+            </Button>
         </WrapPanel>
         
         <TabControl Grid.Row="1" ItemsSource="{Binding OpenedSchoolClasses}" SelectedValue="{Binding SelectedClass, Mode=TwoWay}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding ViewModel.Name}"/>
-                        <Button Grid.Column="1" Grid.Row="0" Width="12" Height="12" Margin="5,0,0,0" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                                Command="{Binding DataContext.CloseTabCommand, ElementName=root}" CommandParameter="{Binding}">
-                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="10" Padding="0" Margin="0,0,0,2" Text="x"/>
-                        </Button>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="{Binding ViewModel.Name}"/>
+                        <ComboBox Grid.Row="1" ItemsSource="{Binding ViewModel.Groups}" MaxWidth="100" SelectedItem="{Binding SelectedGroup, Mode=TwoWay}" DisplayMemberPath="Name"/>
                     </Grid>
                 </DataTemplate>
             </TabControl.ItemTemplate>

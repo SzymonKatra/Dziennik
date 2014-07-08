@@ -39,6 +39,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libs\System.Windows.Interactivity.dll</HintPath>
@@ -62,6 +63,9 @@
     </ApplicationDefinition>
     <Compile Include="CommandUtils\RelayCommand.cs" />
     <Compile Include="CommonEventArgs.cs" />
+    <Compile Include="Controls\DirectorySelector.xaml.cs">
+      <DependentUpon>DirectorySelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\MessageBoxSuper.xaml.cs">
       <DependentUpon>MessageBoxSuper.xaml</DependentUpon>
     </Compile>
@@ -122,6 +126,10 @@
     <Compile Include="Controls\MarksControl.xaml.cs">
       <DependentUpon>MarksControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\OptionsViewModel.cs" />
+    <Compile Include="View\OptionsWindow.xaml.cs">
+      <DependentUpon>OptionsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SchoolClassControl.xaml.cs">
       <DependentUpon>SchoolClassControl.xaml</DependentUpon>
     </Compile>
@@ -130,6 +138,10 @@
     <Compile Include="View\SelectStudentsWindow.xaml.cs">
       <DependentUpon>SelectStudentsWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\DirectorySelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\MessageBoxSuper.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -175,6 +187,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Controls\MarksControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\OptionsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -229,6 +245,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\options.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

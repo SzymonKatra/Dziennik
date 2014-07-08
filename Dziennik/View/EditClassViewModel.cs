@@ -145,8 +145,7 @@ namespace Dziennik.View
             {
                 Path = sfd.FileName;
             }
-        }
-        
+        }        
 
         public string Error
         {
@@ -175,6 +174,8 @@ namespace Dziennik.View
                 m_okCommand.RaiseCanExecuteChanged();
                 return "Wprowadź poprawną nazwę klasy";
             }
+
+            Path = GlobalConfig.Notifier.SchoolClassesDirectory + @"\" + m_name + GlobalConfig.FileExtension;
 
             m_nameValid = true;
             m_okCommand.RaiseCanExecuteChanged();

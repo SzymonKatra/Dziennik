@@ -100,6 +100,12 @@ namespace Dziennik.ViewModel
                 return decimal.Round(sum / (decimal)validMarks, GlobalConfig.DecimalRoundingPoints);
             }
         }
+
+        public decimal HalfEndingMark
+        {
+            get { return m_model.HalfEndingMark; }
+            set { m_model.HalfEndingMark = value; OnPropertyChanged("HalfEndingMark"); }
+        }
         public decimal YearEndingMark
         {
             get { return m_model.YearEndingMark; }

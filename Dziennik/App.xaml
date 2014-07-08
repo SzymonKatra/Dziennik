@@ -7,7 +7,11 @@
              xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:Dziennik">
     <Application.Resources>
-        <Style x:Key="validationTemplateTextBox" TargetType="{x:Type TextBox}">
+        <Style x:Key="inputControlStyle" TargetType="{x:Type Control}">
+            <Setter Property="Margin" Value="10,5,10,5"/>
+        </Style>
+        
+        <Style x:Key="validationTemplateTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource inputControlStyle}">
             <Style.Triggers>
                 <Trigger Property="Validation.HasError" Value="True">
                     <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self},  Path=(Validation.Errors).CurrentItem.ErrorContent}"/>
@@ -15,11 +19,18 @@
             </Style.Triggers>
         </Style>
         
+        <Style x:Key="textBlockTitleStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        
         <BitmapImage x:Key="img_add" UriSource="Resources\add.png"/>
         <BitmapImage x:Key="img_open" UriSource="Resources\open.png"/>
         <BitmapImage x:Key="img_edit" UriSource="Resources\edit.png"/>
         <BitmapImage x:Key="img_save" UriSource="Resources\save.png"/>
         <BitmapImage x:Key="img_save_all" UriSource="Resources\save_all.png"/>
+        <BitmapImage x:Key="img_options" UriSource="Resources\options.png"/>
         
         <BooleanToVisibilityConverter x:Key="convertBoolToVisibility"/>
     </Application.Resources>
