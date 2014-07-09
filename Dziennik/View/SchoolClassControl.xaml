@@ -1,5 +1,5 @@
 ﻿<UserControl x:Class="Dziennik.View.SchoolClassControl"
-             Name="root"
+             Name="rootSchoolClassControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -24,9 +24,9 @@
                 <DataGridTemplateColumn Header="Oceny (1)" Visibility="{Binding ShowFirstMarks, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <my:MarksControl MarksSource="{Binding FirstSemester.Marks}" SelectedMark="{Binding DataContext.SelectedMark, ElementName=root, Mode=TwoWay}"
-                                             CommandAddMark="{Binding DataContext.AddMarkCommand, ElementName=root}" CommandParameterAddMark="{Binding FirstSemester.Marks}"
-                                             CommandEditMark="{Binding DataContext.EditMarkCommand, ElementName=root}" CommandParameterEditMark="{Binding FirstSemester.Marks}"/>
+                            <my:MarksControl MarksSource="{Binding FirstSemester.Marks}" SelectedMark="{Binding DataContext.SelectedMark, ElementName=rootSchoolClassControl, Mode=TwoWay}"
+                                             CommandAddMark="{Binding DataContext.AddMarkCommand, ElementName=rootSchoolClassControl}" CommandParameterAddMark="{Binding FirstSemester.Marks}"
+                                             CommandEditMark="{Binding DataContext.EditMarkCommand, ElementName=rootSchoolClassControl}" CommandParameterEditMark="{Binding FirstSemester.Marks}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -34,16 +34,16 @@
                 <DataGridTemplateColumn Header="Ocena śródroczna" Visibility="{Binding ShowHalfEndingMark, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <my:EndingMarkControl EndingMark="{Binding HalfEndingMark}" CommandEditMark="{Binding DataContext.EditEndingMarkCommand, ElementName=root}" CommandParameterEditMark="half"/>
+                            <my:EndingMarkControl EndingMark="{Binding HalfEndingMark}" CommandEditMark="{Binding DataContext.EditEndingMarkCommand,ElementName=rootSchoolClassControl}" CommandParameterEditMark="half"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Oceny (2)" Visibility="{Binding ShowSecondMarks, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <my:MarksControl MarksSource="{Binding SecondSemester.Marks}" SelectedMark="{Binding DataContext.SelectedMark, ElementName=root, Mode=TwoWay}"
-                                             CommandAddMark="{Binding DataContext.AddMarkCommand, ElementName=root}" CommandParameterAddMark="{Binding SecondSemester.Marks}"
-                                             CommandEditMark="{Binding DataContext.EditMarkCommand, ElementName=root}" CommandParameterEditMark="{Binding SecondSemester.Marks}"/>
+                            <my:MarksControl MarksSource="{Binding SecondSemester.Marks}" SelectedMark="{Binding DataContext.SelectedMark, ElementName=rootSchoolClassControl, Mode=TwoWay}"
+                                             CommandAddMark="{Binding DataContext.AddMarkCommand, ElementName=rootSchoolClassControl}" CommandParameterAddMark="{Binding SecondSemester.Marks}"
+                                             CommandEditMark="{Binding DataContext.EditMarkCommand, ElementName=rootSchoolClassControl}" CommandParameterEditMark="{Binding SecondSemester.Marks}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -52,7 +52,7 @@
                 <DataGridTemplateColumn Header="Ocena końcoworoczna" Visibility="{Binding ShowYearEndingMark, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <my:EndingMarkControl EndingMark="{Binding YearEndingMark}" CommandEditMark="{Binding DataContext.EditEndingMarkCommand, ElementName=root}" CommandParameterEditMark="year"/>
+                            <my:EndingMarkControl EndingMark="{Binding YearEndingMark}" CommandEditMark="{Binding DataContext.EditEndingMarkCommand, ElementName=rootSchoolClassControl}" CommandParameterEditMark="year"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

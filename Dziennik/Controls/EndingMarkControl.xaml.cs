@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using System.Globalization;
 
 namespace Dziennik.Controls
 {
@@ -30,18 +31,18 @@ namespace Dziennik.Controls
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public static readonly DependencyProperty EndingMarkProperty = DependencyProperty.Register("EndingMark", typeof(decimal), typeof(EndingMarkControl), new PropertyMetadata(0M));
+        public static readonly DependencyProperty EndingMarkProperty = DependencyProperty.Register("EndingMark", typeof(decimal), typeof(EndingMarkControl), new PropertyMetadata(0M, (s, e) => { ((EndingMarkControl)s).RaisePropertyChanged("DisplayedText"); }));
         public decimal EndingMark
         {
             get { return (decimal)GetValue(EndingMarkProperty); }
-            set { SetValue(EndingMarkProperty, value); RaisePropertyChanged("DisplayedText"); }
+            set { SetValue(EndingMarkProperty, value); }
         }
+
         public string DisplayedText
         {
             get
             {
-                if (EndingMark == 0M) return "Wystaw";
-                return EndingMark.ToString();
+                return (EndingMark == 0M ? "Wystaw" : EndingMark.ToString(CultureInfo.InvariantCulture));
             }
         }
 

@@ -44,7 +44,7 @@
                 <Button Style="{StaticResource imageButtonStyle}" Command="{Binding EditClassCommand}">
                     <Image Source="{StaticResource img_edit}"/>
                 </Button>
-                <Button Style="{StaticResource imageButtonStyle}" Command="{Binding AddClassCommand}">
+                <Button Style="{StaticResource imageButtonStyle}" Command="{Binding AddClassCommand}" ToolTip="Dodaj klasę">
                     <Image Source="{StaticResource img_add}"/>
                 </Button>
             </WrapPanel>

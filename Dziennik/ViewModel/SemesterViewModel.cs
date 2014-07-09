@@ -57,7 +57,7 @@ namespace Dziennik.ViewModel
 
                 foreach (MarkViewModel item in m_marks) if (item.IsValueValid) sum += item.Value;
 
-                return decimal.Round(sum / (decimal)validMarks, GlobalConfig.DecimalRoundingPoints);
+                return Ext.DecimalRoundHalfUp(sum / (decimal)validMarks, GlobalConfig.DecimalRoundingPoints);
             }
         }
 

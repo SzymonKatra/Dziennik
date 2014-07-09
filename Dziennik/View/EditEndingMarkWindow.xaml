@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
         
         <TextBlock Grid.Column="0" Grid.Row="0" Text="Ocena" Style="{StaticResource textBlockTitleStyle}"/>
-        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding MarkInput, Mode=TwoWay, ValidatesOnDataErrors=True}" Style="{StaticResource inputControlStyle}"/>
+        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding MarkInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
         
         <my:OkCancelControl Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>

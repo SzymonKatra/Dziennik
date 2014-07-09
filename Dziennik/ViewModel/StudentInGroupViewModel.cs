@@ -97,7 +97,7 @@ namespace Dziennik.ViewModel
                 foreach (MarkViewModel item in m_firstSemester.Marks) if (item.IsValueValid) sum += item.Value;
                 foreach (MarkViewModel item in m_secondSemester.Marks) if (item.IsValueValid) sum += item.Value;
 
-                return decimal.Round(sum / (decimal)validMarks, GlobalConfig.DecimalRoundingPoints);
+                return Ext.DecimalRoundHalfUp(sum / (decimal)validMarks, GlobalConfig.DecimalRoundingPoints);
             }
         }
 

@@ -72,8 +72,8 @@
     <Compile Include="Controls\MessageBoxSuper.xaml.cs">
       <DependentUpon>MessageBoxSuper.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\OKCancelControl.xaml.cs">
-      <DependentUpon>OKCancelControl.xaml</DependentUpon>
+    <Compile Include="Controls\OkCancelControl.xaml.cs">
+      <DependentUpon>OkCancelControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DialogService.cs" />
     <Compile Include="Ext.cs" />
@@ -160,7 +160,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\OKCancelControl.xaml">
+    <Page Include="Controls\OkCancelControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

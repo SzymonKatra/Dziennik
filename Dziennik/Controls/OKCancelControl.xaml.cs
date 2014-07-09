@@ -38,7 +38,7 @@ namespace Dziennik.Controls
             set { SetValue(CommandCancelProperty, value); }
         }
 
-        public static readonly DependencyProperty CommandParameterOkProperty = DependencyProperty.Register("CommandParameterCancel", typeof(object), typeof(OkCancelControl), new PropertyMetadata(null));
+        public static readonly DependencyProperty CommandParameterOkProperty = DependencyProperty.Register("CommandParameterOk", typeof(object), typeof(OkCancelControl), new PropertyMetadata(null));
         public object CommandParameterOk
         {
             get { return GetValue(CommandParameterOkProperty); }
