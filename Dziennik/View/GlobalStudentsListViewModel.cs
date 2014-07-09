@@ -47,14 +47,14 @@ namespace Dziennik.View
         public ObservableCollection<GlobalStudentViewModel> Students
         {
             get { return m_students; }
-            set { m_students = value; OnPropertyChanged("Students"); }
+            set { m_students = value; RaisePropertyChanged("Students"); }
         }
 
         private GlobalStudentViewModel m_selectedStudent;
         public GlobalStudentViewModel SelectedStudent
         {
             get { return m_selectedStudent; }
-            set { m_selectedStudent = value; OnPropertyChanged("SelectedStudent"); }
+            set { m_selectedStudent = value; RaisePropertyChanged("SelectedStudent"); }
         }
 
         private void AddStudent(object e)

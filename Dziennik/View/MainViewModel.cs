@@ -30,7 +30,7 @@ namespace Dziennik.View
         public ObservableCollection<SchoolClassControlViewModel> OpenedSchoolClasses
         {
             get { return m_openedSchoolClasses; }
-            set { m_openedSchoolClasses = value; OnPropertyChanged("OpenedSchoolClasses"); }
+            set { m_openedSchoolClasses = value; RaisePropertyChanged("OpenedSchoolClasses"); }
         }
         private SchoolClassControlViewModel m_selectedClass;
         public SchoolClassControlViewModel SelectedClass
@@ -39,7 +39,7 @@ namespace Dziennik.View
             set
             {
                 m_selectedClass = value;
-                OnPropertyChanged("SelectedClass");
+                RaisePropertyChanged("SelectedClass");
                 m_saveCommand.RaiseCanExecuteChanged();
             }
         }
@@ -170,12 +170,12 @@ namespace Dziennik.View
         {
             foreach (SchoolClassControlViewModel tab in m_openedSchoolClasses) PromptSave(tab);
 
-            //ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
-            //{
-            //    GlobalConfig.Notifier.SaveRegistry();
-            //}
-            //, null, "Zapisywanie ustawień do rejestru...");
-            //GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+            ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
+            {
+                GlobalConfig.Notifier.SaveRegistry();
+            }
+            , null, "Zapisywanie ustawień do rejestru...");
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
         private void CloseTab(SchoolClassControlViewModel e)
         {

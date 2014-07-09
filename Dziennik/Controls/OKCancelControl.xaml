@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="Dziennik.Controls.OkCancelControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="30" d:DesignWidth="300">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type UserControl}}}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width=".6*"/>
+            <ColumnDefinition Width=".4*"/>
+        </Grid.ColumnDefinitions>
+
+        <Button Grid.Column="0" Margin="10,5,10,5" Content="OK" Command="{Binding CommandOk}" CommandParameter="{Binding CommandParameterOk}"/>
+        <Button Grid.Column="1" Margin="10,5,10,5" Content="Anuluj" Command="{Binding CommandCancel}" CommandParameter="{Binding CommandParameterCancel}"/>
+    </Grid>
+</UserControl>

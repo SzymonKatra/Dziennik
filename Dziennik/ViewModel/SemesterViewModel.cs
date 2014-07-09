@@ -43,7 +43,7 @@ namespace Dziennik.ViewModel
                 MarksSubscribe();
 
                 m_model.Marks = value.ModelCollection;
-                OnPropertyChanged("Marks");
+                RaisePropertyChanged("Marks");
             }
         }
         public decimal AverageMark
@@ -76,7 +76,7 @@ namespace Dziennik.ViewModel
         }
         private void PerformMarksChanged()
         {
-            OnPropertyChanged("AverageMark");
+            RaisePropertyChanged("AverageMark");
             OnMarksChanged(EventArgs.Empty);
         }
 

@@ -31,10 +31,10 @@ namespace Dziennik.ViewModel
             set
             {
                 m_model.Value = value;
-                OnPropertyChanged("Value");
-                OnPropertyChanged("IsValueValid");
-                OnPropertyChanged("DisplayedMark");
-                OnPropertyChanged("ToolTipFormatted");
+                RaisePropertyChanged("Value");
+                RaisePropertyChanged("IsValueValid");
+                RaisePropertyChanged("DisplayedMark");
+                RaisePropertyChanged("ToolTipFormatted");
             }
         }
         public string Note
@@ -43,26 +43,26 @@ namespace Dziennik.ViewModel
             set
             {
                 m_model.Note = value;
-                OnPropertyChanged("Note");
-                OnPropertyChanged("IsValueValid");
-                OnPropertyChanged("DisplayedMark");
-                OnPropertyChanged("ToolTipFormatted");
+                RaisePropertyChanged("Note");
+                RaisePropertyChanged("IsValueValid");
+                RaisePropertyChanged("DisplayedMark");
+                RaisePropertyChanged("ToolTipFormatted");
             }
         }
         public DateTime AddDate
         {
             get { return m_model.AddDate; }
-            set { m_model.AddDate = value; OnPropertyChanged("AddDate"); OnPropertyChanged("ToolTipFormatted"); }
+            set { m_model.AddDate = value; RaisePropertyChanged("AddDate"); RaisePropertyChanged("ToolTipFormatted"); }
         }
         public DateTime LastChangeDate
         {
             get { return m_model.LastChangeDate; }
-            set { m_model.LastChangeDate = value; OnPropertyChanged("LastChangeDate"); OnPropertyChanged("ToolTipFormatted"); }
+            set { m_model.LastChangeDate = value; RaisePropertyChanged("LastChangeDate"); RaisePropertyChanged("ToolTipFormatted"); }
         }
         public string Description
         {
             get { return m_model.Description; }
-            set { m_model.Description = value; OnPropertyChanged("Description"); OnPropertyChanged("ToolTipFormatted"); }
+            set { m_model.Description = value; RaisePropertyChanged("Description"); RaisePropertyChanged("ToolTipFormatted"); }
         }
 
         public bool IsValueValid

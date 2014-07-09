@@ -26,27 +26,27 @@ namespace Dziennik.ViewModel
         public int Id
         {
             get { return m_model.Id; }
-            set { m_model.Id = value; OnPropertyChanged("Id"); }
+            set { m_model.Id = value; RaisePropertyChanged("Id"); }
         }
         public string Name
         {
             get { return m_model.Name; }
-            set { m_model.Name = value; OnPropertyChanged("Name"); }
+            set { m_model.Name = value; RaisePropertyChanged("Name"); }
         }
         public string Surname
         {
             get { return m_model.Surname; }
-            set { m_model.Surname = value; OnPropertyChanged("Surname"); }
+            set { m_model.Surname = value; RaisePropertyChanged("Surname"); }
         }
         public string Email
         {
             get { return m_model.Email; }
-            set { m_model.Email = value; OnPropertyChanged("Email"); }
+            set { m_model.Email = value; RaisePropertyChanged("Email"); }
         }
         public string AdditionalInformation
         {
             get { return m_model.AdditionalInformation; }
-            set { m_model.AdditionalInformation = value; OnPropertyChanged("AdditionalInformation"); }
+            set { m_model.AdditionalInformation = value; RaisePropertyChanged("AdditionalInformation"); }
         }
 
         public static GlobalStudentViewModel Dummy

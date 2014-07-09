@@ -48,7 +48,7 @@ namespace Dziennik.View
         public string Name
         {
             get { return m_name; }
-            set { m_name = value; OnPropertyChanged("Name"); }
+            set { m_name = value; RaisePropertyChanged("Name"); }
         }
 
         private RelayCommand m_okCommand;

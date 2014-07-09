@@ -49,7 +49,7 @@ namespace Dziennik.View
         public bool IsAddingMode
         {
             get { return m_isAddingMode; }
-            set { m_isAddingMode = value; OnPropertyChanged("IsAddingMode"); m_removeStudentCommand.RaiseCanExecuteChanged(); }
+            set { m_isAddingMode = value; RaisePropertyChanged("IsAddingMode"); m_removeStudentCommand.RaiseCanExecuteChanged(); }
         }
 
         private int m_id;
@@ -58,35 +58,35 @@ namespace Dziennik.View
         public string IdInput
         {
             get { return m_idInput; }
-            set { m_idInput = value; OnPropertyChanged("IdInput"); }
+            set { m_idInput = value; RaisePropertyChanged("IdInput"); }
         }
 
         private string m_name;
         public string Name
         {
             get { return m_name; }
-            set { m_name = value; OnPropertyChanged("Name"); }
+            set { m_name = value; RaisePropertyChanged("Name"); }
         }
 
         private string m_surname;
         public string Surname
         {
             get { return m_surname; }
-            set { m_surname = value; OnPropertyChanged("Surname"); }
+            set { m_surname = value; RaisePropertyChanged("Surname"); }
         }
 
         private string m_email;
         public string Email
         {
             get { return m_email; }
-            set { m_email = value; OnPropertyChanged("Email"); }
+            set { m_email = value; RaisePropertyChanged("Email"); }
         }
 
         private string m_additionalInformation;
         public string AdditionalInformation
         {
             get { return m_additionalInformation; }
-            set { m_additionalInformation = value; OnPropertyChanged("AdditionalInformation"); }
+            set { m_additionalInformation = value; RaisePropertyChanged("AdditionalInformation"); }
         }
 
         private RelayCommand m_okCommand;

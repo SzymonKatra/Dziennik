@@ -30,14 +30,14 @@ namespace Dziennik.View
         public ObservableCollection<SchoolClassControlViewModel> OpenedSchoolClasses
         {
             get { return m_openedSchoolClasses; }
-            set { m_openedSchoolClasses = value; OnPropertyChanged("OpenedSchoolClasses"); }
+            set { m_openedSchoolClasses = value; RaisePropertyChanged("OpenedSchoolClasses"); }
         }
 
         private SchoolClassControlViewModel m_selectedClass;
         public SchoolClassControlViewModel SelectedClass
         {
             get { return m_selectedClass; }
-            set { m_selectedClass = value; OnPropertyChanged("SelectedClass"); m_editClassCommand.RaiseCanExecuteChanged(); }
+            set { m_selectedClass = value; RaisePropertyChanged("SelectedClass"); m_editClassCommand.RaiseCanExecuteChanged(); }
         }
 
         public OptionsViewModel(ObservableCollection<SchoolClassControlViewModel> openedSchoolClasses)

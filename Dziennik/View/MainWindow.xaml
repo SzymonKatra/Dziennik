@@ -24,11 +24,8 @@
         </Grid.RowDefinitions>
         
         <WrapPanel Grid.Row="0" Orientation="Horizontal">
-            <Button Style="{StaticResource imageButtonStyle}"  ToolTip="Zapisz zmiany w wybranej klasie" Command="{Binding SaveCommand}">
+            <Button Style="{StaticResource imageButtonStyle}"  ToolTip="Zapisz zmiany" Command="{Binding SaveAllCommand}">
                 <Image Source="{StaticResource img_save}"/>
-            </Button>
-            <Button Style="{StaticResource imageButtonStyle}"  ToolTip="Zapisz zmiany we wszystkich klasach" Command="{Binding SaveAllCommand}">
-                <Image Source="{StaticResource img_save_all}"/>
             </Button>
             <Button Style="{StaticResource imageButtonStyle}"  ToolTip="Opcje" Command="{Binding OptionsCommand}">
                 <Image Source="{StaticResource img_options}"/>
@@ -43,7 +40,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Text="{Binding ViewModel.Name}"/>
+                        <TextBlock Grid.Row="0" Text="{Binding ViewModel.Name}" FontSize="20"/>
                         <ComboBox Grid.Row="1" ItemsSource="{Binding ViewModel.Groups}" MaxWidth="100" SelectedItem="{Binding SelectedGroup, Mode=TwoWay}" DisplayMemberPath="Name"/>
                     </Grid>
                 </DataTemplate>

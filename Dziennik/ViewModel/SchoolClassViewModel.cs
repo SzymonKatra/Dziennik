@@ -36,7 +36,7 @@ namespace Dziennik.ViewModel
         public string Name
         {
             get { return m_model.Name; }
-            set { m_model.Name = value; OnPropertyChanged("Name"); }
+            set { m_model.Name = value; RaisePropertyChanged("Name"); }
         }
         private SynchronizedPerItemObservableCollection<GlobalStudentViewModel, GlobalStudent> m_students;
         public SynchronizedPerItemObservableCollection<GlobalStudentViewModel, GlobalStudent> Students
@@ -51,7 +51,7 @@ namespace Dziennik.ViewModel
                 SubscribeStudents();
 
                 m_model.Students = value.ModelCollection;
-                OnPropertyChanged("Students");
+                RaisePropertyChanged("Students");
             }
         }
         private SynchronizedObservableCollection<SchoolGroupViewModel, SchoolGroup> m_groups;
@@ -67,7 +67,7 @@ namespace Dziennik.ViewModel
                 SubscribeGroups();
 
                 m_model.Groups = value.ModelCollection;
-                OnPropertyChanged("Groups");
+                RaisePropertyChanged("Groups");
             }
         }
 

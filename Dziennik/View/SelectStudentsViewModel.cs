@@ -18,7 +18,7 @@ namespace Dziennik.View
             public bool Selected
             {
                 get { return m_selected; }
-                set { m_selected = value; OnPropertyChanged("Selected"); }
+                set { m_selected = value; RaisePropertyChanged("Selected"); }
             }
 
             private GlobalStudentViewModel m_global;
@@ -73,13 +73,13 @@ namespace Dziennik.View
 
             private void AllChanged()
             {
-                OnPropertyChanged("Global");
-                OnPropertyChanged("InGroup");
-                OnPropertyChanged("Id");
-                OnPropertyChanged("Name");
-                OnPropertyChanged("Surname");
-                OnPropertyChanged("Email");
-                OnPropertyChanged("AdditionalInformation");
+                RaisePropertyChanged("Global");
+                RaisePropertyChanged("InGroup");
+                RaisePropertyChanged("Id");
+                RaisePropertyChanged("Name");
+                RaisePropertyChanged("Surname");
+                RaisePropertyChanged("Email");
+                RaisePropertyChanged("AdditionalInformation");
             }
         }
 
@@ -226,7 +226,7 @@ namespace Dziennik.View
         public ObservableCollection<Selection> ToSelect
         {
             get { return m_toSelect; }
-            set { m_toSelect = value; OnPropertyChanged("ToSelect"); }
+            set { m_toSelect = value; RaisePropertyChanged("ToSelect"); }
         }
 
         private RelayCommand m_okCommand;

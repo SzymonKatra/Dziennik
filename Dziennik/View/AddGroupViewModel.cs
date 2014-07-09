@@ -36,7 +36,7 @@ namespace Dziennik.View
         public string Name
         {
             get { return m_name; }
-            set { m_name = value; OnPropertyChanged("Name"); }
+            set { m_name = value; RaisePropertyChanged("Name"); }
         }
 
         private List<int> m_selectedStudents = new List<int>();
@@ -45,14 +45,14 @@ namespace Dziennik.View
         public string SelectedStudentsInput
         {
             get { return m_selectedStudentsInput; }
-            set { m_selectedStudentsInput = value; OnPropertyChanged("SelectedStudentsInput"); }
+            set { m_selectedStudentsInput = value; RaisePropertyChanged("SelectedStudentsInput"); }
         }
 
         private bool m_renumberFromOne = true;
         public bool RenumberFromOne
         {
             get { return m_renumberFromOne; }
-            set { m_renumberFromOne = value; OnPropertyChanged("RenumberFromOne"); }
+            set { m_renumberFromOne = value; RaisePropertyChanged("RenumberFromOne"); }
         }
 
         private RelayCommand m_okCommand;

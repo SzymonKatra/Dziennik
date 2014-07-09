@@ -21,6 +21,7 @@ namespace Dziennik.View
         {
             m_addMarkCommand = new RelayCommand<ObservableCollection<MarkViewModel>>(AddMark);
             m_editMarkCommand = new RelayCommand<ObservableCollection<MarkViewModel>>(EditMark);
+            m_editEndingMarkCommand = new RelayCommand<string>(EditEndingMark);
             m_autoSaveCommand = new RelayCommand(AutoSave);
             m_saveCommand = new RelayCommand(Save);
 
@@ -31,28 +32,28 @@ namespace Dziennik.View
         public SchoolClassViewModel ViewModel
         {
             get { return m_viewModel; }
-            set { m_viewModel = value; OnPropertyChanged("ViewModel"); }
+            set { m_viewModel = value; RaisePropertyChanged("ViewModel"); }
         }
 
         private SchoolGroupViewModel m_selectedGroup;
         public SchoolGroupViewModel SelectedGroup
         {
             get { return m_selectedGroup; }
-            set { m_selectedGroup = value; OnPropertyChanged("SelectedGroup"); }
+            set { m_selectedGroup = value; RaisePropertyChanged("SelectedGroup"); }
         }
 
         private StudentInGroupViewModel m_selectedStudent;
         public StudentInGroupViewModel SelectedStudent
         {
             get { return m_selectedStudent; }
-            set { m_selectedStudent = value; OnPropertyChanged("SelectedStudent"); }
+            set { m_selectedStudent = value; RaisePropertyChanged("SelectedStudent"); }
         }
 
         private MarkViewModel m_selectedMark;
         public MarkViewModel SelectedMark
         {
             get { return m_selectedMark; }
-            set { m_selectedMark = value; OnPropertyChanged("SelectedMark"); }
+            set { m_selectedMark = value; RaisePropertyChanged("SelectedMark"); }
         }
 
         private RelayCommand<ObservableCollection<MarkViewModel>> m_addMarkCommand;
@@ -65,6 +66,12 @@ namespace Dziennik.View
         public ICommand EditMarkCommand
         {
             get { return m_editMarkCommand; }
+        }
+
+        private RelayCommand<string> m_editEndingMarkCommand;
+        public ICommand EditEndingMarkCommand
+        {
+            get { return m_editEndingMarkCommand; }
         }
 
         private RelayCommand m_autoSaveCommand;
@@ -100,6 +107,38 @@ namespace Dziennik.View
                 param.Remove(m_selectedMark);
             }
             if (dialogViewModel.Result != EditMarkViewModel.EditMarkResult.Cancel) m_autoSaveCommand.Execute(null);
+        }
+        private void EditEndingMark(string param)
+        {
+            decimal initialMark;
+            decimal averageMark;
+
+            if (param == "half")
+            {
+                initialMark = m_selectedStudent.HalfEndingMark;
+                averageMark = m_selectedStudent.FirstSemester.AverageMark;
+            }
+            else
+            {
+                initialMark = m_selectedStudent.YearEndingMark;
+                averageMark = m_selectedStudent.AverageMarkAll;
+            }
+
+            EditEndingMarkViewModel dialogViewModel = new EditEndingMarkViewModel(initialMark, averageMark);
+            GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Main, dialogViewModel);
+
+            if (dialogViewModel.Result == EditEndingMarkViewModel.EditEndingMarkResult.Ok)
+            {
+                if (param == "half")
+                {
+                    m_selectedStudent.HalfEndingMark = dialogViewModel.Mark;
+                }
+                else
+                {
+                    m_selectedStudent.YearEndingMark = dialogViewModel.Mark;
+                }
+            }
+            if (dialogViewModel.Result != EditEndingMarkViewModel.EditEndingMarkResult.Cancel) m_autoSaveCommand.Execute(null);
         }
         private void AutoSave(object param)
         {

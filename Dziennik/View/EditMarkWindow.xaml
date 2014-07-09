@@ -34,7 +34,7 @@
                 <ColumnDefinition Width=".4*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Grid.Row="0" Content="Zapisz" Margin="10,5,10,5" Command="{Binding OkCommand}"/>
+            <Button Grid.Column="0" Grid.Row="0" Content="OK" Margin="10,5,10,5" Command="{Binding OkCommand}"/>
             <Button Grid.Column="1" Grid.Row="0" Content="Anuluj" Margin="10,5,10,5" Command="{Binding CancelCommand}"/>
         </Grid>
 

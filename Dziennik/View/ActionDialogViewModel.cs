@@ -40,14 +40,14 @@ namespace Dziennik.View
         public string Content
         {
             get { return m_content; }
-            set { m_content = value; OnPropertyChanged("Content"); }
+            set { m_content = value; RaisePropertyChanged("Content"); }
         }
 
         private string m_title;
         public string Title
         {
             get { return m_title; }
-            set { m_title = value; OnPropertyChanged("Title"); }
+            set { m_title = value; RaisePropertyChanged("Title"); }
         }
 
         private void DoWork(object e)

@@ -43,7 +43,7 @@ namespace Dziennik.View
         public SchoolGroupViewModel SelectedGroup
         {
             get { return m_selectedGroup; }
-            set { m_selectedGroup = value; OnPropertyChanged("SelectedGroup"); m_editGroupCommand.RaiseCanExecuteChanged(); }
+            set { m_selectedGroup = value; RaisePropertyChanged("SelectedGroup"); m_editGroupCommand.RaiseCanExecuteChanged(); }
         }
 
         private EditClassResult m_result = EditClassResult.Cancel;
@@ -57,7 +57,7 @@ namespace Dziennik.View
         public string Name
         {
             get { return m_name; }
-            set { m_name = value; OnPropertyChanged("Name"); }
+            set { m_name = value; RaisePropertyChanged("Name"); }
         }
 
         private bool m_pathValid = false;
@@ -65,14 +65,14 @@ namespace Dziennik.View
         public string Path
         {
             get { return m_path; }
-            set { m_path = value; OnPropertyChanged("Path"); }
+            set { m_path = value; RaisePropertyChanged("Path"); }
         }
 
         private bool m_isAddingMode = false;
         public bool IsAddingMode
         {
             get { return m_isAddingMode; }
-            set { m_isAddingMode = value; OnPropertyChanged("IsAddingMode"); m_removeClassCommand.RaiseCanExecuteChanged(); }
+            set { m_isAddingMode = value; RaisePropertyChanged("IsAddingMode"); m_removeClassCommand.RaiseCanExecuteChanged(); }
         }
 
         private RelayCommand m_okCommand;

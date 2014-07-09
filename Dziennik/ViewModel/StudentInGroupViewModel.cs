@@ -39,12 +39,12 @@ namespace Dziennik.ViewModel
         public int GlobalId
         {
             get { return m_model.GlobalId; }
-            set { m_model.GlobalId = value; OnPropertyChanged("GlobalId"); }
+            set { m_model.GlobalId = value; RaisePropertyChanged("GlobalId"); }
         }
         public int Id
         {
             get { return m_model.Id; }
-            set { m_model.Id = value; OnPropertyChanged("Id"); }
+            set { m_model.Id = value; RaisePropertyChanged("Id"); }
         }
         private SemesterViewModel m_firstSemester;
         public SemesterViewModel FirstSemester
@@ -59,7 +59,7 @@ namespace Dziennik.ViewModel
                 SemesterSubscribe(m_firstSemester);
 
                 m_model.FirstSemester = value.Model;
-                OnPropertyChanged("FirstSemester");
+                RaisePropertyChanged("FirstSemester");
             }
         }
         private SemesterViewModel m_secondSemester;
@@ -75,7 +75,7 @@ namespace Dziennik.ViewModel
                 SemesterSubscribe(m_secondSemester);
 
                 m_model.FirstSemester = value.Model;
-                OnPropertyChanged("SecondSemester");
+                RaisePropertyChanged("SecondSemester");
             }
         }
 
@@ -83,7 +83,7 @@ namespace Dziennik.ViewModel
         public GlobalStudentViewModel GlobalStudent
         {
             get { return m_globalStudent; }
-            set { m_globalStudent = value; OnPropertyChanged("GlobalStudent"); }
+            set { m_globalStudent = value; RaisePropertyChanged("GlobalStudent"); }
         }
         public decimal AverageMarkAll
         {
@@ -104,17 +104,17 @@ namespace Dziennik.ViewModel
         public decimal HalfEndingMark
         {
             get { return m_model.HalfEndingMark; }
-            set { m_model.HalfEndingMark = value; OnPropertyChanged("HalfEndingMark"); }
+            set { m_model.HalfEndingMark = value; RaisePropertyChanged("HalfEndingMark"); }
         }
         public decimal YearEndingMark
         {
             get { return m_model.YearEndingMark; }
-            set { m_model.YearEndingMark = value; OnPropertyChanged("YearEndingMark"); }
+            set { m_model.YearEndingMark = value; RaisePropertyChanged("YearEndingMark"); }
         }
 
         private void SemesterMarksChanged(object sender, EventArgs e)
         {
-            OnPropertyChanged("AverageMarkAll");
+            RaisePropertyChanged("AverageMarkAll");
         }
 
         private void SemesterSubscribe(SemesterViewModel semester)

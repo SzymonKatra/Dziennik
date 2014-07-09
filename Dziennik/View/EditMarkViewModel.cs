@@ -48,7 +48,7 @@ namespace Dziennik.View
         public bool IsAddingMode
         {
             get { return m_isAddingMode; }
-            set { m_isAddingMode = value; OnPropertyChanged("IsAddingMode"); m_removeMarkCommand.RaiseCanExecuteChanged(); }
+            set { m_isAddingMode = value; RaisePropertyChanged("IsAddingMode"); m_removeMarkCommand.RaiseCanExecuteChanged(); }
         }
 
         private MarkViewModel m_mark;
@@ -59,7 +59,7 @@ namespace Dziennik.View
         public string ValueInput
         {
             get { return m_valueInput; }
-            set { m_valueInput = value; OnPropertyChanged("ValueInput"); }
+            set { m_valueInput = value; RaisePropertyChanged("ValueInput"); }
         }
 
         private string m_note;
@@ -68,14 +68,14 @@ namespace Dziennik.View
         public string NoteInput
         {
             get { return m_noteInput; }
-            set { m_noteInput = value; OnPropertyChanged("NoteInput"); }
+            set { m_noteInput = value; RaisePropertyChanged("NoteInput"); }
         }
 
         private string m_description;
         public string Description
         {
             get { return m_description; }
-            set { m_description = value; OnPropertyChanged("Description"); }
+            set { m_description = value; RaisePropertyChanged("Description"); }
         }
 
         private bool m_noteSelected;
@@ -85,9 +85,9 @@ namespace Dziennik.View
             set
             {
                 m_noteSelected = value;
-                OnPropertyChanged("NoteSelected");
-                OnPropertyChanged("ValueInput"); // to remove red border if is error in textbox
-                OnPropertyChanged("NoteInput"); // validation returns string.Empty if textbox is not selected by radiobutton
+                RaisePropertyChanged("NoteSelected");
+                RaisePropertyChanged("ValueInput"); // to remove red border if is error in textbox
+                RaisePropertyChanged("NoteInput"); // validation returns string.Empty if textbox is not selected by radiobutton
                 m_okCommand.RaiseCanExecuteChanged();
             }
         }

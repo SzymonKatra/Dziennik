@@ -64,11 +64,11 @@ namespace Dziennik.Controls
             get { return (ICommand)GetValue(CommandAddMarkProperty); }
             set { SetValue(CommandAddMarkProperty, value); }
         }
-        public static readonly DependencyProperty CommandParametrAddMarkProperty = DependencyProperty.Register("CommandParametrAddMark", typeof(object), typeof(MarksControl), new PropertyMetadata(null));
-        public object CommandParametrAddMark
+        public static readonly DependencyProperty CommandParameterAddMarkProperty = DependencyProperty.Register("CommandParameterAddMark", typeof(object), typeof(MarksControl), new PropertyMetadata(null));
+        public object CommandParameterAddMark
         {
-            get { return GetValue(CommandParametrAddMarkProperty); }
-            set { SetValue(CommandParametrAddMarkProperty, value); }
+            get { return GetValue(CommandParameterAddMarkProperty); }
+            set { SetValue(CommandParameterAddMarkProperty, value); }
         }
 
         public static readonly DependencyProperty CommandEditMarkProperty = DependencyProperty.Register("CommandEditMark", typeof(ICommand), typeof(MarksControl), new PropertyMetadata(null));
@@ -77,11 +77,11 @@ namespace Dziennik.Controls
             get { return (ICommand)GetValue(CommandEditMarkProperty); }
             set { SetValue(CommandEditMarkProperty, value); }
         }
-        public static readonly DependencyProperty CommandParametrEditMarkProperty = DependencyProperty.Register("CommandParametrEditMark", typeof(object), typeof(MarksControl), new PropertyMetadata(null));
-        public object CommandParametrEditMark
+        public static readonly DependencyProperty CommandParameterEditMarkProperty = DependencyProperty.Register("CommandParameterEditMark", typeof(object), typeof(MarksControl), new PropertyMetadata(null));
+        public object CommandParameterEditMark
         {
-            get { return GetValue(CommandParametrEditMarkProperty); }
-            set { SetValue(CommandParametrEditMarkProperty, value); }
+            get { return GetValue(CommandParameterEditMarkProperty); }
+            set { SetValue(CommandParameterEditMarkProperty, value); }
         }
 
         public static readonly RoutedEvent AddMarkEvent = EventManager.RegisterRoutedEvent("AddMark", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(MarksControl));
@@ -101,7 +101,7 @@ namespace Dziennik.Controls
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             RaiseEvent(new RoutedEventArgs(AddMarkEvent));
-            if (CommandAddMark != null) CommandAddMark.Execute(CommandParametrAddMark);
+            if (CommandAddMark != null) CommandAddMark.Execute(CommandParameterAddMark);
         }
         private void TextBlock_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -110,7 +110,7 @@ namespace Dziennik.Controls
                 if (listBox.SelectedItem is MarkViewModel)
                 {
                     RaiseEvent(new EditMarkEventArgs((MarkViewModel)listBox.SelectedItem));
-                    if (CommandEditMark != null) CommandEditMark.Execute(CommandParametrEditMark);
+                    if (CommandEditMark != null) CommandEditMark.Execute(CommandParameterEditMark);
                 }
             }
 

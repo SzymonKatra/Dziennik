@@ -16,91 +16,91 @@ namespace Dziennik
             public bool ShowName
             {
                 get { return m_showName; }
-                set { m_showName = value; OnPropertyChanged("ShowName"); }
+                set { m_showName = value; RaisePropertyChanged("ShowName"); }
             }
 
             private bool m_showSurname = true;
             public bool ShowSurname
             {
                 get { return m_showSurname; }
-                set { m_showSurname = value; OnPropertyChanged("ShowSurname"); }
+                set { m_showSurname = value; RaisePropertyChanged("ShowSurname"); }
             }
 
             private bool m_showEmail = true;
             public bool ShowEmail
             {
                 get { return m_showEmail; }
-                set { m_showEmail = value; OnPropertyChanged("ShowEmail"); }
+                set { m_showEmail = value; RaisePropertyChanged("ShowEmail"); }
             }
 
             private bool m_showFirstMarks = true;
             public bool ShowFirstMarks
             {
                 get { return m_showFirstMarks; }
-                set { m_showFirstMarks = value; OnPropertyChanged("ShowFirstMarks"); }
+                set { m_showFirstMarks = value; RaisePropertyChanged("ShowFirstMarks"); }
             }
 
             private bool m_showFirstAverage = true;
             public bool ShowFirstAverage
             {
                 get { return m_showFirstAverage; }
-                set { m_showFirstAverage = value; OnPropertyChanged("ShowFirstAverage"); }
+                set { m_showFirstAverage = value; RaisePropertyChanged("ShowFirstAverage"); }
             }
 
             private bool m_showHalfEndingMark = true;
             public bool ShowHalfEndingMark
             {
                 get { return m_showHalfEndingMark; }
-                set { m_showHalfEndingMark = value; OnPropertyChanged("ShowHalfEndingMark"); }
+                set { m_showHalfEndingMark = value; RaisePropertyChanged("ShowHalfEndingMark"); }
             }
 
             private bool m_showSecondMarks = true;
             public bool ShowSecondMarks
             {
                 get { return m_showSecondMarks; }
-                set { m_showSecondMarks = value; OnPropertyChanged("ShowSecondMarks"); }
+                set { m_showSecondMarks = value; RaisePropertyChanged("ShowSecondMarks"); }
             }
 
             private bool m_showSecondAverage = true;
             public bool ShowSecondAverage
             {
                 get { return m_showSecondAverage; }
-                set { m_showSecondAverage = value; OnPropertyChanged("ShowSecondAverage"); }
+                set { m_showSecondAverage = value; RaisePropertyChanged("ShowSecondAverage"); }
             }
 
             private bool m_showEndingAverage = true;
             public bool ShowEndingAverage
             {
                 get { return m_showEndingAverage; }
-                set { m_showEndingAverage = value; OnPropertyChanged("ShowEndingAverage"); }
+                set { m_showEndingAverage = value; RaisePropertyChanged("ShowEndingAverage"); }
             }
 
             private bool m_showYearEndingMark = true;
             public bool ShowYearEndingMark
             {
                 get { return m_showYearEndingMark; }
-                set { m_showYearEndingMark = value; OnPropertyChanged("ShowYearEndingMark"); }
+                set { m_showYearEndingMark = value; RaisePropertyChanged("ShowYearEndingMark"); }
             }
 
             private bool m_autoSave = true;
             public bool AutoSave
             {
                 get { return m_autoSave; }
-                set { m_autoSave = value; OnPropertyChanged("AutoSave"); }
+                set { m_autoSave = value; RaisePropertyChanged("AutoSave"); }
             }
 
             private string m_schoolClassesDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Dziennik_Klasy";
             public string SchoolClassesDirectory
             {
                 get { return m_schoolClassesDirectory; }
-                set { m_schoolClassesDirectory = value; OnPropertyChanged("SchoolClassesDirectory"); }
+                set { m_schoolClassesDirectory = value; RaisePropertyChanged("SchoolClassesDirectory"); }
             }
 
             private string m_schoolClassesBackupDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Dziennik_Klasy_Archiwum";
             public string SchoolClassesBackupDirectory
             {
                 get { return m_schoolClassesBackupDirectory; }
-                set { m_schoolClassesBackupDirectory = value; OnPropertyChanged("SchoolClassesBackupDirectory"); }
+                set { m_schoolClassesBackupDirectory = value; RaisePropertyChanged("SchoolClassesBackupDirectory"); }
             }
 
             public void LoadRegistry()
@@ -216,6 +216,7 @@ namespace Dziennik
             windowViewModelMappings.Add(typeof(EditGroupViewModel), (vm) => { return new EditGroupWindow((EditGroupViewModel)vm); });
             windowViewModelMappings.Add(typeof(EditClassViewModel), (vm) => { return new EditClassWindow((EditClassViewModel)vm); });
             windowViewModelMappings.Add(typeof(OptionsViewModel), (vm) => { return new OptionsWindow((OptionsViewModel)vm); });
+            windowViewModelMappings.Add(typeof(EditEndingMarkViewModel), (vm) => { return new EditEndingMarkWindow((EditEndingMarkViewModel)vm); });
 
             Dialogs = new DialogService(windowViewModelMappings);
         }

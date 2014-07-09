@@ -72,6 +72,9 @@
     <Compile Include="Controls\MessageBoxSuper.xaml.cs">
       <DependentUpon>MessageBoxSuper.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\OKCancelControl.xaml.cs">
+      <DependentUpon>OKCancelControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DialogService.cs" />
     <Compile Include="Ext.cs" />
     <Compile Include="INotifyCollectionChangedSimple.cs" />
@@ -94,6 +97,10 @@
     <Compile Include="View\AddGroupViewModel.cs" />
     <Compile Include="View\AddGroupWindow.xaml.cs">
       <DependentUpon>AddGroupWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\EditEndingMarkViewModel.cs" />
+    <Compile Include="View\EditEndingMarkWindow.xaml.cs">
+      <DependentUpon>EditEndingMarkWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\EditGroupViewModel.cs" />
     <Compile Include="View\EditGroupWindow.xaml.cs">
@@ -153,6 +160,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\OKCancelControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\ActionDialogWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -162,6 +173,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\AddGroupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\EditEndingMarkWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
