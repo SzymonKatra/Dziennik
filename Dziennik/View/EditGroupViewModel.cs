@@ -103,7 +103,7 @@ namespace Dziennik.View
             ObservableCollection<GlobalStudentViewModel> canBeAdded = new ObservableCollection<GlobalStudentViewModel>();
             foreach(GlobalStudentViewModel globalStudent in m_globalStudents)
             {
-                var result = m_schoolGroup.Students.FirstOrDefault((x) => { return x.GlobalStudent == globalStudent; });
+                var result = m_schoolGroup.Students.FirstOrDefault((x) => { return x.GlobalStudent.Model.Id == globalStudent.Model.Id; });
                 if (result == null) canBeAdded.Add(globalStudent);
             }
 

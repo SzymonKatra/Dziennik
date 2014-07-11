@@ -12,7 +12,6 @@ namespace Dziennik.Model
         public DatabaseContext(string filePath)
             : base(@"Data Source="+filePath)
         {
-            Console.WriteLine("tworzenie");
             Database.SetInitializer<DatabaseContext>(new DropCreateDatabaseIfModelChanges<DatabaseContext>());
         }
 

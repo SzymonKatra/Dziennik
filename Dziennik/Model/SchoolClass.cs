@@ -17,8 +17,8 @@ namespace Dziennik.Model
 
         public SchoolClass()
         {
-            //Students = new List<GlobalStudent>();
-            //Groups = new List<SchoolGroup>();
+            Students = new List<GlobalStudent>();
+            Groups = new List<SchoolGroup>();
         }
     }
 }

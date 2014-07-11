@@ -18,7 +18,7 @@ namespace Dziennik.ViewModel
 
             m_students = new SynchronizedPerItemObservableCollection<StudentInGroupViewModel, StudentInGroup>(m_model.Students, (m) => { return new StudentInGroupViewModel(m); });;
 
-            SubscribeStudents();
+            //SubscribeStudents();
         }
 
         private SchoolGroup m_model;
@@ -38,29 +38,29 @@ namespace Dziennik.ViewModel
             get { return m_students; }
             set
             {
-                UnsubscribeStudents();
+                //UnsubscribeStudents();
                 m_students = value;
-                SubscribeStudents();
+                //SubscribeStudents();
                 m_model.Students = value.ModelCollection;
                 RaisePropertyChanged("Students");
             }
         }
 
-        private void SubscribeStudents()
-        {
-            m_students.Removed += m_students_Removed;
-        }
-        private void UnsubscribeStudents()
-        {
-            m_students.Removed -= m_students_Removed;
-        }
+        //private void SubscribeStudents()
+        //{
+        //    m_students.Removed += m_students_Removed;
+        //}
+        //private void UnsubscribeStudents()
+        //{
+        //    m_students.Removed -= m_students_Removed;
+        //}
 
-        private void m_students_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<StudentInGroupViewModel> e)
-        {
-            foreach (var item in e.Items)
-            {
-                GlobalConfig.Database.StudentsInGroups.Remove(item.Model);
-            }
-        }
+        //private void m_students_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<StudentInGroupViewModel> e)
+        //{
+        //    foreach (var item in e.Items)
+        //    {
+        //        GlobalConfig.Database.StudentsInGroups.Remove(item.Model);
+        //    }
+        //}
     }
 }

@@ -11,6 +11,7 @@ namespace Dziennik.Model
         [Key]
         public int Id { get; set; }
 
+        public int Dummy { get; set; }
         public virtual List<Mark> Marks { get; set; }
 
         public Semester()

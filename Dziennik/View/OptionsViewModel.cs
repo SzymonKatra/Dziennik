@@ -82,7 +82,7 @@ namespace Dziennik.View
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditClassViewModel.EditClassResult.Ok)
             {
-                //GlobalConfig.Database.SchoolClasses.Add(schoolClass.Model);
+                GlobalConfig.Database.SchoolClasses.Add(schoolClass.Model);
                 SchoolClassControlViewModel tab = new SchoolClassControlViewModel(schoolClass);
                 m_openedSchoolClasses.Add(tab);
                 SelectedClass = tab;

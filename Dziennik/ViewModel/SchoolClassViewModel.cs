@@ -21,8 +21,8 @@ namespace Dziennik.ViewModel
             m_students = new SynchronizedPerItemObservableCollection<GlobalStudentViewModel, GlobalStudent>(m_model.Students, (m) => { return new GlobalStudentViewModel(m); });
             m_groups = new SynchronizedObservableCollection<SchoolGroupViewModel, SchoolGroup>(m_model.Groups, (m) => { return new SchoolGroupViewModel(m); });
 
-            SubscribeStudents();
-            SubscribeGroups();
+            //SubscribeStudents();
+            //SubscribeGroups();
         }
 
         private SchoolClass m_model;
@@ -42,9 +42,9 @@ namespace Dziennik.ViewModel
             get { return m_students; }
             set
             {
-                UnsubscribeStudents();
+                //UnsubscribeStudents();
                 m_students = value;
-                SubscribeStudents();
+                //SubscribeStudents();
                 m_model.Students = value.ModelCollection;
                 RaisePropertyChanged("Students");
             }
@@ -55,44 +55,44 @@ namespace Dziennik.ViewModel
             get { return m_groups; }
             set
             {
-                UnsubscribeGroups();
+                //UnsubscribeGroups();
                 m_groups = value;
-                SubscribeGroups();
+                //SubscribeGroups();
                 m_model.Groups = value.ModelCollection;
                 RaisePropertyChanged("Groups");
             }
         }
 
-        private void SubscribeStudents()
-        {
-            m_students.Removed += m_students_Removed;
-        }
-        private void UnsubscribeStudents()
-        {
-            m_students.Removed -= m_students_Removed;
-        }    
-        private void SubscribeGroups()
-        {
-            m_groups.Removed += m_groups_Removed;
-        }
-        private void UnsubscribeGroups()
-        {
-            m_groups.Removed -= m_groups_Removed;
-        }
+        //private void SubscribeStudents()
+        //{
+        //    m_students.Removed += m_students_Removed;
+        //}
+        //private void UnsubscribeStudents()
+        //{
+        //    m_students.Removed -= m_students_Removed;
+        //}    
+        //private void SubscribeGroups()
+        //{
+        //    m_groups.Removed += m_groups_Removed;
+        //}
+        //private void UnsubscribeGroups()
+        //{
+        //    m_groups.Removed -= m_groups_Removed;
+        //}
 
-        private void m_students_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<GlobalStudentViewModel> e)
-        {
-            foreach (var item in e.Items)
-            {
-                GlobalConfig.Database.GlobalStudents.Remove(item.Model);
-            }
-        }
-        private void m_groups_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<SchoolGroupViewModel> e)
-        {
-            foreach (var item in e.Items)
-            {
-                GlobalConfig.Database.SchoolGroups.Remove(item.Model);
-            }
-        }
+        //private void m_students_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<GlobalStudentViewModel> e)
+        //{
+        //    foreach (var item in e.Items)
+        //    {
+        //        GlobalConfig.Database.GlobalStudents.Remove(item.Model);
+        //    }
+        //}
+        //private void m_groups_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<SchoolGroupViewModel> e)
+        //{
+        //    foreach (var item in e.Items)
+        //    {
+        //        GlobalConfig.Database.SchoolGroups.Remove(item.Model);
+        //    }
+        //}
     }
 }

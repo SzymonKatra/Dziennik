@@ -90,21 +90,21 @@ namespace Dziennik.ViewModel
         {
             m_marks.CollectionChanged += m_marks_CollectionChanged;
             m_marks.ItemPropertyInCollectionChanged += m_marks_ItemPropertyInCollectionChanged;
-            m_marks.Removed += m_marks_Removed;
+            //m_marks.Removed += m_marks_Removed;
         }
         private void UnsubscribeMarks()
         {
             m_marks.CollectionChanged -= m_marks_CollectionChanged;
             m_marks.ItemPropertyInCollectionChanged -= m_marks_ItemPropertyInCollectionChanged;
-            m_marks.Removed -= m_marks_Removed;
+            //m_marks.Removed -= m_marks_Removed;
         }
 
-        private void m_marks_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<MarkViewModel> e)
-        {
-            foreach (var item in e.Items)
-            {
-                GlobalConfig.Database.Marks.Remove(item.Model);
-            }
-        }
+        //private void m_marks_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<MarkViewModel> e)
+        //{
+        //    foreach (var item in e.Items)
+        //    {
+        //        GlobalConfig.Database.Marks.Remove(item.Model);
+        //    }
+        //}
     }
 }

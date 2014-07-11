@@ -18,5 +18,11 @@ namespace Dziennik.Model
         public virtual Semester SecondSemester { get; set; }
         public decimal HalfEndingMark { get; set; }
         public decimal YearEndingMark { get; set; }
+
+        public StudentInGroup()
+        {
+            FirstSemester = new Semester();
+            SecondSemester = new Semester();
+        }
     }
 }

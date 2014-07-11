@@ -113,13 +113,9 @@ namespace Dziennik.View
                 m_openedSchoolClasses.Clear();
 
                 GlobalConfig.InitializeDatabase();
-                GlobalConfig.Database.SchoolClasses.Add(new Model.SchoolClass());
             }
            , null, "Odczytywanie bazy danch...");
             GlobalConfig.Dialogs.ShowDialog(this, saveDialogViewModel);
-
-            Model.SchoolClass sc = new Model.SchoolClass();
-            GlobalConfig.Database.SaveChanges();
 
             foreach (var item in GlobalConfig.Database.SchoolClasses) m_openedSchoolClasses.Add(new SchoolClassControlViewModel(new SchoolClassViewModel(item)));
             m_databasePathChanged = false;

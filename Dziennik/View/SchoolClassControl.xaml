@@ -17,7 +17,7 @@
                   AutoGenerateColumns="False"
                   SelectedItem="{Binding SelectedStudent, Mode=TwoWay}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Nr" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="Nr" Binding="{Binding Number}"/>
                 <DataGridTextColumn Header="Imię" Binding="{Binding GlobalStudent.Name}" Visibility="{Binding ShowName, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
                 <DataGridTextColumn Header="Nazwisko" Binding="{Binding GlobalStudent.Surname}" Visibility="{Binding ShowSurname, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
                 <DataGridTextColumn Header="Email" Binding="{Binding GlobalStudent.Email}" Visibility="{Binding ShowEmail, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
