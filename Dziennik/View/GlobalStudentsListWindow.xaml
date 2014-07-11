@@ -23,7 +23,7 @@
                   IsReadOnly="True"
                   AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Nr" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="Nr" Binding="{Binding Number}"/>
                 <DataGridTextColumn Header="Imię" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Nazwisko" Binding="{Binding Surname}"/>
                 <DataGridTextColumn Header="Email" Binding="{Binding Email}"/>

@@ -148,11 +148,7 @@ namespace Dziennik.View
         {
             ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(m_viewModel.Path));
-                using (FileStream stream = new FileStream(m_viewModel.Path, System.IO.FileMode.Create))
-                {
-                    m_viewModel.Serialize(stream);
-                }
+                GlobalConfig.Database.SaveChanges();
             }
             , null, "Zapisywanie...");
             GlobalConfig.Dialogs.ShowDialog((param == null ? GlobalConfig.Main : param), dialogViewModel);

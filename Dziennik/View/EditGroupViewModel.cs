@@ -103,7 +103,7 @@ namespace Dziennik.View
             ObservableCollection<GlobalStudentViewModel> canBeAdded = new ObservableCollection<GlobalStudentViewModel>();
             foreach(GlobalStudentViewModel globalStudent in m_globalStudents)
             {
-                var result = m_schoolGroup.Students.FirstOrDefault((x) => { return x.GlobalId == globalStudent.Id; });
+                var result = m_schoolGroup.Students.FirstOrDefault((x) => { return x.GlobalStudent == globalStudent; });
                 if (result == null) canBeAdded.Add(globalStudent);
             }
 
@@ -117,11 +117,11 @@ namespace Dziennik.View
                                            "Dziennik",
                                            MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
 
-                int selectedGlobalId = dialogViewModel.ResultSelection[0];
+                int selectedGlobalNumber = dialogViewModel.ResultSelection[0];
 
                 StudentInGroupViewModel studentInGroup = new StudentInGroupViewModel();
-                studentInGroup.GlobalId = selectedGlobalId;
-                studentInGroup.Id = (m_schoolGroup.Students.Count <= 0 ? 1 : m_schoolGroup.Students[m_schoolGroup.Students.Count - 1].Id + 1);
+                studentInGroup.GlobalStudent = m_globalStudents.First(x => x.Number == selectedGlobalNumber);
+                studentInGroup.Number = (m_schoolGroup.Students.Count <= 0 ? 1 : m_schoolGroup.Students[m_schoolGroup.Students.Count - 1].Number + 1);
                 m_schoolGroup.Students.Add(studentInGroup);
             }
         }
@@ -139,8 +139,8 @@ namespace Dziennik.View
 
                 foreach(int selRes in selectionResult)
                 {
-                    StudentInGroupViewModel student = m_schoolGroup.Students.First((x) => { return x.Id == selRes; });
-                    student.GlobalId = -1;
+                    StudentInGroupViewModel student = m_schoolGroup.Students.First((x) => { return x.Number == selRes; });
+                    student.GlobalStudent = GlobalStudentViewModel.Dummy;
                     student.FirstSemester.Marks.Clear();
                     student.SecondSemester.Marks.Clear();
                 }

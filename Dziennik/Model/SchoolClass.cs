@@ -2,31 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 namespace Dziennik.Model
 {
-    [Serializable]
-    public sealed class SchoolClass
+    public class SchoolClass
     {
-        private string m_name;
-        public string Name
-        {
-            get { return m_name; }
-            set { m_name = value; }
-        }
+        [Key]
+        public int Id { get; set; }
 
-        private List<GlobalStudent> m_students = new List<GlobalStudent>();
-        public List<GlobalStudent> Students
-        {
-            get { return m_students; }
-            set { m_students = value; }
-        }
+        public string Name { get; set; }
+        public virtual List<GlobalStudent> Students { get; set; }
+        public virtual List<SchoolGroup> Groups { get; set; }
 
-        private List<SchoolGroup> m_groups = new List<SchoolGroup>();
-        public List<SchoolGroup> Groups
+        public SchoolClass()
         {
-            get { return m_groups; }
-            set { m_groups = value; }
+            //Students = new List<GlobalStudent>();
+            //Groups = new List<SchoolGroup>();
         }
     }
 }

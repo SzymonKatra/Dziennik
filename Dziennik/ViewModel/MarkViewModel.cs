@@ -49,6 +49,11 @@ namespace Dziennik.ViewModel
                 RaisePropertyChanged("ToolTipFormatted");
             }
         }
+        public int Weight
+        {
+            get { return m_model.Weight; }
+            set { m_model.Weight = value; }
+        }
         public DateTime AddDate
         {
             get { return m_model.AddDate; }
@@ -87,9 +92,10 @@ namespace Dziennik.ViewModel
         {
             get
             {
-                return string.Format("{5}: {1}{0}Opis: {2}{0}Data dodania: {3}{0}Ostatnia zmiana: {4}",
+                return string.Format("{5}: {1}{0}Waga: {2}{0}Opis: {3}{0}Data dodania: {4}{0}Ostatnia zmiana: {5}",
                                      Environment.NewLine,
                                      this.DisplayedMark,
+                                     this.Weight,
                                      this.Description,
                                      this.AddDate.ToString(GlobalConfig.DateTimeFormat),
                                      this.LastChangeDate.ToString(GlobalConfig.DateTimeFormat),

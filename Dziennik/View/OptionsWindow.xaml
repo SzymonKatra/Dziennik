@@ -27,11 +27,11 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="Katalog z klasami"/>
+        <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="Plik bazy danych"/>
         <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="Katalog z archiwami"/>
 
-        <my:DirectorySelector x:Name="dirSelect" Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" SelectedPath="{Binding SchoolClassesDirectory, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}" IsTextBoxReadOnly="True"/>
-        <my:DirectorySelector Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" SelectedPath="{Binding SchoolClassesBackupDirectory, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}" IsTextBoxReadOnly="True"/>
+        <my:DirectorySelector x:Name="dirSelect" Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" SelectedPath="{Binding DatabasePath, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}" IsTextBoxReadOnly="True"/>
+        <my:DirectorySelector Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" SelectedPath="{Binding DatabaseArchiveDirectory, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}" IsTextBoxReadOnly="True"/>
         
         <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>

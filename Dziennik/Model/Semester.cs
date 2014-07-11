@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 namespace Dziennik.Model
 {
-    [Serializable]
-    public sealed class Semester
+    public class Semester
     {
-        private List<Mark> m_marks = new List<Mark>();
-        public List<Mark> Marks
+        [Key]
+        public int Id { get; set; }
+
+        public virtual List<Mark> Marks { get; set; }
+
+        public Semester()
         {
-            get { return m_marks; }
-            set { m_marks = value; }
+            Marks = new List<Mark>();
         }
     }
 }

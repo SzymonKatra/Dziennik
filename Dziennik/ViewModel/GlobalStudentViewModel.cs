@@ -23,10 +23,10 @@ namespace Dziennik.ViewModel
             get { return m_model; }
         }
 
-        public int Id
+        public int Number
         {
-            get { return m_model.Id; }
-            set { m_model.Id = value; RaisePropertyChanged("Id"); }
+            get { return m_model.Number; }
+            set { m_model.Number = value; RaisePropertyChanged("Number"); }
         }
         public string Name
         {
@@ -55,7 +55,7 @@ namespace Dziennik.ViewModel
             {
                 GlobalStudentViewModel result = new GlobalStudentViewModel();
 
-                result.Id = -1;
+                result.Number = -1;
                 result.Name = "----------";
                 result.Surname = "----------";
                 result.Email = "----------";

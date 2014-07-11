@@ -28,7 +28,7 @@ namespace Dziennik.View
 
             m_student = student;
 
-            m_id = student.Id;
+            m_id = student.Number;
             m_name = student.Name;
             m_surname = student.Surname;
             m_email = student.Email;

@@ -16,6 +16,8 @@ namespace Dziennik.ViewModel
         {
             m_model = studentInGroup;
 
+            m_globalStudent = new GlobalStudentViewModel(m_model.Global);
+
             m_firstSemester = new SemesterViewModel(m_model.FirstSemester);
             m_secondSemester = new SemesterViewModel(m_model.SecondSemester);
 
@@ -36,15 +38,10 @@ namespace Dziennik.ViewModel
             set { m_schoolClass = value; }
         }
 
-        public int GlobalId
+        public int Number
         {
-            get { return m_model.GlobalId; }
-            set { m_model.GlobalId = value; RaisePropertyChanged("GlobalId"); }
-        }
-        public int Id
-        {
-            get { return m_model.Id; }
-            set { m_model.Id = value; RaisePropertyChanged("Id"); }
+            get { return m_model.Number; }
+            set { m_model.Number = value; RaisePropertyChanged("Number"); }
         }
         private SemesterViewModel m_firstSemester;
         public SemesterViewModel FirstSemester
@@ -79,25 +76,25 @@ namespace Dziennik.ViewModel
             }
         }
 
-        private GlobalStudentViewModel m_globalStudent; // SchoolClassViewModel must synchronize it
+        private GlobalStudentViewModel m_globalStudent;
         public GlobalStudentViewModel GlobalStudent
         {
             get { return m_globalStudent; }
-            set { m_globalStudent = value; RaisePropertyChanged("GlobalStudent"); }
+            set { m_globalStudent = value; m_model.Global = value.Model; RaisePropertyChanged("GlobalStudent"); }
         }
         public decimal AverageMarkAll
         {
             get
             {
-                int validMarks = m_firstSemester.CountValidMarks() + m_secondSemester.CountValidMarks();
-                if (validMarks <= 0) return 0M;
+                int validMarksWeight = m_firstSemester.CountValidMarksWeight() + m_secondSemester.CountValidMarksWeight();
+                if (validMarksWeight <= 0) return 0M;
 
                 decimal sum = 0M;
 
-                foreach (MarkViewModel item in m_firstSemester.Marks) if (item.IsValueValid) sum += item.Value;
-                foreach (MarkViewModel item in m_secondSemester.Marks) if (item.IsValueValid) sum += item.Value;
+                foreach (MarkViewModel item in m_firstSemester.Marks) if (item.IsValueValid) sum += item.Value * item.Weight;
+                foreach (MarkViewModel item in m_secondSemester.Marks) if (item.IsValueValid) sum += item.Value * item.Weight;
 
-                return Ext.DecimalRoundHalfUp(sum / (decimal)validMarks, GlobalConfig.DecimalRoundingPoints);
+                return Ext.DecimalRoundHalfUp(sum / (decimal)validMarksWeight, GlobalConfig.DecimalRoundingPoints);
             }
         }
 

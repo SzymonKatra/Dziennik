@@ -39,7 +39,7 @@ namespace Dziennik.View
             {
                 get
                 {
-                    return (m_global != null ? m_global.Id : m_inGroup.Id);
+                    return (m_global != null ? m_global.Number : m_inGroup.Number);
                 }
             }
             public string Name

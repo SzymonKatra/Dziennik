@@ -19,7 +19,7 @@ namespace Dziennik.ViewModel
             m_model = semester;
 
             m_marks = new SynchronizedPerItemObservableCollection<MarkViewModel, Mark>(m_model.Marks, (m) => { return new MarkViewModel(m); });
-            MarksSubscribe();
+            SubscribeMarks();
         }
 
         private Semester m_model;
@@ -36,11 +36,11 @@ namespace Dziennik.ViewModel
             get { return m_marks; }
             set
             {
-                MarksUnsubscribe();
+                UnsubscribeMarks();
 
                 m_marks = value;
 
-                MarksSubscribe();
+                SubscribeMarks();
 
                 m_model.Marks = value.ModelCollection;
                 RaisePropertyChanged("Marks");
@@ -50,18 +50,18 @@ namespace Dziennik.ViewModel
         {
             get
             {
-                int validMarks = CountValidMarks();
-                if (validMarks <= 0) return 0M;
+                int validMarksWeight = CountValidMarksWeight();
+                if (validMarksWeight <= 0) return 0M;
 
                 decimal sum = 0M;
 
-                foreach (MarkViewModel item in m_marks) if (item.IsValueValid) sum += item.Value;
+                foreach (MarkViewModel item in m_marks) if (item.IsValueValid) sum += item.Value * item.Weight;
 
-                return Ext.DecimalRoundHalfUp(sum / (decimal)validMarks, GlobalConfig.DecimalRoundingPoints);
+                return Ext.DecimalRoundHalfUp(sum / (decimal)validMarksWeight, GlobalConfig.DecimalRoundingPoints);
             }
         }
 
-        public int CountValidMarks()
+        public int CountValidMarksWeight()
         {
             return m_marks.Count((m) => { return m.IsValueValid; });
         }
@@ -86,15 +86,25 @@ namespace Dziennik.ViewModel
             if (handler != null) handler(this, e);
         }
 
-        private void MarksSubscribe()
+        private void SubscribeMarks()
         {
             m_marks.CollectionChanged += m_marks_CollectionChanged;
             m_marks.ItemPropertyInCollectionChanged += m_marks_ItemPropertyInCollectionChanged;
+            m_marks.Removed += m_marks_Removed;
         }
-        private void MarksUnsubscribe()
+        private void UnsubscribeMarks()
         {
             m_marks.CollectionChanged -= m_marks_CollectionChanged;
             m_marks.ItemPropertyInCollectionChanged -= m_marks_ItemPropertyInCollectionChanged;
+            m_marks.Removed -= m_marks_Removed;
+        }
+
+        private void m_marks_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<MarkViewModel> e)
+        {
+            foreach (var item in e.Items)
+            {
+                GlobalConfig.Database.Marks.Remove(item.Model);
+            }
         }
     }
 }

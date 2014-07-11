@@ -60,7 +60,7 @@ namespace Dziennik.View
         private void AddStudent(object e)
         {
             GlobalStudentViewModel student = new GlobalStudentViewModel();
-            student.Id = GetNextStudentId();
+            student.Number = GetNextStudentId();
 
             EditStudentViewModel dialogViewModel = new EditStudentViewModel(student);
             dialogViewModel.IsAddingMode = true;
@@ -87,7 +87,7 @@ namespace Dziennik.View
                 if (index < 0) return;
                 for (int i = index + 1; i < m_students.Count; i++)
                 {
-                    m_students[i].Id--;
+                    m_students[i].Number--;
                 }
 
                 m_students.RemoveAt(index);
@@ -113,7 +113,7 @@ namespace Dziennik.View
                         int nameSurnameSeparatorIndex = line.IndexOf(' ');
 
                         GlobalStudentViewModel student = new GlobalStudentViewModel();
-                        student.Id = GetNextStudentId();
+                        student.Number = GetNextStudentId();
                         student.Surname = line.Substring(0, nameSurnameSeparatorIndex);
                         student.Name = line.Substring(nameSurnameSeparatorIndex + 1);
 
@@ -132,7 +132,7 @@ namespace Dziennik.View
 
         private int GetNextStudentId()
         {
-            return (m_students.Count <= 0 ? 1 : m_students[m_students.Count - 1].Id + 1);
+            return (m_students.Count <= 0 ? 1 : m_students[m_students.Count - 1].Number + 1);
         }
     }
 }

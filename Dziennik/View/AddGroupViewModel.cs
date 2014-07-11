@@ -90,8 +90,8 @@ namespace Dziennik.View
             foreach (int selStudent in m_selectedStudents)
             {
                 StudentInGroupViewModel studentInGroup = new StudentInGroupViewModel();
-                studentInGroup.GlobalId = selStudent;
-                studentInGroup.Id = (m_renumberFromOne ? index++ : selStudent);
+                studentInGroup.GlobalStudent = m_globalStudentCollection.First(x => x.Number == selStudent);
+                studentInGroup.Number = (m_renumberFromOne ? index++ : selStudent);
 
                 m_result.Students.Add(studentInGroup);
             }
@@ -165,7 +165,7 @@ namespace Dziennik.View
 
             foreach (int selStudent in m_selectedStudents)
             {
-                if (m_globalStudentCollection.FirstOrDefault((gs) => { return gs.Id == selStudent; }) == null)
+                if (m_globalStudentCollection.FirstOrDefault((gs) => { return gs.Number == selStudent; }) == null)
                 {
                     m_okCommand.RaiseCanExecuteChanged();
                     return string.Format("Ucznia o numerze {0} nie ma w bazie", selStudent);

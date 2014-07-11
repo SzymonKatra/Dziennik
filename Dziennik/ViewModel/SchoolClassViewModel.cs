@@ -25,8 +25,6 @@ namespace Dziennik.ViewModel
             SubscribeGroups();
         }
 
-        private static XmlSerializer s_serializer = new XmlSerializer(typeof(SchoolClass));
-
         private SchoolClass m_model;
         public SchoolClass Model
         {
@@ -45,11 +43,8 @@ namespace Dziennik.ViewModel
             set
             {
                 UnsubscribeStudents();
-
                 m_students = value;
-
                 SubscribeStudents();
-
                 m_model.Students = value.ModelCollection;
                 RaisePropertyChanged("Students");
             }
@@ -61,112 +56,43 @@ namespace Dziennik.ViewModel
             set
             {
                 UnsubscribeGroups();
-
                 m_groups = value;
-
                 SubscribeGroups();
-
                 m_model.Groups = value.ModelCollection;
                 RaisePropertyChanged("Groups");
             }
         }
 
-        private string m_path;
-        public string Path
-        {
-            get { return m_path; }
-            set { m_path = value; }
-        }
-
         private void SubscribeStudents()
         {
-            m_students.ItemPropertyInCollectionChanged += m_students_ItemPropertyInCollectionChanged;
+            m_students.Removed += m_students_Removed;
         }
         private void UnsubscribeStudents()
         {
-            m_students.ItemPropertyInCollectionChanged -= m_students_ItemPropertyInCollectionChanged;
-        }
-
+            m_students.Removed -= m_students_Removed;
+        }    
         private void SubscribeGroups()
         {
-            m_groups.Added += m_gropus_Added;
-            m_groups.Removed += m_gropus_Removed;
-
-            m_groups.RaiseAddedForAll();
+            m_groups.Removed += m_groups_Removed;
         }
         private void UnsubscribeGroups()
         {
-            m_groups.RaiseRemovedForAll();
-
-            m_groups.Added -= m_gropus_Added;
-            m_groups.Removed -= m_gropus_Removed;
+            m_groups.Removed -= m_groups_Removed;
         }
 
-        private void m_gropus_Added(object sender, NotifyCollectionChangedSimpleEventArgs<SchoolGroupViewModel> e)
+        private void m_students_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<GlobalStudentViewModel> e)
         {
-            foreach(SchoolGroupViewModel group in e.Items)
+            foreach (var item in e.Items)
             {
-                group.StudentInGroupAttachedGlobalIdChanged += group_StudentInGroupAttachedGlobalIdChanged;
-
-                foreach (StudentInGroupViewModel student in group.Students)
-                {
-                    student.GlobalStudent = FindCorrespondingGlobalStudent(student.GlobalId);
-                }
+                GlobalConfig.Database.GlobalStudents.Remove(item.Model);
             }
         }
-        private void m_gropus_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<SchoolGroupViewModel> e)
+        private void m_groups_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<SchoolGroupViewModel> e)
         {
-            foreach (SchoolGroupViewModel group in e.Items)
+            foreach (var item in e.Items)
             {
-                group.StudentInGroupAttachedGlobalIdChanged -= group_StudentInGroupAttachedGlobalIdChanged;
-
-                foreach (StudentInGroupViewModel student in group.Students)
-                {
-                    student.GlobalStudent = null;
-                }
+                GlobalConfig.Database.SchoolGroups.Remove(item.Model);
             }
-        }
-
-        private void group_StudentInGroupAttachedGlobalIdChanged(object sender, CommonEventArgs<StudentInGroupViewModel> e)
-        {
-            e.Item.GlobalStudent = FindCorrespondingGlobalStudent(e.Item.GlobalId);
-        }
-
-        private void m_students_ItemPropertyInCollectionChanged(object sender, ItemPropertyInCollectionChangedEventArgs<GlobalStudentViewModel> e)
-        {
-            if (e.PropertyName == "Id")
-            {
-                foreach (SchoolGroupViewModel group in m_groups)
-                {
-                    foreach (StudentInGroupViewModel student in group.Students)
-                    {
-                        if (e.Item.Id == student.GlobalId)
-                        {
-                            student.GlobalId = e.Item.Id;
-                            student.GlobalStudent = e.Item;
-                        }
-                    }
-                }
-            }
-        }
-        
-        public GlobalStudentViewModel FindCorrespondingGlobalStudent(int globalId)
-        {
-            if (globalId > 0 && m_students.Count >= globalId && m_students[globalId - 1].Id == globalId) return m_students[globalId - 1];
-
-            GlobalStudentViewModel result = m_students.FirstOrDefault((gs) => { return gs.Id == globalId; });
-
-            if (result == null) result = GlobalStudentViewModel.Dummy;
-            return result;
-        }
-
-        public void Serialize(Stream outputStream)
-        {
-            s_serializer.Serialize(outputStream, m_model);
-        }
-        public static SchoolClassViewModel Deserialize(Stream inputStream)
-        {
-            return new SchoolClassViewModel((SchoolClass)s_serializer.Deserialize(inputStream));
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows;
 using Dziennik.View;
 using Microsoft.Win32;
+using Dziennik.Model;
 
 namespace Dziennik
 {
@@ -89,18 +90,18 @@ namespace Dziennik
                 set { m_autoSave = value; RaisePropertyChanged("AutoSave"); }
             }
 
-            private string m_schoolClassesDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Dziennik_Klasy";
-            public string SchoolClassesDirectory
+            private string m_databasePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\DziennikBaza.sdf";
+            public string DatabasePath
             {
-                get { return m_schoolClassesDirectory; }
-                set { m_schoolClassesDirectory = value; RaisePropertyChanged("SchoolClassesDirectory"); }
+                get { return m_databasePath; }
+                set { m_databasePath = value; RaisePropertyChanged("SchoolClassesDirectory"); }
             }
 
-            private string m_schoolClassesBackupDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Dziennik_Klasy_Archiwum";
-            public string SchoolClassesBackupDirectory
+            private string m_databaseArchiveDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Dziennik_Archiwum";
+            public string DatabaseArchiveDirectory
             {
-                get { return m_schoolClassesBackupDirectory; }
-                set { m_schoolClassesBackupDirectory = value; RaisePropertyChanged("SchoolClassesBackupDirectory"); }
+                get { return m_databaseArchiveDirectory; }
+                set { m_databaseArchiveDirectory = value; RaisePropertyChanged("SchoolClassesBackupDirectory"); }
             }
 
             public void LoadRegistry()
@@ -117,9 +118,8 @@ namespace Dziennik
                 object showEndingAverageReg = key.GetValue(GlobalConfig.RegistryValueNameShowEndingAverage);
                 object showYearEndingMarkReg = key.GetValue(GlobalConfig.RegistryValueNameShowYearEndingMark);
                 object autoSaveReg = key.GetValue(GlobalConfig.RegistryValueNameAutoSave);
-                //object lastOpenedReg = key.GetValue(GlobalConfig.RegistryValueNameLastOpened);
-                object schoolClassesDirectoryReg = key.GetValue(GlobalConfig.RegistryValueNameSchoolClassesDirectory);
-                object schoolClassesBackupDirectoryReg = key.GetValue(GlobalConfig.RegistryValueNameSchoolClassesBackupDirectory);
+                object databasePathReg = key.GetValue(GlobalConfig.RegistryValueNameDatabasePath);
+                object databaseArchiveDirectoryReg = key.GetValue(GlobalConfig.RegistryValueNameDatabaseArchiveDirectory);
                 key.Close();
 
                 if (showNameReg != null) ShowName = Ext.BoolParseOrDefault(showNameReg.ToString(), m_showName);
@@ -133,8 +133,8 @@ namespace Dziennik
                 if (showEndingAverageReg != null) ShowEndingAverage = Ext.BoolParseOrDefault(showEndingAverageReg.ToString(), m_showEndingAverage);
                 if (showYearEndingMarkReg != null) ShowYearEndingMark = Ext.BoolParseOrDefault(showYearEndingMarkReg.ToString(), m_showYearEndingMark);
                 if (autoSaveReg != null) AutoSave = Ext.BoolParseOrDefault(autoSaveReg.ToString(), m_autoSave);
-                if (schoolClassesDirectoryReg != null) SchoolClassesDirectory = schoolClassesDirectoryReg.ToString();
-                if (schoolClassesBackupDirectoryReg != null) SchoolClassesBackupDirectory = schoolClassesBackupDirectoryReg.ToString();
+                if (databasePathReg != null) DatabasePath = databasePathReg.ToString();
+                if (databaseArchiveDirectoryReg != null) DatabaseArchiveDirectory = databaseArchiveDirectoryReg.ToString();
                 //if (lastOpenedReg != null)
                 //{
                 //    string lastOpened = lastOpenedReg.ToString();
@@ -156,8 +156,8 @@ namespace Dziennik
                 key.SetValue(GlobalConfig.RegistryValueNameShowEndingAverage, m_showEndingAverage);
                 key.SetValue(GlobalConfig.RegistryValueNameShowYearEndingMark, m_showYearEndingMark);
                 key.SetValue(GlobalConfig.RegistryValueNameAutoSave, m_autoSave);
-                key.SetValue(GlobalConfig.RegistryValueNameSchoolClassesDirectory, m_schoolClassesDirectory);
-                key.SetValue(GlobalConfig.RegistryValueNameSchoolClassesBackupDirectory, m_schoolClassesBackupDirectory);
+                key.SetValue(GlobalConfig.RegistryValueNameDatabasePath, m_databasePath);
+                key.SetValue(GlobalConfig.RegistryValueNameDatabaseArchiveDirectory, m_databaseArchiveDirectory);
                 //StringBuilder builder = new StringBuilder();
                 //foreach (SchoolClassControlViewModel item in m_openedSchoolClasses)
                 //{
@@ -187,8 +187,8 @@ namespace Dziennik
         public static readonly string RegistryValueNameShowYearEndingMark = "ShowYearEndingMark";
         public static readonly string RegistryValueNameAutoSave = "AutoSave";
         public static readonly string RegistryValueNameLastOpened = "LastOpened";
-        public static readonly string RegistryValueNameSchoolClassesDirectory = "SchoolClassesDirectory";
-        public static readonly string RegistryValueNameSchoolClassesBackupDirectory = "SchoolClassesBackupDirectory";
+        public static readonly string RegistryValueNameDatabasePath = "DatabasePath";
+        public static readonly string RegistryValueNameDatabaseArchiveDirectory = "DatabaseArchiveDirectory";
 
         public static readonly DialogService Dialogs;
 
@@ -201,6 +201,18 @@ namespace Dziennik
                 if (m_main != null) throw new InvalidOperationException("Main window already assigned");
                 m_main = value;
             }
+        }
+
+        private static DatabaseContext m_database;
+        public static DatabaseContext Database
+        {
+            get { return m_database; }
+        }
+
+        public static void InitializeDatabase()
+        {
+            if (m_database != null) m_database.Dispose();
+            m_database = new DatabaseContext(Notifier.DatabasePath);
         }
 
         static GlobalConfig()

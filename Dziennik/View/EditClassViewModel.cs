@@ -25,14 +25,12 @@ namespace Dziennik.View
             m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
             m_removeClassCommand = new RelayCommand(RemoveClass, CanRemoveClass);
-            m_choosePathCommand = new RelayCommand(ChoosePath);
             m_showGlobalStudentsListCommand = new RelayCommand(ShowGlobalStudentsList);
             m_addGroupCommand = new RelayCommand(AddGroup);
             m_editGroupCommand = new RelayCommand(EditGroup, CanEditGroup);
 
             m_schoolClass = schoolClass;
             m_name = schoolClass.Name;
-            m_path = schoolClass.Path;
 
             m_autoSaveCommand = autoSaveCommand;
         }
@@ -60,14 +58,6 @@ namespace Dziennik.View
             set { m_name = value; RaisePropertyChanged("Name"); }
         }
 
-        private bool m_pathValid = false;
-        private string m_path;
-        public string Path
-        {
-            get { return m_path; }
-            set { m_path = value; RaisePropertyChanged("Path"); }
-        }
-
         private bool m_isAddingMode = false;
         public bool IsAddingMode
         {
@@ -93,12 +83,6 @@ namespace Dziennik.View
             get { return m_removeClassCommand; }
         }
 
-        private RelayCommand m_choosePathCommand;
-        public ICommand ChoosePathCommand
-        {
-            get { return m_choosePathCommand; }
-        }
-
         private RelayCommand m_addGroupCommand;
         public ICommand AddGroupCommand
         {
@@ -122,33 +106,17 @@ namespace Dziennik.View
         {
             get { return m_schoolClass; }
         }
-        
 
         private void Ok(object param)
         {
-            if (m_isAddingMode)
-            {
-                if (File.Exists(m_path))
-                {
-                    if (MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this),
-                                               "Podany plik istnieje i zostanie nadpisany" + Environment.NewLine + "Czy chcesz kontynuować?", "Dziennik",
-                                               MessageBoxSuperPredefinedButtons.YesNo) == MessageBoxSuperButton.No)
-                    {
-                        Path = string.Empty;
-                        return;
-                    }
-                }
-            }
-
             m_schoolClass.Name = m_name;
-            m_schoolClass.Path = m_path;
 
             m_result = EditClassResult.Ok;
             GlobalConfig.Dialogs.Close(this);
         }
         private bool CanOk(object param)
         {
-            return m_nameValid && m_pathValid;
+            return m_nameValid;
         }
         private void Cancel(object param)
         {
@@ -158,7 +126,7 @@ namespace Dziennik.View
         private void RemoveClass(object param)
         {
             if (MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this),
-                                        "Czy napewno chcesz usunąć plik z klasą?", "Dziennik", MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
+                                        "Czy napewno chcesz klasę?", "Dziennik", MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
 
             m_result = EditClassResult.RemoveClass;
             GlobalConfig.Dialogs.Close(this);
@@ -166,21 +134,6 @@ namespace Dziennik.View
         private bool CanRemoveClass(object param)
         {
             return !m_isAddingMode;
-        }
-        private void ChoosePath(object param)
-        {
-            Microsoft.Win32.SaveFileDialog sfd = new Microsoft.Win32.SaveFileDialog();
-            sfd.FileName = m_name;
-            sfd.DefaultExt = GlobalConfig.FileExtension;
-            //sfd.ValidateNames = true;
-            sfd.Filter = GlobalConfig.FileDialogFilter;
-
-            bool? result = sfd.ShowDialog(GlobalConfig.Dialogs.GetWindow(this));
-
-            if (result == true)
-            {
-                Path = sfd.FileName;
-            }
         }
         private void AddGroup(object param)
         {
@@ -225,7 +178,6 @@ namespace Dziennik.View
                 switch (columnName)
                 {
                     case "Name": return ValidateName();
-                    case "Path": return ValidatePath();
                 }
 
                 return string.Empty;
@@ -242,25 +194,7 @@ namespace Dziennik.View
                 return "Wprowadź poprawną nazwę klasy";
             }
 
-            Path = GlobalConfig.Notifier.SchoolClassesDirectory + @"\" + m_name + GlobalConfig.FileExtension;
-
             m_nameValid = true;
-            m_okCommand.RaiseCanExecuteChanged();
-            return string.Empty;
-        }
-        private string ValidatePath()
-        {
-            m_pathValid = false;
-
-            Uri temp;
-
-            if (string.IsNullOrWhiteSpace(m_path) || !Uri.TryCreate(m_path, UriKind.Absolute, out temp))
-            {
-                m_okCommand.RaiseCanExecuteChanged();
-                return "Wprowadź poprawną ścieżkę";
-            }
-
-            m_pathValid = true;
             m_okCommand.RaiseCanExecuteChanged();
             return string.Empty;
         }
