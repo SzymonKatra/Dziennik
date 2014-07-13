@@ -6,16 +6,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Dziennik.Model
 {
-    public class StudentInGroup
+    [Serializable]
+    public class StudentInGroup : ModelBase
     {
-        [Key]
-        public int Id { get; set; }
-
-        public virtual GlobalStudent Global { get; set; }
+        public ulong? GlobalStudentId { get; set; }
         public int Number { get; set; }
         
-        public virtual Semester FirstSemester { get; set; }
-        public virtual Semester SecondSemester { get; set; }
+        public Semester FirstSemester { get; set; }
+        public Semester SecondSemester { get; set; }
         public decimal HalfEndingMark { get; set; }
         public decimal YearEndingMark { get; set; }
 

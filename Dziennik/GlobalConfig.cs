@@ -203,8 +203,8 @@ namespace Dziennik
             }
         }
 
-        private static DatabaseContext m_database;
-        public static DatabaseContext Database
+        private static DatabaseMain m_database;
+        public static DatabaseMain Database
         {
             get { return m_database; }
         }
@@ -212,7 +212,7 @@ namespace Dziennik
         public static void InitializeDatabase()
         {
             if (m_database != null) m_database.Dispose();
-            m_database = new DatabaseContext(Notifier.DatabasePath);
+            m_database = new DatabaseMain(Notifier.DatabasePath);
         }
 
         static GlobalConfig()

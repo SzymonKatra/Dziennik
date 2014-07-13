@@ -6,13 +6,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Dziennik.Model
 {
-    public class Semester
+    [Serializable]
+    public class Semester : ModelBase
     {
-        [Key]
-        public int Id { get; set; }
-
-        public int Dummy { get; set; }
-        public virtual List<Mark> Marks { get; set; }
+        public List<Mark> Marks { get; set; }
 
         public Semester()
         {

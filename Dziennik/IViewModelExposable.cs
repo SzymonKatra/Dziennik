@@ -9,7 +9,7 @@ namespace Dziennik
     /// 
     /// </summary>
     /// <typeparam name="M">Model type</typeparam>
-    public interface IViewModelExposable<M>
+    public interface IViewModelExposable<out M>
     {
         M Model { get; }
     }

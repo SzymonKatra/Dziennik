@@ -6,13 +6,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Dziennik.Model
 {
-    public class SchoolGroup
+    [Serializable]
+    public class SchoolGroup : ModelBase
     {
-        [Key]
-        public int Id { get; set; }
-
         public string Name { get; set; }
-        public virtual List<StudentInGroup> Students { get; set; }
+        public List<StudentInGroup> Students { get; set; }
 
         public SchoolGroup()
         {

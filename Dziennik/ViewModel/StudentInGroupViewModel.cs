@@ -16,8 +16,6 @@ namespace Dziennik.ViewModel
         {
             m_model = studentInGroup;
 
-            m_globalStudent = new GlobalStudentViewModel(m_model.Global);
-
             m_firstSemester = new SemesterViewModel(m_model.FirstSemester);
             m_secondSemester = new SemesterViewModel(m_model.SecondSemester);
 
@@ -80,7 +78,7 @@ namespace Dziennik.ViewModel
         public GlobalStudentViewModel GlobalStudent
         {
             get { return m_globalStudent; }
-            set { m_globalStudent = value; m_model.Global = value.Model; RaisePropertyChanged("GlobalStudent"); }
+            set { m_globalStudent = value; m_model.GlobalStudentId = value.Model.Id; RaisePropertyChanged("GlobalStudent"); }
         }
         public decimal AverageMarkAll
         {
