@@ -6,7 +6,7 @@ using Dziennik.Model;
 
 namespace Dziennik.ViewModel
 {
-    public class SchoolGroupViewModel : ObservableObject, IViewModelExposable<SchoolGroup>
+    public class SchoolGroupViewModel : ObservableObject, IModelExposable<SchoolGroup>
     {
         public SchoolGroupViewModel()
             : this(new SchoolGroup())

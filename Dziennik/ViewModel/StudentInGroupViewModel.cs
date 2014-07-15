@@ -6,7 +6,7 @@ using Dziennik.Model;
 
 namespace Dziennik.ViewModel
 {
-    public sealed class StudentInGroupViewModel : ObservableObject, IViewModelExposable<StudentInGroup>
+    public sealed class StudentInGroupViewModel : ObservableObject, IModelExposable<StudentInGroup>
     {
         public StudentInGroupViewModel()
             : this(new StudentInGroup())
@@ -78,7 +78,7 @@ namespace Dziennik.ViewModel
         public GlobalStudentViewModel GlobalStudent
         {
             get { return m_globalStudent; }
-            set { m_globalStudent = value; m_model.GlobalStudentId = value.Model.Id; RaisePropertyChanged("GlobalStudent"); }
+            set { m_globalStudent = value; RaisePropertyChanged("GlobalStudent"); }
         }
         public decimal AverageMarkAll
         {

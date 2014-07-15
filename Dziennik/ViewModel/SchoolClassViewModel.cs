@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace Dziennik.ViewModel
 {
-    public sealed class SchoolClassViewModel : ObservableObject, IViewModelExposable<SchoolClass>
+    public sealed class SchoolClassViewModel : ObservableObject, IModelExposable<SchoolClass>
     {
         public SchoolClassViewModel()
             : this(new SchoolClass())

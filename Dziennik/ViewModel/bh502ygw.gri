@@ -1,0 +1,106 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.ComponentModel.DataAnnotations;
+using Dziennik.Model;
+using fastJSON;
+using System.IO;
+using System.Diagnostics;
+using System.Reflection;
+
+namespace Dziennik.ViewModel
+{
+    public class DatabaseMain
+    {
+        private string m_path;
+        public string Path
+        {
+            get { return m_path; }
+            set { m_path = value; }
+        }
+
+        private ulong m_currentId = 1;
+        public void AssignId(ModelBase model)
+        {
+            model.Id = m_currentId;
+            m_currentId++; //in new line for clarity
+        }
+        public void AssignId(IViewModelExposable<ModelBase> viewModel)
+        {
+            AssignId(viewModel.Model);
+        }
+
+        public static DatabaseMain Load(string path)
+        {
+            DatabaseMain database = new DatabaseMain();
+
+            database.m_path = path;
+
+            using (FileStream stream = new FileStream(database.m_path, FileMode.OpenOrCreate))
+            {
+                byte[] buffer = new byte[sizeof(ulong)];
+
+                stream.Read(buffer, 0, sizeof(ulong)); // current id
+                database.m_currentId = BitConverter.ToUInt64(buffer, 0);
+
+                stream.Read(buffer, 0, sizeof(int)); // json data length
+                int len = BitConverter.ToInt32(buffer, 0);
+
+                buffer = new byte[len];
+                stream.Read(buffer, 0, len);
+
+                string json = Encoding.UTF8.GetString(buffer);
+                database.SchoolClass = new SchoolClassViewModel((SchoolClass)JSON.ToObject(json, typeof(SchoolClass)));
+            }
+
+            foreach (SchoolGroupViewModel group in database.SchoolClass.Groups)
+            {
+                foreach (StudentInGroupViewModel student in group.Students)
+                {
+                    if (student.Model.GlobalStudentId != null)
+                    {
+                        student.GlobalStudent = database.SchoolClass.Students.FirstOrDefault(x => x.Model.Id == student.Model.GlobalStudentId);
+                        Debug.Assert(student.GlobalStudent == null, "DatabaseMain.Load - GlobalStudent id not found");
+                    }
+                }
+            }
+
+            return database;
+        }
+        public void Save()
+        {
+            using (FileStream stream = new FileStream(m_path, FileMode.OpenOrCreate))
+            {
+                stream.Write(BitConverter.GetBytes(m_currentId), 0, sizeof(ulong)); // save current id
+                byte[] jsonBytes = Encoding.UTF8.GetBytes(JSON.ToJSON(SchoolClass.Model));
+                stream.Write(BitConverter.GetBytes(jsonBytes.Length), 0, sizeof(int)); // save json data length
+                stream.Write(jsonBytes, 0, jsonBytes.Length); // save json data
+
+                stream.Close();
+            }
+        }
+
+        public void Reflect(object obj)
+        {
+            if(obj is ModelBase)
+            {
+                ModelBase model = (ModelBase)obj;
+                if (!model.IsIdSet) AssignId(model);
+            }
+
+            Type type = obj.GetType();
+
+            PropertyInfo[] properties = type.GetProperties();
+        }
+
+        public SchoolClassViewModel SchoolClass { get; set; }
+    }
+}
+
+/*
+ * FILE STRUCTURE:
+ * 8 bytes - [Current Id]
+ * 4 bytes - [Length of JSON]
+ * [Length of JSON] bytes - json data
+*/

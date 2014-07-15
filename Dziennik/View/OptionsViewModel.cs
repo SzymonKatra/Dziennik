@@ -63,7 +63,7 @@ namespace Dziennik.View
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditClassViewModel.EditClassResult.RemoveClass)
             {
-                GlobalConfig.Database.SchoolClasses.Remove(m_selectedClass.ViewModel.Model);
+                //GlobalConfig.Database.SchoolClasses.Remove(m_selectedClass.ViewModel.Model);
                 m_selectedClass = null;
                 m_openedSchoolClasses.Remove(tab);
                 return;
@@ -82,7 +82,7 @@ namespace Dziennik.View
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditClassViewModel.EditClassResult.Ok)
             {
-                GlobalConfig.Database.SchoolClasses.Add(schoolClass.Model);
+                //GlobalConfig.Database.SchoolClasses.Add(schoolClass.Model);
                 SchoolClassControlViewModel tab = new SchoolClassControlViewModel(schoolClass);
                 m_openedSchoolClasses.Add(tab);
                 SelectedClass = tab;

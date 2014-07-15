@@ -11,7 +11,6 @@ using Dziennik.ViewModel;
 using System.ComponentModel;
 using System.IO;
 using Microsoft.Win32;
-using System.Data.Entity;
 
 namespace Dziennik.View
 {
@@ -87,7 +86,7 @@ namespace Dziennik.View
 
             ActionDialogViewModel dialogViewModel2 = new ActionDialogViewModel((d, p) =>
             {
-                GlobalConfig.Database.SaveChanges();
+                //GlobalConfig.Database.SaveChanges();
             }
             , null, "Zapisywanie bazy danych...");
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel2);
@@ -109,15 +108,15 @@ namespace Dziennik.View
         {
             ActionDialogViewModel saveDialogViewModel = new ActionDialogViewModel((d, p) =>
             {
-                if (GlobalConfig.Database != null) m_saveCommand.Execute(null);
+                //if (GlobalConfig.Database != null) m_saveCommand.Execute(null);
                 m_openedSchoolClasses.Clear();
 
-                GlobalConfig.InitializeDatabase();
+                //GlobalConfig.InitializeDatabase();
             }
            , null, "Odczytywanie bazy danch...");
             GlobalConfig.Dialogs.ShowDialog(this, saveDialogViewModel);
 
-            foreach (var item in GlobalConfig.Database.SchoolClasses) m_openedSchoolClasses.Add(new SchoolClassControlViewModel(new SchoolClassViewModel(item)));
+            //foreach (var item in GlobalConfig.Database.SchoolClasses) m_openedSchoolClasses.Add(new SchoolClassControlViewModel(new SchoolClassViewModel(item)));
             m_databasePathChanged = false;
         }
     }

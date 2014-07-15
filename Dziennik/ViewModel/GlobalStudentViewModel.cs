@@ -6,7 +6,7 @@ using Dziennik.Model;
 
 namespace Dziennik.ViewModel
 {
-    public sealed class GlobalStudentViewModel : ObservableObject, IViewModelExposable<GlobalStudent>
+    public sealed class GlobalStudentViewModel : ObservableObject, IModelExposable<GlobalStudent>
     {
         public GlobalStudentViewModel()
             : this(new GlobalStudent())

@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace Dziennik.ViewModel
 {
-    public sealed class MarkViewModel : ObservableObject, IViewModelExposable<Mark>
+    public sealed class MarkViewModel : ObservableObject, IModelExposable<Mark>
     {
         public MarkViewModel()
             : this(new Mark())

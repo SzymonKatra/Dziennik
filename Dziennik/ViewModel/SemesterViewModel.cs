@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace Dziennik.ViewModel
 {
-    public sealed class SemesterViewModel : ObservableObject, IViewModelExposable<Semester>
+    public sealed class SemesterViewModel : ObservableObject, IModelExposable<Semester>
     {
         public SemesterViewModel()
             : this(new Semester())

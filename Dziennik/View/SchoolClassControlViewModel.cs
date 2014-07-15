@@ -148,7 +148,7 @@ namespace Dziennik.View
         {
             ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
             {
-                GlobalConfig.Database.SaveChanges();
+                //GlobalConfig.Database.SaveChanges();
             }
             , null, "Zapisywanie...");
             GlobalConfig.Dialogs.ShowDialog((param == null ? GlobalConfig.Main : param), dialogViewModel);

@@ -9,11 +9,11 @@ namespace Dziennik.Model
     public abstract class ModelBase
     {
         private ulong? m_id;
-        public ulong Id
+        public ulong? Id
         {
             get
             {
-                return (ulong)m_id;
+                return m_id;
             }
             set
             {

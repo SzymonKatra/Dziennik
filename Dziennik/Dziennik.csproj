@@ -37,6 +37,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="fastJSON">
+      <HintPath>..\libs\fastJSON.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
@@ -76,6 +79,7 @@
     <Compile Include="Controls\OkCancelControl.xaml.cs">
       <DependentUpon>OkCancelControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DatabaseRelationAttribute.cs" />
     <Compile Include="DialogService.cs" />
     <Compile Include="Ext.cs" />
     <Compile Include="INotifyCollectionChangedSimple.cs" />
@@ -115,7 +119,7 @@
     <Compile Include="EventArgs.cs" />
     <Compile Include="CommandUtils\EventToCommand.cs" />
     <Compile Include="GlobalConfig.cs" />
-    <Compile Include="IViewModelExposable.cs" />
+    <Compile Include="IModelExposable.cs" />
     <Compile Include="Model\Semester.cs" />
     <Compile Include="PerItemObservableCollection.cs" />
     <Compile Include="SynchronizedObservableCollection.cs" />

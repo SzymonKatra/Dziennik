@@ -203,18 +203,6 @@ namespace Dziennik
             }
         }
 
-        private static DatabaseMain m_database;
-        public static DatabaseMain Database
-        {
-            get { return m_database; }
-        }
-
-        public static void InitializeDatabase()
-        {
-            if (m_database != null) m_database.Dispose();
-            m_database = new DatabaseMain(Notifier.DatabasePath);
-        }
-
         static GlobalConfig()
         {
             Dictionary<Type, Func<object, Window>> windowViewModelMappings = new Dictionary<Type, Func<object, Window>>();
