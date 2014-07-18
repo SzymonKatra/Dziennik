@@ -83,7 +83,9 @@ namespace Dziennik.View
             if (dialogViewModel.Result == EditClassViewModel.EditClassResult.Ok)
             {
                 //GlobalConfig.Database.SchoolClasses.Add(schoolClass.Model);
-                SchoolClassControlViewModel tab = new SchoolClassControlViewModel(schoolClass);
+                SchoolClassControlViewModel tab = new SchoolClassControlViewModel(new DatabaseMain());
+                tab.Database.SchoolClass = schoolClass;
+                tab.Database.Path = dialogViewModel.Path;
                 m_openedSchoolClasses.Add(tab);
                 SelectedClass = tab;
             }

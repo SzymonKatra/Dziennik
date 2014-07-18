@@ -29,13 +29,6 @@ namespace Dziennik.ViewModel
             get { return m_model; }
         }
 
-        private SchoolClassViewModel m_schoolClass;
-        public SchoolClassViewModel SchoolClass
-        {
-            get { return m_schoolClass; }
-            set { m_schoolClass = value; }
-        }
-
         public int Number
         {
             get { return m_model.Number; }
@@ -73,8 +66,9 @@ namespace Dziennik.ViewModel
                 RaisePropertyChanged("SecondSemester");
             }
         }
-
+ 
         private GlobalStudentViewModel m_globalStudent;
+        [DatabaseRelationProperty("GlobalStudents", "GlobalStudentId")]
         public GlobalStudentViewModel GlobalStudent
         {
             get { return m_globalStudent; }

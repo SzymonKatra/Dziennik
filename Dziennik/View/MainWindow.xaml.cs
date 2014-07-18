@@ -24,16 +24,6 @@ namespace Dziennik.View
     {
         public MainWindow()
         {
-            DatabaseMain database = new DatabaseMain();
-            database.SchoolClass = new SchoolClassViewModel();
-            GlobalStudentViewModel gs = new GlobalStudentViewModel();
-            database.SchoolClass.Students.Add(gs);
-            SchoolGroupViewModel gr = new SchoolGroupViewModel();
-            gr.Students.Add(new StudentInGroupViewModel() { GlobalStudent = gs });
-            gr.Students.Add(new StudentInGroupViewModel() { GlobalStudent = gs });
-            database.SchoolClass.Groups.Add(gr);
-            database.ReflectToAssignId(database.SchoolClass.Model);
-
             InitializeComponent();
 
             MainViewModel viewModel = new MainViewModel();

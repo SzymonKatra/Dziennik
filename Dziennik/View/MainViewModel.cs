@@ -52,7 +52,7 @@ namespace Dziennik.View
             get { return m_optionsCommand; }
         }
 
-        private bool m_databasePathChanged = true;
+        private bool m_databasesDirectoryChanged = true;
 
         public void Init()
         {
@@ -72,7 +72,7 @@ namespace Dziennik.View
         }
         private void Notifier_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "DatabasePath") m_databasePathChanged = true;
+            if (e.PropertyName == "DatabasesDirectory") m_databasesDirectoryChanged = true;
         }
 
         private void Save(object param)
@@ -86,7 +86,7 @@ namespace Dziennik.View
 
             ActionDialogViewModel dialogViewModel2 = new ActionDialogViewModel((d, p) =>
             {
-                //GlobalConfig.Database.SaveChanges();
+                foreach (var schoolClass in m_openedSchoolClasses) schoolClass.SaveCommand.Execute(null);
             }
             , null, "Zapisywanie bazy danych...");
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel2);
@@ -101,23 +101,73 @@ namespace Dziennik.View
             }
             , null, "Zapisywanie ustawień do rejestru...");
             GlobalConfig.Dialogs.ShowDialog(this, saveDialogViewModel);
-            if (m_databasePathChanged) ReloadSchoolClasses();
+            if (m_databasesDirectoryChanged) ReloadSchoolClasses();
         }
+        private void OpenFromPath(string path)
+        {
+            ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
+            {
+                if (!File.Exists(path))
+                {
+                    MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Wybrany plik nie istnieje", "Dziennik", MessageBoxSuperPredefinedButtons.OK);
+                }
 
+                SchoolClassControlViewModel searchTab = m_openedSchoolClasses.FirstOrDefault((x) => { return x.Database.Path == path; });
+                if (searchTab != null)
+                {
+                    MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Ta klasa jest już otwarta", "Dziennik", MessageBoxSuperPredefinedButtons.OK);
+                    SelectedClass = searchTab;
+                    return;
+                }
+
+                DatabaseMain database = null;
+                try
+                {
+                    database = DatabaseMain.Load(path);
+                }
+                catch { MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Wystąpił błąd podczas odczytywania pliku", "Dziennik", MessageBoxSuperPredefinedButtons.OK); }
+
+                if (database == null) return;
+                database.Path = path;
+                SchoolClassControlViewModel tab = new SchoolClassControlViewModel(database);
+                m_openedSchoolClasses.Add(tab);
+                SelectedClass = tab;
+
+                if (SelectedClass.ViewModel.Groups.Count > 0)
+                {
+                    SelectedClass.SelectedGroup = SelectedClass.ViewModel.Groups[0];
+                }
+            }
+            , null, path, "Otwieranie");
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+        }
+        private void CloseAllTabs()
+        {
+            foreach (SchoolClassControlViewModel tab in m_openedSchoolClasses)
+            {
+                tab.SaveCommand.Execute(null);
+                m_openedSchoolClasses.Remove(tab);
+            }
+        }
         private void ReloadSchoolClasses()
         {
             ActionDialogViewModel saveDialogViewModel = new ActionDialogViewModel((d, p) =>
             {
-                //if (GlobalConfig.Database != null) m_saveCommand.Execute(null);
-                m_openedSchoolClasses.Clear();
+                CloseAllTabs();
 
-                //GlobalConfig.InitializeDatabase();
+                GlobalConfig.CreateDirectoriesIfNotExists();
+
+                IEnumerable<string> files = Directory.EnumerateFiles(GlobalConfig.Notifier.DatabasesDirectory);
+
+                var validFiles = from f in files where f.EndsWith(GlobalConfig.FileExtension) select f;
+
+                foreach (string file in validFiles) OpenFromPath(file);
             }
-           , null, "Odczytywanie bazy danch...");
+           , null, "Odczytywanie klas...");
             GlobalConfig.Dialogs.ShowDialog(this, saveDialogViewModel);
 
             //foreach (var item in GlobalConfig.Database.SchoolClasses) m_openedSchoolClasses.Add(new SchoolClassControlViewModel(new SchoolClassViewModel(item)));
-            m_databasePathChanged = false;
+            m_databasesDirectoryChanged = false;
         }
     }
 }

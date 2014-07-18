@@ -21,6 +21,13 @@ namespace Dziennik.ViewModel
             set { m_path = value; }
         }
 
+        private bool m_globalRelationsCollectionChecking = true;
+        public bool GlobalRelationsCollectionChecking
+        {
+            get { return m_globalRelationsCollectionChecking; }
+            set { m_globalRelationsCollectionChecking = value; }
+        }
+
         private ulong m_currentId = 1;
         public void AssignId(ModelBase model)
         {
@@ -55,31 +62,33 @@ namespace Dziennik.ViewModel
                 database.SchoolClass = new SchoolClassViewModel((SchoolClass)JSON.ToObject(json, typeof(SchoolClass)));
             }
 
-            foreach (SchoolGroupViewModel group in database.SchoolClass.Groups)
-            {
-                foreach (StudentInGroupViewModel student in group.Students)
-                {
-                    if (student.Model.GlobalStudentId != null)
-                    {
-                        student.GlobalStudent = database.SchoolClass.Students.FirstOrDefault(x => x.Model.Id == student.Model.GlobalStudentId);
-                        Debug.Assert(student.GlobalStudent == null, "DatabaseMain.Load - GlobalStudent id not found");
-                    }
-                }
-            }
+            database.RestoreRelations(database.SchoolClass);
+
+            //foreach (SchoolGroupViewModel group in database.SchoolClass.Groups)
+            //{
+            //    foreach (StudentInGroupViewModel student in group.Students)
+            //    {
+            //        if (student.Model.GlobalStudentId != null)
+            //        {
+            //            student.GlobalStudent = database.SchoolClass.Students.FirstOrDefault(x => x.Model.Id == student.Model.GlobalStudentId);
+            //            Debug.Assert(student.GlobalStudent == null, "DatabaseMain.Load - GlobalStudent id not found");
+            //        }
+            //    }
+            //}
 
             return database;
         }
         public void Save()
         {
-            ReflectToAssignId(SchoolClass.Model);
-
-            foreach (SchoolGroupViewModel group in SchoolClass.Groups)
-            {
-                foreach (StudentInGroupViewModel student in group.Students)
-                {
-                    student.Model.GlobalStudentId = (student.GlobalStudent == null ? null : student.GlobalStudent.Model.Id);
-                }
-            }
+            AssignIdentifiers(SchoolClass.Model);
+            AssignRelations(SchoolClass);
+            //foreach (SchoolGroupViewModel group in SchoolClass.Groups)
+            //{
+            //    foreach (StudentInGroupViewModel student in group.Students)
+            //    {
+            //        student.Model.GlobalStudentId = (student.GlobalStudent == null ? null : student.GlobalStudent.Model.Id);
+            //    }
+            //}
 
             using (FileStream stream = new FileStream(m_path, FileMode.OpenOrCreate))
             {
@@ -91,92 +100,150 @@ namespace Dziennik.ViewModel
                 stream.Close();
             }
         }
-        //private Dictionary<Type, PropertyInfo[]> m_reflectionCache = new Dictionary<Type, PropertyInfo[]>();
 
-        protected class RelationPair
+        protected void AssignIdentifiers(object modelObj)
         {
-            private IEnumerable<IModelExposable<ModelBase>> m_collection;
-            public IEnumerable<IModelExposable<ModelBase>> Collection
-            {
-                get { return m_collection; }
-                set { m_collection = value; }
-            }
+            if (!(modelObj is ModelBase)) return;
+            ModelBase model = (ModelBase)modelObj;
 
-            private IModelExposable<ModelBase> m_property;
-            public IModelExposable<ModelBase> Property
-            {
-                get { return m_property; }
-                set { m_property = value; }
-            }
-        }
-        private Dictionary<string, RelationPair> m_relationPairs = new Dictionary<string, RelationPair>();
-        public void ReflectToAssignId(ModelBase model)
-        {
             if (model.Id == null) AssignId(model);
 
             Type type = model.GetType();
 
-            //System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
-            //if (!m_reflectionCache.ContainsKey(type)) m_reflectionCache.Add(type, type.GetProperties());
             PropertyInfo[] properties = type.GetProperties();
-            //PropertyInfo[] properties = m_reflectionCache[type];
-            //sw.Stop();
-            //Console.WriteLine(sw.Elapsed);
+
             foreach (PropertyInfo property in properties)
             {
+                if (property.GetGetMethod().IsStatic) continue;
+
                 object propVal = property.GetValue(model, null);
 
-                if(propVal is ModelBase)
-                {
-                    ReflectToAssignId((ModelBase)propVal);
-                }
-                else if (propVal is IEnumerable)
+                if (propVal is IEnumerable)
                 {
                     IEnumerable coll = (IEnumerable)propVal;
                     foreach (object item in coll)
                     {
-                        if (item is ModelBase) ReflectToAssignId((ModelBase)item);
+                        AssignIdentifiers(item);
                     }
+                }
+                else AssignIdentifiers(propVal);
+            }
+        }
+
+        private class RelationPair
+        {
+            public class ViewModelsPair
+            {
+                public IModelExposable<ModelBase> Owner { get; set; } // view model to which model assign xxxId property
+                public IModelExposable<ModelBase> Related { get; set; } // related view model
+                public PropertyInfo RelatedProperty { get; set; }
+
+                public ViewModelsPair()
+                    : this(null, null, null)
+                {
+                }
+                public ViewModelsPair(IModelExposable<ModelBase> owner, IModelExposable<ModelBase> related, PropertyInfo relatedProperty)
+                {
+                    Owner = owner;
+                    Related = related;
+                    RelatedProperty = relatedProperty;
+                }
+            }
+
+            public IEnumerable<IModelExposable<ModelBase>> Collection { get; set; }
+            public List<ViewModelsPair> Properties { get; set; }
+            public string ModelPropertyIdName { get; set; }
+
+            public RelationPair()
+            {
+                Properties = new List<ViewModelsPair>();
+            }
+        }
+        private Dictionary<string, RelationPair> m_relations = new Dictionary<string, RelationPair>();
+        protected void RestoreRelations(object viewModelObj)
+        {
+            m_relations.Clear();
+            MakeRelationPairs(viewModelObj);
+
+            foreach (var kvp in m_relations)
+            {
+                foreach (var viewModels in kvp.Value.Properties)
+                {
+                    IModelExposable<ModelBase> result = kvp.Value.Collection.FirstOrDefault(x => x.Model.Id == (ulong?)viewModels.Owner.Model.GetType().GetProperty(kvp.Value.ModelPropertyIdName).GetValue(viewModels.Owner.Model, null));
+                    if (m_globalRelationsCollectionChecking && result == null) throw new InvalidOperationException("Specified ViewModel not found in global collection. Relationship: " + kvp.Key);
+
+                    viewModels.RelatedProperty.SetValue(viewModels.Owner, result, null);
                 }
             }
         }
-        public void ReflectToAssignRelations(IModelExposable<ModelBase> viewModel)
+        protected void AssignRelations(object viewModelObj)
         {
+            m_relations.Clear();
+            MakeRelationPairs(viewModelObj);
+
+            foreach (var kvp in m_relations)
+            {
+                foreach (var viewModels in kvp.Value.Properties)
+                {
+                    if (m_globalRelationsCollectionChecking)
+                    {
+                        if (!kvp.Value.Collection.Contains(viewModels.Related)) throw new InvalidOperationException("Global collection doesn't contains related ViewModel in relationship: " + kvp.Key);
+                    }
+
+                    PropertyInfo modelIdPropertyInfo = viewModels.Owner.Model.GetType().GetProperty(kvp.Value.ModelPropertyIdName);
+                    modelIdPropertyInfo.SetValue(viewModels.Owner.Model, viewModels.Related.Model.Id, null);
+                }
+            }
+        }
+        private void MakeRelationPairs(object viewModelObj)
+        {
+            if (!(viewModelObj is IModelExposable<ModelBase>)) return;
+            IModelExposable<ModelBase> viewModel = (IModelExposable<ModelBase>)viewModelObj;
+
             Type type = viewModel.GetType();
 
             PropertyInfo[] properties = type.GetProperties();
 
             foreach (PropertyInfo property in properties)
             {
+                if(property.GetGetMethod().IsStatic) continue;
                 object propVal = property.GetValue(viewModel, null);
                 object[] attributes = property.GetCustomAttributes(false);
-
-                bool isCollection;
-                if (propVal is IEnumerable)
-                    isCollection = true;
-                else if (propVal is IModelExposable<ModelBase>)
-                    isCollection = false;
-                else continue;
 
                 foreach (object attrib in attributes)
                 {
                     if(attrib is DatabaseRelationAttribute)
-                    {
-                        DatabaseRelationAttribute attribVal = (DatabaseRelationAttribute)attrib;
+                    {               
+                        DatabaseRelationAttribute baseAttribVal = (DatabaseRelationAttribute)attrib;
 
-                        RelationPair pair;
-                        if (!m_relationPairs.ContainsKey(attribVal.RelationName))
+                        if (!m_relations.ContainsKey(baseAttribVal.RelationName)) m_relations.Add(baseAttribVal.RelationName, new RelationPair());
+                        RelationPair pair = m_relations[baseAttribVal.RelationName];
+
+                        if(baseAttribVal is DatabaseRelationPropertyAttribute)
                         {
-                            pair = new RelationPair();
-                            m_relationPairs.Add(attribVal.RelationName, pair);
+                            DatabaseRelationPropertyAttribute propAttribVal = (DatabaseRelationPropertyAttribute)baseAttribVal;
+                            pair.Properties.Add(new RelationPair.ViewModelsPair(viewModel, (IModelExposable<ModelBase>)propVal, property));
+                            pair.ModelPropertyIdName = propAttribVal.ModelPropertyIdName;
                         }
-                        else pair = m_relationPairs[attribVal.RelationName];
+                        else if (baseAttribVal is DatabaseRelationCollectionAttribute)
+                        {
+                            if (pair.Collection != null) throw new InvalidOperationException("Relation " + baseAttribVal.RelationName + " already has paired collection");
 
-                        if (isCollection)
+                            DatabaseRelationCollectionAttribute collAttribVal = (DatabaseRelationCollectionAttribute)baseAttribVal;
                             pair.Collection = (IEnumerable<IModelExposable<ModelBase>>)propVal;
-                        else pair.Property = (IModelExposable<ModelBase>)propVal;
+                        }
                     }
                 }
+
+                if (propVal is IEnumerable)
+                {
+                    IEnumerable coll = (IEnumerable)propVal;
+                    foreach (object item in coll)
+                    {
+                        MakeRelationPairs(item);
+                    }
+                }
+                else MakeRelationPairs(propVal);
             }
         }
 

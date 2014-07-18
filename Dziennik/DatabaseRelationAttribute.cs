@@ -6,7 +6,7 @@ using System.Text;
 namespace Dziennik
 {
     [AttributeUsage(AttributeTargets.All, Inherited = false, AllowMultiple = true)]
-    public sealed class DatabaseRelationAttribute : System.Attribute
+    public abstract class DatabaseRelationAttribute : System.Attribute
     {
         public DatabaseRelationAttribute(string relationName)
         {

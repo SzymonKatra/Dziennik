@@ -14,10 +14,10 @@ namespace Dziennik.View
     public sealed class SchoolClassControlViewModel : ObservableObject
     {
         public SchoolClassControlViewModel()
-            : this(new SchoolClassViewModel())
+            : this(new DatabaseMain())
         {
         }
-        public SchoolClassControlViewModel(SchoolClassViewModel viewModel)
+        public SchoolClassControlViewModel(DatabaseMain database)
         {
             m_addMarkCommand = new RelayCommand<ObservableCollection<MarkViewModel>>(AddMark);
             m_editMarkCommand = new RelayCommand<ObservableCollection<MarkViewModel>>(EditMark);
@@ -25,14 +25,19 @@ namespace Dziennik.View
             m_autoSaveCommand = new RelayCommand(AutoSave);
             m_saveCommand = new RelayCommand(Save);
 
-            m_viewModel = viewModel;
+            m_database = database;
         }
 
-        private SchoolClassViewModel m_viewModel;
+        private DatabaseMain m_database;
+        public DatabaseMain Database
+        {
+            get { return m_database; }
+        }
+
         public SchoolClassViewModel ViewModel
         {
-            get { return m_viewModel; }
-            set { m_viewModel = value; RaisePropertyChanged("ViewModel"); }
+            get { return m_database.SchoolClass; }
+            set { m_database.SchoolClass = value; RaisePropertyChanged("ViewModel"); }
         }
 
         private SchoolGroupViewModel m_selectedGroup;
@@ -148,7 +153,7 @@ namespace Dziennik.View
         {
             ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
             {
-                //GlobalConfig.Database.SaveChanges();
+                m_database.Save();
             }
             , null, "Zapisywanie...");
             GlobalConfig.Dialogs.ShowDialog((param == null ? GlobalConfig.Main : param), dialogViewModel);

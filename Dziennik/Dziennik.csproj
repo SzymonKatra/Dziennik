@@ -80,6 +80,8 @@
       <DependentUpon>OkCancelControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DatabaseRelationAttribute.cs" />
+    <Compile Include="DatabaseRelationCollectionAttribute.cs" />
+    <Compile Include="DatabaseRelationPropertyAttribute.cs" />
     <Compile Include="DialogService.cs" />
     <Compile Include="Ext.cs" />
     <Compile Include="INotifyCollectionChangedSimple.cs" />

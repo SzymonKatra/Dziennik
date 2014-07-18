@@ -58,6 +58,19 @@ namespace Dziennik.View
             set { m_name = value; RaisePropertyChanged("Name"); }
         }
 
+        public string Path
+        {
+            get
+            {
+                string result = GlobalConfig.Notifier.DatabasesDirectory + @"\" + m_name + GlobalConfig.FileExtension;
+                foreach (char c in System.IO.Path.GetInvalidPathChars())
+                {
+                    result = result.Replace(c.ToString(), "");
+                }
+                return result;
+            }
+        }
+
         private bool m_isAddingMode = false;
         public bool IsAddingMode
         {
