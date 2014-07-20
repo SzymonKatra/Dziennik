@@ -34,18 +34,18 @@ namespace Dziennik
         }
         private class RelationPair
         {
-            public class ViewModelsPair
+            public class RelationProperties
             {
                 public IModelExposable<ModelBase> Owner { get; set; } // view model to which model assign xxxId property
                 public IModelExposable<ModelBase> Related { get; set; } // related view model
                 public PropertyInfo RelatedProperty { get; set; }
                 public string ModelPropertyIdName { get; set; }
 
-                public ViewModelsPair()
+                public RelationProperties()
                     : this(null, null, null, null)
                 {
                 }
-                public ViewModelsPair(IModelExposable<ModelBase> owner, IModelExposable<ModelBase> related, PropertyInfo relatedProperty, string modelPropertyIdName)
+                public RelationProperties(IModelExposable<ModelBase> owner, IModelExposable<ModelBase> related, PropertyInfo relatedProperty, string modelPropertyIdName)
                 {
                     Owner = owner;
                     Related = related;
@@ -55,11 +55,11 @@ namespace Dziennik
             }
 
             public IEnumerable<IModelExposable<ModelBase>> Collection { get; set; }
-            public List<ViewModelsPair> Properties { get; set; }
+            public List<RelationProperties> Properties { get; set; }
 
             public RelationPair()
             {
-                Properties = new List<ViewModelsPair>();
+                Properties = new List<RelationProperties>();
             }
         }
 
@@ -168,15 +168,15 @@ namespace Dziennik
 
             foreach (var kvp in m_relations)
             {
-                foreach (var viewModels in kvp.Value.Properties)
+                foreach (var relationProperties in kvp.Value.Properties)
                 {
-                    IModelExposable<ModelBase> result = kvp.Value.Collection.FirstOrDefault(x => x.Model.Id == (ulong?)viewModels.Owner.Model.GetType().GetProperty(viewModels.ModelPropertyIdName).GetValue(viewModels.Owner.Model, null));
+                    IModelExposable<ModelBase> result = kvp.Value.Collection.FirstOrDefault(x => x.Model.Id == (ulong?)relationProperties.Owner.Model.GetType().GetProperty(relationProperties.ModelPropertyIdName).GetValue(relationProperties.Owner.Model, null));
                     if (m_restoreRelationsGlobalCollectionChecking == RestoreRelationsGlobalCollectionCheckingModes.ExceptionIfNotExists && result == null)
                     {
                         throw new InvalidOperationException("Specified ViewModel not found in global collection. Relationship: " + kvp.Key);
                     }
 
-                    viewModels.RelatedProperty.SetValue(viewModels.Owner, result, null);
+                    relationProperties.RelatedProperty.SetValue(relationProperties.Owner, result, null);
                 }
             }
         }
@@ -187,17 +187,17 @@ namespace Dziennik
 
             foreach (var kvp in m_relations)
             {
-                foreach (var viewModels in kvp.Value.Properties)
+                foreach (var relationProperties in kvp.Value.Properties)
                 {
                     if (m_assignRelationsGlobalCollectionChecking != AssingRelationsGlobalCollectionCheckingModes.Disable)
                     {
-                        if (!kvp.Value.Collection.Contains(viewModels.Related))
+                        if (!kvp.Value.Collection.Contains(relationProperties.Related))
                         {
                             if (m_assignRelationsGlobalCollectionChecking == AssingRelationsGlobalCollectionCheckingModes.AddToGlobalIfNotExists)
                             {
                                 if (kvp.Value.Collection is ICollection<IModelExposable<ModelBase>>)
                                 {
-                                    ((ICollection<IModelExposable<ModelBase>>)kvp.Value.Collection).Add(viewModels.Related);
+                                    ((ICollection<IModelExposable<ModelBase>>)kvp.Value.Collection).Add(relationProperties.Related);
                                 }
                                 else throw new InvalidOperationException("Mode is AddToGlobalIfNotExists but global collection is not type of ICollection<IModelExposable<ModelBase>>");
                             }
@@ -208,8 +208,8 @@ namespace Dziennik
                         }
                     }
 
-                    PropertyInfo modelIdPropertyInfo = viewModels.Owner.Model.GetType().GetProperty(viewModels.ModelPropertyIdName);
-                    modelIdPropertyInfo.SetValue(viewModels.Owner.Model, viewModels.Related.Model.Id, null);
+                    PropertyInfo modelIdPropertyInfo = relationProperties.Owner.Model.GetType().GetProperty(relationProperties.ModelPropertyIdName);
+                    modelIdPropertyInfo.SetValue(relationProperties.Owner.Model, relationProperties.Related.Model.Id, null);
                 }
             }
         }
@@ -237,7 +237,7 @@ namespace Dziennik
                         if (baseAttribVal is DatabaseRelationPropertyAttribute)
                         {
                             DatabaseRelationPropertyAttribute propAttribVal = (DatabaseRelationPropertyAttribute)baseAttribVal;
-                            pair.Properties.Add(new RelationPair.ViewModelsPair(viewModel, (IModelExposable<ModelBase>)propVal, property.Info, propAttribVal.ModelPropertyIdName));
+                            pair.Properties.Add(new RelationPair.RelationProperties(viewModel, (IModelExposable<ModelBase>)propVal, property.Info, propAttribVal.ModelPropertyIdName));
                         }
                         else if (baseAttribVal is DatabaseRelationCollectionAttribute)
                         {
