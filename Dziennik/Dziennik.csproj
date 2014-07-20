@@ -79,6 +79,7 @@
     <Compile Include="Controls\OkCancelControl.xaml.cs">
       <DependentUpon>OkCancelControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DatabaseContext.cs" />
     <Compile Include="DatabaseRelationAttribute.cs" />
     <Compile Include="DatabaseRelationCollectionAttribute.cs" />
     <Compile Include="DatabaseRelationPropertyAttribute.cs" />

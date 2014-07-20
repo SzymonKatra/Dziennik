@@ -36,8 +36,8 @@ namespace Dziennik.View
 
         public SchoolClassViewModel ViewModel
         {
-            get { return m_database.SchoolClass; }
-            set { m_database.SchoolClass = value; RaisePropertyChanged("ViewModel"); }
+            get { return m_database.ViewModel; }
+            set { m_database.ViewModel = value; RaisePropertyChanged("ViewModel"); }
         }
 
         private SchoolGroupViewModel m_selectedGroup;
