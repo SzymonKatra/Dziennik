@@ -1,6 +1,7 @@
 ﻿<Window x:Class="Dziennik.View.EditMarkWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:my="clr-namespace:Dziennik.Controls"
         Title="Edytuj ocenę" Height="200" Width="300"
         WindowStartupLocation="CenterOwner">
     <Grid>
@@ -28,18 +29,11 @@
             
             <Button Grid.Column="1" Grid.Row="0" Content="Usuń ocenę" Margin="10,5,10,5" Command="{Binding RemoveMarkCommand}"/>
         </Grid>
-        <Grid Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width=".6*"/>
-                <ColumnDefinition Width=".4*"/>
-            </Grid.ColumnDefinitions>
-
-            <Button Grid.Column="0" Grid.Row="0" Content="OK" Margin="10,5,10,5" Command="{Binding OkCommand}"/>
-            <Button Grid.Column="1" Grid.Row="0" Content="Anuluj" Margin="10,5,10,5" Command="{Binding CancelCommand}"/>
-        </Grid>
 
         <TextBox Grid.Column="1" Grid.Row="0" IsEnabled="{Binding IsChecked, ElementName=radioMark}" Text="{Binding ValueInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
         <TextBox Grid.Column="1" Grid.Row="1" IsEnabled="{Binding IsChecked, ElementName=radioNote}" Text="{Binding NoteInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
         <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource inputControlStyle}" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Description, Mode=TwoWay}"/>
+
+        <my:OkCancelControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>
 </Window>

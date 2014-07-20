@@ -4,6 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
         xmlns:c="clr-namespace:Dziennik.CommandUtils"
+        xmlns:my="clr-namespace:Dziennik.Controls"
         Title="Wybierz uczniów" Height="300" Width="500"
         WindowStartupLocation="CenterOwner">
     <Grid>
@@ -49,14 +50,6 @@
             <Button Grid.Column="1" Margin="10,5,10,5" Content="Odznacz wszystkich" Command="{Binding ClearAllCommand}"/>
         </Grid>
 
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width=".6*"/>
-                <ColumnDefinition Width=".4*"/>
-            </Grid.ColumnDefinitions>
-
-            <Button Grid.Column="0" Margin="10,5,10,5" Content="OK" Command="{Binding OkCommand}"/>
-            <Button Grid.Column="1" Margin="10,5,10,5" Content="Anuluj" Command="{Binding CancelCommand}"/>
-        </Grid>
+        <my:OkCancelControl Grid.Row="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>
 </Window>

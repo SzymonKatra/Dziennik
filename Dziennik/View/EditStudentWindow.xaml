@@ -1,6 +1,7 @@
 ﻿<Window x:Class="Dziennik.View.EditStudentWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:my="clr-namespace:Dziennik.Controls"
         Title="Edytuj ucznia" Height="300" Width="300"
         WindowStartupLocation="CenterOwner">
     <Grid>
@@ -39,14 +40,6 @@
             <Button Grid.Column="1" Grid.Row="0" Content="Usuń ucznia" Margin="10,5,10,5" Command="{Binding RemoveStudentCommand}"/>
         </Grid>
 
-        <Grid Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width=".6*"/>
-                <ColumnDefinition Width=".4*"/>
-            </Grid.ColumnDefinitions>
-
-            <Button Grid.Column="0" Grid.Row="0" Content="Zapisz" Margin="10,5,10,5" Command="{Binding OkCommand}"/>
-            <Button Grid.Column="1" Grid.Row="0" Content="Anuluj" Margin="10,5,10,5" Command="{Binding CancelCommand}"/>
-        </Grid>
+        <my:OkCancelControl Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>
 </Window>
