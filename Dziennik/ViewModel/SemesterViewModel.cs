@@ -63,7 +63,7 @@ namespace Dziennik.ViewModel
 
         public int CountValidMarksWeight()
         {
-            return m_marks.Count((m) => { return m.IsValueValid; });
+            return m_marks.Sum((m) => { return (m.IsValueValid ? m.Weight : 0); });
         }
 
         private void m_marks_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -72,7 +72,7 @@ namespace Dziennik.ViewModel
         }
         private void m_marks_ItemPropertyInCollectionChanged(object sender, ItemPropertyInCollectionChangedEventArgs<MarkViewModel> e)
         {
-            if (e.PropertyName == "Value") PerformMarksChanged();
+            if (e.PropertyName == "Value" || e.PropertyName == "IsValueValid" || e.PropertyName == "Weight") PerformMarksChanged();
         }
         private void PerformMarksChanged()
         {

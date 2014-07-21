@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Dziennik"
              mc:Ignorable="d"
              d:DesignHeight="20" d:DesignWidth="100">
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type UserControl}}}" HorizontalAlignment="Left">
@@ -11,6 +12,12 @@
             <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
         <ListBox Name="listBox" Grid.Column="0" ItemsSource="{Binding MarksSource}" SelectedItem="{Binding SelectedMark, Mode=TwoWay}" LostFocus="listBox_LostFocus">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="ToolTipService.ToolTip" Value="{Binding ToolTipFormatted}"/>
+                    <Setter Property="ToolTipService.InitialShowDelay" Value="1"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal"/>
@@ -18,7 +25,10 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding DisplayedMark}" ToolTipService.ToolTip="{Binding ToolTipFormatted}" ToolTipService.InitialShowDelay="1"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding DisplayedMark}"/>
+                        <TextBlock Text="{Binding Weight}" FontSize="8" VerticalAlignment="Bottom" Visibility="{Binding ShowWeights, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
+                    </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

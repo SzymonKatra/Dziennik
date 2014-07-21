@@ -94,8 +94,7 @@ namespace Dziennik.View
         private void AddMark(ObservableCollection<MarkViewModel> param)
         {
             MarkViewModel mark = new MarkViewModel();
-            EditMarkViewModel dialogViewModel = new EditMarkViewModel(mark);
-            dialogViewModel.IsAddingMode = true;
+            EditMarkViewModel dialogViewModel = new EditMarkViewModel(mark, true);
             GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Main, dialogViewModel);
             if (dialogViewModel.Result == EditMarkViewModel.EditMarkResult.Ok)
             {

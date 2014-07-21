@@ -92,7 +92,7 @@ namespace Dziennik.ViewModel
         {
             get
             {
-                return string.Format("{5}: {1}{0}Waga: {2}{0}Opis: {3}{0}Data dodania: {4}{0}Ostatnia zmiana: {5}",
+                return string.Format("{6}: {1}{0}Waga: {2}{0}Opis: {3}{0}Data dodania: {4}{0}Ostatnia zmiana: {5}",
                                      Environment.NewLine,
                                      this.DisplayedMark,
                                      this.Weight,

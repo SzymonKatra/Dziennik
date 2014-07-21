@@ -159,7 +159,7 @@ namespace Dziennik.View
 
                 IEnumerable<string> files = Directory.EnumerateFiles(GlobalConfig.Notifier.DatabasesDirectory);
 
-                var validFiles = from f in files where f.EndsWith(GlobalConfig.FileExtension) select f;
+                var validFiles = from f in files where f.EndsWith(GlobalConfig.SchoolClassDatabaseFileExtension) select f;
 
                 foreach (string file in validFiles) OpenFromPath(file);
             }

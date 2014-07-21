@@ -20,16 +20,20 @@ namespace Dziennik.View
             RemoveMark,
         }
 
-        public EditMarkViewModel(MarkViewModel mark)
+        public EditMarkViewModel(MarkViewModel mark, bool isAddingMode = false)
         {
+            m_isAddingMode = isAddingMode;
+
             m_mark = mark;
 
             m_value = m_mark.Value;
             m_note = m_mark.Note;
+            m_weight = (isAddingMode ? 1 : m_mark.Weight);
             m_description = m_mark.Description;
 
             m_valueInput = m_value.ToString(CultureInfo.InvariantCulture);
             m_noteInput = m_note;
+            m_weightInput = m_weight.ToString();
 
             m_noteSelected = !mark.IsValueValid;
 
@@ -48,7 +52,7 @@ namespace Dziennik.View
         public bool IsAddingMode
         {
             get { return m_isAddingMode; }
-            set { m_isAddingMode = value; RaisePropertyChanged("IsAddingMode"); m_removeMarkCommand.RaiseCanExecuteChanged(); }
+            //set { m_isAddingMode = value; RaisePropertyChanged("IsAddingMode"); m_removeMarkCommand.RaiseCanExecuteChanged(); }
         }
 
         private MarkViewModel m_mark;
@@ -71,6 +75,15 @@ namespace Dziennik.View
             set { m_noteInput = value; RaisePropertyChanged("NoteInput"); }
         }
 
+        private int m_weight;
+        private bool m_weightInputValid = false;
+        private string m_weightInput;
+        public string WeightInput
+        {
+            get { return m_weightInput; }
+            set { m_weightInput = value; RaisePropertyChanged("WeightInput"); }
+        }
+
         private string m_description;
         public string Description
         {
@@ -87,6 +100,7 @@ namespace Dziennik.View
                 m_noteSelected = value;
                 RaisePropertyChanged("NoteSelected");
                 RaisePropertyChanged("ValueInput"); // to remove red border if is error in textbox
+                RaisePropertyChanged("WeightInput"); // as above
                 RaisePropertyChanged("NoteInput"); // validation returns string.Empty if textbox is not selected by radiobutton
                 m_okCommand.RaiseCanExecuteChanged();
             }
@@ -116,10 +130,12 @@ namespace Dziennik.View
             {
                 m_mark.Note = m_note;
                 m_mark.Value = 0;
+                m_mark.Weight = 0;
             }
             else
             {
                 m_mark.Value = m_value;
+                m_mark.Weight = m_weight;
                 m_mark.Note = string.Empty;
             }
             m_mark.Description = m_description;
@@ -131,7 +147,7 @@ namespace Dziennik.View
         }
         private bool CanOk(object e)
         {
-            return (m_noteSelected ? m_noteInputValid : m_valueInputValid);
+            return (m_noteSelected ? m_noteInputValid : m_valueInputValid && m_weightInputValid);
         }
         private void Cancel(object e)
         {
@@ -165,6 +181,7 @@ namespace Dziennik.View
                 {
                     case "ValueInput": return ValidateValueInput();
                     case "NoteInput": return ValidateNoteInput();
+                    case "WeightInput": return ValidateWeightInput();
                 }
 
                 return string.Empty;
@@ -231,6 +248,31 @@ namespace Dziennik.View
 
             m_note = m_noteInput;
             m_noteInputValid = true;
+            m_okCommand.RaiseCanExecuteChanged();
+
+            return string.Empty;
+        }
+        private string ValidateWeightInput()
+        {
+            if (m_noteSelected) return string.Empty;
+            m_weightInputValid = false;
+
+            int result;
+
+            if (!int.TryParse(m_weightInput, out result))
+            {
+                m_okCommand.RaiseCanExecuteChanged();
+                return "Wprowadź poprawną liczbę całkowitą";
+            }
+
+            if (result < 0)
+            {
+                m_okCommand.RaiseCanExecuteChanged();
+                return "Wprowadź liczbę dodatnią";
+            }
+
+            m_weight = result;
+            m_weightInputValid = true;
             m_okCommand.RaiseCanExecuteChanged();
 
             return string.Empty;

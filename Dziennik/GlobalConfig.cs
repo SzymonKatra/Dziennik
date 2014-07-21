@@ -91,6 +91,13 @@ namespace Dziennik
                 set { m_autoSave = value; RaisePropertyChanged("AutoSave"); }
             }
 
+            private bool m_showWeights = true;
+            public bool ShowWeights
+            {
+                get { return m_showWeights; }
+                set { m_showWeights = value; RaisePropertyChanged("ShowWeights"); }
+            }
+
             private string m_databasesDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Dziennik_Klasy";
             public string DatabasesDirectory
             {
@@ -119,6 +126,7 @@ namespace Dziennik
                 object showEndingAverageReg = key.GetValue(GlobalConfig.RegistryValueNameShowEndingAverage);
                 object showYearEndingMarkReg = key.GetValue(GlobalConfig.RegistryValueNameShowYearEndingMark);
                 object autoSaveReg = key.GetValue(GlobalConfig.RegistryValueNameAutoSave);
+                object showWeightsReg = key.GetValue(GlobalConfig.RegistryValueNameShowWeights);
                 object databasesDirectoryReg = key.GetValue(GlobalConfig.RegistryValueNameDatabasesDirectory);
                 object databasesArchiveDirectoryReg = key.GetValue(GlobalConfig.RegistryValueNameDatabasesArchiveDirectory);
                 key.Close();
@@ -134,6 +142,7 @@ namespace Dziennik
                 if (showEndingAverageReg != null) ShowEndingAverage = Ext.BoolParseOrDefault(showEndingAverageReg.ToString(), m_showEndingAverage);
                 if (showYearEndingMarkReg != null) ShowYearEndingMark = Ext.BoolParseOrDefault(showYearEndingMarkReg.ToString(), m_showYearEndingMark);
                 if (autoSaveReg != null) AutoSave = Ext.BoolParseOrDefault(autoSaveReg.ToString(), m_autoSave);
+                if (showWeightsReg != null) ShowWeights = Ext.BoolParseOrDefault(showWeightsReg.ToString(), m_showWeights);
                 if (databasesDirectoryReg != null) DatabasesDirectory = databasesDirectoryReg.ToString();
                 if (databasesArchiveDirectoryReg != null) DatabasesArchiveDirectory = databasesArchiveDirectoryReg.ToString();
                 //if (lastOpenedReg != null)
@@ -157,6 +166,7 @@ namespace Dziennik
                 key.SetValue(GlobalConfig.RegistryValueNameShowEndingAverage, m_showEndingAverage);
                 key.SetValue(GlobalConfig.RegistryValueNameShowYearEndingMark, m_showYearEndingMark);
                 key.SetValue(GlobalConfig.RegistryValueNameAutoSave, m_autoSave);
+                key.SetValue(GlobalConfig.RegistryValueNameShowWeights, m_showWeights);
                 key.SetValue(GlobalConfig.RegistryValueNameDatabasesDirectory, m_databasesDirectory);
                 key.SetValue(GlobalConfig.RegistryValueNameDatabasesArchiveDirectory, m_databasesArchiveDirectory);
                 //StringBuilder builder = new StringBuilder();
@@ -173,8 +183,11 @@ namespace Dziennik
 
         public static readonly int DecimalRoundingPoints = 2;
         public static readonly string DateTimeFormat = "dd.MM.yyyy HH:mm";
-        public static readonly string FileExtension = ".dzi";
-        public static readonly string FileDialogFilter = "Pliki dziennika (.dzi)|*.dzi|Dokumenty XML (.xml)|*.xml|Wszystkie pliki (*.*)|*.*";
+        public static readonly string SchoolClassDatabaseFileExtension = ".dzs";
+        public static readonly string SchoolOptionsDatabaseFileExtension = ".dzo";
+        public static readonly string FileDialogFilter = "Pliki dziennika (.dzs)|*.dzs|Dokumenty XML (.xml)|*.xml|Wszystkie pliki (*.*)|*.*";
+        public static readonly string SchoolOptionsDatabaseFileName = "options" + SchoolOptionsDatabaseFileExtension;
+
         public static readonly string RegistryKeyName = @"Software\Dziennik_Katra";
         public static readonly string RegistryValueNameShowName = "ShowName";
         public static readonly string RegistryValueNameShowSurname = "ShowSurname";
@@ -187,7 +200,7 @@ namespace Dziennik
         public static readonly string RegistryValueNameShowEndingAverage = "ShowEndingAverage";
         public static readonly string RegistryValueNameShowYearEndingMark = "ShowYearEndingMark";
         public static readonly string RegistryValueNameAutoSave = "AutoSave";
-        public static readonly string RegistryValueNameLastOpened = "LastOpened";
+        public static readonly string RegistryValueNameShowWeights = "ShowWeights";
         public static readonly string RegistryValueNameDatabasesDirectory = "DatabasesDirectory";
         public static readonly string RegistryValueNameDatabasesArchiveDirectory = "DatabasesArchiveDirectory";
 

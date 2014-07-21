@@ -30,10 +30,10 @@
 
             <ComboBox Grid.Column="0" Style="{StaticResource inputControlStyle}" ItemsSource="{Binding SchoolClass.Groups}" SelectedItem="{Binding SelectedGroup, Mode=TwoWay}" DisplayMemberPath="Name"/>
             <WrapPanel Grid.Column="1">
-                <Button Style="{StaticResource imageButtonStyle}" Command="{Binding EditGroupCommand}">
+                <Button Style="{StaticResource imageButtonStyle}" Command="{Binding EditGroupCommand}" ToolTip="Edytuj grupę">
                     <Image Source="{StaticResource img_edit}"/>
                 </Button>
-                <Button Style="{StaticResource imageButtonStyle}" Command="{Binding AddGroupCommand}">
+                <Button Style="{StaticResource imageButtonStyle}" Command="{Binding AddGroupCommand}" ToolTip="Dodaj grupę">
                     <Image Source="{StaticResource img_add}"/>
                 </Button>
             </WrapPanel>
