@@ -84,12 +84,12 @@ namespace Dziennik.View
             , null, "Zapisywanie ustawień do rejestru...");
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
 
-            ActionDialogViewModel dialogViewModel2 = new ActionDialogViewModel((d, p) =>
+            dialogViewModel = new ActionDialogViewModel((d, p) =>
             {
                 foreach (var schoolClass in m_openedSchoolClasses) schoolClass.SaveCommand.Execute(null);
             }
             , null, "Zapisywanie bazy danych...");
-            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel2);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
         private void Options(object e)
         {

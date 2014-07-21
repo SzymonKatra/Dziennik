@@ -86,7 +86,10 @@
     <Compile Include="DialogService.cs" />
     <Compile Include="Ext.cs" />
     <Compile Include="INotifyCollectionChangedSimple.cs" />
+    <Compile Include="Model\GlobalSubject.cs" />
     <Compile Include="Model\ModelBase.cs" />
+    <Compile Include="Model\RealizedSubject.cs" />
+    <Compile Include="Model\RealizedSubjectPresence.cs" />
     <Compile Include="Model\SchoolClass.cs" />
     <Compile Include="Model\SchoolGroup.cs" />
     <Compile Include="Model\StudentInGroup.cs" />

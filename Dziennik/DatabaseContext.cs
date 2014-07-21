@@ -214,7 +214,7 @@ namespace Dziennik
             }
         }
 
-        private void MakeRelationPairs(IModelExposable<ModelBase> viewModel)
+        private void MakeRelationPairs(IModelExposable<ModelBase> viewModel, Dictionary<string, IEnumerable> availableGlobalCollections)
         {
             Type type = viewModel.GetType();
 
@@ -248,7 +248,7 @@ namespace Dziennik
                         }
                     }
                 }
-
+                //TODO: add to list collecion
                 if (propVal is IEnumerable)
                 {
                     if (propVal is string) continue; // to prevent foreach'ing string
@@ -260,6 +260,7 @@ namespace Dziennik
                     }
                 }
                 else if (propVal is IModelExposable<ModelBase>) MakeRelationPairs((IModelExposable<ModelBase>)propVal);
+                //TODO: remove from list collection
             }
         }
 
