@@ -54,6 +54,7 @@ namespace Dziennik
                 }
             }
 
+            public string Name { get; set; }
             public IEnumerable<IModelExposable<ModelBase>> Collection { get; set; }
             public List<RelationProperties> Properties { get; set; }
 
@@ -86,7 +87,7 @@ namespace Dziennik
         }
 
         private ulong m_currentId = 1;
-        private Dictionary<string, RelationPair> m_relations = new Dictionary<string, RelationPair>();
+        private List<RelationPair> m_relations = new List<RelationPair>();
         private Dictionary<Type, CachedProperty[]> m_reflectionCache = new Dictionary<Type, CachedProperty[]>();
         #endregion
 
@@ -164,16 +165,16 @@ namespace Dziennik
         protected void RestoreRelations(IModelExposable<ModelBase> viewModel)
         {
             m_relations.Clear();
-            MakeRelationPairs(viewModel);
+            MakeRelationPairs(viewModel, new Dictionary<string,RelationPair>());
 
-            foreach (var kvp in m_relations)
+            foreach (var relation in m_relations)
             {
-                foreach (var relationProperties in kvp.Value.Properties)
+                foreach (var relationProperties in relation.Properties)
                 {
-                    IModelExposable<ModelBase> result = kvp.Value.Collection.FirstOrDefault(x => x.Model.Id == (ulong?)relationProperties.Owner.Model.GetType().GetProperty(relationProperties.ModelPropertyIdName).GetValue(relationProperties.Owner.Model, null));
+                    IModelExposable<ModelBase> result = relation.Collection.FirstOrDefault(x => x.Model.Id == (ulong?)relationProperties.Owner.Model.GetType().GetProperty(relationProperties.ModelPropertyIdName).GetValue(relationProperties.Owner.Model, null));
                     if (m_restoreRelationsGlobalCollectionChecking == RestoreRelationsGlobalCollectionCheckingModes.ExceptionIfNotExists && result == null)
                     {
-                        throw new InvalidOperationException("Specified ViewModel not found in global collection. Relationship: " + kvp.Key);
+                        throw new InvalidOperationException("Specified ViewModel not found in global collection. Relationship: " + relation.Name);
                     }
 
                     relationProperties.RelatedProperty.SetValue(relationProperties.Owner, result, null);
@@ -183,27 +184,27 @@ namespace Dziennik
         protected void AssignRelations(IModelExposable<ModelBase> viewModel)
         {
             m_relations.Clear();
-            MakeRelationPairs(viewModel);
+            MakeRelationPairs(viewModel, new Dictionary<string,RelationPair>());
 
-            foreach (var kvp in m_relations)
+            foreach (var relation in m_relations)
             {
-                foreach (var relationProperties in kvp.Value.Properties)
+                foreach (var relationProperties in relation.Properties)
                 {
                     if (m_assignRelationsGlobalCollectionChecking != AssingRelationsGlobalCollectionCheckingModes.Disable)
                     {
-                        if (!kvp.Value.Collection.Contains(relationProperties.Related))
+                        if (!relation.Collection.Contains(relationProperties.Related))
                         {
                             if (m_assignRelationsGlobalCollectionChecking == AssingRelationsGlobalCollectionCheckingModes.AddToGlobalIfNotExists)
                             {
-                                if (kvp.Value.Collection is ICollection<IModelExposable<ModelBase>>)
+                                if (relation.Collection is ICollection<IModelExposable<ModelBase>>)
                                 {
-                                    ((ICollection<IModelExposable<ModelBase>>)kvp.Value.Collection).Add(relationProperties.Related);
+                                    ((ICollection<IModelExposable<ModelBase>>)relation.Collection).Add(relationProperties.Related);
                                 }
                                 else throw new InvalidOperationException("Mode is AddToGlobalIfNotExists but global collection is not type of ICollection<IModelExposable<ModelBase>>");
                             }
                             else // must be ExceptionIfNotExists
                             {
-                                throw new InvalidOperationException("Global collection doesn't contains related ViewModel in relationship: " + kvp.Key);
+                                throw new InvalidOperationException("Global collection doesn't contains related ViewModel in relationship: " + relation.Name);
                             }
                         }
                     }
@@ -214,12 +215,15 @@ namespace Dziennik
             }
         }
 
-        private void MakeRelationPairs(IModelExposable<ModelBase> viewModel, Dictionary<string, IEnumerable> availableGlobalCollections)
+        private void MakeRelationPairs(IModelExposable<ModelBase> viewModel, Dictionary<string, RelationPair> availablePairs)
         {
             Type type = viewModel.GetType();
 
             CachedProperty[] properties = GetCachedProperties(type);
 
+            Dictionary<string, RelationPair> addedCollections = new Dictionary<string, RelationPair>();
+
+            //first search in properties and find collections
             foreach (CachedProperty property in properties)
             {
                 object propVal = property.Info.GetValue(viewModel, null);
@@ -227,28 +231,39 @@ namespace Dziennik
 
                 foreach (object attrib in attributes)
                 {
-                    if (attrib is DatabaseRelationAttribute)
+                    if (attrib is DatabaseRelationPropertyAttribute)
                     {
-                        DatabaseRelationAttribute baseAttribVal = (DatabaseRelationAttribute)attrib;
+                        DatabaseRelationPropertyAttribute propAttribVal = (DatabaseRelationPropertyAttribute)attrib;
 
-                        if (!m_relations.ContainsKey(baseAttribVal.RelationName)) m_relations.Add(baseAttribVal.RelationName, new RelationPair());
-                        RelationPair pair = m_relations[baseAttribVal.RelationName];
+                        if (!availablePairs.ContainsKey(propAttribVal.RelationName)) throw new InvalidOperationException("Specified relation not found: " + propAttribVal.RelationName);
 
-                        if (baseAttribVal is DatabaseRelationPropertyAttribute)
+                        availablePairs[propAttribVal.RelationName].Properties.Add(new RelationPair.RelationProperties(viewModel, (IModelExposable<ModelBase>)propVal, property.Info, propAttribVal.ModelPropertyIdName));
+                    }
+                    else if (attrib is DatabaseRelationCollectionAttribute)
+                    {
+                        DatabaseRelationCollectionAttribute collAttribVal = (DatabaseRelationCollectionAttribute)attrib;
+
+                        if (availablePairs.ContainsKey(collAttribVal.RelationName)) throw new InvalidOperationException("Found another yet relation with the same name: " + collAttribVal.RelationName);
+                        addedCollections.Add(collAttribVal.RelationName, new RelationPair()
                         {
-                            DatabaseRelationPropertyAttribute propAttribVal = (DatabaseRelationPropertyAttribute)baseAttribVal;
-                            pair.Properties.Add(new RelationPair.RelationProperties(viewModel, (IModelExposable<ModelBase>)propVal, property.Info, propAttribVal.ModelPropertyIdName));
-                        }
-                        else if (baseAttribVal is DatabaseRelationCollectionAttribute)
-                        {
-                            if (pair.Collection != null) throw new InvalidOperationException("Relation " + baseAttribVal.RelationName + " already has paired collection");
-
-                            DatabaseRelationCollectionAttribute collAttribVal = (DatabaseRelationCollectionAttribute)baseAttribVal;
-                            pair.Collection = (IEnumerable<IModelExposable<ModelBase>>)propVal;
-                        }
+                            Name = collAttribVal.RelationName,
+                            Collection = (IEnumerable<IModelExposable<ModelBase>>)propVal
+                        });
                     }
                 }
-                //TODO: add to list collecion
+            }
+
+            //second add found collections to cache
+            foreach (var kvp in addedCollections)
+            {
+                availablePairs.Add(kvp.Key, kvp.Value);
+            }
+
+            //third search inside rest properties
+            foreach (CachedProperty property in properties)
+            {
+                object propVal = property.Info.GetValue(viewModel, null);
+
                 if (propVal is IEnumerable)
                 {
                     if (propVal is string) continue; // to prevent foreach'ing string
@@ -256,11 +271,17 @@ namespace Dziennik
                     IEnumerable coll = (IEnumerable)propVal;
                     foreach (object item in coll)
                     {
-                        if (item is IModelExposable<ModelBase>) MakeRelationPairs((IModelExposable<ModelBase>)item);
+                        if (item is IModelExposable<ModelBase>) MakeRelationPairs((IModelExposable<ModelBase>)item, availablePairs);
                     }
                 }
-                else if (propVal is IModelExposable<ModelBase>) MakeRelationPairs((IModelExposable<ModelBase>)propVal);
-                //TODO: remove from list collection
+                else if (propVal is IModelExposable<ModelBase>) MakeRelationPairs((IModelExposable<ModelBase>)propVal, availablePairs);
+            }
+
+            //fourth remove collections from cache and add them to global relations list
+            foreach (var toRemoveKvp in addedCollections)
+            {
+                m_relations.Add(toRemoveKvp.Value);
+                availablePairs.Remove(toRemoveKvp.Key);
             }
         }
 
