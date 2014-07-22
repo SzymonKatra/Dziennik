@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Dziennik
 {
-    public class ObservableCollectionNotifySimple<T> : ObservableCollection<T>, INotifyCollectionChangedSimple<T>
+    public class ObservableCollectionExtended<T> : ObservableCollection<T>, INotifyCollectionChangedSimple<T>
     {
         public event EventHandler<NotifyCollectionChangedSimpleEventArgs<T>> Added;
         public event EventHandler<NotifyCollectionChangedSimpleEventArgs<T>> Removed;

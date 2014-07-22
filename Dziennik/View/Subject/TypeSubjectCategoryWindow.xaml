@@ -1,0 +1,18 @@
+﻿<Window x:Class="Dziennik.View.TypeSubjectCategoryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:my="clr-namespace:Dziennik.Controls"
+        Title="Podaj kategorię" Height="130" Width="250"
+        WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        
+        <TextBlock Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="Podaj kategorię dla nowych tematów"/>
+        <TextBox Grid.Row="1" Style="{StaticResource inputControlStyle}" Text="{Binding Category}"/>
+        <my:OkCancelControl Grid.Row="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
+    </Grid>
+</Window>

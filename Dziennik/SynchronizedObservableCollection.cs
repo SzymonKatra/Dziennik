@@ -31,7 +31,7 @@ namespace Dziennik
     /// <typeparam name="T">ViewModel type</typeparam>
     /// <typeparam name="M">Model type</typeparam>
     /// <typeparam name="MC">Model collection</typeparam>
-    public class SynchronizedObservableCollection<VM, M, MC> : ObservableCollectionNotifySimple<VM>
+    public class SynchronizedObservableCollection<VM, M, MC> : ObservableCollectionExtended<VM>
                                                                where VM : IModelExposable<M>
                                                                where MC : System.Collections.Generic.IList<M>
     {

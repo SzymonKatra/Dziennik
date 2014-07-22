@@ -22,7 +22,7 @@
         <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="Nazwa"/>
         <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
 
-        <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
+        <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -30,17 +30,20 @@
 
             <ComboBox Grid.Column="0" Style="{StaticResource inputControlStyle}" ItemsSource="{Binding SchoolClass.Groups}" SelectedItem="{Binding SelectedGroup, Mode=TwoWay}" DisplayMemberPath="Name"/>
             <WrapPanel Grid.Column="1">
-                <Button Style="{StaticResource imageButtonStyle}" Command="{Binding EditGroupCommand}" ToolTip="Edytuj grupę">
+                <Button Style="{StaticResource wrapPanelImageButtonStyle}" Command="{Binding EditGroupCommand}" ToolTip="Edytuj grupę">
                     <Image Source="{StaticResource img_edit}"/>
                 </Button>
-                <Button Style="{StaticResource imageButtonStyle}" Command="{Binding AddGroupCommand}" ToolTip="Dodaj grupę">
+                <Button Style="{StaticResource wrapPanelImageButtonStyle}" Command="{Binding AddGroupCommand}" ToolTip="Dodaj grupę">
                     <Image Source="{StaticResource img_add}"/>
                 </Button>
             </WrapPanel>
         </Grid>
         
+        <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
+            <Button Content="Wszyscy uczniowie" Style="{StaticResource commonButtonStyle}" Command="{Binding ShowGlobalStudentsListCommand}"/>
+        </Grid>
         <Grid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">
-            <Button Content="Wszyscy uczniowie" Margin="10,5,10,5" Command="{Binding ShowGlobalStudentsListCommand}"/>
+            <Button Content="Wszystkie tematy" Style="{StaticResource commonButtonStyle}" Command="{Binding ShowGlobalSubjectsListCommand}"/>
         </Grid>
 
         <Grid Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2">

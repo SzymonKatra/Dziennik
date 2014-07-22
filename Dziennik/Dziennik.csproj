@@ -70,6 +70,9 @@
     <Compile Include="Controls\DirectorySelector.xaml.cs">
       <DependentUpon>DirectorySelector.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\EditButtonControl.xaml.cs">
+      <DependentUpon>EditButtonControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\EndingMarkControl.xaml.cs">
       <DependentUpon>EndingMarkControl.xaml</DependentUpon>
     </Compile>
@@ -94,32 +97,37 @@
     <Compile Include="Model\SchoolGroup.cs" />
     <Compile Include="Model\StudentInGroup.cs" />
     <Compile Include="NotifyCollectionChangedSimpleEventArgs.cs" />
-    <Compile Include="ObservableCollectionNotifySimple.cs" />
+    <Compile Include="ObservableCollectionExtended.cs" />
+    <Compile Include="ObservableCollectionExtensions.cs" />
+    <Compile Include="SelectionRangeParser.cs" />
     <Compile Include="ViewModel\DatabaseMain.cs" />
+    <Compile Include="ViewModel\GlobalSubjectViewModel.cs" />
+    <Compile Include="ViewModel\RealizedSubjectPresenceViewModel.cs" />
+    <Compile Include="ViewModel\RealizedSubjectViewModel.cs" />
     <Compile Include="ViewModel\SchoolClassViewModel.cs" />
     <Compile Include="ViewModel\SchoolGroupViewModel.cs" />
     <Compile Include="ViewModel\StudentInGroupViewModel.cs" />
-    <Compile Include="View\ActionDialogViewModel.cs" />
-    <Compile Include="View\ActionDialogWindow.xaml.cs">
+    <Compile Include="View\Common\ActionDialogViewModel.cs" />
+    <Compile Include="View\Common\ActionDialogWindow.xaml.cs">
       <DependentUpon>ActionDialogWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\EditClassViewModel.cs" />
-    <Compile Include="View\EditClassWindow.xaml.cs">
+    <Compile Include="View\Class\EditClassViewModel.cs" />
+    <Compile Include="View\Class\EditClassWindow.xaml.cs">
       <DependentUpon>EditClassWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\AddGroupViewModel.cs" />
-    <Compile Include="View\AddGroupWindow.xaml.cs">
+    <Compile Include="View\Group\AddGroupViewModel.cs" />
+    <Compile Include="View\Group\AddGroupWindow.xaml.cs">
       <DependentUpon>AddGroupWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\EditEndingMarkViewModel.cs" />
-    <Compile Include="View\EditEndingMarkWindow.xaml.cs">
+    <Compile Include="View\Mark\EditEndingMarkViewModel.cs" />
+    <Compile Include="View\Mark\EditEndingMarkWindow.xaml.cs">
       <DependentUpon>EditEndingMarkWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\EditGroupViewModel.cs" />
-    <Compile Include="View\EditGroupWindow.xaml.cs">
+    <Compile Include="View\Group\EditGroupViewModel.cs" />
+    <Compile Include="View\Group\EditGroupWindow.xaml.cs">
       <DependentUpon>EditGroupWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\EditMarkWindow.xaml.cs">
+    <Compile Include="View\Mark\EditMarkWindow.xaml.cs">
       <DependentUpon>EditMarkWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="EventArgs.cs" />
@@ -134,14 +142,22 @@
     <Compile Include="Model\Mark.cs" />
     <Compile Include="Model\GlobalStudent.cs" />
     <Compile Include="ObservableObject.cs" />
-    <Compile Include="View\EditMarkViewModel.cs" />
-    <Compile Include="View\EditStudentViewModel.cs" />
-    <Compile Include="View\EditStudentWindow.xaml.cs">
+    <Compile Include="View\Mark\EditMarkViewModel.cs" />
+    <Compile Include="View\Student\EditStudentViewModel.cs" />
+    <Compile Include="View\Student\EditStudentWindow.xaml.cs">
       <DependentUpon>EditStudentWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\GlobalStudentsListViewModel.cs" />
-    <Compile Include="View\GlobalStudentsListWindow.xaml.cs">
+    <Compile Include="View\Subject\EditGlobalSubjectViewModel.cs" />
+    <Compile Include="View\Subject\EditGlobalSubjectWindow.xaml.cs">
+      <DependentUpon>EditGlobalSubjectWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Student\GlobalStudentsListViewModel.cs" />
+    <Compile Include="View\Student\GlobalStudentsListWindow.xaml.cs">
       <DependentUpon>GlobalStudentsListWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Subject\GlobalSubjectsListViewModel.cs" />
+    <Compile Include="View\Subject\GlobalSubjectsListWindow.xaml.cs">
+      <DependentUpon>GlobalSubjectsListWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MainViewModel.cs" />
     <Compile Include="ViewModel\SemesterViewModel.cs" />
@@ -149,19 +165,31 @@
     <Compile Include="Controls\MarksControl.xaml.cs">
       <DependentUpon>MarksControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\OptionsViewModel.cs" />
-    <Compile Include="View\OptionsWindow.xaml.cs">
+    <Compile Include="View\Common\OptionsViewModel.cs" />
+    <Compile Include="View\Common\OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\SchoolClassControl.xaml.cs">
+    <Compile Include="View\Common\SchoolClassControl.xaml.cs">
       <DependentUpon>SchoolClassControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\SchoolClassControlViewModel.cs" />
-    <Compile Include="View\SelectStudentsViewModel.cs" />
-    <Compile Include="View\SelectStudentsWindow.xaml.cs">
+    <Compile Include="View\Common\SchoolClassControlViewModel.cs" />
+    <Compile Include="View\Student\SelectStudentsViewModel.cs" />
+    <Compile Include="View\Student\SelectStudentsWindow.xaml.cs">
       <DependentUpon>SelectStudentsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Subject\SelectGlobalSubjectViewModel.cs" />
+    <Compile Include="View\Subject\SelectGlobalSubjectWindow.xaml.cs">
+      <DependentUpon>SelectGlobalSubjectWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Subject\TypeSubjectCategoryViewModel.cs" />
+    <Compile Include="View\Subject\TypeSubjectCategoryWindow.xaml.cs">
+      <DependentUpon>TypeSubjectCategoryWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Controls\DirectorySelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\EditButtonControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -177,35 +205,43 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ActionDialogWindow.xaml">
+    <Page Include="View\Common\ActionDialogWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\EditClassWindow.xaml">
+    <Page Include="View\Class\EditClassWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\AddGroupWindow.xaml">
+    <Page Include="View\Group\AddGroupWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\EditEndingMarkWindow.xaml">
+    <Page Include="View\Mark\EditEndingMarkWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\EditGroupWindow.xaml">
+    <Page Include="View\Group\EditGroupWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\EditMarkWindow.xaml">
+    <Page Include="View\Mark\EditMarkWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\EditStudentWindow.xaml">
+    <Page Include="View\Student\EditStudentWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\GlobalStudentsListWindow.xaml">
+    <Page Include="View\Subject\EditGlobalSubjectWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Student\GlobalStudentsListWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Subject\GlobalSubjectsListWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -225,15 +261,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\OptionsWindow.xaml">
+    <Page Include="View\Common\OptionsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\SchoolClassControl.xaml">
+    <Page Include="View\Common\SchoolClassControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\SelectStudentsWindow.xaml">
+    <Page Include="View\Student\SelectStudentsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Subject\SelectGlobalSubjectWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Subject\TypeSubjectCategoryWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

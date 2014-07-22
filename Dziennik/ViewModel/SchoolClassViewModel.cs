@@ -20,6 +20,7 @@ namespace Dziennik.ViewModel
 
             m_students = new SynchronizedPerItemObservableCollection<GlobalStudentViewModel, GlobalStudent>(m_model.Students, (m) => { return new GlobalStudentViewModel(m); });
             m_groups = new SynchronizedObservableCollection<SchoolGroupViewModel, SchoolGroup>(m_model.Groups, (m) => { return new SchoolGroupViewModel(m); });
+            m_subjects = new SynchronizedObservableCollection<GlobalSubjectViewModel, GlobalSubject>(m_model.Subjects, (m) => { return new GlobalSubjectViewModel(m); });
         }
 
         private SchoolClass m_model;
@@ -58,6 +59,18 @@ namespace Dziennik.ViewModel
                 //SubscribeGroups();
                 m_model.Groups = value.ModelCollection;
                 RaisePropertyChanged("Groups");
+            }
+        }
+        private SynchronizedObservableCollection<GlobalSubjectViewModel, GlobalSubject> m_subjects;
+        [DatabaseRelationCollection("GlobalSubjects")]
+        public SynchronizedObservableCollection<GlobalSubjectViewModel, GlobalSubject> Subjects
+        {
+            get { return m_subjects; }
+            set
+            {
+                m_subjects = value;
+                m_model.Subjects = value.ModelCollection;
+                RaisePropertyChanged("Subjects");
             }
         }
     }

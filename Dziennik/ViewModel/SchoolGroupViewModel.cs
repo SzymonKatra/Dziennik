@@ -45,6 +45,18 @@ namespace Dziennik.ViewModel
                 RaisePropertyChanged("Students");
             }
         }
+        private SynchronizedObservableCollection<RealizedSubjectViewModel, RealizedSubject> m_realizedSubjects;
+        [DatabaseRelationCollection("GroupRealizedSubjects")]
+        public SynchronizedObservableCollection<RealizedSubjectViewModel, RealizedSubject> RealizedSubjects
+        {
+            get { return m_realizedSubjects; }
+            set
+            {
+                m_realizedSubjects = value;
+                m_model.RealizedSubjects = value.ModelCollection;
+                RaisePropertyChanged("RealizedSubjects");
+            }
+        }
 
         //private void SubscribeStudents()
         //{

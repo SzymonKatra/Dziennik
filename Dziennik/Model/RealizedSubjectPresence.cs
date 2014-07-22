@@ -9,5 +9,7 @@ namespace Dziennik.Model
     public class RealizedSubjectPresence : ModelBase
     {
         public ulong? RealizedSubjectId { get; set; }
+
+        public bool WasPresent { get; set; }
     }
 }

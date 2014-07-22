@@ -66,6 +66,17 @@ namespace Dziennik.ViewModel
                 RaisePropertyChanged("SecondSemester");
             }
         }
+        private SynchronizedObservableCollection<RealizedSubjectPresenceViewModel, RealizedSubjectPresence> m_presence;
+        public SynchronizedObservableCollection<RealizedSubjectPresenceViewModel, RealizedSubjectPresence> Presence
+        {
+            get { return m_presence; }
+            set
+            {
+                m_presence = value;
+                m_model.Presence = value.ModelCollection;
+                RaisePropertyChanged("Presence");
+            }
+        }
  
         private GlobalStudentViewModel m_globalStudent;
         [DatabaseRelationProperty("GlobalStudents", "GlobalStudentId")]

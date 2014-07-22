@@ -147,62 +147,7 @@ namespace Dziennik.View
         {
             get
             {
-                List<int> selected = ResultSelection;
-
-                string result = string.Empty;
-
-                int startRange = -1;
-                int endRange = -1;
-
-                foreach (int sel in selected)
-                {
-                    if (endRange < 0)
-                    {
-                        startRange = endRange = sel;
-                    }
-                    else
-                    {
-                        if (sel == endRange + 1)
-                        {
-                            endRange++;
-                        }
-                        else
-                        {
-                            if (startRange != endRange)
-                            {
-                                result += startRange.ToString();
-                                result += '-';
-                                result += endRange.ToString();
-                                result += "; ";
-                            }
-                            else
-                            {
-                                result += endRange.ToString();
-                                result += "; ";
-                            }
-
-                            startRange = endRange = sel;
-                        }
-                    }
-                }
-
-                if (endRange >= 0)
-                {
-                    if (startRange != endRange)
-                    {
-                        result += startRange.ToString();
-                        result += '-';
-                        result += endRange.ToString();
-                        result += "; ";
-                    }
-                    else
-                    {
-                        result += endRange.ToString();
-                        result += "; ";
-                    }
-                }
-
-                return result;
+                return SelectionParser.Create(ResultSelection);
             }
         }
 
@@ -288,61 +233,6 @@ namespace Dziennik.View
         private bool CanUncheckOtherSelections(Selection param)
         {
             return m_singleSelection;
-        }
-
-        public static List<int> ParseSelection(string input)
-        {
-            string errorTemp;
-            return ParseSelection(input, out errorTemp);
-        }
-        public static List<int> ParseSelection(string input, out string error)
-        {
-            List<int> result = new List<int>();
-            error = string.Empty;
-            if (string.IsNullOrWhiteSpace(input)) return result;
-
-            try
-            {
-                string toParse = input.Replace(" ", "");
-                while (toParse[toParse.Length - 1] == ',' || toParse[toParse.Length - 1] == ';') toParse = toParse.Remove(toParse.Length - 1);
-                if (string.IsNullOrWhiteSpace(toParse)) return result;
-
-                string[] tokens = input.Split(',', ';');
-
-                foreach (string item in tokens)
-                {
-                    if (string.IsNullOrWhiteSpace(item)) continue;
-                    int valResult;
-                    if (int.TryParse(item, out valResult))
-                    {
-                        result.Add(valResult);
-                        continue;
-                    }
-
-                    string[] rangeStr = item.Split('-');
-                    if (rangeStr.Length != 2)
-                    {
-                        error = "Nieprawidłowy format. Zakresy oddziel jednym myślnikiem(-)";
-                        return null;
-                    }
-
-                    int minRange;
-                    int maxRange;
-                    if (!int.TryParse(rangeStr[0], out minRange) || !int.TryParse(rangeStr[1], out maxRange))
-                    {
-                        error = "Niedozwolone znaki";
-                        return null;
-                    }
-
-                    for (int i = minRange; i <= maxRange; i++) result.Add(i);
-                }
-            }
-            catch
-            {
-                Debug.Assert(true, "Exception in SelectStudentsViewModel.ParseSelection");
-            }
-
-            return result;
         }
     }
 }

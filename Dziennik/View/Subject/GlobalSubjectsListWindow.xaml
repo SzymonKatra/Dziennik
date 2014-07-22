@@ -1,0 +1,40 @@
+﻿<Window x:Class="Dziennik.View.GlobalSubjectsListWindow"
+        Name="root"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:my="clr-namespace:Dziennik.Controls"
+        Title="Tematy" Height="300" Width="300"
+        WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <WrapPanel Grid.Row="0" Orientation="Horizontal">
+            <Button Content="Dodaj temat" Style="{StaticResource wrapPanelButtonStyle}" Command="{Binding AddSubjectCommand}"/>
+            <Button Content="Dodaj automatycznie ze schowka" Style="{StaticResource wrapPanelButtonStyle}" Command="{Binding AutoAddSubjectsClipboardCommand}"/>
+        </WrapPanel>
+
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Subjects}"
+                  SelectedItem="{Binding SelectedSubject, Mode=TwoWay}"
+                  CanUserAddRows="False"
+                  CanUserSortColumns="False"
+                  SelectionMode="Single"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Numer" Binding="{Binding Number}"/>
+                <DataGridTextColumn Header="Temat" Binding="{Binding Name}"/>
+                <DataGridTemplateColumn Header="Edytuj">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <my:EditButtonControl Command="{Binding DataContext.EditSubjectCommand, ElementName=root}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

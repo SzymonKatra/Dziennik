@@ -50,10 +50,10 @@
 
                 <ComboBox Grid.Column="0" Style="{StaticResource inputControlStyle}" ItemsSource="{Binding OpenedSchoolClasses}" SelectedItem="{Binding SelectedClass, Mode=TwoWay}" DisplayMemberPath="ViewModel.Name"/>
                 <WrapPanel Grid.Column="1">
-                    <Button Style="{StaticResource imageButtonStyle}" Command="{Binding EditClassCommand}" ToolTip="Edytuj klasę">
+                    <Button Style="{StaticResource wrapPanelImageButtonStyle}" Command="{Binding EditClassCommand}" ToolTip="Edytuj klasę">
                         <Image Source="{StaticResource img_edit}"/>
                     </Button>
-                    <Button Style="{StaticResource imageButtonStyle}" Command="{Binding AddClassCommand}" ToolTip="Dodaj klasę">
+                    <Button Style="{StaticResource wrapPanelImageButtonStyle}" Command="{Binding AddClassCommand}" ToolTip="Dodaj klasę">
                         <Image Source="{StaticResource img_add}"/>
                     </Button>
                 </WrapPanel>

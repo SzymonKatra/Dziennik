@@ -9,5 +9,7 @@ namespace Dziennik.Model
     public class RealizedSubject : ModelBase
     {
         public ulong? GlobalSubjectId { get; set; }
+
+        public DateTime RealizedDate { get; set; }
     }
 }

@@ -24,6 +24,7 @@ namespace Dziennik.View
             m_editEndingMarkCommand = new RelayCommand<string>(EditEndingMark);
             m_autoSaveCommand = new RelayCommand(AutoSave);
             m_saveCommand = new RelayCommand(Save);
+            m_realizeSubjectCommand = new RelayCommand(RealizeSubject);
 
             m_database = database;
         }
@@ -61,6 +62,13 @@ namespace Dziennik.View
             set { m_selectedMark = value; RaisePropertyChanged("SelectedMark"); }
         }
 
+        private RealizedSubjectViewModel m_selectedSubject;
+        public RealizedSubjectViewModel SelectedSubject
+        {
+            get { return m_selectedSubject; }
+            set { m_selectedSubject = value; RaisePropertyChanged("SelectedSubject"); }
+        }
+
         private RelayCommand<ObservableCollection<MarkViewModel>> m_addMarkCommand;
         public ICommand AddMarkCommand
         {
@@ -89,6 +97,12 @@ namespace Dziennik.View
         public ICommand SaveCommand
         {
             get { return m_saveCommand; }
+        }
+
+        private RelayCommand m_realizeSubjectCommand;
+        public ICommand RealizeSubjectCommand
+        {
+            get { return m_realizeSubjectCommand; }
         }
 
         private void AddMark(ObservableCollection<MarkViewModel> param)
@@ -157,6 +171,10 @@ namespace Dziennik.View
             , null, "Zapisywanie...");
             GlobalConfig.Dialogs.ShowDialog((param == null ? GlobalConfig.Main : param), dialogViewModel);
         }
-        
+        private void RealizeSubject(object e)
+        {
+            SelectGlobalSubjectViewModel dialogViewModel = new SelectGlobalSubjectViewModel(m_database.ViewModel.Subjects);
+            GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Main, dialogViewModel);
+        }
     }
 }

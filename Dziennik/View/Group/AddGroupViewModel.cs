@@ -155,7 +155,7 @@ namespace Dziennik.View
             m_selectedStudentsInputValid = false;
 
             string error;
-            List<int> tempColl = SelectStudentsViewModel.ParseSelection(m_selectedStudentsInput, out error);
+            List<int> tempColl = SelectionParser.Parse(m_selectedStudentsInput, out error);
             if (tempColl == null)
             {
                 m_okCommand.RaiseCanExecuteChanged();

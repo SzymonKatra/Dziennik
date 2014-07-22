@@ -2,6 +2,7 @@
         Name="root"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:my="clr-namespace:Dziennik.Controls"
         Title="Uczniowie" Height="300" Width="500"
         WindowStartupLocation="CenterOwner">
     <Grid>
@@ -11,8 +12,8 @@
         </Grid.RowDefinitions>
         
         <WrapPanel Grid.Row="0" Orientation="Horizontal">
-            <Button Content="Dodaj ucznia" Margin="5,5,5,5" Command="{Binding AddStudentCommand}"/>
-            <Button Content="Dodaj automatycznie ze schowka" Margin="5,5,5,5" Command="{Binding AutoAddStudentsClipboardCommand}"/>
+            <Button Content="Dodaj ucznia" Style="{StaticResource wrapPanelButtonStyle}"  Command="{Binding AddStudentCommand}"/>
+            <Button Content="Dodaj automatycznie ze schowka" Style="{StaticResource wrapPanelButtonStyle}" Command="{Binding AutoAddStudentsClipboardCommand}"/>
         </WrapPanel>
         <DataGrid Grid.Row="1"
                   ItemsSource="{Binding Students}"
@@ -30,7 +31,7 @@
                 <DataGridTemplateColumn Header="Edytuj">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="..." Width="30" Margin="0,0,0,0" Command="{Binding DataContext.EditStudentCommand, ElementName=root}"/>
+                            <my:EditButtonControl Command="{Binding DataContext.EditStudentCommand, ElementName=root}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

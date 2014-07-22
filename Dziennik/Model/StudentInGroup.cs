@@ -16,6 +16,7 @@ namespace Dziennik.Model
         public Semester SecondSemester { get; set; }
         public decimal HalfEndingMark { get; set; }
         public decimal YearEndingMark { get; set; }
+        public List<RealizedSubjectPresence> Presence { get; set; }
 
         public StudentInGroup()
         {

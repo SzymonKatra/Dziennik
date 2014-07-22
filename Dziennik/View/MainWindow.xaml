@@ -24,10 +24,10 @@
         </Grid.RowDefinitions>
         
         <WrapPanel Grid.Row="0" Orientation="Horizontal">
-            <Button Style="{StaticResource imageButtonStyle}"  ToolTip="Zapisz zmiany" Command="{Binding SaveCommand}">
+            <Button Style="{StaticResource wrapPanelImageButtonStyle}"  ToolTip="Zapisz zmiany" Command="{Binding SaveCommand}">
                 <Image Source="{StaticResource img_save}"/>
             </Button>
-            <Button Style="{StaticResource imageButtonStyle}"  ToolTip="Opcje" Command="{Binding OptionsCommand}">
+            <Button Style="{StaticResource wrapPanelImageButtonStyle}"  ToolTip="Opcje" Command="{Binding OptionsCommand}">
                 <Image Source="{StaticResource img_options}"/>
             </Button>
         </WrapPanel>
