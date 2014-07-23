@@ -221,19 +221,19 @@ namespace Dziennik
         {
             Dictionary<Type, Func<object, Window>> windowViewModelMappings = new Dictionary<Type, Func<object, Window>>();
 
-            windowViewModelMappings.Add(typeof(EditMarkViewModel), (vm) => { return new EditMarkWindow((EditMarkViewModel)vm); });
-            windowViewModelMappings.Add(typeof(EditStudentViewModel), (vm) => { return new EditStudentWindow((EditStudentViewModel)vm); });
-            windowViewModelMappings.Add(typeof(ActionDialogViewModel), (vm) => { return new ActionDialogWindow((ActionDialogViewModel)vm); });
-            windowViewModelMappings.Add(typeof(GlobalStudentsListViewModel), (vm) => { return new GlobalStudentsListWindow((GlobalStudentsListViewModel)vm); });
-            windowViewModelMappings.Add(typeof(AddGroupViewModel), (vm) => { return new AddGroupWindow((AddGroupViewModel)vm); });
-            windowViewModelMappings.Add(typeof(SelectStudentsViewModel), (vm) => { return new SelectStudentsWindow((SelectStudentsViewModel)vm); });
-            windowViewModelMappings.Add(typeof(EditGroupViewModel), (vm) => { return new EditGroupWindow((EditGroupViewModel)vm); });
-            windowViewModelMappings.Add(typeof(EditClassViewModel), (vm) => { return new EditClassWindow((EditClassViewModel)vm); });
-            windowViewModelMappings.Add(typeof(OptionsViewModel), (vm) => { return new OptionsWindow((OptionsViewModel)vm); });
-            windowViewModelMappings.Add(typeof(EditEndingMarkViewModel), (vm) => { return new EditEndingMarkWindow((EditEndingMarkViewModel)vm); });
-            windowViewModelMappings.Add(typeof(GlobalSubjectsListViewModel), (vm) => { return new GlobalSubjectsListWindow((GlobalSubjectsListViewModel)vm); });
-            windowViewModelMappings.Add(typeof(EditGlobalSubjectViewModel), (vm) => { return new EditGlobalSubjectWindow((EditGlobalSubjectViewModel)vm); });
-            windowViewModelMappings.Add(typeof(SelectGlobalSubjectViewModel), (vm) => { return new SelectGlobalSubjectWindow((SelectGlobalSubjectViewModel)vm); });
+            windowViewModelMappings.Add(typeof(EditMarkViewModel), vm => new EditMarkWindow((EditMarkViewModel)vm));
+            windowViewModelMappings.Add(typeof(EditStudentViewModel), vm => new EditStudentWindow((EditStudentViewModel)vm));
+            windowViewModelMappings.Add(typeof(ActionDialogViewModel), vm => new ActionDialogWindow((ActionDialogViewModel)vm));
+            windowViewModelMappings.Add(typeof(GlobalStudentsListViewModel), vm => new GlobalStudentsListWindow((GlobalStudentsListViewModel)vm));
+            windowViewModelMappings.Add(typeof(AddGroupViewModel), vm => new AddGroupWindow((AddGroupViewModel)vm));
+            windowViewModelMappings.Add(typeof(SelectStudentsViewModel), vm => new SelectStudentsWindow((SelectStudentsViewModel)vm));
+            windowViewModelMappings.Add(typeof(EditGroupViewModel), vm => new EditGroupWindow((EditGroupViewModel)vm));
+            windowViewModelMappings.Add(typeof(EditClassViewModel), vm => new EditClassWindow((EditClassViewModel)vm));
+            windowViewModelMappings.Add(typeof(OptionsViewModel), vm => new OptionsWindow((OptionsViewModel)vm));
+            windowViewModelMappings.Add(typeof(EditEndingMarkViewModel), vm => new EditEndingMarkWindow((EditEndingMarkViewModel)vm));
+            windowViewModelMappings.Add(typeof(GlobalSubjectsListViewModel), vm => new GlobalSubjectsListWindow((GlobalSubjectsListViewModel)vm));
+            windowViewModelMappings.Add(typeof(EditGlobalSubjectViewModel), vm => new EditGlobalSubjectWindow((EditGlobalSubjectViewModel)vm));
+            windowViewModelMappings.Add(typeof(SelectGlobalSubjectViewModel), vm => new SelectGlobalSubjectWindow((SelectGlobalSubjectViewModel)vm));
             windowViewModelMappings.Add(typeof(TypeSubjectCategoryViewModel), vm => new TypeSubjectCategoryWindow((TypeSubjectCategoryViewModel)vm));
 
             Dialogs = new DialogService(windowViewModelMappings);
