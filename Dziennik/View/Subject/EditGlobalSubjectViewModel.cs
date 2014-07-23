@@ -18,16 +18,18 @@ namespace Dziennik.View
             Remove,
         }
 
-        public EditGlobalSubjectViewModel(GlobalSubjectViewModel subject, bool isAddingMode = false)
+        public EditGlobalSubjectViewModel(GlobalSubjectViewModel subject, IEnumerable<GlobalSubjectViewModel> existingSubjects, bool isAddingMode = false)
         {
             m_okCommand = new RelayCommand(Ok);
             m_cancelCommand = new RelayCommand(Cancel);
             m_removeSubjectCommand = new RelayCommand(RemoveSubject, CanRemoveSubject);
 
             m_subject = subject;
+            m_existingSubjects = existingSubjects;
+            m_existingCategories = GlobalSubjectsListViewModel.GetExistingCategories(existingSubjects);
 
-            m_number = subject.Number;
-            m_category = subject.Category;
+            m_number = m_firstNumber = (isAddingMode ? GlobalSubjectsListViewModel.GetNextSubjectNumber(existingSubjects, subject.Category) : subject.Number);
+            m_category = m_firstCategory = subject.Category;
             m_name = subject.Name;
 
             m_isAddingMode = isAddingMode;
@@ -56,6 +58,8 @@ namespace Dziennik.View
         }
 
         private GlobalSubjectViewModel m_subject;
+        private IEnumerable<GlobalSubjectViewModel> m_existingSubjects;
+        private IEnumerable<string> m_existingCategories;
 
         private bool m_isAddingMode = false;
         public bool IsAddingMode
@@ -63,17 +67,40 @@ namespace Dziennik.View
             get { return m_isAddingMode; }
         }
 
+        private int m_firstNumber;
         private int m_number;
         public int Number
         {
             get { return m_number; }
+            set { m_number = value; RaisePropertyChanged("Number"); }
         }
 
+        private string m_firstCategory;
         private string m_category;
         public string Category
         {
             get { return m_category; }
-            set { m_category = value; RaisePropertyChanged("Category"); }
+            set
+            {
+                m_category = value;
+                if (m_isAddingMode)
+                {
+                    Number = GlobalSubjectsListViewModel.GetNextSubjectNumber(m_existingSubjects, m_category);
+                }
+                else
+                {
+                    if (GlobalSubjectsListViewModel.CheckCategory(m_category, m_firstCategory))
+                    {
+                        Number = m_firstNumber;
+                    }
+                    else
+                    {
+                        Number = GlobalSubjectsListViewModel.GetNextSubjectNumber(m_existingSubjects, m_category);
+                    }
+                }
+                RaisePropertyChanged("Category");
+                RaisePropertyChanged("Number");
+            }
         }
 
         private string m_name;
@@ -85,6 +112,7 @@ namespace Dziennik.View
 
         private void Ok(object e)
         {
+            m_subject.Number = GlobalSubjectsListViewModel.GetNextSubjectNumber(m_existingSubjects, m_category);
             m_subject.Category = m_category;
             m_subject.Name = m_name;
             m_result = EditGlobalSubjectResult.Ok;

@@ -14,6 +14,12 @@ namespace Dziennik.ViewModel
 {
     public class DatabaseMain : DatabaseContext<SchoolClassViewModel, SchoolClass>
     {
+        public DatabaseMain()
+        {
+            base.AssignRelationsGlobalCollectionChecking = AssingRelationsGlobalCollectionCheckingModes.ExceptionIfNotExistsNotNull;
+            base.RestoreRelationsGlobalCollectionChecking = RestoreRelationsGlobalCollectionCheckingModes.ExceptionIfNotExistsNotNull;
+        }
+
         private string m_path;
         public string Path
         {

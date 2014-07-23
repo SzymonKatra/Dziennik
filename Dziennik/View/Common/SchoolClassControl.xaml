@@ -98,12 +98,14 @@
                               AutoGenerateColumns="False"
                               SelectedItem="{Binding SelectedSubject, Mode=TwoWay}">
                         <DataGrid.Columns>
+                            <DataGridTextColumn Header="Numer" Binding="{Binding GlobalSubject.Number}"/>
                             <DataGridTextColumn Header="Data zrealizowania" Binding="{Binding RealizedDate}"/>
-                            <DataGridTextColumn Header="Temat" Binding="{Binding GlobalSubject.Name}"/>
+                            <DataGridTextColumn Header="Temat" Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="Kategoria" Binding="{Binding GlobalSubject.Category}"/>
                             <DataGridTemplateColumn Header="Edytuj">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <my:EditButtonControl Command="{Binding EditRealizedSubjectCommand}"/>
+                                        <my:EditButtonControl Command="{Binding DataContext.EditRealizedSubjectCommand, ElementName=rootSchoolClassControl}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

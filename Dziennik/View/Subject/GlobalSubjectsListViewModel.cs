@@ -58,8 +58,7 @@ namespace Dziennik.View
         private void AddSubject(object e)
         {
             GlobalSubjectViewModel subject = new GlobalSubjectViewModel();
-            subject.Number = GetNextSubjectId();
-            EditGlobalSubjectViewModel dialogViewModel = new EditGlobalSubjectViewModel(subject, true);
+            EditGlobalSubjectViewModel dialogViewModel = new EditGlobalSubjectViewModel(subject, m_subjects, true);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditGlobalSubjectViewModel.EditGlobalSubjectResult.Ok)
             {
@@ -74,6 +73,7 @@ namespace Dziennik.View
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result != TypeSubjectCategoryViewModel.TypeSubjectCategoryResult.Ok) return;
             string category = dialogViewModel.Category;
+            int currentNumber = GetNextSubjectNumber(m_subjects, category);
             try
             {
                 if (Clipboard.ContainsData(DataFormats.Text))
@@ -89,7 +89,7 @@ namespace Dziennik.View
                         if (string.IsNullOrWhiteSpace(line)) continue;
 
                         GlobalSubjectViewModel subject = new GlobalSubjectViewModel();
-                        subject.Number = GetNextSubjectId();
+                        subject.Number = currentNumber++;
                         subject.Category = category;
                         subject.Name = line;
                         m_subjects.Add(subject);
@@ -107,7 +107,7 @@ namespace Dziennik.View
         }
         private void EditSubject(object e)
         {
-            EditGlobalSubjectViewModel dialogViewModel = new EditGlobalSubjectViewModel(m_selectedSubject);
+            EditGlobalSubjectViewModel dialogViewModel = new EditGlobalSubjectViewModel(m_selectedSubject, m_subjects);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditGlobalSubjectViewModel.EditGlobalSubjectResult.Remove)
             {
@@ -117,9 +117,34 @@ namespace Dziennik.View
             if (dialogViewModel.Result != EditGlobalSubjectViewModel.EditGlobalSubjectResult.Cancel) m_autoSaveCommand.Execute(null);
         }
 
-        private int GetNextSubjectId()
+        public static List<string> GetExistingCategories(IEnumerable<GlobalSubjectViewModel> subjects)
         {
-            return (m_subjects.Count > 0 ? m_subjects[m_subjects.Count - 1].Number + 1 : 1);
+            List<string> result = new List<string>();
+            foreach (GlobalSubjectViewModel sub in subjects)
+            {
+                string findResult = result.FirstOrDefault(x => CheckCategory(x, sub.Category));
+                if (findResult == null) result.Add((sub.Category == null ? string.Empty : sub.Category));
+            }
+            result.Sort();
+            return result;
+        }
+        public static bool CheckCategory(string category, string categoryToCompare)
+        {
+            if (string.IsNullOrWhiteSpace(category))
+            {
+                return string.IsNullOrWhiteSpace(categoryToCompare);
+            }
+            else return category == categoryToCompare;
+        }
+        public static int GetNextSubjectNumber(IEnumerable<GlobalSubjectViewModel> subjects, string category)
+        {
+            int highestNumber = 0;
+            foreach (GlobalSubjectViewModel sub in subjects)
+            {
+                if (CheckCategory(sub.Category, category) && sub.Number > highestNumber) highestNumber = sub.Number;
+            }
+
+            return highestNumber + 1;
         }
     }
 }

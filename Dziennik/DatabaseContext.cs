@@ -19,12 +19,14 @@ namespace Dziennik
         public enum RestoreRelationsGlobalCollectionCheckingModes
         {
             Disable,
-            ExceptionIfNotExists,
+            ExceptionIfNotExistsAlways,
+            ExceptionIfNotExistsNotNull,
         }
         public enum AssingRelationsGlobalCollectionCheckingModes
         {
             Disable,
-            ExceptionIfNotExists,
+            ExceptionIfNotExistsAlways,
+            ExceptionIfNotExistsNotNull,
             AddToGlobalIfNotExists,
         }
         private class CachedProperty
@@ -65,14 +67,14 @@ namespace Dziennik
         }
 
         #region Properties
-        private RestoreRelationsGlobalCollectionCheckingModes m_restoreRelationsGlobalCollectionChecking = RestoreRelationsGlobalCollectionCheckingModes.ExceptionIfNotExists;
+        private RestoreRelationsGlobalCollectionCheckingModes m_restoreRelationsGlobalCollectionChecking = RestoreRelationsGlobalCollectionCheckingModes.ExceptionIfNotExistsAlways;
         public RestoreRelationsGlobalCollectionCheckingModes RestoreRelationsGlobalCollectionChecking
         {
             get { return m_restoreRelationsGlobalCollectionChecking; }
             set { m_restoreRelationsGlobalCollectionChecking = value; }
         }
 
-        private AssingRelationsGlobalCollectionCheckingModes m_assignRelationsGlobalCollectionChecking = AssingRelationsGlobalCollectionCheckingModes.ExceptionIfNotExists;
+        private AssingRelationsGlobalCollectionCheckingModes m_assignRelationsGlobalCollectionChecking = AssingRelationsGlobalCollectionCheckingModes.ExceptionIfNotExistsAlways;
         public AssingRelationsGlobalCollectionCheckingModes AssignRelationsGlobalCollectionChecking
         {
             get { return m_assignRelationsGlobalCollectionChecking; }
@@ -171,8 +173,12 @@ namespace Dziennik
             {
                 foreach (var relationProperties in relation.Properties)
                 {
-                    IModelExposable<ModelBase> result = relation.Collection.FirstOrDefault(x => x.Model.Id == (ulong?)relationProperties.Owner.Model.GetType().GetProperty(relationProperties.ModelPropertyIdName).GetValue(relationProperties.Owner.Model, null));
-                    if (m_restoreRelationsGlobalCollectionChecking == RestoreRelationsGlobalCollectionCheckingModes.ExceptionIfNotExists && result == null)
+                    ulong? val = (ulong?)relationProperties.Owner.Model.GetType().GetProperty(relationProperties.ModelPropertyIdName).GetValue(relationProperties.Owner.Model, null);
+                    if (val == null && m_restoreRelationsGlobalCollectionChecking == RestoreRelationsGlobalCollectionCheckingModes.ExceptionIfNotExistsNotNull)
+                        continue;
+                    
+                    IModelExposable<ModelBase> result = relation.Collection.FirstOrDefault(x => x.Model.Id == val);
+                    if (m_restoreRelationsGlobalCollectionChecking == RestoreRelationsGlobalCollectionCheckingModes.ExceptionIfNotExistsAlways && result == null)
                     {
                         throw new InvalidOperationException("Specified ViewModel not found in global collection. Relationship: " + relation.Name);
                     }
@@ -192,7 +198,7 @@ namespace Dziennik
                 {
                     if (m_assignRelationsGlobalCollectionChecking != AssingRelationsGlobalCollectionCheckingModes.Disable)
                     {
-                        if (!relation.Collection.Contains(relationProperties.Related))
+                        if ((m_assignRelationsGlobalCollectionChecking == AssingRelationsGlobalCollectionCheckingModes.ExceptionIfNotExistsNotNull && relationProperties.Related != null) && !relation.Collection.Contains(relationProperties.Related))
                         {
                             if (m_assignRelationsGlobalCollectionChecking == AssingRelationsGlobalCollectionCheckingModes.AddToGlobalIfNotExists)
                             {
@@ -202,7 +208,7 @@ namespace Dziennik
                                 }
                                 else throw new InvalidOperationException("Mode is AddToGlobalIfNotExists but global collection is not type of ICollection<IModelExposable<ModelBase>>");
                             }
-                            else // must be ExceptionIfNotExists
+                            else // must be ExceptionIfNotExistsAlways
                             {
                                 throw new InvalidOperationException("Global collection doesn't contains related ViewModel in relationship: " + relation.Name);
                             }
@@ -210,7 +216,7 @@ namespace Dziennik
                     }
 
                     PropertyInfo modelIdPropertyInfo = relationProperties.Owner.Model.GetType().GetProperty(relationProperties.ModelPropertyIdName);
-                    modelIdPropertyInfo.SetValue(relationProperties.Owner.Model, relationProperties.Related.Model.Id, null);
+                    modelIdPropertyInfo.SetValue(relationProperties.Owner.Model, (relationProperties.Related == null ? null : relationProperties.Related.Model.Id), null);
                 }
             }
         }

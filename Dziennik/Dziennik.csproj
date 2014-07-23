@@ -82,6 +82,9 @@
     <Compile Include="Controls\OkCancelControl.xaml.cs">
       <DependentUpon>OkCancelControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\RemoveButtonControl.xaml.cs">
+      <DependentUpon>RemoveButtonControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="DatabaseRelationAttribute.cs" />
     <Compile Include="DatabaseRelationCollectionAttribute.cs" />
@@ -177,6 +180,10 @@
     <Compile Include="View\Student\SelectStudentsWindow.xaml.cs">
       <DependentUpon>SelectStudentsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Subject\RealizeSubjectViewModel.cs" />
+    <Compile Include="View\Subject\RealizeSubjectWindow.xaml.cs">
+      <DependentUpon>RealizeSubjectWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Subject\SelectGlobalSubjectViewModel.cs" />
     <Compile Include="View\Subject\SelectGlobalSubjectWindow.xaml.cs">
       <DependentUpon>SelectGlobalSubjectWindow.xaml</DependentUpon>
@@ -202,6 +209,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\OkCancelControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\RemoveButtonControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -270,6 +281,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Student\SelectStudentsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Subject\RealizeSubjectWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

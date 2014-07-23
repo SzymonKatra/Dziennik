@@ -24,7 +24,8 @@ namespace Dziennik.View
             m_editEndingMarkCommand = new RelayCommand<string>(EditEndingMark);
             m_autoSaveCommand = new RelayCommand(AutoSave);
             m_saveCommand = new RelayCommand(Save);
-            m_realizeSubjectCommand = new RelayCommand(RealizeSubject);
+            m_realizeSubjectCommand = new RelayCommand(RealizeSubject, CanRealizeSubject);
+            m_editRealizedSubjectCommand = new RelayCommand(EditRealizedSubject);
 
             m_database = database;
         }
@@ -45,7 +46,7 @@ namespace Dziennik.View
         public SchoolGroupViewModel SelectedGroup
         {
             get { return m_selectedGroup; }
-            set { m_selectedGroup = value; RaisePropertyChanged("SelectedGroup"); }
+            set { m_selectedGroup = value; RaisePropertyChanged("SelectedGroup"); m_realizeSubjectCommand.RaiseCanExecuteChanged(); }
         }
 
         private StudentInGroupViewModel m_selectedStudent;
@@ -103,6 +104,12 @@ namespace Dziennik.View
         public ICommand RealizeSubjectCommand
         {
             get { return m_realizeSubjectCommand; }
+        }
+
+        private RelayCommand m_editRealizedSubjectCommand;
+        public ICommand EditRealizedSubjectCommand
+        {
+            get { return m_editRealizedSubjectCommand; }
         }
 
         private void AddMark(ObservableCollection<MarkViewModel> param)
@@ -173,8 +180,37 @@ namespace Dziennik.View
         }
         private void RealizeSubject(object e)
         {
-            SelectGlobalSubjectViewModel dialogViewModel = new SelectGlobalSubjectViewModel(m_database.ViewModel.Subjects);
+            RealizeSubjectViewModel dialogViewModel = new RealizeSubjectViewModel(null, m_selectedGroup.Students, GetAvailableSubjects(m_selectedGroup), true);
             GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Main, dialogViewModel);
+            if (dialogViewModel.Result == RealizeSubjectViewModel.RealizeSubjectResult.Ok)
+            {
+                m_selectedGroup.RealizedSubjects.Add(dialogViewModel.RealizedSubject);
+            }
+            if (dialogViewModel.Result != RealizeSubjectViewModel.RealizeSubjectResult.Cancel) m_autoSaveCommand.Execute(null);
+        }
+        private bool CanRealizeSubject(object e)
+        {
+            return m_selectedGroup != null;
+        }
+        private void EditRealizedSubject(object e)
+        {
+            RealizeSubjectViewModel dialogViewModel = new RealizeSubjectViewModel(m_selectedSubject, m_selectedGroup.Students, GetAvailableSubjects(m_selectedGroup));
+            GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Main, dialogViewModel);
+            if (dialogViewModel.Result == RealizeSubjectViewModel.RealizeSubjectResult.RemoveSubject)
+            {
+                m_selectedGroup.RealizedSubjects.Remove(m_selectedSubject);
+                m_selectedSubject = null;
+            }
+            if (dialogViewModel.Result != RealizeSubjectViewModel.RealizeSubjectResult.Cancel) m_autoSaveCommand.Execute(null);
+        }
+        private IEnumerable<GlobalSubjectViewModel> GetAvailableSubjects(SchoolGroupViewModel group)
+        {
+            List<GlobalSubjectViewModel> available = new List<GlobalSubjectViewModel>();
+            foreach (GlobalSubjectViewModel subject in m_database.ViewModel.Subjects)
+            {
+                if (group.RealizedSubjects.FirstOrDefault(x => x.GlobalSubject == subject) == null) available.Add(subject);
+            }
+            return available;
         }
     }
 }

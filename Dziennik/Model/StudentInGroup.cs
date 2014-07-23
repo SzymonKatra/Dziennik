@@ -22,6 +22,7 @@ namespace Dziennik.Model
         {
             FirstSemester = new Semester();
             SecondSemester = new Semester();
+            Presence = new List<RealizedSubjectPresence>();
         }
     }
 }

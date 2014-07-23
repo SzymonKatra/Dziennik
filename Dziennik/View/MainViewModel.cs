@@ -125,7 +125,10 @@ namespace Dziennik.View
                 {
                     database = DatabaseMain.Load(path);
                 }
-                catch { MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Wystąpił błąd podczas odczytywania pliku", "Dziennik", MessageBoxSuperPredefinedButtons.OK); }
+                catch (Exception exception)
+                {
+                    MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Wystąpił błąd podczas odczytywania pliku" + Environment.NewLine + "Treść błędu:" + Environment.NewLine + exception.ToString(), "Dziennik", MessageBoxSuperPredefinedButtons.OK);
+                }
 
                 if (database == null) return;
                 database.Path = path;

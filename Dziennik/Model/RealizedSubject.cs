@@ -11,5 +11,6 @@ namespace Dziennik.Model
         public ulong? GlobalSubjectId { get; set; }
 
         public DateTime RealizedDate { get; set; }
+        public string CustomSubject { get; set; }
     }
 }

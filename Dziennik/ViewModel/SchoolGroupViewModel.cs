@@ -17,7 +17,7 @@ namespace Dziennik.ViewModel
             m_model = schoolGroup;
 
             m_students = new SynchronizedPerItemObservableCollection<StudentInGroupViewModel, StudentInGroup>(m_model.Students, (m) => { return new StudentInGroupViewModel(m); });;
-
+            m_realizedSubjects = new SynchronizedObservableCollection<RealizedSubjectViewModel, RealizedSubject>(m_model.RealizedSubjects, m => new RealizedSubjectViewModel(m));
             //SubscribeStudents();
         }
 

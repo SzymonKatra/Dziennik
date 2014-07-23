@@ -27,20 +27,14 @@ namespace Dziennik.View
             }
         }
 
-        public SelectGlobalSubjectViewModel(ObservableCollection<GlobalSubjectViewModel> subjects)
+        public SelectGlobalSubjectViewModel(IEnumerable<GlobalSubjectViewModel> subjects)
         {
             m_okCommand = new RelayCommand(Ok);
             m_cancelCommand = new RelayCommand(Cancel);
 
             m_subjects = subjects;
 
-            m_categories = new ObservableCollection<string>();
-            foreach (GlobalSubjectViewModel sub in subjects)
-            {
-                string result = m_categories.FirstOrDefault(x => CheckCategory(x, sub.Category));
-                if (result == null) m_categories.Add((sub.Category == null ? string.Empty : sub.Category));
-            }
-            m_categories.Sort();
+            m_categories = new ObservableCollection<string>(GlobalSubjectsListViewModel.GetExistingCategories(subjects));
 
             m_displayedSubjects = new ObservableCollection<GlobalSubjectViewModel>(subjects);
         }
@@ -51,7 +45,7 @@ namespace Dziennik.View
             get { return m_result; }
         }
 
-        private ObservableCollection<GlobalSubjectViewModel> m_subjects;
+        private IEnumerable<GlobalSubjectViewModel> m_subjects;
 
         private ObservableCollection<string> m_categories;
         public ObservableCollection<string> Categories
@@ -110,17 +104,8 @@ namespace Dziennik.View
 
             foreach (GlobalSubjectViewModel subject in m_subjects)
             {
-                if (CheckCategory(subject.Category, m_selectedCategory)) m_displayedSubjects.Add(subject);
+                if (GlobalSubjectsListViewModel.CheckCategory(subject.Category, m_selectedCategory)) m_displayedSubjects.Add(subject);
             }
-        }
-
-        private bool CheckCategory(string category, string categoryToCompare)
-        {
-            if (string.IsNullOrWhiteSpace(category))
-            {
-                return string.IsNullOrWhiteSpace(categoryToCompare);
-            }
-            else return category == categoryToCompare;
         }
     }
 }

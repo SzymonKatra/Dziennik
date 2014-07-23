@@ -18,6 +18,7 @@ namespace Dziennik.ViewModel
 
             m_firstSemester = new SemesterViewModel(m_model.FirstSemester);
             m_secondSemester = new SemesterViewModel(m_model.SecondSemester);
+            m_presence = new SynchronizedObservableCollection<RealizedSubjectPresenceViewModel, RealizedSubjectPresence>(m_model.Presence, m => new RealizedSubjectPresenceViewModel(m));
 
             SemesterSubscribe(m_firstSemester);
             SemesterSubscribe(m_secondSemester);
