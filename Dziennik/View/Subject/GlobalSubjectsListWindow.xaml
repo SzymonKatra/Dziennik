@@ -26,6 +26,7 @@
                   IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Numer" Binding="{Binding Number}"/>
+                <DataGridTextColumn Header="Kategoria" Binding="{Binding Category}"/>
                 <DataGridTextColumn Header="Temat" Binding="{Binding Name}"/>
                 <DataGridTemplateColumn Header="Edytuj">
                     <DataGridTemplateColumn.CellTemplate>

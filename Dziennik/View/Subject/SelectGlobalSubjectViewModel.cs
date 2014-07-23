@@ -41,6 +41,8 @@ namespace Dziennik.View
                 if (result == null) m_categories.Add((sub.Category == null ? string.Empty : sub.Category));
             }
             m_categories.Sort();
+
+            m_displayedSubjects = new ObservableCollection<GlobalSubjectViewModel>(subjects);
         }
 
         private SelectedGlobalSubjectResult m_result = SelectedGlobalSubjectResult.Cancel;
@@ -52,7 +54,7 @@ namespace Dziennik.View
         private ObservableCollection<GlobalSubjectViewModel> m_subjects;
 
         private ObservableCollection<string> m_categories;
-        private ObservableCollection<string> Categories
+        public ObservableCollection<string> Categories
         {
             get { return m_categories; }
             set { m_categories = value; RaisePropertyChanged("Categories"); }

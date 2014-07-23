@@ -22,6 +22,7 @@
                   SelectedItem="{Binding SelectedSubject, Mode=TwoWay}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Numer" Binding="{Binding Number}"/>
+                <DataGridTextColumn Header="Kategoria" Binding="{Binding Category}"/>
                 <DataGridTextColumn Header="Temat" Binding="{Binding Name}"/>
             </DataGrid.Columns>
         </DataGrid>
