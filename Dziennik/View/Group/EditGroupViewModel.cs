@@ -20,13 +20,16 @@ namespace Dziennik.View
             RemoveGroup,
         }
 
-        public EditGroupViewModel(SchoolGroupViewModel schoolGroup, ObservableCollection<GlobalStudentViewModel> globalStudents)
+        public EditGroupViewModel(SchoolGroupViewModel schoolGroup, ObservableCollection<GlobalStudentViewModel> globalStudents, ICommand autoSaveCommand)
         {
             m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
             m_addStudentCommand = new RelayCommand(AddStudent);
             m_removeStudentsCommand = new RelayCommand(RemoveStudents);
             m_removeGroupCommand = new RelayCommand(RemoveGroup);
+            m_showGlobalSubjectsListCommand = new RelayCommand(ShowGlobalSubjectsList);
+
+            m_autoSaveCommand = autoSaveCommand;
 
             m_schoolGroup = schoolGroup;
             m_globalStudents = globalStudents;
@@ -40,6 +43,7 @@ namespace Dziennik.View
             get { return m_result; }
         }
 
+        private ICommand m_autoSaveCommand;
         private SchoolGroupViewModel m_schoolGroup;
         private ObservableCollection<GlobalStudentViewModel> m_globalStudents;
 
@@ -81,6 +85,12 @@ namespace Dziennik.View
             get { return m_removeGroupCommand; }
         }
 
+        private RelayCommand m_showGlobalSubjectsListCommand;
+        public ICommand ShowGlobalSubjectsListCommand
+        {
+            get { return m_showGlobalSubjectsListCommand; }
+        }
+
         private void Ok(object param)
         {
             m_result = EditGroupResult.Ok;
@@ -92,11 +102,14 @@ namespace Dziennik.View
         {
             return m_nameValid;
         }
-        private void Cancel(object param)
+        private void Cancel(object e)
         {
             m_result = EditGroupResult.Cancel;
 
-            GlobalConfig.Dialogs.Close(this);
+            if (e == null)
+            {
+                GlobalConfig.Dialogs.Close(this);
+            }
         }
         private void AddStudent(object param)
         {
@@ -152,6 +165,11 @@ namespace Dziennik.View
 
             m_result = EditGroupResult.RemoveGroup;
             GlobalConfig.Dialogs.Close(this);
+        }
+        private void ShowGlobalSubjectsList(object e)
+        {
+            GlobalSubjectsListViewModel dialogViewModel = new GlobalSubjectsListViewModel(m_schoolGroup.GlobalSubjects, m_autoSaveCommand);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
 
         public string Error

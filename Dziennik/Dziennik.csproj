@@ -36,6 +36,9 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="fastJSON">
       <HintPath>..\libs\fastJSON.dll</HintPath>
@@ -188,10 +191,6 @@
     <Compile Include="View\Subject\SelectGlobalSubjectWindow.xaml.cs">
       <DependentUpon>SelectGlobalSubjectWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Subject\TypeSubjectCategoryViewModel.cs" />
-    <Compile Include="View\Subject\TypeSubjectCategoryWindow.xaml.cs">
-      <DependentUpon>TypeSubjectCategoryWindow.xaml</DependentUpon>
-    </Compile>
     <Page Include="Controls\DirectorySelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -292,10 +291,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Subject\TypeSubjectCategoryWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -342,6 +337,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\options.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

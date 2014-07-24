@@ -234,7 +234,6 @@ namespace Dziennik
             windowViewModelMappings.Add(typeof(GlobalSubjectsListViewModel), vm => new GlobalSubjectsListWindow((GlobalSubjectsListViewModel)vm));
             windowViewModelMappings.Add(typeof(EditGlobalSubjectViewModel), vm => new EditGlobalSubjectWindow((EditGlobalSubjectViewModel)vm));
             windowViewModelMappings.Add(typeof(SelectGlobalSubjectViewModel), vm => new SelectGlobalSubjectWindow((SelectGlobalSubjectViewModel)vm));
-            windowViewModelMappings.Add(typeof(TypeSubjectCategoryViewModel), vm => new TypeSubjectCategoryWindow((TypeSubjectCategoryViewModel)vm));
             windowViewModelMappings.Add(typeof(RealizeSubjectViewModel), vm => new RealizeSubjectWindow((RealizeSubjectViewModel)vm));
 
             Dialogs = new DialogService(windowViewModelMappings);

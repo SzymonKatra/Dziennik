@@ -26,10 +26,8 @@ namespace Dziennik.View
 
             m_subject = subject;
             m_existingSubjects = existingSubjects;
-            m_existingCategories = GlobalSubjectsListViewModel.GetExistingCategories(existingSubjects);
 
-            m_number = m_firstNumber = (isAddingMode ? GlobalSubjectsListViewModel.GetNextSubjectNumber(existingSubjects, subject.Category) : subject.Number);
-            m_category = m_firstCategory = subject.Category;
+            m_number = m_firstNumber = (isAddingMode ? GlobalSubjectsListViewModel.GetNextSubjectNumber(existingSubjects) : subject.Number);
             m_name = subject.Name;
 
             m_isAddingMode = isAddingMode;
@@ -59,7 +57,6 @@ namespace Dziennik.View
 
         private GlobalSubjectViewModel m_subject;
         private IEnumerable<GlobalSubjectViewModel> m_existingSubjects;
-        private IEnumerable<string> m_existingCategories;
 
         private bool m_isAddingMode = false;
         public bool IsAddingMode
@@ -75,34 +72,6 @@ namespace Dziennik.View
             set { m_number = value; RaisePropertyChanged("Number"); }
         }
 
-        private string m_firstCategory;
-        private string m_category;
-        public string Category
-        {
-            get { return m_category; }
-            set
-            {
-                m_category = value;
-                if (m_isAddingMode)
-                {
-                    Number = GlobalSubjectsListViewModel.GetNextSubjectNumber(m_existingSubjects, m_category);
-                }
-                else
-                {
-                    if (GlobalSubjectsListViewModel.CheckCategory(m_category, m_firstCategory))
-                    {
-                        Number = m_firstNumber;
-                    }
-                    else
-                    {
-                        Number = GlobalSubjectsListViewModel.GetNextSubjectNumber(m_existingSubjects, m_category);
-                    }
-                }
-                RaisePropertyChanged("Category");
-                RaisePropertyChanged("Number");
-            }
-        }
-
         private string m_name;
         public string Name
         {
@@ -112,8 +81,7 @@ namespace Dziennik.View
 
         private void Ok(object e)
         {
-            m_subject.Number = GlobalSubjectsListViewModel.GetNextSubjectNumber(m_existingSubjects, m_category);
-            m_subject.Category = m_category;
+            m_subject.Number = GlobalSubjectsListViewModel.GetNextSubjectNumber(m_existingSubjects);
             m_subject.Name = m_name;
             m_result = EditGlobalSubjectResult.Ok;
             GlobalConfig.Dialogs.Close(this);
@@ -121,7 +89,10 @@ namespace Dziennik.View
         private void Cancel(object e)
         {
             m_result = EditGlobalSubjectResult.Cancel;
-            GlobalConfig.Dialogs.Close(this);
+            if (e == null)
+            {
+                GlobalConfig.Dialogs.Close(this);
+            }
         }
         private void RemoveSubject(object e)
         {

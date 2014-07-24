@@ -20,7 +20,7 @@ namespace Dziennik.View
             RemoveMark,
         }
 
-        public EditMarkViewModel(MarkViewModel mark, bool isAddingMode = false)
+        public EditMarkViewModel(MarkViewModel mark, StudentInGroupViewModel owner = null, bool isAddingMode = false)
         {
             m_isAddingMode = isAddingMode;
 
@@ -40,6 +40,8 @@ namespace Dziennik.View
             m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
             m_removeMarkCommand = new RelayCommand(RemoveMark, CanRemoveMark);
+
+            if (owner != null) m_title = string.Format("{0} - {1} {2}", owner.Number, owner.GlobalStudent.Name, owner.GlobalStudent.Surname);
         }
 
         private EditMarkResult m_result = EditMarkResult.Cancel;
@@ -56,6 +58,13 @@ namespace Dziennik.View
         }
 
         private MarkViewModel m_mark;
+
+        private string m_title = "Edytuj ocenę";
+        public string Title
+        {
+            get { return m_title; }
+            set { m_title = value; RaisePropertyChanged("Title"); }
+        }
 
         private decimal m_value;
         private bool m_valueInputValid = false;
@@ -152,7 +161,10 @@ namespace Dziennik.View
         private void Cancel(object e)
         {
             m_result = EditMarkResult.Cancel;
-            GlobalConfig.Dialogs.Close(this);
+            if (e == null)
+            {
+                GlobalConfig.Dialogs.Close(this);
+            }
         }
         private void RemoveMark(object e)
         {
@@ -207,6 +219,12 @@ namespace Dziennik.View
             {
                 m_okCommand.RaiseCanExecuteChanged();
                 return "Wprowadź ocenę z zakresu <1; 6>";
+            }
+
+            if(result % 0.5M != 0M)
+            {
+                m_okCommand.RaiseCanExecuteChanged();
+                return "Wprowadź całkowitą ocenę lub połówkę";
             }
 
             m_value = result;

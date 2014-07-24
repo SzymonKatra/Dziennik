@@ -27,16 +27,12 @@ namespace Dziennik.View
             }
         }
 
-        public SelectGlobalSubjectViewModel(IEnumerable<GlobalSubjectViewModel> subjects)
+        public SelectGlobalSubjectViewModel(ObservableCollection<GlobalSubjectViewModel> subjects)
         {
             m_okCommand = new RelayCommand(Ok);
             m_cancelCommand = new RelayCommand(Cancel);
 
             m_subjects = subjects;
-
-            m_categories = new ObservableCollection<string>(GlobalSubjectsListViewModel.GetExistingCategories(subjects));
-
-            m_displayedSubjects = new ObservableCollection<GlobalSubjectViewModel>(subjects);
         }
 
         private SelectedGlobalSubjectResult m_result = SelectedGlobalSubjectResult.Cancel;
@@ -45,27 +41,11 @@ namespace Dziennik.View
             get { return m_result; }
         }
 
-        private IEnumerable<GlobalSubjectViewModel> m_subjects;
-
-        private ObservableCollection<string> m_categories;
-        public ObservableCollection<string> Categories
+        private ObservableCollection<GlobalSubjectViewModel> m_subjects;
+        public ObservableCollection<GlobalSubjectViewModel> Subjects
         {
-            get { return m_categories; }
-            set { m_categories = value; RaisePropertyChanged("Categories"); }
-        }
-
-        private string m_selectedCategory;
-        public string SelectedCategory
-        {
-            get { return m_selectedCategory; }
-            set { m_selectedCategory = value; RaisePropertyChanged("SelectedCategory"); UpdateDisplayedSubjects(); }
-        }
-
-        private ObservableCollection<GlobalSubjectViewModel> m_displayedSubjects;
-        public ObservableCollection<GlobalSubjectViewModel> DisplayedSubjects
-        {
-            get { return m_displayedSubjects; }
-            set { m_displayedSubjects = value; RaisePropertyChanged("DisplayedSubjects"); }
+            get { return m_subjects; }
+            set { m_subjects = value; RaisePropertyChanged("Subjects"); }
         }
 
         private GlobalSubjectViewModel m_selectedSubject;
@@ -94,17 +74,9 @@ namespace Dziennik.View
         private void Cancel(object e)
         {
             m_result = SelectedGlobalSubjectResult.Cancel;
-            GlobalConfig.Dialogs.Close(this);
-        }
-
-        private void UpdateDisplayedSubjects()
-        {
-            m_displayedSubjects.Clear();
-            if (m_selectedCategory == null) return;
-
-            foreach (GlobalSubjectViewModel subject in m_subjects)
+            if (e == null)
             {
-                if (GlobalSubjectsListViewModel.CheckCategory(subject.Category, m_selectedCategory)) m_displayedSubjects.Add(subject);
+                GlobalConfig.Dialogs.Close(this);
             }
         }
     }

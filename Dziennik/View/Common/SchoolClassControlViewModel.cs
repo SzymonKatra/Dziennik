@@ -115,7 +115,7 @@ namespace Dziennik.View
         private void AddMark(ObservableCollection<MarkViewModel> param)
         {
             MarkViewModel mark = new MarkViewModel();
-            EditMarkViewModel dialogViewModel = new EditMarkViewModel(mark, true);
+            EditMarkViewModel dialogViewModel = new EditMarkViewModel(mark, m_selectedStudent, true);
             GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Main, dialogViewModel);
             if (dialogViewModel.Result == EditMarkViewModel.EditMarkResult.Ok)
             {
@@ -125,7 +125,7 @@ namespace Dziennik.View
         }
         private void EditMark(ObservableCollection<MarkViewModel> param)
         {
-            EditMarkViewModel dialogViewModel = new EditMarkViewModel(m_selectedMark);
+            EditMarkViewModel dialogViewModel = new EditMarkViewModel(m_selectedMark, m_selectedStudent);
             GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Main, dialogViewModel);
             if (dialogViewModel.Result == EditMarkViewModel.EditMarkResult.RemoveMark)
             {
@@ -206,7 +206,7 @@ namespace Dziennik.View
         private IEnumerable<GlobalSubjectViewModel> GetAvailableSubjects(SchoolGroupViewModel group)
         {
             List<GlobalSubjectViewModel> available = new List<GlobalSubjectViewModel>();
-            foreach (GlobalSubjectViewModel subject in m_database.ViewModel.Subjects)
+            foreach (GlobalSubjectViewModel subject in group.GlobalSubjects)
             {
                 if (group.RealizedSubjects.FirstOrDefault(x => x.GlobalSubject == subject) == null) available.Add(subject);
             }

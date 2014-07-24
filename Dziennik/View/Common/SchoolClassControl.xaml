@@ -11,10 +11,45 @@
     <Grid>
         <TabControl TabStripPlacement="Left">
             <TabControl.Resources>
-                <Style TargetType="{x:Type TabItem}">
+                <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource tabItemNiceStyle}">
                     <Setter Property="Height" Value="50"/>
                 </Style>
             </TabControl.Resources>
+            <TabItem Header="Tematy">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <WrapPanel Grid.Row="0">
+                        <Button Content="Zrealizuj temat" Style="{StaticResource wrapPanelButtonStyle}" Command="{Binding RealizeSubjectCommand}"/>
+                    </WrapPanel>
+
+                    <DataGrid Grid.Row="1"
+                              ItemsSource="{Binding SelectedGroup.RealizedSubjects}"
+                              CanUserAddRows="False"
+                              CanUserSortColumns="False"
+                              SelectionMode="Single"
+                              IsReadOnly="True"
+                              AutoGenerateColumns="False"
+                              SelectedItem="{Binding SelectedSubject, Mode=TwoWay}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Numer" Binding="{Binding GlobalSubject.Number}"/>
+                            <DataGridTextColumn Header="Data zrealizowania" Binding="{Binding RealizedDate}"/>
+                            <DataGridTextColumn Header="Temat" Binding="{Binding Name}"/>
+                            <DataGridTemplateColumn Header="Edytuj">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <my:EditButtonControl Command="{Binding DataContext.EditRealizedSubjectCommand, ElementName=rootSchoolClassControl}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            
             <TabItem Header="Oceny">
                 <DataGrid ItemsSource="{Binding SelectedGroup.Students}"
                   CanUserAddRows="False"
@@ -25,8 +60,8 @@
                   SelectedItem="{Binding SelectedStudent, Mode=TwoWay}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Nr" Binding="{Binding Number}"/>
-                        <DataGridTextColumn Header="Imię" Binding="{Binding GlobalStudent.Name}" Visibility="{Binding ShowName, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
                         <DataGridTextColumn Header="Nazwisko" Binding="{Binding GlobalStudent.Surname}" Visibility="{Binding ShowSurname, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
+                        <DataGridTextColumn Header="Imię" Binding="{Binding GlobalStudent.Name}" Visibility="{Binding ShowName, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
                         <DataGridTextColumn Header="Email" Binding="{Binding GlobalStudent.Email}" Visibility="{Binding ShowEmail, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
                         <DataGridTemplateColumn Header="Oceny (1)" Visibility="{Binding ShowFirstMarks, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
                             <DataGridTemplateColumn.CellTemplate>
@@ -65,53 +100,6 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-            </TabItem>
-
-            <TabItem Header="Obecności">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <DatePicker Grid.Row="0" Width="150" HorizontalAlignment="Left" DisplayDateStart=""/>
-                </Grid>
-            </TabItem>
-
-            <TabItem Header="Tematy">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <WrapPanel Grid.Row="0">
-                        <Button Content="Zrealizuj temat" Style="{StaticResource wrapPanelButtonStyle}" Command="{Binding RealizeSubjectCommand}"/>
-                    </WrapPanel>
-
-                    <DataGrid Grid.Row="1"
-                              ItemsSource="{Binding SelectedGroup.RealizedSubjects}"
-                              CanUserAddRows="False"
-                              CanUserSortColumns="False"
-                              SelectionMode="Single"
-                              IsReadOnly="True"
-                              AutoGenerateColumns="False"
-                              SelectedItem="{Binding SelectedSubject, Mode=TwoWay}">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Numer" Binding="{Binding GlobalSubject.Number}"/>
-                            <DataGridTextColumn Header="Data zrealizowania" Binding="{Binding RealizedDate}"/>
-                            <DataGridTextColumn Header="Temat" Binding="{Binding Name}"/>
-                            <DataGridTextColumn Header="Kategoria" Binding="{Binding GlobalSubject.Category}"/>
-                            <DataGridTemplateColumn Header="Edytuj">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <my:EditButtonControl Command="{Binding DataContext.EditRealizedSubjectCommand, ElementName=rootSchoolClassControl}"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

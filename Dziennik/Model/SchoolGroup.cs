@@ -11,11 +11,13 @@ namespace Dziennik.Model
     {
         public string Name { get; set; }
         public List<StudentInGroup> Students { get; set; }
+        public List<GlobalSubject> Subjects { get; set; }
         public List<RealizedSubject> RealizedSubjects { get; set; }
 
         public SchoolGroup()
         {
             Students = new List<StudentInGroup>();
+            Subjects = new List<GlobalSubject>();
             RealizedSubjects = new List<RealizedSubject>();
         }
     }

@@ -4,6 +4,7 @@
         xmlns:my="clr-namespace:Dziennik.Controls"
         Title="Edytuj ucznia" Height="300" Width="300"
         WindowStartupLocation="CenterOwner">
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="70"/>
@@ -20,14 +21,14 @@
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="Nr"/>
-        <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="Imię"/>
-        <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource textBlockTitleStyle}" Text="Nazwisko"/>
+        <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="Nazwisko"/>
+        <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource textBlockTitleStyle}" Text="Imię"/>
         <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource textBlockTitleStyle}" Text="Email"/>
         <TextBlock Grid.Column="0" Grid.Row="4" Style="{StaticResource textBlockTitleStyle}" Text="Dodatkowe informacje" TextWrapping="Wrap"/>
         
         <TextBox Grid.Column="1" Grid.Row="0" IsEnabled="False" Text="{Binding IdInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
-        <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" Text="{Binding Name, Mode=TwoWay}"/>
-        <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource inputControlStyle}" Text="{Binding Surname, Mode=TwoWay}"/>
+        <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" Text="{Binding Surname, Mode=TwoWay}"/>
+        <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource inputControlStyle}" Text="{Binding Name, Mode=TwoWay}"/>
         <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource inputControlStyle}" Text="{Binding Email, Mode=TwoWay}"/>
         <TextBox Grid.Column="1" Grid.Row="4" Style="{StaticResource inputControlStyle}" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding AdditionalInformation, Mode=TwoWay}"/>
 

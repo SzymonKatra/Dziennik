@@ -5,6 +5,7 @@
         xmlns:my="clr-namespace:Dziennik.Controls"
         Title="Uczniowie" Height="300" Width="500"
         WindowStartupLocation="CenterOwner">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -25,8 +26,8 @@
                   AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Nr" Binding="{Binding Number}"/>
-                <DataGridTextColumn Header="Imię" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Nazwisko" Binding="{Binding Surname}"/>
+                <DataGridTextColumn Header="Imię" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Email" Binding="{Binding Email}"/>
                 <DataGridTemplateColumn Header="Edytuj">
                     <DataGridTemplateColumn.CellTemplate>

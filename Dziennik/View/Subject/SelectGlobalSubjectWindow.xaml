@@ -4,16 +4,15 @@
         xmlns:my="clr-namespace:Dziennik.Controls"
         Title="Wybierz temat" Height="300" Width="300"
         WindowStartupLocation="CenterOwner">
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-        <ComboBox Grid.Row="0" Style="{StaticResource inputControlStyle}" ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"/>
-        <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding DisplayedSubjects}"
+        <DataGrid Grid.Row="0"
+                  ItemsSource="{Binding Subjects}"
                   CanUserAddRows="False"
                   CanUserSortColumns="False"
                   SelectionMode="Single"
@@ -22,10 +21,9 @@
                   SelectedItem="{Binding SelectedSubject, Mode=TwoWay}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Numer" Binding="{Binding Number}"/>
-                <DataGridTextColumn Header="Kategoria" Binding="{Binding Category}"/>
                 <DataGridTextColumn Header="Temat" Binding="{Binding Name}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <my:OkCancelControl Grid.Row="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
+        <my:OkCancelControl Grid.Row="1" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>
 </Window>

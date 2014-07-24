@@ -25,7 +25,7 @@ namespace Dziennik.View
             m_mark = initialMark;
             if (initialMark == 0M)
             {
-                m_mark = Ext.DecimalRoundHalfUp(averageMark - 0.1M);
+                m_mark = decimal.Round(averageMark - 0.1M, MidpointRounding.AwayFromZero);
             }
 
             m_markInput = m_mark.ToString(CultureInfo.InvariantCulture);
@@ -73,7 +73,10 @@ namespace Dziennik.View
         }
         private void Cancel(object e)
         {
-            GlobalConfig.Dialogs.Close(this);
+            if (e == null)
+            {
+                GlobalConfig.Dialogs.Close(this);
+            }
         }
 
         public string Error

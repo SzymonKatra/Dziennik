@@ -209,10 +209,13 @@ namespace Dziennik.View
             m_result = true;
             GlobalConfig.Dialogs.Close(this);
         }
-        private void Cancel(object param)
+        private void Cancel(object e)
         {
             m_result = false;
-            GlobalConfig.Dialogs.Close(this);
+            if (e == null)
+            {
+                GlobalConfig.Dialogs.Close(this);
+            }
         }
         private void SelectAll(object param)
         {

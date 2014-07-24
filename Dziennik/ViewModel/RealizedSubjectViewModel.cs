@@ -35,7 +35,7 @@ namespace Dziennik.ViewModel
         }
         public bool IsCustom
         {
-            get { return !string.IsNullOrWhiteSpace(m_model.CustomSubject); }
+            get { return m_globalSubject == null; }
         }
         public string Name
         {

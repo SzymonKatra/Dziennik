@@ -8,8 +8,9 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
         xmlns:c="clr-namespace:Dziennik.CommandUtils"
         xmlns:local="clr-namespace:Dziennik"
-        Title="Dziennik" Height="350" Width="900"
-        WindowStartupLocation="CenterScreen">
+        Title="Dziennik" Height="500" Width="900"
+        WindowStartupLocation="CenterOwner"
+        WindowState="Maximized">
     
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
@@ -33,6 +34,9 @@
         </WrapPanel>
         
         <TabControl Grid.Row="1" ItemsSource="{Binding OpenedSchoolClasses}" SelectedValue="{Binding SelectedClass, Mode=TwoWay}">
+            <TabControl.Resources>
+                <Style TargetType="TabItem" BasedOn="{StaticResource tabItemNiceStyle}"/>
+            </TabControl.Resources>
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <Grid>

@@ -57,7 +57,7 @@ namespace Dziennik.ViewModel
 
                 foreach (MarkViewModel item in m_marks) if (item.IsValueValid) sum += item.Value * item.Weight;
 
-                return Ext.DecimalRoundHalfUp(sum / (decimal)validMarksWeight, GlobalConfig.DecimalRoundingPoints);
+                return decimal.Round(sum / (decimal)validMarksWeight, GlobalConfig.DecimalRoundingPoints, MidpointRounding.AwayFromZero);
             }
         }
 

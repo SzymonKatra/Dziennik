@@ -19,11 +19,18 @@ namespace Dziennik.View
             m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
             m_selectStudentsCommand = new RelayCommand(SelectStudents);
+            m_showGlobalSubjectsListCommand = new RelayCommand(ShowGlobalSubjectsList);
 
             m_globalStudentCollection = globalStudentCollection;
+
+            foreach (var gStudent in m_globalStudentCollection)
+            {
+                m_selectedStudents.Add(gStudent.Number);
+            }
+            m_selectedStudentsInput = SelectionParser.Create(m_selectedStudents);
         }
 
-        private SchoolGroupViewModel m_result = null;
+        private SchoolGroupViewModel m_result = new SchoolGroupViewModel();
         public SchoolGroupViewModel Result
         {
             get { return m_result; }
@@ -73,6 +80,12 @@ namespace Dziennik.View
             get { return m_selectStudentsCommand; }
         }
 
+        private RelayCommand m_showGlobalSubjectsListCommand;
+        public ICommand ShowGlobalSubjectsListCommand
+        {
+            get { return m_showGlobalSubjectsListCommand; }
+        }
+
         private void Ok(object param)
         {
             if (m_selectedStudents.Count <= 0)
@@ -83,8 +96,6 @@ namespace Dziennik.View
             if (!m_renumberFromOne) m_selectedStudents.Sort();
 
             int index = 1;
-
-            m_result = new SchoolGroupViewModel();
 
             m_result.Name = m_name;
             foreach (int selStudent in m_selectedStudents)
@@ -102,11 +113,14 @@ namespace Dziennik.View
         {
             return m_nameValid && m_selectedStudentsInputValid;
         }
-        private void Cancel(object param)
+        private void Cancel(object e)
         {
             m_result = null;
 
-            GlobalConfig.Dialogs.Close(this);
+            if (e == null)
+            {
+                GlobalConfig.Dialogs.Close(this);
+            }
         }
         private void SelectStudents(object param)
         {
@@ -116,6 +130,11 @@ namespace Dziennik.View
             {
                 SelectedStudentsInput = dialogViewModel.ResultSelectionString;
             }
+        }
+        private void ShowGlobalSubjectsList(object e)
+        {
+            GlobalSubjectsListViewModel dialogViewModel = new GlobalSubjectsListViewModel(m_result.GlobalSubjects, new RelayCommand((x) => { }));
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
 
         public string Error

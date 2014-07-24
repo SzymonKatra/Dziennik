@@ -42,10 +42,6 @@
         <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
             <Button Content="Wszyscy uczniowie" Style="{StaticResource commonButtonStyle}" Command="{Binding ShowGlobalStudentsListCommand}"/>
         </Grid>
-        <Grid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">
-            <Button Content="Wszystkie tematy" Style="{StaticResource commonButtonStyle}" Command="{Binding ShowGlobalSubjectsListCommand}"/>
-        </Grid>
-
         <Grid Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width=".65*"/>

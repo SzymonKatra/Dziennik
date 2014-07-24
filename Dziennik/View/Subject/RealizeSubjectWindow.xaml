@@ -4,6 +4,7 @@
         xmlns:my="clr-namespace:Dziennik.Controls"
         Title="Realizacja tematu" Height="300" Width="300"
         WindowStartupLocation="CenterOwner">
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="120"/>
@@ -47,12 +48,12 @@
                 <DataGridTemplateColumn Header="Obecność">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding Presence.WasPresent, Mode=TwoWay}"/>
+                            <CheckBox IsChecked="{Binding WasPresentCache, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Imię" Binding="{Binding Student.GlobalStudent.Name}"/>
                 <DataGridTextColumn Header="Nazwisko" Binding="{Binding Student.GlobalStudent.Surname}"/>
+                <DataGridTextColumn Header="Imię" Binding="{Binding Student.GlobalStudent.Name}"/>
             </DataGrid.Columns>
         </DataGrid>
         

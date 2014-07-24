@@ -4,12 +4,14 @@
         xmlns:my="clr-namespace:Dziennik.Controls"
         Title="Dodaj grupę" Height="300" Width="300"
         WindowStartupLocation="CenterOwner">
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="70"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
@@ -34,6 +36,10 @@
             <Button Grid.Column="1" Margin="0,5,10,5" Content="..." Command="{Binding SelectStudentsCommand}"/>
         </Grid>
         
-        <my:OkCancelControl Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
+        <Grid Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2">
+            <Button Style="{StaticResource commonButtonStyle}" Content="Wszystkie tematy" Command="{Binding ShowGlobalSubjectsListCommand}"/>
+        </Grid>
+        
+        <my:OkCancelControl Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>
 </Window>

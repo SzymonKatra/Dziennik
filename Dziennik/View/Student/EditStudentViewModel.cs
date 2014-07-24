@@ -133,7 +133,10 @@ namespace Dziennik.View
         private void Cancel(object e)
         {
             m_result = EditStudentResult.Cancel;
-            GlobalConfig.Dialogs.Close(this);
+            if (e == null)
+            {
+                GlobalConfig.Dialogs.Close(this);
+            }
         }
         private void RemoveStudent(object e)
         {

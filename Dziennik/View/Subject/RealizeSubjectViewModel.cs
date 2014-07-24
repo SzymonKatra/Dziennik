@@ -34,6 +34,13 @@ namespace Dziennik.View
                 get { return m_presence; }
                 set { m_presence = value; RaisePropertyChanged("Presence"); }
             }
+
+            private bool m_wasPresentCache;
+            public bool WasPresentCache
+            {
+                get { return m_wasPresentCache; }
+                set { m_wasPresentCache = value; }
+            }
         }
 
         public RealizeSubjectViewModel(RealizedSubjectViewModel realizedSubject, IEnumerable<StudentInGroupViewModel> students, IEnumerable<GlobalSubjectViewModel> availableSubjects, bool isAddingMode = false)
@@ -46,7 +53,7 @@ namespace Dziennik.View
             m_isAddingMode = isAddingMode;
             m_realizedSubject = realizedSubject;
             m_students = students;
-            m_availableSubjects = availableSubjects;
+            m_availableSubjects = new ObservableCollection<GlobalSubjectViewModel>(availableSubjects);
 
             if (!m_isAddingMode)
             {
@@ -67,11 +74,12 @@ namespace Dziennik.View
                 if (isAddingMode)
                 {
                     pair.Presence = new RealizedSubjectPresenceViewModel() { RealizedSubject = m_realizedSubject };
-                    //pair.Presence.WasPresent = true;
+                    pair.Presence.WasPresent = pair.WasPresentCache = true;
                 }
                 else
                 {
                     pair.Presence = student.Presence.First(x => x.RealizedSubject == m_realizedSubject);
+                    pair.WasPresentCache = pair.Presence.WasPresent;
                 }
                 m_pairs.Add(pair);
             }
@@ -96,7 +104,7 @@ namespace Dziennik.View
             get { return m_realizedSubject; }
         }
         private IEnumerable<StudentInGroupViewModel> m_students;
-        private IEnumerable<GlobalSubjectViewModel> m_availableSubjects;
+        private ObservableCollection<GlobalSubjectViewModel> m_availableSubjects;
 
         private ObservableCollection<StudentPresencePair> m_pairs = new ObservableCollection<StudentPresencePair>();
         public ObservableCollection<StudentPresencePair> Pairs
@@ -165,6 +173,10 @@ namespace Dziennik.View
                 m_realizedSubject.GlobalSubject = m_selectedSubject;
             }
             m_realizedSubject.RealizedDate = m_realizeDate;
+            foreach (var pair in m_pairs)
+            {
+                pair.Presence.WasPresent = pair.WasPresentCache;
+            }
             if (m_isAddingMode)
             {
                 foreach (var pair in m_pairs)
@@ -182,7 +194,10 @@ namespace Dziennik.View
         private void Cancel(object e)
         {
             m_result = RealizeSubjectResult.Cancel;
-            GlobalConfig.Dialogs.Close(this);
+            if (e == null)
+            {
+                GlobalConfig.Dialogs.Close(this);
+            }
         }
         private void RemoveSubject(object e)
         {

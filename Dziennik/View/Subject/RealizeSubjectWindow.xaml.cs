@@ -22,6 +22,9 @@ namespace Dziennik.View
         {
             InitializeComponent();
 
+            this.Width = SystemParameters.PrimaryScreenWidth * 0.7;
+            this.Height = SystemParameters.PrimaryScreenHeight * 0.5;
+
             this.DataContext = viewModel;
 
             GlobalConfig.Dialogs.Register(this, viewModel);

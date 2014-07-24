@@ -4,6 +4,7 @@
         xmlns:my="clr-namespace:Dziennik.Controls"
         Title="Edytuj ocenę" Height="300" Width="300"
         WindowStartupLocation="CenterOwner">
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="70"/>

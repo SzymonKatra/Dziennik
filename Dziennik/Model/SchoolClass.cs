@@ -12,13 +12,11 @@ namespace Dziennik.Model
         public string Name { get; set; }
         public List<GlobalStudent> Students { get; set; }
         public List<SchoolGroup> Groups { get; set; }
-        public List<GlobalSubject> Subjects { get; set; }
 
         public SchoolClass()
         {
             Students = new List<GlobalStudent>();
             Groups = new List<SchoolGroup>();
-            Subjects = new List<GlobalSubject>();
         }
     }
 }

@@ -33,10 +33,5 @@ namespace Dziennik.ViewModel
             get { return m_model.Name; }
             set { m_model.Name = value; RaisePropertyChanged("Name"); }
         }
-        public string Category
-        {
-            get { return m_model.Category; }
-            set { m_model.Category = value; RaisePropertyChanged("Category"); }
-        }
     }
 }

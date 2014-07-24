@@ -114,8 +114,8 @@ namespace Dziennik.View
 
                         GlobalStudentViewModel student = new GlobalStudentViewModel();
                         student.Number = GetNextStudentId();
-                        student.Surname = line.Substring(0, nameSurnameSeparatorIndex);
-                        student.Name = line.Substring(nameSurnameSeparatorIndex + 1);
+                        student.Surname = (nameSurnameSeparatorIndex <0 ? line : line.Substring(0, nameSurnameSeparatorIndex));
+                        student.Name = (nameSurnameSeparatorIndex < 0 ? string.Empty : line.Substring(nameSurnameSeparatorIndex + 1));
 
                         m_students.Add(student);
                         ++added;

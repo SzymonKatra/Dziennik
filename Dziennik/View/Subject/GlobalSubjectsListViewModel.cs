@@ -69,11 +69,7 @@ namespace Dziennik.View
         private void AutoAddSubjectsClipboard(object e)
         {
             if (MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Czy chcesz kontynuować?", "Dziennik", MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
-            TypeSubjectCategoryViewModel dialogViewModel = new TypeSubjectCategoryViewModel();
-            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
-            if (dialogViewModel.Result != TypeSubjectCategoryViewModel.TypeSubjectCategoryResult.Ok) return;
-            string category = dialogViewModel.Category;
-            int currentNumber = GetNextSubjectNumber(m_subjects, category);
+            int currentNumber = GetNextSubjectNumber(m_subjects);
             try
             {
                 if (Clipboard.ContainsData(DataFormats.Text))
@@ -90,7 +86,6 @@ namespace Dziennik.View
 
                         GlobalSubjectViewModel subject = new GlobalSubjectViewModel();
                         subject.Number = currentNumber++;
-                        subject.Category = category;
                         subject.Name = line;
                         m_subjects.Add(subject);
 
@@ -117,31 +112,12 @@ namespace Dziennik.View
             if (dialogViewModel.Result != EditGlobalSubjectViewModel.EditGlobalSubjectResult.Cancel) m_autoSaveCommand.Execute(null);
         }
 
-        public static List<string> GetExistingCategories(IEnumerable<GlobalSubjectViewModel> subjects)
-        {
-            List<string> result = new List<string>();
-            foreach (GlobalSubjectViewModel sub in subjects)
-            {
-                string findResult = result.FirstOrDefault(x => CheckCategory(x, sub.Category));
-                if (findResult == null) result.Add((sub.Category == null ? string.Empty : sub.Category));
-            }
-            result.Sort();
-            return result;
-        }
-        public static bool CheckCategory(string category, string categoryToCompare)
-        {
-            if (string.IsNullOrWhiteSpace(category))
-            {
-                return string.IsNullOrWhiteSpace(categoryToCompare);
-            }
-            else return category == categoryToCompare;
-        }
-        public static int GetNextSubjectNumber(IEnumerable<GlobalSubjectViewModel> subjects, string category)
+        public static int GetNextSubjectNumber(IEnumerable<GlobalSubjectViewModel> subjects)
         {
             int highestNumber = 0;
             foreach (GlobalSubjectViewModel sub in subjects)
             {
-                if (CheckCategory(sub.Category, category) && sub.Number > highestNumber) highestNumber = sub.Number;
+                if (sub.Number > highestNumber) highestNumber = sub.Number;
             }
 
             return highestNumber + 1;

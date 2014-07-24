@@ -4,13 +4,13 @@
         xmlns:my="clr-namespace:Dziennik.Controls"
         Title="Edytuj temat" Height="300" Width="300"
         WindowStartupLocation="CenterOwner">
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="70"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
@@ -20,13 +20,10 @@
         <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="Numer"/>
         <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" IsEnabled="False" Text="{Binding Number}"/>
         
-        <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="Kategoria"/>
-        <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" Text="{Binding Category, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
-        
-        <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource textBlockTitleStyle}" Text="Temat"/>
-        <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource inputControlStyle}" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding Name, Mode=TwoWay}"/>
+        <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="Temat"/>
+        <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding Name, Mode=TwoWay}"/>
 
-        <Grid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">
+        <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width=".65*"/>
                 <ColumnDefinition Width=".35*"/>
@@ -35,6 +32,6 @@
             <Button Grid.Column="1" Margin="10,5,10,5" Content="Usuń temat" Command="{Binding RemoveSubjectCommand}"/>
         </Grid>
         
-        <my:OkCancelControl Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
+        <my:OkCancelControl Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>
 </Window>
