@@ -99,6 +99,11 @@ namespace Dziennik.ViewModel
             //m_marks.Removed -= m_marks_Removed;
         }
 
+        public static decimal ProposeMark(decimal average)
+        {
+            return decimal.Round(average - 0.1M, MidpointRounding.AwayFromZero);
+        }
+
         //private void m_marks_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<MarkViewModel> e)
         //{
         //    foreach (var item in e.Items)

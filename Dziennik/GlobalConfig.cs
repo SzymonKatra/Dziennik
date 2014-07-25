@@ -7,6 +7,7 @@ using Dziennik.View;
 using Microsoft.Win32;
 using Dziennik.Model;
 using System.IO;
+using Dziennik.Controls;
 
 namespace Dziennik
 {
@@ -248,6 +249,16 @@ namespace Dziennik
         {
             if (!Directory.Exists(Notifier.DatabasesDirectory)) Directory.CreateDirectory(Notifier.DatabasesDirectory);
             if (!Directory.Exists(Notifier.DatabasesArchiveDirectory)) Directory.CreateDirectory(Notifier.DatabasesArchiveDirectory);
+        }
+
+        public static string GetStringResource(object key)
+        {
+            object result = Application.Current.TryFindResource(key);
+            return (result == null ? key + " NOT FOUND - RESOURCE ERROR" : (string)result);
+        }
+        public static MessageBoxSuperButton MessageBox(object viewModel, string text, MessageBoxSuperPredefinedButtons buttons)
+        {
+            return MessageBoxSuper.ShowBox(Dialogs.GetWindow(viewModel), text, GetStringResource("lang_AppName"), buttons);
         }
 
         //SINGLETON

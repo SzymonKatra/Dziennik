@@ -26,6 +26,8 @@ namespace Dziennik.View
             this.DataContext = viewModel;
 
             GlobalConfig.Dialogs.Register(this, viewModel);
+
+            if (viewModel.IsAddingMode) markTextBox.Focus();
         }
     }
 }

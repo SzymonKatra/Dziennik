@@ -6,6 +6,7 @@ using System.ComponentModel;
 using Dziennik.CommandUtils;
 using System.Windows.Input;
 using System.Globalization;
+using Dziennik.ViewModel;
 
 namespace Dziennik.View
 {
@@ -25,7 +26,7 @@ namespace Dziennik.View
             m_mark = initialMark;
             if (initialMark == 0M)
             {
-                m_mark = decimal.Round(averageMark - 0.1M, MidpointRounding.AwayFromZero);
+                m_mark = SemesterViewModel.ProposeMark(averageMark);
             }
 
             m_markInput = m_mark.ToString(CultureInfo.InvariantCulture);

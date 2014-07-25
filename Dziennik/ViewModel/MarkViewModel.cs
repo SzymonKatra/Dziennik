@@ -83,7 +83,7 @@ namespace Dziennik.ViewModel
             {
                 if (IsValueValid)
                 {
-                    return this.Value.ToString(CultureInfo.InvariantCulture);
+                    return GetValidDisplayedMark(this.Value);
                 }
                 else return this.Note;
             }
@@ -101,6 +101,15 @@ namespace Dziennik.ViewModel
                                      this.LastChangeDate.ToString(GlobalConfig.DateTimeFormat),
                                      (IsValueValid ? "Ocena" : "Uwaga"));
             }
+        }
+
+        public static string GetValidDisplayedMark(decimal value)
+        {
+            if (value < 1M || value > 6M) return string.Empty;
+            decimal truncated = decimal.Truncate(value);
+            string result = truncated.ToString(CultureInfo.InvariantCulture);
+            if (value - truncated == 0.5M) result += "+";
+            return result;
         }
     }
 }

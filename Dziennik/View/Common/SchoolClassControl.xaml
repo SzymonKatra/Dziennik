@@ -15,7 +15,7 @@
                     <Setter Property="Height" Value="50"/>
                 </Style>
             </TabControl.Resources>
-            <TabItem Header="Tematy">
+            <TabItem Header="{DynamicResource lang_Subjects}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"/>
@@ -23,7 +23,7 @@
                     </Grid.RowDefinitions>
 
                     <WrapPanel Grid.Row="0">
-                        <Button Content="Zrealizuj temat" Style="{StaticResource wrapPanelButtonStyle}" Command="{Binding RealizeSubjectCommand}"/>
+                        <Button Content="{DynamicResource lang_RealizeSubject}" Style="{StaticResource wrapPanelButtonStyle}" Command="{Binding RealizeSubjectCommand}"/>
                     </WrapPanel>
 
                     <DataGrid Grid.Row="1"
@@ -35,10 +35,10 @@
                               AutoGenerateColumns="False"
                               SelectedItem="{Binding SelectedSubject, Mode=TwoWay}">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Numer" Binding="{Binding GlobalSubject.Number}"/>
-                            <DataGridTextColumn Header="Data zrealizowania" Binding="{Binding RealizedDate}"/>
-                            <DataGridTextColumn Header="Temat" Binding="{Binding Name}"/>
-                            <DataGridTemplateColumn Header="Edytuj">
+                            <DataGridTextColumn Header="{DynamicResource lang_NumberShort}" Binding="{Binding GlobalSubject.Number}"/>
+                            <DataGridTextColumn Header="{DynamicResource lang_RealizedDate}" Binding="{Binding RealizedDate}"/>
+                            <DataGridTextColumn Header="{DynamicResource lang_Subject}" Binding="{Binding Name}"/>
+                            <DataGridTemplateColumn Header="{DynamicResource lang_Edit}">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <my:EditButtonControl Command="{Binding DataContext.EditRealizedSubjectCommand, ElementName=rootSchoolClassControl}"/>
@@ -49,8 +49,8 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
-            
-            <TabItem Header="Oceny">
+
+            <TabItem Header="{DynamicResource lang_Marks}">
                 <DataGrid ItemsSource="{Binding SelectedGroup.Students}"
                   CanUserAddRows="False"
                   CanUserSortColumns="False"
@@ -59,8 +59,8 @@
                   AutoGenerateColumns="False"
                   SelectedItem="{Binding SelectedStudent, Mode=TwoWay}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Nr" Binding="{Binding Number}"/>
-                        <DataGridTextColumn Header="Nazwisko" Binding="{Binding GlobalStudent.Surname}" Visibility="{Binding ShowSurname, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
+                        <DataGridTextColumn Header="{DynamicResource lang_NumberShort}" Binding="{Binding Number}"/>
+                        <DataGridTextColumn Header="{DynamicResource lang}" Binding="{Binding GlobalStudent.Surname}" Visibility="{Binding ShowSurname, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
                         <DataGridTextColumn Header="Imię" Binding="{Binding GlobalStudent.Name}" Visibility="{Binding ShowName, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
                         <DataGridTextColumn Header="Email" Binding="{Binding GlobalStudent.Email}" Visibility="{Binding ShowEmail, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
                         <DataGridTemplateColumn Header="Oceny (1)" Visibility="{Binding ShowFirstMarks, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
@@ -74,6 +74,15 @@
                         </DataGridTemplateColumn>
                         <DataGridTextColumn Header="Średnia (1)" Binding="{Binding FirstSemester.AverageMark}" Visibility="{Binding ShowFirstAverage, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
                         <DataGridTemplateColumn Header="Ocena śródroczna" Visibility="{Binding ShowHalfEndingMark, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <my:EndingMarksHeaderWithContext Header="{TemplateBinding Content}"
+                                                                     CommandPutAllEndingMarks="{Binding DataContext.PutAllEndingMarksCommand,ElementName=rootSchoolClassControl}"
+                                                                     CommandPutNotAllEndingMarks="{Binding DataContext.PutNotAllEndingMarksCommand,ElementName=rootSchoolClassControl}"
+                                                                     CommandCancelAllEndingMarks="{Binding DataContext.CancelAllEndingMarksCommand,ElementName=rootSchoolClassControl}"
+                                                                     CommandParameterAll="half"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <my:EndingMarkControl EndingMark="{Binding HalfEndingMark}" CommandEditMark="{Binding DataContext.EditEndingMarkCommand,ElementName=rootSchoolClassControl}" CommandParameterEditMark="half"/>
@@ -92,6 +101,15 @@
                         <DataGridTextColumn Header="Średnia (2)" Binding="{Binding SecondSemester.AverageMark}" Visibility="{Binding ShowSecondAverage, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
                         <DataGridTextColumn Header="Średnia (roczna)" Binding="{Binding AverageMarkAll}" Visibility="{Binding ShowEndingAverage, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
                         <DataGridTemplateColumn Header="Ocena końcoworoczna" Visibility="{Binding ShowYearEndingMark, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <my:EndingMarksHeaderWithContext Header="{TemplateBinding Content}"
+                                                                     CommandPutAllEndingMarks="{Binding DataContext.PutAllEndingMarksCommand,ElementName=rootSchoolClassControl}"
+                                                                     CommandPutNotAllEndingMarks="{Binding DataContext.PutNotAllEndingMarksCommand,ElementName=rootSchoolClassControl}"
+                                                                     CommandCancelAllEndingMarks="{Binding DataContext.CancelAllEndingMarksCommand,ElementName=rootSchoolClassControl}"
+                                                                     CommandParameterAll="year"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <my:EndingMarkControl EndingMark="{Binding YearEndingMark}" CommandEditMark="{Binding DataContext.EditEndingMarkCommand, ElementName=rootSchoolClassControl}" CommandParameterEditMark="year"/>

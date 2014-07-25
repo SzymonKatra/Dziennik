@@ -33,7 +33,7 @@
             <Button Grid.Column="1" Grid.Row="0" Content="Usuń ocenę" Margin="10,5,10,5" Command="{Binding RemoveMarkCommand}"/>
         </Grid>
 
-        <TextBox Grid.Column="1" Grid.Row="0" IsEnabled="{Binding IsChecked, ElementName=radioMark}" Text="{Binding ValueInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
+        <TextBox x:Name="markTextBox" Grid.Column="1" Grid.Row="0" IsEnabled="{Binding IsChecked, ElementName=radioMark}" Text="{Binding ValueInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
         <TextBox Grid.Column="1" Grid.Row="1" IsEnabled="{Binding IsChecked, ElementName=radioMark}" Text="{Binding WeightInput, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
         <TextBox Grid.Column="1" Grid.Row="2" IsEnabled="{Binding IsChecked, ElementName=radioNote}" Text="{Binding NoteInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
         <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource inputControlStyle}" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Description, Mode=TwoWay}"/>

@@ -8,6 +8,8 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.IO;
 using Dziennik.Model;
+using Dziennik.Controls;
+using System.Windows;
 
 namespace Dziennik.View
 {
@@ -26,6 +28,9 @@ namespace Dziennik.View
             m_saveCommand = new RelayCommand(Save);
             m_realizeSubjectCommand = new RelayCommand(RealizeSubject, CanRealizeSubject);
             m_editRealizedSubjectCommand = new RelayCommand(EditRealizedSubject);
+            m_putAllEndingMarksCommand = new RelayCommand<string>(PutAllEndingMarks);
+            m_putNotAllEndingMarksCommand = new RelayCommand<string>(PutNotAllEndingMarks);
+            m_cancelAllEndingMarksCommand = new RelayCommand<string>(CancelAllEndingMarks);
 
             m_database = database;
         }
@@ -110,6 +115,22 @@ namespace Dziennik.View
         public ICommand EditRealizedSubjectCommand
         {
             get { return m_editRealizedSubjectCommand; }
+        }
+
+        private RelayCommand<string> m_putAllEndingMarksCommand;
+        public ICommand PutAllEndingMarksCommand
+        {
+            get { return m_putAllEndingMarksCommand; }
+        }
+        private RelayCommand<string> m_putNotAllEndingMarksCommand;
+        public ICommand PutNotAllEndingMarksCommand
+        {
+            get { return m_putNotAllEndingMarksCommand; }
+        }
+        private RelayCommand<string> m_cancelAllEndingMarksCommand;
+        public ICommand CancelAllEndingMarksCommand
+        {
+            get { return m_cancelAllEndingMarksCommand; }
         }
 
         private void AddMark(ObservableCollection<MarkViewModel> param)
@@ -211,6 +232,85 @@ namespace Dziennik.View
                 if (group.RealizedSubjects.FirstOrDefault(x => x.GlobalSubject == subject) == null) available.Add(subject);
             }
             return available;
+        }
+        private void PutAllEndingMarks(string e)
+        {
+            if (!MessageBoxContinue()) return;
+
+            int completedCount = 0;
+            foreach (StudentInGroupViewModel student in m_selectedGroup.Students)
+            {
+                decimal average = (e == "half" ? student.FirstSemester.AverageMark : student.AverageMarkAll);
+                decimal endingMark = SemesterViewModel.ProposeMark(average);
+                if (endingMark == 0M) continue;
+                if (e == "half")
+                {
+                    student.HalfEndingMark = endingMark;
+                }
+                else
+                {
+                    student.YearEndingMark = endingMark;
+                }
+
+                completedCount++;
+            }
+
+            MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(GlobalConfig.Main), string.Format("Wystawiono {0} ocen", completedCount), "Dziennik", MessageBoxSuperPredefinedButtons.OK);
+        }
+        private void PutNotAllEndingMarks(string e)
+        {
+            if (!MessageBoxContinue()) return;
+
+            int completedCount = 0;
+            foreach (StudentInGroupViewModel student in m_selectedGroup.Students)
+            {
+                decimal average = (e == "half" ? student.FirstSemester.AverageMark : student.AverageMarkAll);
+                decimal endingMark = SemesterViewModel.ProposeMark(average);
+                if (endingMark == 0M) continue;
+                if (e == "half")
+                {
+                    if (student.HalfEndingMark != 0M) continue;
+                    student.HalfEndingMark = endingMark;
+                }
+                else
+                {
+                    if (student.YearEndingMark != 0M) continue;
+                    student.YearEndingMark = endingMark;
+                }
+
+                completedCount++;
+            }
+
+            MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(GlobalConfig.Main), string.Format("Wystawiono {0} ocen", completedCount), "Dziennik", MessageBoxSuperPredefinedButtons.OK);
+        }
+        private void CancelAllEndingMarks(string e)
+        {
+            if (!MessageBoxContinue()) return;
+
+            int completedCount = 0;
+            foreach (StudentInGroupViewModel student in m_selectedGroup.Students)
+            {
+                if (e == "half")
+                {
+                    if (student.HalfEndingMark == 0M) continue;
+                    student.HalfEndingMark = 0M;
+                }
+                else
+                {
+                    if (student.YearEndingMark == 0M) continue;
+                    student.YearEndingMark = 0M;
+                }
+
+                completedCount++;
+            }
+
+            MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(GlobalConfig.Main), string.Format("Anulowano {0} ocen", completedCount), "Dziennik", MessageBoxSuperPredefinedButtons.OK);
+        }
+
+        private bool MessageBoxContinue()
+        {
+            if (MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(GlobalConfig.Main), GlobalConfig.GetStringResource("langDoYouWantContinue"), "Dziennik", MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return false;
+            return true;
         }
     }
 }

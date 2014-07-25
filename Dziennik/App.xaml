@@ -7,95 +7,12 @@
              xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:Dziennik">
     <Application.Resources>
-        <Style x:Key="inputControlStyle" TargetType="{x:Type FrameworkElement}">
-            <Setter Property="Margin" Value="10,5,10,5"/>
-        </Style>
-
-        <Style TargetType="{x:Type DataGridRow}">
-            <Style.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"  Color="{x:Static SystemColors.HighlightColor}"/>
-            </Style.Resources>
-        </Style>
-
-        <Style TargetType="{x:Type DataGrid}">
-            <Setter Property="AlternationCount" Value="2"/>
-            <Setter Property="AlternatingRowBackground" Value="#E8E8E8"/>
-        </Style>
-
-        <Style x:Key="tabItemNiceStyle" TargetType="{x:Type TabItem}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type TabItem}">
-                        <Grid>
-                            <Border Name="Border"
-                                    Background="{DynamicResource {x:Static SystemColors.InactiveBorderBrushKey}}"
-                                    BorderBrush="Black" 
-                                    BorderThickness="1,1,1,1">
-                                <ContentPresenter x:Name="ContentSite"
-                                                  VerticalAlignment="Center"
-                                                  HorizontalAlignment="Center"
-                                                  ContentSource="Header"
-                                                  Margin="12,2,12,2"/>
-                            </Border>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="Border" Property="Background">
-                                    <Setter.Value>
-                                        <RadialGradientBrush x:Name="gradientBrush" GradientOrigin="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
-                                            <GradientStop Color="White" Offset="0"/>
-                                            <GradientStop Color="White" Offset="0.5"/>
-                                            <GradientStop Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" Offset="1"/>
-                                        </RadialGradientBrush>
-                                    </Setter.Value>
-                                </Setter>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        
-
-        <Style x:Key="validationTemplateTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource inputControlStyle}">
-            <Style.Triggers>
-                <Trigger Property="Validation.HasError" Value="True">
-                    <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self},  Path=(Validation.Errors).CurrentItem.ErrorContent}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="controlTitleStyle" TargetType="{x:Type Control}">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-
-        <Style x:Key="textBlockTitleStyle" TargetType="{x:Type TextBlock}">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
-        </Style>
-
-        <Style x:Key="commonButtonStyle" TargetType="Button">
-            <Setter Property="Margin" Value="10,5,10,5"/>
-        </Style>
-
-        <Style x:Key="wrapPanelButtonStyle" TargetType="Button">
-            <Setter Property="Margin" Value="5,5,5,5"/>
-        </Style>
-
-        <Style x:Key="wrapPanelImageButtonStyle" TargetType="Button" BasedOn="{StaticResource wrapPanelButtonStyle}">
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Background" Value="Transparent"/>
-        </Style>
-
-        <BitmapImage x:Key="img_add" UriSource="Resources\add.png"/>
-        <BitmapImage x:Key="img_open" UriSource="Resources\open.png"/>
-        <BitmapImage x:Key="img_edit" UriSource="Resources\edit.png"/>
-        <BitmapImage x:Key="img_save" UriSource="Resources\save.png"/>
-        <BitmapImage x:Key="img_save_all" UriSource="Resources\save_all.png"/>
-        <BitmapImage x:Key="img_options" UriSource="Resources\options.png"/>
-
-        <BooleanToVisibilityConverter x:Key="convertBoolToVisibility"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources\ImagesDictionary.xaml"/>
+                <ResourceDictionary Source="Resources\StylesDictionary.xaml"/>
+                <ResourceDictionary Source="Resources\LanguageDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>        
     </Application.Resources>
 </Application>

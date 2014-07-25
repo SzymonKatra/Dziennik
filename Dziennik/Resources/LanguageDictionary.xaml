@@ -1,0 +1,28 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib">
+    
+    <s:String x:Key="lang_AppName">Dziennik</s:String>
+    <s:String x:Key="lang_DoYouWantContinue">Czy chcesaz kontynuować?</s:String>
+    
+    <s:String x:Key="lang_Subjects">Tematy</s:String>
+    <s:String x:Key="lang_Marks">Oceny</s:String>
+    <s:String x:Key="lang_Number">Numer</s:String>
+    <s:String x:Key="lang_NumberShort">Nr</s:String>
+    <s:String x:Key="lang_Edit">Edytuj</s:String>
+    
+    <s:String x:Key="lang_RealizeSubject">Zrealizuj temat</s:String>
+    <s:String x:Key="lang_RealizedDate">Data zrealizowania</s:String>
+    <s:String x:Key="lang_Subject">Temat</s:String>
+
+    <s:String x:Key="lang_Surname">Nazwisko</s:String>
+    <s:String x:Key="lang_Name">Imię</s:String>
+    <s:String x:Key="lang_Email">Email</s:String>
+    <s:String x:Key="lang_MarksFirst">Oceny (1)</s:String>
+    <s:String x:Key="lang_AverageFirst">Średnia (1)</s:String>
+    <s:String x:Key="lang_HalfEndingMark">Ocena śródroczna</s:String>
+    <s:String x:Key="lang_MarksSecond">Oceny (2)</s:String>
+    <s:String x:Key="lang_AverageSecond">Średnia (2)</s:String>
+    <s:String x:Key="lang_averageYear">Średnia (roczna)</s:String>
+    <s:String x:Key="lang_YearEndingMark">Ocena końcoworoczna</s:String>
+</ResourceDictionary>

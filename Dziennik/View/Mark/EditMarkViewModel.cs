@@ -31,7 +31,7 @@ namespace Dziennik.View
             m_weight = (isAddingMode ? 1 : m_mark.Weight);
             m_description = m_mark.Description;
 
-            m_valueInput = m_value.ToString(CultureInfo.InvariantCulture);
+            m_valueInput = (isAddingMode ? string.Empty : MarkViewModel.GetValidDisplayedMark(m_value));
             m_noteInput = m_note;
             m_weightInput = m_weight.ToString();
 
@@ -205,29 +205,49 @@ namespace Dziennik.View
             if (m_noteSelected) return string.Empty;
             m_valueInputValid = false;
 
-            decimal result;
+            int integralResult;
 
-            string toParse = m_valueInput.Replace(',', '.');
-
-            if (!decimal.TryParse(toParse, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out result))
+            string toParse = Ext.RemoveAllWhitespaces(m_valueInput);
+            bool hadDigit = false;
+            bool hadPlus = false;
+            foreach (char c in toParse)
+            {
+                if(char.IsDigit(c))
+                {
+                    hadDigit = true;
+                    continue;
+                }
+                if(c == '+')
+                {
+                    if(!hadDigit)
+                    {
+                        m_okCommand.RaiseCanExecuteChanged();
+                        return "Znak plusa musi się znajdować za liczbą";
+                    }
+                    hadPlus = true;
+                    break;
+                }
+            }
+            if (toParse.Count(x => x == '+') > 1)
             {
                 m_okCommand.RaiseCanExecuteChanged();
-                return "Wprowadź poprawną liczbę. Oddziel liczby kropką (.) lub przecinkiem(,)";
+                return "Znak plusa może być tylko jeden";
             }
+            toParse = toParse.Replace("+", "");
 
-            if(result <1M || result > 6M)
+            if (!int.TryParse(toParse, out integralResult))
             {
                 m_okCommand.RaiseCanExecuteChanged();
-                return "Wprowadź ocenę z zakresu <1; 6>";
+                return "Niedozwolone znaki";
             }
 
-            if(result % 0.5M != 0M)
+            if (integralResult < 1M || integralResult > 6M)
             {
                 m_okCommand.RaiseCanExecuteChanged();
-                return "Wprowadź całkowitą ocenę lub połówkę";
+                return "Wprowadź całkowitą ocenę z zakresu <1; 6> z ewentualnym plusem";
             }
 
-            m_value = result;
+            m_value = (decimal)integralResult + (hadPlus ? 0.5M : 0M);
             m_valueInputValid = true;
             m_okCommand.RaiseCanExecuteChanged();
 
