@@ -3,7 +3,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:my="clr-namespace:Dziennik.Controls"
-        Title="Uczniowie" Height="300" Width="500"
+        Title="{DynamicResource lang_GlobalStudentsTitle}" Height="300" Width="500"
         WindowStartupLocation="CenterOwner">
 
     <Grid>
@@ -13,8 +13,8 @@
         </Grid.RowDefinitions>
         
         <WrapPanel Grid.Row="0" Orientation="Horizontal">
-            <Button Content="Dodaj ucznia" Style="{StaticResource wrapPanelButtonStyle}"  Command="{Binding AddStudentCommand}"/>
-            <Button Content="Dodaj automatycznie ze schowka" Style="{StaticResource wrapPanelButtonStyle}" Command="{Binding AutoAddStudentsClipboardCommand}"/>
+            <Button Content="{DynamicResource lang_AddStudent}" Style="{StaticResource wrapPanelButtonStyle}"  Command="{Binding AddStudentCommand}"/>
+            <Button Content="{DynamicResource lang_AutoAddStudentClipboard}" Style="{StaticResource wrapPanelButtonStyle}" Command="{Binding AutoAddStudentsClipboardCommand}"/>
         </WrapPanel>
         <DataGrid Grid.Row="1"
                   ItemsSource="{Binding Students}"
@@ -25,10 +25,10 @@
                   IsReadOnly="True"
                   AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Nr" Binding="{Binding Number}"/>
-                <DataGridTextColumn Header="Nazwisko" Binding="{Binding Surname}"/>
-                <DataGridTextColumn Header="Imię" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Email" Binding="{Binding Email}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_NumberShort}" Binding="{Binding Number}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_SurnamePerson}" Binding="{Binding Surname}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_NamePerson}" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_Email}" Binding="{Binding Email}"/>
                 <DataGridTemplateColumn Header="Edytuj">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

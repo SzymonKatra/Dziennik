@@ -5,7 +5,7 @@
         xmlns:local="clr-namespace:Dziennik"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
         xmlns:c="clr-namespace:Dziennik.CommandUtils"
-        Title="Opcje" Height="350" Width="600"
+        Title="{DynamicResource lang_OptionsTitle}" Height="350" Width="600"
         WindowStartupLocation="CenterOwner">
 
     <i:Interaction.Triggers>
@@ -36,8 +36,8 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="Katalog z bazą danych"/>
-            <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="Katalog z archiwami"/>
+            <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_DatabaseDirectory}"/>
+            <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_DatabaseArchiveDirectory}"/>
 
             <my:DirectorySelector x:Name="dirSelect" Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" SelectedPath="{Binding DatabasesDirectory, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}" IsTextBoxReadOnly="True"/>
             <my:DirectorySelector Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" SelectedPath="{Binding DatabasesArchiveDirectory, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}" IsTextBoxReadOnly="True"/>
@@ -50,10 +50,10 @@
 
                 <ComboBox Grid.Column="0" Style="{StaticResource inputControlStyle}" ItemsSource="{Binding OpenedSchoolClasses}" SelectedItem="{Binding SelectedClass, Mode=TwoWay}" DisplayMemberPath="ViewModel.Name"/>
                 <WrapPanel Grid.Column="1">
-                    <Button Style="{StaticResource wrapPanelImageButtonStyle}" Command="{Binding EditClassCommand}" ToolTip="Edytuj klasę">
+                    <Button Style="{StaticResource wrapPanelImageButtonStyle}" Command="{Binding EditClassCommand}" ToolTip="{DynamicResource lang_EditClass}">
                         <Image Source="{StaticResource img_edit}"/>
                     </Button>
-                    <Button Style="{StaticResource wrapPanelImageButtonStyle}" Command="{Binding AddClassCommand}" ToolTip="Dodaj klasę">
+                    <Button Style="{StaticResource wrapPanelImageButtonStyle}" Command="{Binding AddClassCommand}" ToolTip="{DynamicResource lang_AddClass}">
                         <Image Source="{StaticResource img_add}"/>
                     </Button>
                 </WrapPanel>
@@ -62,21 +62,21 @@
         
         <Grid Grid.Column="1" Grid.Row="0">
             <WrapPanel Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Orientation="Vertical">
-                <CheckBox Content="Imię" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowName, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
-                <CheckBox Content="Nazwisko" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowSurname, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
-                <CheckBox Content="Email" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowEmail, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
-                <CheckBox Content="Oceny (1)" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowFirstMarks, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
-                <CheckBox Content="Średnia (1)" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowFirstAverage, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
-                <CheckBox Content="Ocena śródroczna" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowHalfEndingMark, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
-                <CheckBox Content="Oceny (2)" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowSecondMarks, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
-                <CheckBox Content="Średnia (2)" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowSecondAverage, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
-                <CheckBox Content="Średnia (roczna)" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowEndingAverage, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
-                <CheckBox Content="Ocena końcoworoczna" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowYearEndingMark, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
-                <CheckBox Content="Autozapis" Style="{StaticResource inputControlStyle}" IsChecked="{Binding AutoSave, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
-                <CheckBox Content="Pokazuj wagi" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowWeights, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
+                <CheckBox Content="{DynamicResource lang_NamePerson}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowName, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
+                <CheckBox Content="{DynamicResource lang_SurnamePerson}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowSurname, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
+                <CheckBox Content="{DynamicResource lang_Email}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowEmail, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
+                <CheckBox Content="{DynamicResource lang_MarksFirst}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowFirstMarks, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
+                <CheckBox Content="{DynamicResource lang_AverageFirst}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowFirstAverage, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
+                <CheckBox Content="{DynamicResource lang_HalfEndingMark}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowHalfEndingMark, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
+                <CheckBox Content="{DynamicResource lang_MarksSecond}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowSecondMarks, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
+                <CheckBox Content="{DynamicResource lang_AverageSecond}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowSecondAverage, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
+                <CheckBox Content="{DynamicResource lang_AverageYear}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowEndingAverage, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
+                <CheckBox Content="{DynamicResource lang_YearEndingMark}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowYearEndingMark, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
+                <CheckBox Content="{DynamicResource lang_AutoSave}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding AutoSave, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
+                <CheckBox Content="{DynamicResource lang_ShowWeights}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowWeights, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
             </WrapPanel>
         </Grid>
 
-        <Button Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Margin="10,5,10,5" Content="Zamknij" Command="{Binding CloseCommand}"/>
+        <Button Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Margin="10,5,10,5" Content="{DynamicResource lang_Close}" Command="{Binding CloseCommand}"/>
     </Grid>
 </Window>

@@ -5,7 +5,7 @@
         xmlns:my="clr-namespace:Dziennik.Controls"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
         xmlns:c="clr-namespace:Dziennik.CommandUtils"
-        Title="Wybierz uczniów" Height="300" Width="500"
+        Title="{DynamicResource lang_SelectStudentsTitle}" Height="300" Width="500"
         WindowStartupLocation="CenterOwner">
 
     <Grid>
@@ -21,7 +21,7 @@
                   SelectionMode="Single"
                   AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Wybór">
+                <DataGridTemplateColumn Header="{DynamicResource lang_Selection}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <CheckBox IsChecked="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -34,10 +34,10 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Nr" IsReadOnly="True" Binding="{Binding Id}"/>
-                <DataGridTextColumn Header="Nazwisko" IsReadOnly="True" Binding="{Binding Surname}"/>
-                <DataGridTextColumn Header="Imię" IsReadOnly="True" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Email" IsReadOnly="True" Binding="{Binding Email}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_NumberShort}" IsReadOnly="True" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_SurnamePerson}" IsReadOnly="True" Binding="{Binding Surname}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_NamePerson}" IsReadOnly="True" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_Email}" IsReadOnly="True" Binding="{Binding Email}"/>
             </DataGrid.Columns>
         </DataGrid>
         
@@ -47,8 +47,8 @@
                 <ColumnDefinition Width=".5*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Margin="10,5,10,5" Content="Zaznacz wszystkich" Command="{Binding SelectAllCommand}"/>
-            <Button Grid.Column="1" Margin="10,5,10,5" Content="Odznacz wszystkich" Command="{Binding ClearAllCommand}"/>
+            <Button Grid.Column="0" Margin="10,5,10,5" Content="{DynamicResource lang_SelectAllStudents}" Command="{Binding SelectAllCommand}"/>
+            <Button Grid.Column="1" Margin="10,5,10,5" Content="{DynamicResource lang_ClearAllStudents}" Command="{Binding ClearAllCommand}"/>
         </Grid>
 
         <my:OkCancelControl Grid.Row="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>

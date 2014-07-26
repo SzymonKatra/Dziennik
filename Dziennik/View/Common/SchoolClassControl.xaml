@@ -36,7 +36,7 @@
                               SelectedItem="{Binding SelectedSubject, Mode=TwoWay}">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="{DynamicResource lang_NumberShort}" Binding="{Binding GlobalSubject.Number}"/>
-                            <DataGridTextColumn Header="{DynamicResource lang_RealizedDate}" Binding="{Binding RealizedDate}"/>
+                            <DataGridTextColumn Header="{DynamicResource lang_RealizedDate}" Binding="{Binding RealizedDate, StringFormat={x:Static local:GlobalConfig.DateFormat}}"/>
                             <DataGridTextColumn Header="{DynamicResource lang_Subject}" Binding="{Binding Name}"/>
                             <DataGridTemplateColumn Header="{DynamicResource lang_Edit}">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -60,10 +60,10 @@
                   SelectedItem="{Binding SelectedStudent, Mode=TwoWay}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="{DynamicResource lang_NumberShort}" Binding="{Binding Number}"/>
-                        <DataGridTextColumn Header="{DynamicResource lang}" Binding="{Binding GlobalStudent.Surname}" Visibility="{Binding ShowSurname, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
-                        <DataGridTextColumn Header="Imię" Binding="{Binding GlobalStudent.Name}" Visibility="{Binding ShowName, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
-                        <DataGridTextColumn Header="Email" Binding="{Binding GlobalStudent.Email}" Visibility="{Binding ShowEmail, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
-                        <DataGridTemplateColumn Header="Oceny (1)" Visibility="{Binding ShowFirstMarks, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
+                        <DataGridTextColumn Header="{DynamicResource lang_SurnamePerson}" Binding="{Binding GlobalStudent.Surname}" Visibility="{Binding ShowSurname, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
+                        <DataGridTextColumn Header="{DynamicResource lang_NamePerson}" Binding="{Binding GlobalStudent.Name}" Visibility="{Binding ShowName, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
+                        <DataGridTextColumn Header="{DynamicResource lang_Email}" Binding="{Binding GlobalStudent.Email}" Visibility="{Binding ShowEmail, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
+                        <DataGridTemplateColumn Header="{DynamicResource lang_MarksFirst}" Visibility="{Binding ShowFirstMarks, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <my:MarksControl MarksSource="{Binding FirstSemester.Marks}" SelectedMark="{Binding DataContext.SelectedMark, ElementName=rootSchoolClassControl, Mode=TwoWay}"
@@ -72,8 +72,8 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="Średnia (1)" Binding="{Binding FirstSemester.AverageMark}" Visibility="{Binding ShowFirstAverage, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
-                        <DataGridTemplateColumn Header="Ocena śródroczna" Visibility="{Binding ShowHalfEndingMark, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
+                        <DataGridTextColumn Header="{DynamicResource lang_AverageFirst}" Binding="{Binding FirstSemester.AverageMark}" Visibility="{Binding ShowFirstAverage, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
+                        <DataGridTemplateColumn Header="{DynamicResource lang_HalfEndingMark}" Visibility="{Binding ShowHalfEndingMark, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
                             <DataGridTemplateColumn.HeaderTemplate>
                                 <DataTemplate>
                                     <my:EndingMarksHeaderWithContext Header="{TemplateBinding Content}"
@@ -89,7 +89,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Oceny (2)" Visibility="{Binding ShowSecondMarks, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
+                        <DataGridTemplateColumn Header="{DynamicResource lang_MarksSecond}" Visibility="{Binding ShowSecondMarks, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <my:MarksControl MarksSource="{Binding SecondSemester.Marks}" SelectedMark="{Binding DataContext.SelectedMark, ElementName=rootSchoolClassControl, Mode=TwoWay}"
@@ -98,9 +98,9 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="Średnia (2)" Binding="{Binding SecondSemester.AverageMark}" Visibility="{Binding ShowSecondAverage, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
-                        <DataGridTextColumn Header="Średnia (roczna)" Binding="{Binding AverageMarkAll}" Visibility="{Binding ShowEndingAverage, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
-                        <DataGridTemplateColumn Header="Ocena końcoworoczna" Visibility="{Binding ShowYearEndingMark, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
+                        <DataGridTextColumn Header="{DynamicResource lang_AverageSecond}" Binding="{Binding SecondSemester.AverageMark}" Visibility="{Binding ShowSecondAverage, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
+                        <DataGridTextColumn Header="{DynamicResource lang_AverageYear}" Binding="{Binding AverageMarkAll}" Visibility="{Binding ShowEndingAverage, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
+                        <DataGridTemplateColumn Header="{DynamicResource lang_YearEndingMark}" Visibility="{Binding ShowYearEndingMark, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
                             <DataGridTemplateColumn.HeaderTemplate>
                                 <DataTemplate>
                                     <my:EndingMarksHeaderWithContext Header="{TemplateBinding Content}"

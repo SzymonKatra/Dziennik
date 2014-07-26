@@ -184,6 +184,7 @@ namespace Dziennik
 
         public static readonly int DecimalRoundingPoints = 2;
         public static readonly string DateTimeFormat = "dd.MM.yyyy HH:mm";
+        public static readonly string DateFormat = "dd.MM.yyyy";
         public static readonly string SchoolClassDatabaseFileExtension = ".dzs";
         public static readonly string SchoolOptionsDatabaseFileExtension = ".dzo";
         public static readonly string FileDialogFilter = "Pliki dziennika (.dzs)|*.dzs|Dokumenty XML (.xml)|*.xml|Wszystkie pliki (*.*)|*.*";

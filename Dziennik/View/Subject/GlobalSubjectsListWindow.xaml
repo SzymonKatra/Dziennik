@@ -3,7 +3,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:my="clr-namespace:Dziennik.Controls"
-        Title="Tematy" Height="300" Width="300"
+        Title="{DynamicResource lang_GlobalSubjectsTitle}" Height="300" Width="300"
         WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
@@ -12,8 +12,8 @@
         </Grid.RowDefinitions>
 
         <WrapPanel Grid.Row="0" Orientation="Horizontal">
-            <Button Content="Dodaj temat" Style="{StaticResource wrapPanelButtonStyle}" Command="{Binding AddSubjectCommand}"/>
-            <Button Content="Dodaj automatycznie ze schowka" Style="{StaticResource wrapPanelButtonStyle}" Command="{Binding AutoAddSubjectsClipboardCommand}"/>
+            <Button Content="{DynamicResource lang_AddSubject}" Style="{StaticResource wrapPanelButtonStyle}" Command="{Binding AddSubjectCommand}"/>
+            <Button Content="{DynamicResource lang_AutoAddSubjectsClipboard}" Style="{StaticResource wrapPanelButtonStyle}" Command="{Binding AutoAddSubjectsClipboardCommand}"/>
         </WrapPanel>
 
         <DataGrid Grid.Row="1"
@@ -25,9 +25,9 @@
                   AutoGenerateColumns="False"
                   IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Numer" Binding="{Binding Number}"/>
-                <DataGridTextColumn Header="Temat" Binding="{Binding Name}"/>
-                <DataGridTemplateColumn Header="Edytuj">
+                <DataGridTextColumn Header="{DynamicResource lang_NumberShort}" Binding="{Binding Number}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_Subject}" Binding="{Binding Name}"/>
+                <DataGridTemplateColumn Header="{DynamicResource lang_Edit}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <my:EditButtonControl Command="{Binding DataContext.EditSubjectCommand, ElementName=root}"/>

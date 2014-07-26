@@ -19,18 +19,18 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-        <RadioButton Name="radioMark" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" GroupName="MarkType" IsChecked="True" Content="Ocena"/>
-        <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="Waga"/>
-        <RadioButton Name="radioNote" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" GroupName="MarkType" IsChecked="{Binding NoteSelected, Mode=TwoWay}" Content="Uwaga"/>
+        <RadioButton Name="radioMark" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" GroupName="MarkType" IsChecked="True" Content="{DynamicResource lang_Mark}"/>
+        <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Weight}"/>
+        <RadioButton Name="radioNote" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" GroupName="MarkType" IsChecked="{Binding NoteSelected, Mode=TwoWay}" Content="{DynamicResource lang_Note}"/>
 
-        <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource textBlockTitleStyle}" Text="Opis"/>
+        <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Description}"/>
         <Grid Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width=".65*"/>
                 <ColumnDefinition Width=".35*"/>
             </Grid.ColumnDefinitions>
             
-            <Button Grid.Column="1" Grid.Row="0" Content="Usuń ocenę" Margin="10,5,10,5" Command="{Binding RemoveMarkCommand}"/>
+            <Button Grid.Column="1" Grid.Row="0" Content="{DynamicResource lang_RemoveMark}" Margin="10,5,10,5" Command="{Binding RemoveMarkCommand}"/>
         </Grid>
 
         <TextBox x:Name="markTextBox" Grid.Column="1" Grid.Row="0" IsEnabled="{Binding IsChecked, ElementName=radioMark}" Text="{Binding ValueInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>

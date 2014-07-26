@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:my="clr-namespace:Dziennik.Controls"
-        Title="Realizacja tematu" Height="300" Width="300"
+        Title="{DynamicResource lang_RealizingSubjectTitle}" Height="300" Width="300"
         WindowStartupLocation="CenterOwner">
 
     <Grid>
@@ -19,7 +19,7 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         
-        <RadioButton Name="radioFrom" Grid.Column="0" Grid.Row="0" Style="{StaticResource controlTitleStyle}" GroupName="SubjectType" IsChecked="True" Content="Z programu"/>
+        <RadioButton Name="radioFrom" Grid.Column="0" Grid.Row="0" Style="{StaticResource controlTitleStyle}" GroupName="SubjectType" IsChecked="True" Content="{DynamicResource lang_FromCurriculum}"/>
         <Grid Grid.Column="1" Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -30,10 +30,10 @@
             <Button Grid.Column="1" IsEnabled="{Binding IsChecked, ElementName=radioFrom}" Margin="0,5,5,5" Content="..." Command="{Binding ChooseSubjectCommand}"/>
         </Grid>
         
-        <RadioButton Name="radioOutside"  Grid.Column="0" Grid.Row="1" Style="{StaticResource controlTitleStyle}" GroupName="SubjectType" IsChecked="{Binding IsOutsideCurriculum, Mode=TwoWay}" Content="Spoza programu"/>
+        <RadioButton Name="radioOutside"  Grid.Column="0" Grid.Row="1" Style="{StaticResource controlTitleStyle}" GroupName="SubjectType" IsChecked="{Binding IsOutsideCurriculum, Mode=TwoWay}" Content="{DynamicResource lang_OutsideCurriculum}"/>
         <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" IsEnabled="{Binding IsChecked, ElementName=radioOutside}" Text="{Binding OutsideSubject}"/>
         
-        <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource textBlockTitleStyle}" Text="Data realizacji"/>
+        <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_RealizedDate}"/>
         <DatePicker Grid.Column="1" Grid.Row="2" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding RealizeDate}"/>
         
         <DataGrid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2"
@@ -44,20 +44,20 @@
                   AutoGenerateColumns="False"
                   IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Numer" Binding="{Binding Student.Number}"/>
-                <DataGridTemplateColumn Header="Obecność">
+                <DataGridTextColumn Header="{DynamicResource lang_NumberShort}" Binding="{Binding Student.Number}"/>
+                <DataGridTemplateColumn Header="{DynamicResource lang_Presence}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <CheckBox IsChecked="{Binding WasPresentCache, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Nazwisko" Binding="{Binding Student.GlobalStudent.Surname}"/>
-                <DataGridTextColumn Header="Imię" Binding="{Binding Student.GlobalStudent.Name}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_SurnamePerson}" Binding="{Binding Student.GlobalStudent.Surname}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_NamePerson}" Binding="{Binding Student.GlobalStudent.Name}"/>
             </DataGrid.Columns>
         </DataGrid>
         
-        <my:RemoveButtonControl Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Content="Usuń temat" Command="{Binding RemoveSubjectCommand}"/>
+        <my:RemoveButtonControl Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Content="{DynamicResource lang_RemoveSubject}" Command="{Binding RemoveSubjectCommand}"/>
         <my:OkCancelControl Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid> 
 </Window>
