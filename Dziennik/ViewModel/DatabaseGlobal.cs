@@ -1,22 +1,17 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.ComponentModel.DataAnnotations;
 using Dziennik.Model;
-using fastJSON;
 using System.IO;
-using System.Diagnostics;
-using System.Reflection;
 
 namespace Dziennik.ViewModel
 {
-    public class DatabaseMain : DatabaseContext<SchoolClassViewModel, SchoolClass>
+    public class DatabaseGlobal : DatabaseContext<GlobalSchoolViewModel, GlobalSchool>
     {
-        public DatabaseMain()
+        public DatabaseGlobal()
         {
-            ViewModel = new SchoolClassViewModel();
+            ViewModel = new GlobalSchoolViewModel();
 
             base.AssignRelationsGlobalCollectionChecking = AssingRelationsGlobalCollectionCheckingModes.ExceptionIfNotExistsNotNull;
             base.RestoreRelationsGlobalCollectionChecking = RestoreRelationsGlobalCollectionCheckingModes.ExceptionIfNotExistsNotNull;
@@ -29,9 +24,9 @@ namespace Dziennik.ViewModel
             set { m_path = value; }
         }
 
-        public static DatabaseMain Load(string path)
+        public static DatabaseGlobal Load(string path)
         {
-            DatabaseMain database = new DatabaseMain();
+            DatabaseGlobal database = new DatabaseGlobal();
 
             database.m_path = path;
 

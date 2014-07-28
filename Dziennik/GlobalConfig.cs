@@ -8,6 +8,7 @@ using Microsoft.Win32;
 using Dziennik.Model;
 using System.IO;
 using Dziennik.Controls;
+using Dziennik.ViewModel;
 
 namespace Dziennik
 {
@@ -50,6 +51,13 @@ namespace Dziennik
                 set { m_showFirstAverage = value; RaisePropertyChanged("ShowFirstAverage"); }
             }
 
+            private bool m_showFirstAttendance = true;
+            public bool ShowFirstAttendance
+            {
+                get { return m_showFirstAttendance; }
+                set { m_showFirstAttendance = value; RaisePropertyChanged("ShowFirstAttendance"); }
+            }
+
             private bool m_showHalfEndingMark = true;
             public bool ShowHalfEndingMark
             {
@@ -71,11 +79,25 @@ namespace Dziennik
                 set { m_showSecondAverage = value; RaisePropertyChanged("ShowSecondAverage"); }
             }
 
+            private bool m_showSecondAttendance = true;
+            public bool ShowSecondAttendance
+            {
+                get { return m_showSecondAttendance; }
+                set { m_showSecondAttendance = value; RaisePropertyChanged("ShowSecondAttendance"); }
+            }
+
             private bool m_showEndingAverage = true;
             public bool ShowEndingAverage
             {
                 get { return m_showEndingAverage; }
                 set { m_showEndingAverage = value; RaisePropertyChanged("ShowEndingAverage"); }
+            }
+
+            private bool m_showYearAttendance = true;
+            public bool ShowYearAttendance
+            {
+                get { return m_showYearAttendance; }
+                set { m_showYearAttendance = value; RaisePropertyChanged("ShowYearAttendance"); }
             }
 
             private bool m_showYearEndingMark = true;
@@ -121,10 +143,13 @@ namespace Dziennik
                 object showEmailReg = key.GetValue(GlobalConfig.RegistryValueNameShowEmail);
                 object showFirstMarksReg = key.GetValue(GlobalConfig.RegistryValueNameShowFirstMarks);
                 object showFirstAverageReg = key.GetValue(GlobalConfig.RegistryValueNameShowFirstAverage);
+                object showFirstAttendanceReg = key.GetValue(GlobalConfig.RegistryValueNameShowFirstAttendance);
                 object showHalfEndingMarkReg = key.GetValue(GlobalConfig.RegistryValueNameShowHalfEndingMark);
                 object showSecondMarksReg = key.GetValue(GlobalConfig.RegistryValueNameShowSecondMarks);
                 object showSecondAverageReg = key.GetValue(GlobalConfig.RegistryValueNameShowSecondAverage);
+                object showSecondAttendanceReg = key.GetValue(GlobalConfig.RegistryValueNameShowSecondAttendance);
                 object showEndingAverageReg = key.GetValue(GlobalConfig.RegistryValueNameShowEndingAverage);
+                object showYearAttendanceReg = key.GetValue(GlobalConfig.RegistryValueNameShowYearAttendance);
                 object showYearEndingMarkReg = key.GetValue(GlobalConfig.RegistryValueNameShowYearEndingMark);
                 object autoSaveReg = key.GetValue(GlobalConfig.RegistryValueNameAutoSave);
                 object showWeightsReg = key.GetValue(GlobalConfig.RegistryValueNameShowWeights);
@@ -137,10 +162,13 @@ namespace Dziennik
                 if (showEmailReg != null) ShowEmail = Ext.BoolParseOrDefault(showEmailReg.ToString(), m_showEmail);
                 if (showFirstMarksReg != null) ShowFirstMarks = Ext.BoolParseOrDefault(showFirstMarksReg.ToString(), m_showFirstMarks);
                 if (showFirstAverageReg != null) ShowFirstAverage = Ext.BoolParseOrDefault(showFirstAverageReg.ToString(), m_showFirstAverage);
+                if (showFirstAttendanceReg != null) ShowFirstAttendance = Ext.BoolParseOrDefault(showFirstAttendanceReg.ToString(), m_showFirstAttendance);
                 if (showHalfEndingMarkReg != null) ShowHalfEndingMark = Ext.BoolParseOrDefault(showHalfEndingMarkReg.ToString(), m_showHalfEndingMark);
                 if (showSecondMarksReg != null) ShowSecondMarks = Ext.BoolParseOrDefault(showSecondMarksReg.ToString(), m_showSecondMarks);
                 if (showSecondAverageReg != null) ShowSecondAverage = Ext.BoolParseOrDefault(showSecondAverageReg.ToString(), m_showSecondAverage);
+                if (showSecondAttendanceReg != null) ShowSecondAttendance = Ext.BoolParseOrDefault(showSecondAttendanceReg.ToString(), m_showSecondAttendance);
                 if (showEndingAverageReg != null) ShowEndingAverage = Ext.BoolParseOrDefault(showEndingAverageReg.ToString(), m_showEndingAverage);
+                if (showYearAttendanceReg != null) ShowYearAttendance = Ext.BoolParseOrDefault(showYearAttendanceReg.ToString(), m_showYearAttendance);
                 if (showYearEndingMarkReg != null) ShowYearEndingMark = Ext.BoolParseOrDefault(showYearEndingMarkReg.ToString(), m_showYearEndingMark);
                 if (autoSaveReg != null) AutoSave = Ext.BoolParseOrDefault(autoSaveReg.ToString(), m_autoSave);
                 if (showWeightsReg != null) ShowWeights = Ext.BoolParseOrDefault(showWeightsReg.ToString(), m_showWeights);
@@ -196,10 +224,13 @@ namespace Dziennik
         public static readonly string RegistryValueNameShowEmail = "ShowEmail";
         public static readonly string RegistryValueNameShowFirstMarks = "ShowFirstMarks";
         public static readonly string RegistryValueNameShowFirstAverage = "ShowFirstAverage";
+        public static readonly string RegistryValueNameShowFirstAttendance = "ShowFirstAttendance";
         public static readonly string RegistryValueNameShowHalfEndingMark = "ShowHalfEndingMark";
         public static readonly string RegistryValueNameShowSecondMarks = "ShowSecondMarks";
         public static readonly string RegistryValueNameShowSecondAverage = "ShowSecondAverage";
+        public static readonly string RegistryValueNameShowSecondAttendance = "ShowSecondAttendance";
         public static readonly string RegistryValueNameShowEndingAverage = "ShowEndingAverage";
+        public static readonly string RegistryValueNameShowYearAttendance = "ShowYearAttendance";
         public static readonly string RegistryValueNameShowYearEndingMark = "ShowYearEndingMark";
         public static readonly string RegistryValueNameAutoSave = "AutoSave";
         public static readonly string RegistryValueNameShowWeights = "ShowWeights";
@@ -217,6 +248,13 @@ namespace Dziennik
                 if (m_main != null) throw new InvalidOperationException("Main window already assigned");
                 m_main = value;
             }
+        }
+
+        private static DatabaseGlobal m_globalDatabase;
+        public static DatabaseGlobal GlobalDatabase
+        {
+            get { return m_globalDatabase; }
+            set { m_globalDatabase = value; }
         }
 
         static GlobalConfig()

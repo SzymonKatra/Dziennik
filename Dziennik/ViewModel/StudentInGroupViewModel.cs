@@ -113,6 +113,44 @@ namespace Dziennik.ViewModel
             set { m_model.YearEndingMark = value; RaisePropertyChanged("YearEndingMark"); }
         }
 
+        public string AttendanceFirstDisplay
+        {
+            get
+            {
+                IEnumerable<RealizedSubjectPresenceViewModel> valid = Presence.Where((x) => x.RealizedSubject.RealizedDate >= GlobalConfig.GlobalDatabase.ViewModel.YearBeginning && x.RealizedSubject.RealizedDate < GlobalConfig.GlobalDatabase.ViewModel.SemesterSeparator);
+                int wasPresentCount = valid.Count((x) => x.WasPresent);
+
+                return string.Format(GlobalConfig.GetStringResource("lang_AttendanceDisplayFormat"), wasPresentCount, valid.Count());
+            }
+        }
+        public string AttendanceSecondDisplay
+        {
+            get
+            {
+                IEnumerable<RealizedSubjectPresenceViewModel> valid = Presence.Where((x) => x.RealizedSubject.RealizedDate >= GlobalConfig.GlobalDatabase.ViewModel.SemesterSeparator && x.RealizedSubject.RealizedDate <= GlobalConfig.GlobalDatabase.ViewModel.YearEnding);
+                int wasPresentCount = valid.Count((x) => x.WasPresent);
+
+                return string.Format(GlobalConfig.GetStringResource("lang_AttendanceDisplayFormat"), wasPresentCount, valid.Count());
+            }
+        }
+        public string AttendanceYearDisplay
+        {
+            get
+            {
+                IEnumerable<RealizedSubjectPresenceViewModel> valid = Presence.Where((x) => x.RealizedSubject.RealizedDate >= GlobalConfig.GlobalDatabase.ViewModel.YearBeginning && x.RealizedSubject.RealizedDate <= GlobalConfig.GlobalDatabase.ViewModel.YearEnding);
+                int wasPresentCount = valid.Count((x) => x.WasPresent);
+
+                return string.Format(GlobalConfig.GetStringResource("lang_AttendanceDisplayFormat"), wasPresentCount, valid.Count());
+            }
+        }
+
+
+        public void RaiseAttendanceChanged()
+        {
+            RaisePropertyChanged("AttendanceFirstDisplay");
+            RaisePropertyChanged("AttendanceSecondDisplay");
+            RaisePropertyChanged("AttendanceYearDisplay");
+        }
         private void SemesterMarksChanged(object sender, EventArgs e)
         {
             RaisePropertyChanged("AverageMarkAll");

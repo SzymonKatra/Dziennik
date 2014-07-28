@@ -86,6 +86,7 @@ namespace Dziennik.View
 
             dialogViewModel = new ActionDialogViewModel((d, p) =>
             {
+                GlobalConfig.GlobalDatabase.Save();
                 foreach (var schoolClass in m_openedSchoolClasses) schoolClass.SaveCommand.Execute(null);
             }
             , null, "Zapisywanie bazy danych...");
@@ -101,6 +102,7 @@ namespace Dziennik.View
             }
             , null, "Zapisywanie ustawień do rejestru...");
             GlobalConfig.Dialogs.ShowDialog(this, saveDialogViewModel);
+            if (GlobalConfig.Notifier.AutoSave) GlobalConfig.GlobalDatabase.Save();
             if (m_databasesDirectoryChanged) ReloadSchoolClasses();
         }
         private void OpenFromPath(string path)
@@ -146,6 +148,7 @@ namespace Dziennik.View
         }
         private void CloseAllTabs()
         {
+            if (GlobalConfig.GlobalDatabase != null) GlobalConfig.GlobalDatabase.Save();
             foreach (SchoolClassControlViewModel tab in m_openedSchoolClasses)
             {
                 tab.SaveCommand.Execute(null);
@@ -159,6 +162,18 @@ namespace Dziennik.View
                 CloseAllTabs();
 
                 GlobalConfig.CreateDirectoriesIfNotExists();
+
+                string optionsPath = GlobalConfig.Notifier.DatabasesDirectory + @"\" + GlobalConfig.SchoolOptionsDatabaseFileName;
+                if (File.Exists(optionsPath))
+                {
+                    GlobalConfig.GlobalDatabase = DatabaseGlobal.Load(GlobalConfig.Notifier.DatabasesDirectory + @"\" + GlobalConfig.SchoolOptionsDatabaseFileName);
+                }
+                else
+                {
+                    GlobalConfig.GlobalDatabase = new DatabaseGlobal();
+                    GlobalConfig.GlobalDatabase.Path = optionsPath;
+                    GlobalConfig.GlobalDatabase.Save();
+                }
 
                 IEnumerable<string> files = Directory.EnumerateFiles(GlobalConfig.Notifier.DatabasesDirectory);
 

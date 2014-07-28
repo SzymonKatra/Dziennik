@@ -182,6 +182,7 @@ namespace Dziennik.View
                 foreach (var pair in m_pairs)
                 {
                     pair.Student.Presence.Add(pair.Presence);
+                    pair.Student.RaiseAttendanceChanged();
                 }
             }
             m_result = RealizeSubjectResult.Ok;

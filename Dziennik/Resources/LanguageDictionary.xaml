@@ -24,10 +24,13 @@
     <s:String x:Key="lang_Email">Email</s:String>
     <s:String x:Key="lang_MarksFirst">Oceny (1)</s:String>
     <s:String x:Key="lang_AverageFirst">Średnia (1)</s:String>
+    <s:String x:Key="lang_AttendanceFirst">Frekwencja (1)</s:String>
     <s:String x:Key="lang_HalfEndingMark">Ocena śródroczna</s:String>
     <s:String x:Key="lang_MarksSecond">Oceny (2)</s:String>
     <s:String x:Key="lang_AverageSecond">Średnia (2)</s:String>
+    <s:String x:Key="lang_AttendanceSecond">Frekwencja(2)</s:String>
     <s:String x:Key="lang_AverageYear">Średnia (roczna)</s:String>
+    <s:String x:Key="lang_AttendanceYear">Frekwencja (roczna)</s:String>
     <s:String x:Key="lang_YearEndingMark">Ocena końcoworoczna</s:String>
 
     <s:String x:Key="lang_EditClassTitle">Edytuj klasę</s:String>
@@ -44,6 +47,9 @@
     <s:String x:Key="lang_ShowWeights">Pokazuj wagi</s:String>
     <s:String x:Key="lang_EditClass">Edytuj klasę</s:String>
     <s:String x:Key="lang_AddClass">Dodaj klasę</s:String>
+    <s:String x:Key="lang_YearBeginning">Rozpoczęcie roku</s:String>
+    <s:String x:Key="lang_SemesterSeparator">Następny semestr</s:String>
+    <s:String x:Key="lang_YearEnding">Zakończenie roku</s:String>
 
     <s:String x:Key="lang_AddGroupTitle">Dodaj grupę</s:String>
     <s:String x:Key="lang_Students">Uczniowie</s:String>
@@ -89,4 +95,6 @@
     <s:String x:Key="lang_Presence">Obecność</s:String>
 
     <s:String x:Key="lang_SelectSubjectTitle">Wybierz temat</s:String>
+
+    <s:String x:Key="lang_AttendanceDisplayFormat">{0} / {1}</s:String>
 </ResourceDictionary>
