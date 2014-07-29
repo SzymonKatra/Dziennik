@@ -8,22 +8,22 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
         xmlns:c="clr-namespace:Dziennik.CommandUtils"
         xmlns:local="clr-namespace:Dziennik"
-        Title="Dziennik" Height="500" Width="900"
+        Title="Dziennik" Width="900" Height="500"
         WindowStartupLocation="CenterOwner"
         WindowState="Maximized">
-    
+
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
             <c:EventToCommand Command="{Binding SaveCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
+
         <WrapPanel Grid.Row="0" Orientation="Horizontal">
             <Button Style="{StaticResource wrapPanelImageButtonStyle}"  ToolTip="Zapisz zmiany" Command="{Binding SaveCommand}">
                 <Image Source="{StaticResource img_save}"/>
@@ -32,7 +32,7 @@
                 <Image Source="{StaticResource img_options}"/>
             </Button>
         </WrapPanel>
-        
+
         <TabControl Grid.Row="1" ItemsSource="{Binding OpenedSchoolClasses}" SelectedValue="{Binding SelectedClass, Mode=TwoWay}">
             <TabControl.Resources>
                 <Style TargetType="TabItem" BasedOn="{StaticResource tabItemNiceStyle}"/>
@@ -44,8 +44,11 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{Binding DataContext.TabWidth,ElementName=root}"/>
+                        </Grid.ColumnDefinitions>
                         <TextBlock Grid.Row="0" Text="{Binding ViewModel.Name}" FontSize="20"/>
-                        <ComboBox Grid.Row="1" ItemsSource="{Binding ViewModel.Groups}" MaxWidth="100" SelectedItem="{Binding SelectedGroup, Mode=TwoWay}" DisplayMemberPath="Name"/>
+                        <ComboBox Grid.Row="1" ItemsSource="{Binding ViewModel.Groups}" SelectedItem="{Binding SelectedGroup, Mode=TwoWay}" DisplayMemberPath="Name"/>
                     </Grid>
                 </DataTemplate>
             </TabControl.ItemTemplate>

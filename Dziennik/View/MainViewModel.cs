@@ -40,6 +40,21 @@ namespace Dziennik.View
             }
         }
 
+        private int m_windowWidth;
+        public int WindowWidth
+        {
+            get { return m_windowWidth; }
+            set { m_windowWidth = value; RaisePropertyChanged("WindowWidth"); RaisePropertyChanged("TabWidth"); }
+        }
+        public int TabWidth
+        {
+            get
+            {
+                int result = (m_windowWidth - 100) / m_openedSchoolClasses.Count;
+                return result;
+            }
+        }
+
         private RelayCommand m_saveCommand;
         public ICommand SaveCommand
         {

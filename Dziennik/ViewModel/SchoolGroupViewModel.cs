@@ -19,7 +19,7 @@ namespace Dziennik.ViewModel
             m_students = new SynchronizedPerItemObservableCollection<StudentInGroupViewModel, StudentInGroup>(m_model.Students, (m) => { return new StudentInGroupViewModel(m); });;
             m_globalSubjects = new SynchronizedObservableCollection<GlobalSubjectViewModel, GlobalSubject>(m_model.Subjects, m => new GlobalSubjectViewModel(m));
             m_realizedSubjects = new SynchronizedObservableCollection<RealizedSubjectViewModel, RealizedSubject>(m_model.RealizedSubjects, m => new RealizedSubjectViewModel(m));
-            //SubscribeStudents();
+            SubscribeRealizedSubjects();
         }
 
         private SchoolGroup m_model;
@@ -65,10 +65,37 @@ namespace Dziennik.ViewModel
             get { return m_realizedSubjects; }
             set
             {
+                UnsubscribeRealizedSubjects();
                 m_realizedSubjects = value;
+                SubscribeRealizedSubjects();
                 m_model.RealizedSubjects = value.ModelCollection;
                 RaisePropertyChanged("RealizedSubjects");
             }
+        }
+
+        public string RealizedSubjectsDisplay
+        {
+            get
+            {
+                int realizedFromCurriculum = m_realizedSubjects.Count(x => !x.IsCustom);
+                int realizedOutsideCurriculum = m_realizedSubjects.Count(x => x.IsCustom);
+
+                return string.Format(GlobalConfig.GetStringResource("lang_RealizedSubjectsCountFormat"), realizedFromCurriculum, m_globalSubjects.Count, realizedOutsideCurriculum);
+            }
+        }
+
+        private void SubscribeRealizedSubjects()
+        {
+            m_realizedSubjects.CollectionChanged += m_realizedSubjects_CollectionChanged;
+        }
+        private void UnsubscribeRealizedSubjects()
+        {
+            m_realizedSubjects.CollectionChanged -= m_realizedSubjects_CollectionChanged;
+        }
+
+        private void m_realizedSubjects_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            RaisePropertyChanged("RealizedSubjectsDisplay");
         }
 
         //private void SubscribeStudents()

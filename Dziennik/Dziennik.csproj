@@ -85,6 +85,7 @@
     </ApplicationDefinition>
     <Compile Include="CommandUtils\RelayCommand.cs" />
     <Compile Include="CommonEventArgs.cs" />
+    <Compile Include="Controls\DecimalToBrushConverter.cs" />
     <Compile Include="Controls\DirectorySelector.xaml.cs">
       <DependentUpon>DirectorySelector.xaml</DependentUpon>
     </Compile>

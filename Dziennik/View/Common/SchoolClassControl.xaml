@@ -22,8 +22,9 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <WrapPanel Grid.Row="0">
-                        <Button Content="{DynamicResource lang_RealizeSubject}" Style="{StaticResource wrapPanelButtonStyle}" Command="{Binding RealizeSubjectCommand}"/>
+                    <WrapPanel Grid.Row="0" Orientation="Horizontal">
+                        <Button Content="{DynamicResource lang_RealizeSubject}" Style="{StaticResource wrapPanelControlStyle}" Command="{Binding RealizeSubjectCommand}"/>
+                        <TextBlock Text="{Binding SelectedGroup.RealizedSubjectsDisplay}" Style="{StaticResource wrapPanelControlStyle}"/>
                     </WrapPanel>
 
                     <DataGrid Grid.Row="1"
@@ -73,7 +74,13 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTextColumn Header="{DynamicResource lang_AverageFirst}" Binding="{Binding FirstSemester.AverageMark}" Visibility="{Binding ShowFirstAverage, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
-                        <DataGridTextColumn Header="{DynamicResource lang_AttendanceFirst}" Binding="{Binding AttendanceFirstDisplay}" Visibility="{Binding ShowFirstAttendance, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
+                        <DataGridTextColumn Header="{DynamicResource lang_AttendanceFirst}" Binding="{Binding AttendanceFirstDisplay}" Visibility="{Binding ShowFirstAttendance, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background" Value="{Binding AttendanceFirst,Converter={StaticResource convertDecimalToBrush}}"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
                         <DataGridTemplateColumn Header="{DynamicResource lang_HalfEndingMark}" Visibility="{Binding ShowHalfEndingMark, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
                             <DataGridTemplateColumn.HeaderTemplate>
                                 <DataTemplate>
@@ -100,9 +107,21 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTextColumn Header="{DynamicResource lang_AverageSecond}" Binding="{Binding SecondSemester.AverageMark}" Visibility="{Binding ShowSecondAverage, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
-                        <DataGridTextColumn Header="{DynamicResource lang_AttendanceSecond}" Binding="{Binding AttendanceSecondDisplay}" Visibility="{Binding ShowSecondAttendance, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
+                        <DataGridTextColumn Header="{DynamicResource lang_AttendanceSecond}" Binding="{Binding AttendanceSecondDisplay}" Visibility="{Binding ShowSecondAttendance, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background" Value="{Binding AttendanceSecond,Converter={StaticResource convertDecimalToBrush}}"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
                         <DataGridTextColumn Header="{DynamicResource lang_AverageYear}" Binding="{Binding AverageMarkAll}" Visibility="{Binding ShowEndingAverage, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
-                        <DataGridTextColumn Header="{DynamicResource lang_AttendanceYear}" Binding="{Binding AttendanceYearDisplay}" Visibility="{Binding ShowYearAttendance, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
+                        <DataGridTextColumn Header="{DynamicResource lang_AttendanceYear}" Binding="{Binding AttendanceYearDisplay}" Visibility="{Binding ShowYearAttendance, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background" Value="{Binding AttendanceYear,Converter={StaticResource convertDecimalToBrush}}"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
                         <DataGridTemplateColumn Header="{DynamicResource lang_YearEndingMark}" Visibility="{Binding ShowYearEndingMark, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
                             <DataGridTemplateColumn.HeaderTemplate>
                                 <DataTemplate>

@@ -48,11 +48,18 @@ namespace Dziennik.View
             GlobalConfig.Dialogs.Register(this, viewModel);
 
             this.Loaded += MainWindow_Loaded;
+            this.SizeChanged += MainWindow_SizeChanged;
+        }
+
+        private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            ((MainViewModel)this.DataContext).WindowWidth = (int)e.NewSize.Width;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             ((MainViewModel)this.DataContext).Init();
+            ((MainViewModel)this.DataContext).WindowWidth = (int)this.ActualWidth;
         }
     }
 }

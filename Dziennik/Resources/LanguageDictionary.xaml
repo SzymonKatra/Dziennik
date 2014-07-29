@@ -7,6 +7,8 @@
     <s:String x:Key="lang_Ok">OK</s:String>
     <s:String x:Key="lang_Cancel">Anuluj</s:String>
     <s:String x:Key="lang_Close">Zamknij</s:String>
+    <s:String x:Key="lang_Error">Błąd</s:String>
+    <s:String x:Key="lang_ErrorFormat">Błąd {0}</s:String>
     
     <s:String x:Key="lang_Subjects">Tematy</s:String>
     <s:String x:Key="lang_Marks">Oceny</s:String>
@@ -96,5 +98,6 @@
 
     <s:String x:Key="lang_SelectSubjectTitle">Wybierz temat</s:String>
 
-    <s:String x:Key="lang_AttendanceDisplayFormat">{0} / {1}</s:String>
+    <s:String x:Key="lang_AttendanceDisplayFormat">{0} / {1} ({2}%)</s:String>
+    <s:String x:Key="lang_RealizedSubjectsCountFormat">Liczba zrealizowanych tematów: {0}/{1} (+{2} dodatkowych)</s:String>
 </ResourceDictionary>

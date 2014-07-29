@@ -176,6 +176,7 @@ namespace Dziennik.View
             foreach (var pair in m_pairs)
             {
                 pair.Presence.WasPresent = pair.WasPresentCache;
+                if (!m_isAddingMode) pair.Student.RaiseAttendanceChanged();
             }
             if (m_isAddingMode)
             {
@@ -207,6 +208,7 @@ namespace Dziennik.View
             foreach (var pair in m_pairs)
             {
                 pair.Student.Presence.Remove(pair.Presence);
+                pair.Student.RaiseAttendanceChanged();
             }
             m_result = RealizeSubjectResult.RemoveSubject;
             GlobalConfig.Dialogs.Close(this);
