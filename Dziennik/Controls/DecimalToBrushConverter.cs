@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Globalization;
 
 namespace Dziennik.Controls
 {
@@ -67,19 +68,22 @@ namespace Dziennik.Controls
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
+            string parameterString = (string)parameter;
+            string[] tokens = parameterString.Split('-');
+            decimal low = decimal.Parse(tokens[0], CultureInfo.InvariantCulture);
+            decimal high = decimal.Parse(tokens[1], CultureInfo.InvariantCulture); 
+            bool lowerRangeRed = bool.Parse(tokens[2]);
+
             decimal input = (decimal)value;
-            if (input <= 0.5M) return Brushes.Red;
+            if ((input <= low && lowerRangeRed) || input < low) return Brushes.Red;
 
-            input -= 0.5M;
-            input *= 2;
+            input -= low;
+            //input *= 2;
 
+            ColorDecimal lowColor = ColorDecimal.FromColor(Colors.Orange);
+            ColorDecimal highColor = ColorDecimal.FromColor(Colors.LightGreen);
 
-            //ColorDecimal high = new ColorDecimal(0M,1M, 0M, 1M);
-            //ColorDecimal low = new ColorDecimal(1M, 0M, 0M, 1M);
-            ColorDecimal high = ColorDecimal.FromColor(Colors.LightGreen);
-            ColorDecimal low = ColorDecimal.FromColor(Colors.Orange);
-
-            ColorDecimal result = (high - low) * input + low;
+            ColorDecimal result = (highColor - lowColor) * (input / (high - low)) + lowColor;
 
             return new SolidColorBrush(result.ToColor());
         }

@@ -14,6 +14,8 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
@@ -42,7 +44,17 @@
         <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
             <Button Content="{DynamicResource lang_AllStudents}" Style="{StaticResource commonButtonStyle}" Command="{Binding ShowGlobalStudentsListCommand}"/>
         </Grid>
-        <Grid Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2">
+
+        <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_YearBeginning}"/>
+        <DatePicker Grid.Column="1" Grid.Row="3" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding SchoolClass.YearBeginning, Mode=TwoWay}"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="4" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_SemesterSeparator}"/>
+        <DatePicker Grid.Column="1" Grid.Row="4" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding SchoolClass.SemesterSeparator, Mode=TwoWay}"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="5" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_YearEnding}"/>
+        <DatePicker Grid.Column="1" Grid.Row="5" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding SchoolClass.YearEnding, Mode=TwoWay}"/>
+
+        <Grid Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width=".65*"/>
                 <ColumnDefinition Width=".35*"/>
@@ -51,6 +63,6 @@
             <Button Grid.Column="1" Margin="10,5,10,5" Content="{DynamicResource lang_RemoveClass}" Command="{Binding RemoveClassCommand}"/>
         </Grid>
 
-        <my:OkCancelControl Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
+        <my:OkCancelControl Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>
 </Window>

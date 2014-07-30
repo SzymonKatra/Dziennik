@@ -108,6 +108,8 @@
       <DependentUpon>RemoveButtonControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DatabaseContext.cs" />
+    <Compile Include="DatabaseIgnoreSearchRelationsAttribute.cs" />
+    <Compile Include="DatabaseInversePropertyOwnerAttribute.cs" />
     <Compile Include="DatabaseRelationAttribute.cs" />
     <Compile Include="DatabaseRelationCollectionAttribute.cs" />
     <Compile Include="DatabaseRelationPropertyAttribute.cs" />

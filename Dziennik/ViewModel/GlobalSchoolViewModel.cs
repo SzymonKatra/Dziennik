@@ -22,21 +22,5 @@ namespace Dziennik.ViewModel
         {
             get { return m_model; }
         }
-
-        public DateTime YearBeginning
-        {
-            get { return m_model.YearBeginning; }
-            set { m_model.YearBeginning = value; RaisePropertyChanged("YearBeginning"); }
-        }
-        public DateTime SemesterSeparator
-        {
-            get { return m_model.SemesterSeparator; }
-            set { m_model.SemesterSeparator = value; RaisePropertyChanged("SemesterSeparator"); }
-        }
-        public DateTime YearEnding
-        {
-            get { return m_model.YearEnding; }
-            set { m_model.YearEnding = value; RaisePropertyChanged("YearEnding"); }
-        }
     }
 }

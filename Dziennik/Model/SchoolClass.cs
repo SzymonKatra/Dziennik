@@ -12,6 +12,9 @@ namespace Dziennik.Model
         public string Name { get; set; }
         public List<GlobalStudent> Students { get; set; }
         public List<SchoolGroup> Groups { get; set; }
+        public DateTime YearBeginning { get; set; }
+        public DateTime SemesterSeparator { get; set; }
+        public DateTime YearEnding { get; set; }
 
         public SchoolClass()
         {

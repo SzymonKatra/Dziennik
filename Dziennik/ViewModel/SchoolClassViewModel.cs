@@ -20,6 +20,7 @@ namespace Dziennik.ViewModel
 
             m_students = new SynchronizedPerItemObservableCollection<GlobalStudentViewModel, GlobalStudent>(m_model.Students, (m) => { return new GlobalStudentViewModel(m); });
             m_groups = new SynchronizedObservableCollection<SchoolGroupViewModel, SchoolGroup>(m_model.Groups, (m) => { return new SchoolGroupViewModel(m); });
+            SubscribeGroups();
         }
 
         private SchoolClass m_model;
@@ -48,17 +49,60 @@ namespace Dziennik.ViewModel
             }
         }
         private SynchronizedObservableCollection<SchoolGroupViewModel, SchoolGroup> m_groups;
+        [DatabaseInversePropertyOwner("OwnerClass", "SubscribeGroups")]
         public SynchronizedObservableCollection<SchoolGroupViewModel, SchoolGroup> Groups
         {
             get { return m_groups; }
             set
             {
-                //UnsubscribeGroups();
+                UnsubscribeGroups();
                 m_groups = value;
-                //SubscribeGroups();
+                SubscribeGroups();
                 m_model.Groups = value.ModelCollection;
                 RaisePropertyChanged("Groups");
             }
         }
+
+        public DateTime YearBeginning
+        {
+            get { return m_model.YearBeginning; }
+            set { m_model.YearBeginning = value; RaisePropertyChanged("YearBeginning"); }
+        }
+        public DateTime SemesterSeparator
+        {
+            get { return m_model.SemesterSeparator; }
+            set { m_model.SemesterSeparator = value; RaisePropertyChanged("SemesterSeparator"); }
+        }
+        public DateTime YearEnding
+        {
+            get { return m_model.YearEnding; }
+            set { m_model.YearEnding = value; RaisePropertyChanged("YearEnding"); }
+        }
+
+        private void SubscribeGroups()
+        {
+            m_groups.Added += m_groups_Added;
+            m_groups.Removed += m_groups_Removed;
+        }
+        private void UnsubscribeGroups()
+        {
+            m_groups.Added += m_groups_Added;
+            m_groups.Removed += m_groups_Removed;
+        }
+
+        private void m_groups_Added(object sender, NotifyCollectionChangedSimpleEventArgs<SchoolGroupViewModel> e)
+        {
+            foreach (var item in e.Items)
+            {
+                item.OwnerClass = this;
+            }
+        }
+        private void m_groups_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<SchoolGroupViewModel> e)
+        {
+            foreach (var item in e.Items)
+            {
+                item.OwnerClass = null;
+            }
+        }   
     }
 }

@@ -32,7 +32,7 @@ namespace Dziennik
     /// Collection which can notify about changed propety of item in this collection via event in class
     /// </summary>
     /// <typeparam name="T">Type</typeparam>
-    public class PerItemObservableCollection<T> : ObservableCollection<T>
+    public class PerItemObservableCollection<T> : ObservableCollectionExtended<T>
                                                   where T : INotifyPropertyChanged
     {
         public event EventHandler<ItemPropertyInCollectionChangedEventArgs<T>> ItemPropertyInCollectionChanged;

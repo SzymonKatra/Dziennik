@@ -25,9 +25,9 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" Width="18">
                         <TextBlock Text="{Binding DisplayedMark}"/>
-                        <TextBlock Text="{Binding Weight}" FontSize="8" VerticalAlignment="Bottom" Visibility="{Binding ShowWeights, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
+                        <TextBlock Text="{Binding DisplayedWeight}" FontSize="8" VerticalAlignment="Bottom" Visibility="{Binding ShowWeights, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

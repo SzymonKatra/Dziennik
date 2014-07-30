@@ -19,6 +19,7 @@ namespace Dziennik.ViewModel
             m_students = new SynchronizedPerItemObservableCollection<StudentInGroupViewModel, StudentInGroup>(m_model.Students, (m) => { return new StudentInGroupViewModel(m); });;
             m_globalSubjects = new SynchronizedObservableCollection<GlobalSubjectViewModel, GlobalSubject>(m_model.Subjects, m => new GlobalSubjectViewModel(m));
             m_realizedSubjects = new SynchronizedObservableCollection<RealizedSubjectViewModel, RealizedSubject>(m_model.RealizedSubjects, m => new RealizedSubjectViewModel(m));
+            SubscribeStudents();
             SubscribeRealizedSubjects();
         }
 
@@ -28,20 +29,29 @@ namespace Dziennik.ViewModel
             get { return m_model; }
         }
 
+        private SchoolClassViewModel m_ownerClass;
+        [DatabaseIgnoreSearchRelations]
+        public SchoolClassViewModel OwnerClass
+        {
+            get { return m_ownerClass; }
+            set { m_ownerClass = value; }
+        }
+
         public string Name
         {
             get { return m_model.Name; }
             set { m_model.Name = value; RaisePropertyChanged("Name"); }
         }
         private SynchronizedPerItemObservableCollection<StudentInGroupViewModel, StudentInGroup> m_students;
+        [DatabaseInversePropertyOwner("OwnerGroup", "SubscribeStudents")]
         public SynchronizedPerItemObservableCollection<StudentInGroupViewModel, StudentInGroup> Students
         {
             get { return m_students; }
             set
             {
-                //UnsubscribeStudents();
+                UnsubscribeStudents();
                 m_students = value;
-                //SubscribeStudents();
+                SubscribeStudents();
                 m_model.Students = value.ModelCollection;
                 RaisePropertyChanged("Students");
             }
@@ -92,10 +102,36 @@ namespace Dziennik.ViewModel
         {
             m_realizedSubjects.CollectionChanged -= m_realizedSubjects_CollectionChanged;
         }
-
+        
         private void m_realizedSubjects_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             RaisePropertyChanged("RealizedSubjectsDisplay");
+        }
+
+        private void SubscribeStudents()
+        {
+            m_students.Added += m_students_Added;
+            m_students.Removed += m_students_Removed;
+        }
+        private void UnsubscribeStudents()
+        {
+            m_students.Added += m_students_Added;
+            m_students.Removed += m_students_Removed;
+        }
+
+        private void m_students_Added(object sender, NotifyCollectionChangedSimpleEventArgs<StudentInGroupViewModel> e)
+        {
+            foreach (var item in e.Items)
+            {
+                item.OwnerGroup = this;
+            }
+        }
+        private void m_students_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<StudentInGroupViewModel> e)
+        {
+            foreach (var item in e.Items)
+            {
+                item.OwnerGroup = null;
+            }
         }
 
         //private void SubscribeStudents()

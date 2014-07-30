@@ -73,11 +73,17 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="{DynamicResource lang_AverageFirst}" Binding="{Binding FirstSemester.AverageMark}" Visibility="{Binding ShowFirstAverage, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
+                        <DataGridTextColumn Header="{DynamicResource lang_AverageFirst}" Binding="{Binding FirstSemester.AverageMark}" Visibility="{Binding ShowFirstAverage, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background" Value="{Binding FirstSemester.AverageMark,Converter={StaticResource convertDecimalToBrush}, ConverterParameter={StaticResource averageMarkConverterParameter}}"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
                         <DataGridTextColumn Header="{DynamicResource lang_AttendanceFirst}" Binding="{Binding AttendanceFirstDisplay}" Visibility="{Binding ShowFirstAttendance, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="Background" Value="{Binding AttendanceFirst,Converter={StaticResource convertDecimalToBrush}}"/>
+                                    <Setter Property="Background" Value="{Binding AttendanceFirst,Converter={StaticResource convertDecimalToBrush}, ConverterParameter={StaticResource attendanceConverterParameter}}"/>
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
@@ -106,19 +112,31 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="{DynamicResource lang_AverageSecond}" Binding="{Binding SecondSemester.AverageMark}" Visibility="{Binding ShowSecondAverage, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
-                        <DataGridTextColumn Header="{DynamicResource lang_AttendanceSecond}" Binding="{Binding AttendanceSecondDisplay}" Visibility="{Binding ShowSecondAttendance, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
+                        <DataGridTextColumn Header="{DynamicResource lang_AverageSecond}" Binding="{Binding SecondSemester.AverageMark}" Visibility="{Binding ShowSecondAverage, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="Background" Value="{Binding AttendanceSecond,Converter={StaticResource convertDecimalToBrush}}"/>
+                                    <Setter Property="Background" Value="{Binding SecondSemester.AverageMark,Converter={StaticResource convertDecimalToBrush}, ConverterParameter={StaticResource averageMarkConverterParameter}}"/>
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="{DynamicResource lang_AverageYear}" Binding="{Binding AverageMarkAll}" Visibility="{Binding ShowEndingAverage, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
+                        <DataGridTextColumn Header="{DynamicResource lang_AttendanceSecond}" Binding="{Binding AttendanceSecondDisplay}" Visibility="{Binding ShowSecondAttendance, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background" Value="{Binding AttendanceSecond,Converter={StaticResource convertDecimalToBrush}, ConverterParameter={StaticResource attendanceConverterParameter}}"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="{DynamicResource lang_AverageYear}" Binding="{Binding AverageMarkAll}" Visibility="{Binding ShowEndingAverage, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background" Value="{Binding AverageMarkAll,Converter={StaticResource convertDecimalToBrush}, ConverterParameter={StaticResource averageMarkConverterParameter}}"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
                         <DataGridTextColumn Header="{DynamicResource lang_AttendanceYear}" Binding="{Binding AttendanceYearDisplay}" Visibility="{Binding ShowYearAttendance, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="Background" Value="{Binding AttendanceYear,Converter={StaticResource convertDecimalToBrush}}"/>
+                                    <Setter Property="Background" Value="{Binding AttendanceYear,Converter={StaticResource convertDecimalToBrush}, ConverterParameter={StaticResource attendanceConverterParameter}}"/>
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>

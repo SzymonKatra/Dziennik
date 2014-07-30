@@ -31,6 +31,14 @@ namespace Dziennik.ViewModel
             get { return m_model; }
         }
 
+        private SchoolGroupViewModel m_ownerGroup;
+        [DatabaseIgnoreSearchRelations]
+        public SchoolGroupViewModel OwnerGroup
+        {
+            get { return m_ownerGroup; }
+            set { m_ownerGroup = value; }
+        }
+
         public int Number
         {
             get { return m_model.Number; }
@@ -119,7 +127,7 @@ namespace Dziennik.ViewModel
             get
             {
                 if (Presence.Count > 0 && Presence[0].RealizedSubject == null) return null; // to prevent errors while loading database
-                IEnumerable<RealizedSubjectPresenceViewModel> valid = Presence.Where((x) => x.RealizedSubject.RealizedDate >= GlobalConfig.GlobalDatabase.ViewModel.YearBeginning && x.RealizedSubject.RealizedDate < GlobalConfig.GlobalDatabase.ViewModel.SemesterSeparator);
+                IEnumerable<RealizedSubjectPresenceViewModel> valid = Presence.Where((x) => x.RealizedSubject.RealizedDate >= OwnerGroup.OwnerClass.YearBeginning && x.RealizedSubject.RealizedDate < OwnerGroup.OwnerClass.SemesterSeparator);
                 return valid;
             }
         }
@@ -128,7 +136,7 @@ namespace Dziennik.ViewModel
             get
             {
                 if (Presence.Count > 0 && Presence[0].RealizedSubject == null) return null; // to prevent errors while loading database
-                IEnumerable<RealizedSubjectPresenceViewModel> valid = Presence.Where((x) => x.RealizedSubject.RealizedDate >= GlobalConfig.GlobalDatabase.ViewModel.SemesterSeparator && x.RealizedSubject.RealizedDate <= GlobalConfig.GlobalDatabase.ViewModel.YearEnding);
+                IEnumerable<RealizedSubjectPresenceViewModel> valid = Presence.Where((x) => x.RealizedSubject.RealizedDate >= OwnerGroup.OwnerClass.SemesterSeparator && x.RealizedSubject.RealizedDate <= OwnerGroup.OwnerClass.YearEnding);
                 return valid;
             }
         }
@@ -137,7 +145,7 @@ namespace Dziennik.ViewModel
             get
             {
                 if (Presence.Count > 0 && Presence[0].RealizedSubject == null) return null; // to prevent errors while loading database   
-                IEnumerable<RealizedSubjectPresenceViewModel> valid = Presence.Where((x) => x.RealizedSubject.RealizedDate >= GlobalConfig.GlobalDatabase.ViewModel.YearBeginning && x.RealizedSubject.RealizedDate <= GlobalConfig.GlobalDatabase.ViewModel.YearEnding);
+                IEnumerable<RealizedSubjectPresenceViewModel> valid = Presence.Where((x) => x.RealizedSubject.RealizedDate >= OwnerGroup.OwnerClass.YearBeginning && x.RealizedSubject.RealizedDate <= OwnerGroup.OwnerClass.YearEnding);
                 return valid;
             }
         }

@@ -30,7 +30,7 @@
     <s:String x:Key="lang_HalfEndingMark">Ocena śródroczna</s:String>
     <s:String x:Key="lang_MarksSecond">Oceny (2)</s:String>
     <s:String x:Key="lang_AverageSecond">Średnia (2)</s:String>
-    <s:String x:Key="lang_AttendanceSecond">Frekwencja(2)</s:String>
+    <s:String x:Key="lang_AttendanceSecond">Frekwencja (2)</s:String>
     <s:String x:Key="lang_AverageYear">Średnia (roczna)</s:String>
     <s:String x:Key="lang_AttendanceYear">Frekwencja (roczna)</s:String>
     <s:String x:Key="lang_YearEndingMark">Ocena końcoworoczna</s:String>

@@ -33,6 +33,7 @@ namespace Dziennik
         {
             public PropertyInfo Info { get; set; }
             public object[] Attributes { get; set; }
+            public bool IgnoreFromSearchRelations { get; set; }
         }
         private class RelationPair
         {
@@ -65,6 +66,34 @@ namespace Dziennik
                 Properties = new List<RelationProperties>();
             }
         }
+        private class InversePropertyOwnerPairs
+        {
+            /// <summary>
+            /// OBE - ObservableCollectionExtended
+            /// </summary>
+            public string SubscribeOwnerOBEMethodName { get; set; }
+            public string ChildOwnerPropertyName { get; set; }
+            public IModelExposable<ModelBase> Owner { get; set; }
+
+            private IModelExposable<ModelBase> m_property;
+            public IModelExposable<ModelBase> Property
+            {
+                get { return m_property; }
+                set { m_property = value; m_collection = null; }
+            }
+
+            private IEnumerable<IModelExposable<ModelBase>> m_collection;
+            public IEnumerable<IModelExposable<ModelBase>> Collection
+            {
+                get { return m_collection; }
+                set { m_collection = value; m_property = null; }
+            }
+
+            public bool IsCollectionValid
+            {
+                get { return m_property == null; }
+            }
+        }
 
         #region Properties
         private RestoreRelationsGlobalCollectionCheckingModes m_restoreRelationsGlobalCollectionChecking = RestoreRelationsGlobalCollectionCheckingModes.ExceptionIfNotExistsAlways;
@@ -90,6 +119,7 @@ namespace Dziennik
 
         private ulong m_currentId = 1;
         private List<RelationPair> m_relations = new List<RelationPair>();
+        private List<InversePropertyOwnerPairs> m_inverseProperties = new List<InversePropertyOwnerPairs>();
         private Dictionary<Type, CachedProperty[]> m_reflectionCache = new Dictionary<Type, CachedProperty[]>();
         #endregion
 
@@ -125,12 +155,15 @@ namespace Dziennik
 
             m_viewModel = customCreator((M)JSON.ToObject(json, typeof(M)));
 
-            RestoreRelations(m_viewModel);
+            ClearAndReflectViewModel(m_viewModel);
+            RestoreRelations();
+            AssignInverseProperties();
         }
         protected void Save(Stream stream)
         {
+            ClearAndReflectViewModel(m_viewModel);
             AssignIdentifiers(m_viewModel.Model);
-            AssignRelations(m_viewModel);
+            AssignRelations();
 
             stream.Write(BitConverter.GetBytes(m_currentId), 0, sizeof(ulong)); // save current id
             byte[] jsonBytes = Encoding.UTF8.GetBytes(JSON.ToJSON(m_viewModel.Model));
@@ -164,11 +197,8 @@ namespace Dziennik
             }
         }
 
-        protected void RestoreRelations(IModelExposable<ModelBase> viewModel)
+        protected void RestoreRelations()
         {
-            m_relations.Clear();
-            MakeRelationPairs(viewModel, new Dictionary<string,RelationPair>());
-
             foreach (var relation in m_relations)
             {
                 foreach (var relationProperties in relation.Properties)
@@ -187,11 +217,8 @@ namespace Dziennik
                 }
             }
         }
-        protected void AssignRelations(IModelExposable<ModelBase> viewModel)
+        protected void AssignRelations()
         {
-            m_relations.Clear();
-            MakeRelationPairs(viewModel, new Dictionary<string,RelationPair>());
-
             foreach (var relation in m_relations)
             {
                 foreach (var relationProperties in relation.Properties)
@@ -220,18 +247,47 @@ namespace Dziennik
                 }
             }
         }
+        protected void AssignInverseProperties()
+        {
+            foreach (var inverseProperty in m_inverseProperties)
+            {
+                if(inverseProperty.IsCollectionValid)
+                {
+                    foreach (var item in inverseProperty.Collection)
+                    {
+                        PropertyInfo ownerPropertyName = item.GetType().GetProperty(inverseProperty.ChildOwnerPropertyName);
+                        ownerPropertyName.SetValue(item, inverseProperty.Owner, null);
+                    }
+                }
+                else
+                {
+                    PropertyInfo ownerPropertyName = inverseProperty.Property.GetType().GetProperty(inverseProperty.ChildOwnerPropertyName);
+                    ownerPropertyName.SetValue(inverseProperty.Property, inverseProperty.Owner, null);
+                }
 
-        private void MakeRelationPairs(IModelExposable<ModelBase> viewModel, Dictionary<string, RelationPair> availablePairs)
+                inverseProperty.Owner.GetType().GetMethod(inverseProperty.SubscribeOwnerOBEMethodName, BindingFlags.NonPublic | BindingFlags.InvokeMethod | BindingFlags.Instance).Invoke(inverseProperty.Owner, null);
+            }
+        }
+
+        private void ClearAndReflectViewModel(IModelExposable<ModelBase> viewModel)
+        {
+            m_relations.Clear();
+            m_inverseProperties = new List<InversePropertyOwnerPairs>();
+            ReflectViewModel(viewModel, new Dictionary<string, RelationPair>());
+        }
+        private void ReflectViewModel(IModelExposable<ModelBase> viewModel, Dictionary<string, RelationPair> availableRelationPairs)
         {
             Type type = viewModel.GetType();
 
             CachedProperty[] properties = GetCachedProperties(type);
 
-            Dictionary<string, RelationPair> addedCollections = new Dictionary<string, RelationPair>();
+            Dictionary<string, RelationPair> addedRelationPairs = new Dictionary<string, RelationPair>();
 
             //first search in properties and find collections
             foreach (CachedProperty property in properties)
             {
+                if (property.IgnoreFromSearchRelations) continue;
+
                 object propVal = property.Info.GetValue(viewModel, null);
                 object[] attributes = property.Attributes;
 
@@ -241,53 +297,73 @@ namespace Dziennik
                     {
                         DatabaseRelationPropertyAttribute propAttribVal = (DatabaseRelationPropertyAttribute)attrib;
 
-                        if (!availablePairs.ContainsKey(propAttribVal.RelationName)) throw new InvalidOperationException("Specified relation not found: " + propAttribVal.RelationName);
+                        if (!availableRelationPairs.ContainsKey(propAttribVal.RelationName)) throw new InvalidOperationException("Specified relation not found: " + propAttribVal.RelationName);
 
-                        availablePairs[propAttribVal.RelationName].Properties.Add(new RelationPair.RelationProperties(viewModel, (IModelExposable<ModelBase>)propVal, property.Info, propAttribVal.ModelPropertyIdName));
+                        availableRelationPairs[propAttribVal.RelationName].Properties.Add(new RelationPair.RelationProperties(viewModel, (IModelExposable<ModelBase>)propVal, property.Info, propAttribVal.ModelPropertyIdName));
                     }
                     else if (attrib is DatabaseRelationCollectionAttribute)
                     {
                         DatabaseRelationCollectionAttribute collAttribVal = (DatabaseRelationCollectionAttribute)attrib;
 
-                        if (availablePairs.ContainsKey(collAttribVal.RelationName)) throw new InvalidOperationException("Found another yet relation with the same name: " + collAttribVal.RelationName);
-                        addedCollections.Add(collAttribVal.RelationName, new RelationPair()
+                        if (availableRelationPairs.ContainsKey(collAttribVal.RelationName)) throw new InvalidOperationException("Found another yet relation with the same name: " + collAttribVal.RelationName);
+                        addedRelationPairs.Add(collAttribVal.RelationName, new RelationPair()
                         {
                             Name = collAttribVal.RelationName,
                             Collection = (IEnumerable<IModelExposable<ModelBase>>)propVal
                         });
                     }
+                    else if (attrib is DatabaseInversePropertyOwnerAttribute)
+                    {
+                        DatabaseInversePropertyOwnerAttribute ipAttribVal = (DatabaseInversePropertyOwnerAttribute)attrib;
+                        InversePropertyOwnerPairs pair = new InversePropertyOwnerPairs();
+                        pair.ChildOwnerPropertyName = ipAttribVal.OwnerPropertyInChildName;
+                        pair.Owner = viewModel;
+                        pair.SubscribeOwnerOBEMethodName = ipAttribVal.SubscribeObservableCollectionExtendedMethodName;
+                        if (propVal is IEnumerable<IModelExposable<ModelBase>>)
+                        {
+                            pair.Collection = (IEnumerable<IModelExposable<ModelBase>>)propVal;
+                        }
+                        else if (propVal is IModelExposable<ModelBase>)
+                        {
+                            pair.Property = (IModelExposable<ModelBase>)propVal;
+                        }
+                        else throw new InvalidOperationException("Inverse property owner must be of type IModelExposable<ModelBase> or IEnumerable<IModelExposable<ModelBase>>");
+                        m_inverseProperties.Add(pair);
+                    }
                 }
             }
 
             //second add found collections to cache
-            foreach (var kvp in addedCollections)
+            foreach (var kvp in addedRelationPairs)
             {
-                availablePairs.Add(kvp.Key, kvp.Value);
+                availableRelationPairs.Add(kvp.Key, kvp.Value);
             }
 
             //third search inside rest properties
             foreach (CachedProperty property in properties)
             {
+                if (property.IgnoreFromSearchRelations) continue;
+                
                 object propVal = property.Info.GetValue(viewModel, null);
 
-                if (propVal is IEnumerable)
+                if (propVal is IEnumerable<IModelExposable<ModelBase>>)
                 {
                     if (propVal is string) continue; // to prevent foreach'ing string
 
-                    IEnumerable coll = (IEnumerable)propVal;
-                    foreach (object item in coll)
+                    IEnumerable<IModelExposable<ModelBase>> coll = (IEnumerable<IModelExposable<ModelBase>>)propVal;
+                    foreach (IModelExposable<ModelBase> item in coll)
                     {
-                        if (item is IModelExposable<ModelBase>) MakeRelationPairs((IModelExposable<ModelBase>)item, availablePairs);
+                        ReflectViewModel(item, availableRelationPairs);
                     }
                 }
-                else if (propVal is IModelExposable<ModelBase>) MakeRelationPairs((IModelExposable<ModelBase>)propVal, availablePairs);
+                else if (propVal is IModelExposable<ModelBase>) ReflectViewModel((IModelExposable<ModelBase>)propVal, availableRelationPairs);
             }
 
             //fourth remove collections from cache and add them to global relations list
-            foreach (var toRemoveKvp in addedCollections)
+            foreach (var toRemoveKvp in addedRelationPairs)
             {
                 m_relations.Add(toRemoveKvp.Value);
-                availablePairs.Remove(toRemoveKvp.Key);
+                availableRelationPairs.Remove(toRemoveKvp.Key);
             }
         }
 
@@ -304,6 +380,15 @@ namespace Dziennik
                     cachedProperties[i] = new CachedProperty();
                     cachedProperties[i].Info = properties[i];
                     cachedProperties[i].Attributes = properties[i].GetCustomAttributes(false);
+                    cachedProperties[i].IgnoreFromSearchRelations = false;
+                    foreach (var attrib in cachedProperties[i].Attributes)
+                    {
+                        if(attrib is DatabaseIgnoreSearchRelationsAttribute)
+                        {
+                            cachedProperties[i].IgnoreFromSearchRelations = true;
+                            break;
+                        }
+                    }
                 }
 
                 m_reflectionCache.Add(type, cachedProperties);

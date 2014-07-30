@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Dziennik
 {
-    public interface INotifyCollectionChangedSimple<T>
+    public interface INotifyCollectionChangedSimple<T> : IEnumerable<T>
     {
         event EventHandler<NotifyCollectionChangedSimpleEventArgs<T>> Added;
         event EventHandler<NotifyCollectionChangedSimpleEventArgs<T>> Removed;

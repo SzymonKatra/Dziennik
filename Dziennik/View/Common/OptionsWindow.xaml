@@ -61,15 +61,6 @@
                     </Button>
                 </WrapPanel>
             </Grid>
-
-            <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_YearBeginning}"/>
-            <DatePicker Grid.Column="1" Grid.Row="3" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding ViewModel.YearBeginning, Source={x:Static local:GlobalConfig.GlobalDatabase}, Mode=TwoWay}"/>          
-            
-            <TextBlock Grid.Column="0" Grid.Row="4" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_SemesterSeparator}"/>
-            <DatePicker Grid.Column="1" Grid.Row="4" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding ViewModel.SemesterSeparator, Source={x:Static local:GlobalConfig.GlobalDatabase}, Mode=TwoWay}"/>
-
-            <TextBlock Grid.Column="0" Grid.Row="5" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_YearEnding}"/>
-            <DatePicker Grid.Column="1" Grid.Row="5" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding ViewModel.YearEnding, Source={x:Static local:GlobalConfig.GlobalDatabase}, Mode=TwoWay}"/>
         </Grid>
         
         <Grid Grid.Column="1" Grid.Row="0">

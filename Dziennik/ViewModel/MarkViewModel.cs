@@ -52,7 +52,7 @@ namespace Dziennik.ViewModel
         public int Weight
         {
             get { return m_model.Weight; }
-            set { m_model.Weight = value; }
+            set { m_model.Weight = value; RaisePropertyChanged("Weight"); RaisePropertyChanged("DisplayedWeight"); }
         }
         public DateTime AddDate
         {
@@ -86,6 +86,17 @@ namespace Dziennik.ViewModel
                     return GetValidDisplayedMark(this.Value);
                 }
                 else return this.Note;
+            }
+        }
+        public string DisplayedWeight
+        {
+            get
+            {
+                if (IsValueValid)
+                {
+                    return this.Weight.ToString();
+                }
+                else return string.Empty;
             }
         }
         public string ToolTipFormatted
