@@ -25,6 +25,9 @@ namespace Dziennik.View
 
             m_offDay = offDay;
             m_isAddingMode = isAddingMode;
+
+            m_from = m_offDay.Start;
+            m_to = m_offDay.End;
         }
 
         private EditOffDayResult m_result = EditOffDayResult.Cancel;
@@ -59,14 +62,41 @@ namespace Dziennik.View
             get { return m_removeOffDayCommand; }
         }
 
+        private DateTime m_from;
+        public DateTime From
+        {
+            get { return m_from; }
+            set
+            {
+                m_from = value; RaisePropertyChanged("From");
+                if (m_to.Ticks == 0) To = m_from;
+            }
+        }
+
+        private DateTime m_to;
+        public DateTime To
+        {
+            get { return m_to; }
+            set { m_to = value; RaisePropertyChanged("To"); }
+        }
+
         private void Ok(object e)
         {
+            m_offDay.Start = m_from;
+            m_offDay.End = m_to;
+
+            m_result = EditOffDayResult.Ok;
+            GlobalConfig.Dialogs.Close(this);
         }
         private void Cancel(object e)
         {
+            m_result = EditOffDayResult.Cancel;
+            GlobalConfig.Dialogs.Close(this);
         }
         private void RemoveOffDay(object e)
         {
+            m_result = EditOffDayResult.Remove;
+            GlobalConfig.Dialogs.Close(this);
         }
         private bool CanRemoveOffDay(object e)
         {

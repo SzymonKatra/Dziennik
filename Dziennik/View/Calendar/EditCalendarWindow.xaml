@@ -43,8 +43,8 @@
             </Button>
         </Grid>
         <DataGrid Grid.Column="1" Grid.Row="4"
-                  ItemsSource="{Binding Calendars}"
-                  SelectedItem="{Binding SelectedCalendar, Mode=TwoWay}"
+                  ItemsSource="{Binding Calendar.OffDays}"
+                  SelectedItem="{Binding SelectedOffDay, Mode=TwoWay}"
                   CanUserAddRows="False"
                   CanUserSortColumns="False"
                   SelectionMode="Single"
@@ -57,7 +57,7 @@
                 <DataGridTemplateColumn Header="Edytuj">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <my:EditButtonControl Command="{Binding DataContext.EditCalendarCommand, ElementName=root}"/>
+                            <my:EditButtonControl Command="{Binding DataContext.EditOffDayCommand, ElementName=root}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
