@@ -1,0 +1,30 @@
+﻿<Window x:Class="Dziennik.View.EditOffDayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Dziennik"
+        xmlns:my="clr-namespace:Dziennik.Controls"
+        Title="{DynamicResource lang_EditOffDayTitle}" Height="300" Width="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="70"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        
+        <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_From}"/>
+        <DatePicker Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding From, Mode=TwoWay}"/>
+        
+        <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_To}"/>
+        <DatePicker Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding To, Mode=TwoWay}"/>
+        
+        <my:RemoveButtonControl Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Content="{DynamicResource lang_RemoveOffDay}" Command="{Binding RemoveOffDay}"/>
+        
+        <my:OkCancelControl Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
+    </Grid>
+</Window>

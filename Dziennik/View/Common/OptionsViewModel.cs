@@ -59,9 +59,14 @@ namespace Dziennik.View
         private void EditClass(object e)
         {
             SchoolClassControlViewModel tab = m_selectedClass;
-            EditClassViewModel dialogViewModel = new EditClassViewModel(tab.ViewModel, tab.AutoSaveCommand);
+            SchoolClassViewModel copy = Ext.DeepClone(tab.ViewModel);
+            EditClassViewModel dialogViewModel = new EditClassViewModel(copy, tab.AutoSaveCommand);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
-            if (dialogViewModel.Result == EditClassViewModel.EditClassResult.RemoveClass)
+            if(dialogViewModel.Result== EditClassViewModel.EditClassResult.Ok)
+            {
+                tab.ViewModel = copy;
+            }
+            else if (dialogViewModel.Result == EditClassViewModel.EditClassResult.RemoveClass)
             {
                 //GlobalConfig.Database.SchoolClasses.Remove(m_selectedClass.ViewModel.Model);
                 m_selectedClass = null;

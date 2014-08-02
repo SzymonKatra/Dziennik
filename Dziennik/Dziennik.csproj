@@ -116,9 +116,11 @@
     <Compile Include="DialogService.cs" />
     <Compile Include="Ext.cs" />
     <Compile Include="INotifyCollectionChangedSimple.cs" />
+    <Compile Include="Model\Calendar.cs" />
     <Compile Include="Model\GlobalSchool.cs" />
     <Compile Include="Model\GlobalSubject.cs" />
     <Compile Include="Model\ModelBase.cs" />
+    <Compile Include="Model\OffDay.cs" />
     <Compile Include="Model\RealizedSubject.cs" />
     <Compile Include="Model\RealizedSubjectPresence.cs" />
     <Compile Include="Model\SchoolClass.cs" />
@@ -128,10 +130,12 @@
     <Compile Include="ObservableCollectionExtended.cs" />
     <Compile Include="ObservableCollectionExtensions.cs" />
     <Compile Include="SelectionRangeParser.cs" />
+    <Compile Include="ViewModel\CalendarViewModel.cs" />
     <Compile Include="ViewModel\DatabaseGlobal.cs" />
     <Compile Include="ViewModel\DatabaseMain.cs" />
     <Compile Include="ViewModel\GlobalSchoolViewModel.cs" />
     <Compile Include="ViewModel\GlobalSubjectViewModel.cs" />
+    <Compile Include="ViewModel\OffDayViewModel.cs" />
     <Compile Include="ViewModel\RealizedSubjectPresenceViewModel.cs" />
     <Compile Include="ViewModel\RealizedSubjectViewModel.cs" />
     <Compile Include="ViewModel\SchoolClassViewModel.cs" />
@@ -144,6 +148,18 @@
     <Compile Include="View\Class\EditClassViewModel.cs" />
     <Compile Include="View\Class\EditClassWindow.xaml.cs">
       <DependentUpon>EditClassWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Calendar\EditCalendarViewModel.cs" />
+    <Compile Include="View\Calendar\EditCalendarWindow.xaml.cs">
+      <DependentUpon>EditCalendarWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Calendar\GlobalCalendarListViewModel.cs" />
+    <Compile Include="View\Calendar\GlobalCalendarListWindow.xaml.cs">
+      <DependentUpon>GlobalCalendarListWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Calendar\EditOffDayViewModel.cs" />
+    <Compile Include="View\Calendar\EditOffDayWindow.xaml.cs">
+      <DependentUpon>EditOffDayWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Group\AddGroupViewModel.cs" />
     <Compile Include="View\Group\AddGroupWindow.xaml.cs">
@@ -260,6 +276,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Class\EditClassWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Calendar\EditCalendarWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Calendar\GlobalCalendarListWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Calendar\EditOffDayWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -403,6 +431,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

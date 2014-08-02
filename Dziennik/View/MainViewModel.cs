@@ -50,7 +50,8 @@ namespace Dziennik.View
         {
             get
             {
-                int result = (m_windowWidth - 100) / m_openedSchoolClasses.Count;
+                int result = (m_windowWidth / m_openedSchoolClasses.Count) - 29;
+                if (result < 0) return 0;
                 return result;
             }
         }

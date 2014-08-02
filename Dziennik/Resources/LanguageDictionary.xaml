@@ -49,9 +49,6 @@
     <s:String x:Key="lang_ShowWeights">Pokazuj wagi</s:String>
     <s:String x:Key="lang_EditClass">Edytuj klasę</s:String>
     <s:String x:Key="lang_AddClass">Dodaj klasę</s:String>
-    <s:String x:Key="lang_YearBeginning">Rozpoczęcie roku</s:String>
-    <s:String x:Key="lang_SemesterSeparator">Następny semestr</s:String>
-    <s:String x:Key="lang_YearEnding">Zakończenie roku</s:String>
 
     <s:String x:Key="lang_AddGroupTitle">Dodaj grupę</s:String>
     <s:String x:Key="lang_Students">Uczniowie</s:String>
@@ -100,4 +97,20 @@
 
     <s:String x:Key="lang_AttendanceDisplayFormat">{0} / {1} ({2}%)</s:String>
     <s:String x:Key="lang_RealizedSubjectsCountFormat">Liczba zrealizowanych tematów: {0}/{1} (+{2} dodatkowych)</s:String>
+
+    <s:String x:Key="lang_GlobalCalendarListTitle">Kalendarze</s:String>
+    <s:String x:Key="lang_AddCalendar">Dodaj kalendarz</s:String>
+    <s:String x:Key="lang_YearBeginning">Rozpoczęcie</s:String>
+    <s:String x:Key="lang_SemesterSeparator">Semestr</s:String>
+    <s:String x:Key="lang_YearEnding">Zakończenie</s:String>
+    <s:String x:Key="lang_OffDays">Dni wolne</s:String>
+
+    <s:String x:Key="lang_EditCalendarTitle">Edytuj kalendarz</s:String>
+    <s:String x:Key="lang_RemoveCalendar">Usuń kalendarz</s:String>
+    <s:String x:Key="lang_AddOffDay">Dodaj dzień wolny</s:String>
+    <s:String x:Key="lang_From">Od</s:String>
+    <s:String x:Key="lang_To">Do</s:String>
+
+    <s:String x:Key="lang_EditOffDayTitle">Edytuj dni wolne</s:String>
+    <s:String x:Key="lang_RemoveOffDay">Usuń dni wolne</s:String>
 </ResourceDictionary>
