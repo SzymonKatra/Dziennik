@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using Dziennik.Controls;
 using Dziennik.ViewModel;
 using System.Threading;
+using System.Globalization;
 
 namespace Dziennik.View
 {
@@ -36,6 +37,10 @@ namespace Dziennik.View
                     MessageBox.Show("Nie można uruchomić dwóch instancji Dziennika na raz", "Dziennik", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
                     this.Close();
                 }
+
+                CultureInfo culture = (CultureInfo)Thread.CurrentThread.CurrentCulture.Clone();
+                culture.DateTimeFormat.ShortDatePattern = GlobalConfig.DateFormat;
+                Thread.CurrentThread.CurrentCulture = culture;
             }
 
             InitializeComponent();

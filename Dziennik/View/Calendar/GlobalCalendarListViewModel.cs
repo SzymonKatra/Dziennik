@@ -11,17 +11,20 @@ namespace Dziennik.View
 {
     public class GlobalCalendarListViewModel : ObservableObject
     {
-        public GlobalCalendarListViewModel(ObservableCollection<CalendarViewModel> calendars, ICommand autoSaveCommand)
+        public GlobalCalendarListViewModel(ObservableCollection<CalendarViewModel> calendars, ObservableCollection<SchoolClassControlViewModel> schoolClasses, ICommand autoSaveCommand)
         {
             m_addCalendarCommand = new RelayCommand(AddCalendar);
             m_editCalendarCommand = new RelayCommand(EditCalendar);
 
             m_autoSaveCommand = autoSaveCommand;
+            m_schoolClasses = schoolClasses;
 
             m_calendars = calendars;
         }
 
         private ICommand m_autoSaveCommand;
+
+        private ObservableCollection<SchoolClassControlViewModel> m_schoolClasses;
 
         private ObservableCollection<CalendarViewModel> m_calendars;
         public ObservableCollection<CalendarViewModel> Calendars
@@ -61,14 +64,31 @@ namespace Dziennik.View
         }
         private void EditCalendar(object e)
         {
-            EditCalendarViewModel dialogViewModel = new EditCalendarViewModel(m_selectedCalendar, m_autoSaveCommand, true);
+            EditCalendarViewModel dialogViewModel = new EditCalendarViewModel(m_selectedCalendar, m_autoSaveCommand);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditCalendarViewModel.EditCalendarResult.Remove)
             {
                 m_calendars.Remove(m_selectedCalendar);
-                m_selectedCalendar = null;
+                SelectedCalendar = null;
             }
-            if (dialogViewModel.Result != EditCalendarViewModel.EditCalendarResult.Cancel) m_autoSaveCommand.Execute(null);
+            if (dialogViewModel.Result != EditCalendarViewModel.EditCalendarResult.Cancel)
+            {
+                m_autoSaveCommand.Execute(null);
+                foreach (var schoolClass in m_schoolClasses)
+                {
+                    if (schoolClass.ViewModel.Calendar == m_selectedCalendar)
+                    {
+                        foreach (var group in schoolClass.ViewModel.Groups)
+                        {
+                            group.RaiseRemainingHoursOfLessonsChanged();
+                            foreach (var student in group.Students)
+                            {
+                                student.RaiseAttendanceChanged();
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

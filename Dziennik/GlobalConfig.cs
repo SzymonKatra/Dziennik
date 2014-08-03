@@ -9,6 +9,8 @@ using Dziennik.Model;
 using System.IO;
 using Dziennik.Controls;
 using Dziennik.ViewModel;
+using System.Windows.Input;
+using Dziennik.CommandUtils;
 
 namespace Dziennik
 {
@@ -257,8 +259,16 @@ namespace Dziennik
             set { m_globalDatabase = value; }
         }
 
+        private static RelayCommand m_globalDatabaseAutoSaveCommand;
+        public static ICommand GlobalDatabaseAutoSaveCommand
+        {
+            get { return GlobalConfig.m_globalDatabaseAutoSaveCommand; }
+        }
+
         static GlobalConfig()
         {
+            m_globalDatabaseAutoSaveCommand = new RelayCommand(x => { if (m_notifier.AutoSave)m_globalDatabase.Save(); });
+
             Dictionary<Type, Func<object, Window>> windowViewModelMappings = new Dictionary<Type, Func<object, Window>>();
 
             windowViewModelMappings.Add(typeof(EditMarkViewModel), vm => new EditMarkWindow((EditMarkViewModel)vm));

@@ -14,6 +14,7 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
@@ -35,8 +36,10 @@
         <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
             <Button Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_AllSubjects}" Command="{Binding ShowGlobalSubjectsListCommand}"/>
         </Grid>
+        
+        <my:WeekScheduleControl x:Name="scheduleControl" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Style="{StaticResource inputControlStyle}" WeekSchedule="{Binding Schedule}"/>
 
-        <Grid Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2">
+        <Grid Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width=".65*"/>
                 <ColumnDefinition Width=".35*"/>
@@ -45,6 +48,6 @@
             <Button Grid.Column="1" Margin="10,5,10,5" Content="{DynamicResource lang_RemoveGroup}" Command="{Binding RemoveGroupCommand}"/>
         </Grid>
 
-        <my:OkCancelControl Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
+        <my:OkCancelControl Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>
 </Window>

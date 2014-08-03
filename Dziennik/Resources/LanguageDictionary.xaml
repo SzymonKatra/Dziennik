@@ -41,6 +41,7 @@
     <s:String x:Key="lang_RemoveClass">Usuń klasę</s:String>
     <s:String x:Key="lang_EditGroup">Edytuj grupę</s:String>
     <s:String x:Key="lang_AddGroup">Dodaj grupę</s:String>
+    <s:String x:Key="lang_ClassCalendar">Kalendarz klasowy</s:String>
 
     <s:String x:Key="lang_OptionsTitle">Opcje</s:String>
     <s:String x:Key="lang_DatabaseDirectory">Katalog z bazą danych</s:String>
@@ -49,7 +50,11 @@
     <s:String x:Key="lang_ShowWeights">Pokazuj wagi</s:String>
     <s:String x:Key="lang_EditClass">Edytuj klasę</s:String>
     <s:String x:Key="lang_AddClass">Dodaj klasę</s:String>
-
+    <s:String x:Key="lang_Classes">Klasy</s:String>
+    <s:String x:Key="lang_Calendars">Kalendarze</s:String>
+    <s:String x:Key="lang_EditCalendar">Edytuj kalendarz</s:String>    
+    <s:String x:Key="lang_AllCalendars">Wszystkie kalendarze</s:String>
+    
     <s:String x:Key="lang_AddGroupTitle">Dodaj grupę</s:String>
     <s:String x:Key="lang_Students">Uczniowie</s:String>
     <s:String x:Key="lang_RenumberFromOne">Numeruj od 1</s:String>
@@ -113,4 +118,18 @@
 
     <s:String x:Key="lang_EditOffDayTitle">Edytuj dni wolne</s:String>
     <s:String x:Key="lang_RemoveOffDay">Usuń dni wolne</s:String>
+
+    <s:String x:Key="lang_CalendarsListTitle">Lista kalendarzy</s:String>
+
+    <s:String x:Key="lang_MondayShort">Pn</s:String>
+    <s:String x:Key="lang_TuesdayShort">Wt</s:String>
+    <s:String x:Key="lang_WednesdayShort">Śr</s:String>
+    <s:String x:Key="lang_ThursdayShort">Cz</s:String>
+    <s:String x:Key="lang_FridayShort">Pt</s:String>
+
+    <s:String x:Key="lang_ErrorBadChars">Niedozwolone znaki</s:String>
+    <s:String x:Key="lang_ErrorTooSmallFormat">Minimalna wartość to {0}</s:String>
+    <s:String x:Key="lang_ErrorTooHighFormat">Maksymalna wartość to {0}</s:String>
+
+    <s:String x:Key="lang_RemainingHoursOfLessonsFormat">Pozostało {0} możliwych do zrealizowania godzin lekcyjnych</s:String>
 </ResourceDictionary>

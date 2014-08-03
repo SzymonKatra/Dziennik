@@ -31,6 +31,7 @@ namespace Dziennik.View
 
             m_schoolClass = schoolClass;
             m_name = schoolClass.Name;
+            m_selectedCalendar = schoolClass.Calendar;
 
             m_autoSaveCommand = autoSaveCommand;
         }
@@ -42,6 +43,13 @@ namespace Dziennik.View
         {
             get { return m_selectedGroup; }
             set { m_selectedGroup = value; RaisePropertyChanged("SelectedGroup"); m_editGroupCommand.RaiseCanExecuteChanged(); }
+        }
+
+        private CalendarViewModel m_selectedCalendar;
+        public CalendarViewModel SelectedCalendar
+        {
+            get { return m_selectedCalendar; }
+            set { m_selectedCalendar = value; RaisePropertyChanged("SelectedCalendar"); }
         }
 
         private EditClassResult m_result = EditClassResult.Cancel;
@@ -123,6 +131,7 @@ namespace Dziennik.View
         private void Ok(object param)
         {
             m_schoolClass.Name = m_name;
+            m_schoolClass.Calendar = m_selectedCalendar;
 
             m_result = EditClassResult.Ok;
             GlobalConfig.Dialogs.Close(this);

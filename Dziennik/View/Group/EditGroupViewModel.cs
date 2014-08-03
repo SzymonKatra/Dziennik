@@ -35,6 +35,12 @@ namespace Dziennik.View
             m_globalStudents = globalStudents;
 
             m_name = schoolGroup.Name;
+            m_schedule = new WeekScheduleViewModel();
+            m_schedule.Monday = schoolGroup.Schedule.Monday;
+            m_schedule.Tuesday = schoolGroup.Schedule.Tuesday;
+            m_schedule.Wednesday = schoolGroup.Schedule.Wednesday;
+            m_schedule.Thursday = schoolGroup.Schedule.Thursday;
+            m_schedule.Friday= schoolGroup.Schedule.Friday;
         }
 
         private EditGroupResult m_result = EditGroupResult.Cancel;
@@ -53,6 +59,13 @@ namespace Dziennik.View
         {
             get { return m_name; }
             set { m_name = value; RaisePropertyChanged("Name"); }
+        }
+
+        private WeekScheduleViewModel m_schedule;
+        public WeekScheduleViewModel Schedule
+        {
+            get { return m_schedule; }
+            set { m_schedule = value; RaisePropertyChanged("Schedule"); }
         }
 
         private RelayCommand m_okCommand;
@@ -95,6 +108,11 @@ namespace Dziennik.View
         {
             m_result = EditGroupResult.Ok;
             m_schoolGroup.Name = m_name;
+            m_schoolGroup.Schedule.Monday = m_schedule.Monday;
+            m_schoolGroup.Schedule.Tuesday = m_schedule.Tuesday;
+            m_schoolGroup.Schedule.Wednesday = m_schedule.Wednesday;
+            m_schoolGroup.Schedule.Thursday = m_schedule.Thursday;
+            m_schoolGroup.Schedule.Friday = m_schedule.Friday;
 
             GlobalConfig.Dialogs.Close(this);
         }

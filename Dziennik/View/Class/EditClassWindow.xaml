@@ -1,6 +1,7 @@
 ﻿<Window x:Class="Dziennik.View.EditClassWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Dziennik"
         xmlns:my="clr-namespace:Dziennik.Controls"
         Title="{DynamicResource lang_EditClassTitle}" Height="300" Width="300"
         WindowStartupLocation="CenterOwner">
@@ -44,16 +45,10 @@
         <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
             <Button Content="{DynamicResource lang_AllStudents}" Style="{StaticResource commonButtonStyle}" Command="{Binding ShowGlobalStudentsListCommand}"/>
         </Grid>
-
-        <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_YearBeginning}"/>
-        <DatePicker Grid.Column="1" Grid.Row="3" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding SchoolClass.YearBeginning, Mode=TwoWay}"/>
-
-        <TextBlock Grid.Column="0" Grid.Row="4" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_SemesterSeparator}"/>
-        <DatePicker Grid.Column="1" Grid.Row="4" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding SchoolClass.SemesterSeparator, Mode=TwoWay}"/>
-
-        <TextBlock Grid.Column="0" Grid.Row="5" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_YearEnding}"/>
-        <DatePicker Grid.Column="1" Grid.Row="5" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding SchoolClass.YearEnding, Mode=TwoWay}"/>
-
+        
+        <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_ClassCalendar}"/>
+        <ComboBox Grid.Column="1" Grid.Row="3" Style="{StaticResource inputControlStyle}" ItemsSource="{Binding ViewModel.Calendars, Source={x:Static local:GlobalConfig.GlobalDatabase}}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedCalendar}"/>
+        
         <Grid Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width=".65*"/>

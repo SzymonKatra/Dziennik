@@ -12,9 +12,7 @@ namespace Dziennik.Model
         public string Name { get; set; }
         public List<GlobalStudent> Students { get; set; }
         public List<SchoolGroup> Groups { get; set; }
-        public DateTime YearBeginning { get; set; }
-        public DateTime SemesterSeparator { get; set; }
-        public DateTime YearEnding { get; set; }
+        public ulong? GlobalCalendarId { get; set; } //from diffrent database, need to set it manually
 
         public SchoolClass()
         {

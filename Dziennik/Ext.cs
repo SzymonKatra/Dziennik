@@ -35,17 +35,17 @@ namespace Dziennik
             return value;
         }
 
-        private static BinaryFormatter s_formatter = new BinaryFormatter();
-        public static T DeepClone<T>(T original)
-        {
-            T result; 
-            using(MemoryStream stream = new MemoryStream())
-            {
-                s_formatter.Serialize(stream, original);
-                stream.Position = 0;
-                result = (T)s_formatter.Deserialize(stream);
-            }
-            return result;
-        }
+        //private static BinaryFormatter s_formatter = new BinaryFormatter();
+        //public static T DeepClone<T>(T original)
+        //{
+        //    T result; 
+        //    using(MemoryStream stream = new MemoryStream())
+        //    {
+        //        s_formatter.Serialize(stream, original);
+        //        stream.Position = 0;
+        //        result = (T)s_formatter.Deserialize(stream);
+        //    }
+        //    return result;
+        //}
     }
 }

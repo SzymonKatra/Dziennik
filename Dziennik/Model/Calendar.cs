@@ -13,5 +13,10 @@ namespace Dziennik.Model
         public DateTime SemesterSeparator { get; set; }
         public DateTime YearEnding { get; set; }
         public List<OffDay> OffDays { get; set; }
+
+        public Calendar()
+        {
+            OffDays = new List<OffDay>();
+        }
     }
 }

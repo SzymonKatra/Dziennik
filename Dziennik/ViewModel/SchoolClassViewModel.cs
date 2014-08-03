@@ -21,6 +21,8 @@ namespace Dziennik.ViewModel
             m_students = new SynchronizedPerItemObservableCollection<GlobalStudentViewModel, GlobalStudent>(m_model.Students, (m) => { return new GlobalStudentViewModel(m); });
             m_groups = new SynchronizedObservableCollection<SchoolGroupViewModel, SchoolGroup>(m_model.Groups, (m) => { return new SchoolGroupViewModel(m); });
             SubscribeGroups();
+
+            m_calendar = GlobalConfig.GlobalDatabase.ViewModel.Calendars.FirstOrDefault(x => x.Model.Id == m_model.GlobalCalendarId);
         }
 
         private SchoolClass m_model;
@@ -63,20 +65,16 @@ namespace Dziennik.ViewModel
             }
         }
 
-        public DateTime YearBeginning
+        private CalendarViewModel m_calendar;
+        public CalendarViewModel Calendar
         {
-            get { return m_model.YearBeginning; }
-            set { m_model.YearBeginning = value; RaisePropertyChanged("YearBeginning"); }
-        }
-        public DateTime SemesterSeparator
-        {
-            get { return m_model.SemesterSeparator; }
-            set { m_model.SemesterSeparator = value; RaisePropertyChanged("SemesterSeparator"); }
-        }
-        public DateTime YearEnding
-        {
-            get { return m_model.YearEnding; }
-            set { m_model.YearEnding = value; RaisePropertyChanged("YearEnding"); }
+            get { return m_calendar; }
+            set
+            {
+                m_calendar = value;
+                m_model.GlobalCalendarId = m_calendar.Model.Id;
+                RaisePropertyChanged("Calendar");
+            }
         }
 
         private void SubscribeGroups()

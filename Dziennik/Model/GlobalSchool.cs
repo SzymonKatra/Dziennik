@@ -8,8 +8,11 @@ namespace Dziennik.Model
     [Serializable]
     public class GlobalSchool : ModelBase
     {
-        public DateTime YearBeginning { get; set; }
-        public DateTime SemesterSeparator { get; set; }
-        public DateTime YearEnding { get; set; }
+        public List<Calendar> Calendars { get; set; }
+
+        public GlobalSchool()
+        {
+            Calendars = new List<Calendar>();
+        }
     }
 }

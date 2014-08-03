@@ -24,7 +24,8 @@
 
                     <WrapPanel Grid.Row="0" Orientation="Horizontal">
                         <Button Content="{DynamicResource lang_RealizeSubject}" Style="{StaticResource wrapPanelControlStyle}" Command="{Binding RealizeSubjectCommand}"/>
-                        <TextBlock Text="{Binding SelectedGroup.RealizedSubjectsDisplay}" Style="{StaticResource wrapPanelControlStyle}"/>
+                        <TextBlock Text="{Binding SelectedGroup.RealizedSubjectsDisplay}" Style="{StaticResource wrapPanelControlStyle}" Foreground="Green"/>
+                        <TextBlock Text="{Binding SelectedGroup.RemainingHoursOfLessonsDisplay}" Style="{StaticResource wrapPanelControlStyle}" Foreground="Red"/>
                     </WrapPanel>
 
                     <DataGrid Grid.Row="1"

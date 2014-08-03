@@ -25,6 +25,23 @@ namespace Dziennik.View
         {
             get { return m_addClassCommand; }
         }
+        private RelayCommand m_editCalendarCommand;
+        public ICommand EditCalendarCommand
+        {
+            get { return m_editCalendarCommand; }
+        }
+
+        private RelayCommand m_addCalendarCommand;
+        public ICommand AddCalendarCommand
+        {
+            get { return m_addCalendarCommand; }
+        }
+
+        private RelayCommand m_showCalendarsListCommand;
+        public ICommand ShowCalendarsListCommand
+        {
+            get { return m_showCalendarsListCommand; }
+        }
 
         private ObservableCollection<SchoolClassControlViewModel> m_openedSchoolClasses;
         public ObservableCollection<SchoolClassControlViewModel> OpenedSchoolClasses
@@ -40,11 +57,21 @@ namespace Dziennik.View
             set { m_selectedClass = value; RaisePropertyChanged("SelectedClass"); m_editClassCommand.RaiseCanExecuteChanged(); }
         }
 
+        private CalendarViewModel m_selectedCalendar;
+        public CalendarViewModel SelectedCalendar
+        {
+            get { return m_selectedCalendar; }
+            set { m_selectedCalendar = value; RaisePropertyChanged("SelectedCalendar"); m_editCalendarCommand.RaiseCanExecuteChanged(); }
+        }
+
         public OptionsViewModel(ObservableCollection<SchoolClassControlViewModel> openedSchoolClasses)
         {
             m_closeCommand = new RelayCommand(Close);
             m_editClassCommand = new RelayCommand(EditClass, CanEditClass);
             m_addClassCommand = new RelayCommand(AddClass);
+            m_editCalendarCommand = new RelayCommand(EditCalendar, CanEditCalendar);
+            m_addCalendarCommand = new RelayCommand(AddCalendar);
+            m_showCalendarsListCommand = new RelayCommand(ShowCalendarsList);
 
             m_openedSchoolClasses = openedSchoolClasses;
         }
@@ -59,17 +86,12 @@ namespace Dziennik.View
         private void EditClass(object e)
         {
             SchoolClassControlViewModel tab = m_selectedClass;
-            SchoolClassViewModel copy = Ext.DeepClone(tab.ViewModel);
-            EditClassViewModel dialogViewModel = new EditClassViewModel(copy, tab.AutoSaveCommand);
+            EditClassViewModel dialogViewModel = new EditClassViewModel(tab.ViewModel, tab.AutoSaveCommand);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
-            if(dialogViewModel.Result== EditClassViewModel.EditClassResult.Ok)
-            {
-                tab.ViewModel = copy;
-            }
-            else if (dialogViewModel.Result == EditClassViewModel.EditClassResult.RemoveClass)
+            if (dialogViewModel.Result == EditClassViewModel.EditClassResult.RemoveClass)
             {
                 //GlobalConfig.Database.SchoolClasses.Remove(m_selectedClass.ViewModel.Model);
-                m_selectedClass = null;
+                SelectedClass = null;
                 m_openedSchoolClasses.Remove(tab);
                 return;
             }
@@ -95,6 +117,54 @@ namespace Dziennik.View
                 SelectedClass = tab;
             }
             if (dialogViewModel.Result != EditClassViewModel.EditClassResult.Cancel) m_selectedClass.AutoSaveCommand.Execute(this);
+        }
+        private void EditCalendar(object e)
+        {
+            EditCalendarViewModel dialogViewModel = new EditCalendarViewModel(m_selectedCalendar, GlobalConfig.GlobalDatabaseAutoSaveCommand);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+            if(dialogViewModel.Result == EditCalendarViewModel.EditCalendarResult.Remove)
+            {
+                GlobalConfig.GlobalDatabase.ViewModel.Calendars.Remove(m_selectedCalendar);
+                SelectedCalendar = null;
+            }
+            if (dialogViewModel.Result != EditCalendarViewModel.EditCalendarResult.Cancel)
+            {
+                GlobalConfig.GlobalDatabaseAutoSaveCommand.Execute(null);
+                foreach (var schoolClass in m_openedSchoolClasses)
+                {
+                    if (schoolClass.ViewModel.Calendar == m_selectedCalendar)
+                    {
+                        foreach (var group in schoolClass.ViewModel.Groups)
+                        {
+                            foreach (var student in group.Students)
+                            {
+                                student.RaiseAttendanceChanged();
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+        private bool CanEditCalendar(object e)
+        {
+            return m_selectedCalendar != null;
+        }
+        private void AddCalendar(object e)
+        {
+            CalendarViewModel calendar = new CalendarViewModel();
+            EditCalendarViewModel dialogViewModel = new EditCalendarViewModel(calendar, GlobalConfig.GlobalDatabaseAutoSaveCommand, true);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+            if (dialogViewModel.Result == EditCalendarViewModel.EditCalendarResult.Ok)
+            {
+                GlobalConfig.GlobalDatabase.ViewModel.Calendars.Add(calendar);
+            }
+            if (dialogViewModel.Result != EditCalendarViewModel.EditCalendarResult.Cancel) GlobalConfig.GlobalDatabaseAutoSaveCommand.Execute(null);
+        }
+        private void ShowCalendarsList(object e)
+        {
+            GlobalCalendarListViewModel dialogViewModel = new GlobalCalendarListViewModel(GlobalConfig.GlobalDatabase.ViewModel.Calendars, m_openedSchoolClasses, GlobalConfig.GlobalDatabaseAutoSaveCommand);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
     }
 }

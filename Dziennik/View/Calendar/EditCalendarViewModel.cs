@@ -34,6 +34,11 @@ namespace Dziennik.View
             m_yearBeginning = m_calendar.YearBeginning;
             m_semesterSeparator = m_calendar.SemesterSeparator;
             m_yearEnding = m_calendar.YearEnding;
+
+            if(isAddingMode)
+            {
+                m_yearBeginning = m_semesterSeparator = m_yearEnding = DateTime.Now.Date;
+            }
         }
 
         private ICommand m_autoSaveCommand;
@@ -163,7 +168,7 @@ namespace Dziennik.View
             if(dialogViewModel.Result== EditOffDayViewModel.EditOffDayResult.Remove)
             {
                 m_calendar.OffDays.Remove(m_selectedOffDay);
-                m_selectedOffDay = null;
+                SelectedOffDay = null;
             }
             if (dialogViewModel.Result != EditOffDayViewModel.EditOffDayResult.Cancel) m_autoSaveCommand.Execute(null);
         }

@@ -101,11 +101,17 @@
     <Compile Include="Controls\MessageBoxSuper.xaml.cs">
       <DependentUpon>MessageBoxSuper.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\NumericUpDown.xaml.cs">
+      <DependentUpon>NumericUpDown.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\OkCancelControl.xaml.cs">
       <DependentUpon>OkCancelControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\RemoveButtonControl.xaml.cs">
       <DependentUpon>RemoveButtonControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\WeekScheduleControl.xaml.cs">
+      <DependentUpon>WeekScheduleControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="DatabaseIgnoreSearchRelationsAttribute.cs" />
@@ -126,6 +132,7 @@
     <Compile Include="Model\SchoolClass.cs" />
     <Compile Include="Model\SchoolGroup.cs" />
     <Compile Include="Model\StudentInGroup.cs" />
+    <Compile Include="Model\WeekSchedule.cs" />
     <Compile Include="NotifyCollectionChangedSimpleEventArgs.cs" />
     <Compile Include="ObservableCollectionExtended.cs" />
     <Compile Include="ObservableCollectionExtensions.cs" />
@@ -141,6 +148,7 @@
     <Compile Include="ViewModel\SchoolClassViewModel.cs" />
     <Compile Include="ViewModel\SchoolGroupViewModel.cs" />
     <Compile Include="ViewModel\StudentInGroupViewModel.cs" />
+    <Compile Include="ViewModel\WeekScheduleViewModel.cs" />
     <Compile Include="View\Common\ActionDialogViewModel.cs" />
     <Compile Include="View\Common\ActionDialogWindow.xaml.cs">
       <DependentUpon>ActionDialogWindow.xaml</DependentUpon>
@@ -251,11 +259,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\NumericUpDown.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\OkCancelControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\RemoveButtonControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\WeekScheduleControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

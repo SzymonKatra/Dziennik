@@ -19,6 +19,9 @@ namespace Dziennik.ViewModel
             m_students = new SynchronizedPerItemObservableCollection<StudentInGroupViewModel, StudentInGroup>(m_model.Students, (m) => { return new StudentInGroupViewModel(m); });;
             m_globalSubjects = new SynchronizedObservableCollection<GlobalSubjectViewModel, GlobalSubject>(m_model.Subjects, m => new GlobalSubjectViewModel(m));
             m_realizedSubjects = new SynchronizedObservableCollection<RealizedSubjectViewModel, RealizedSubject>(m_model.RealizedSubjects, m => new RealizedSubjectViewModel(m));
+            m_schedule = new WeekScheduleViewModel(m_model.Schedule);
+
+            SubscribeSchedule();
             SubscribeStudents();
             SubscribeRealizedSubjects();
         }
@@ -83,6 +86,23 @@ namespace Dziennik.ViewModel
             }
         }
 
+        private WeekScheduleViewModel m_schedule;
+        public WeekScheduleViewModel Schedule
+        {
+            get { return m_schedule; }
+            set
+            {
+                UnsubscribeSchedule();
+
+                m_schedule = value;
+
+                SubscribeSchedule();
+
+                m_model.Schedule = value.Model;
+                RaisePropertyChanged("Schedule");
+            }
+        }
+
         public string RealizedSubjectsDisplay
         {
             get
@@ -92,6 +112,71 @@ namespace Dziennik.ViewModel
 
                 return string.Format(GlobalConfig.GetStringResource("lang_RealizedSubjectsCountFormat"), realizedFromCurriculum, m_globalSubjects.Count, realizedOutsideCurriculum);
             }
+        }
+
+        public int RemainingHoursOfLessons
+        {
+            get
+            {
+                if (OwnerClass == null || OwnerClass.Calendar == null) return 0;
+
+                DateTime today = DateTime.Now.Date;
+                if (today < OwnerClass.Calendar.YearBeginning) today = OwnerClass.Calendar.YearBeginning;
+                int result = 0;
+
+                for (DateTime i = today; i < OwnerClass.Calendar.YearEnding; i = i.AddDays(1.0))
+                {
+                    bool nextDay = false;
+                    foreach (var offDay in OwnerClass.Calendar.OffDays)
+                    {
+                        if (i >= offDay.Start && i <= offDay.End)
+                        {
+                            nextDay = true;
+                            break;
+                        }
+                    }
+                    if (nextDay) continue;
+
+                    switch(i.DayOfWeek)
+                    {
+                        case DayOfWeek.Monday: result += m_schedule.Monday; break;
+                        case DayOfWeek.Tuesday: result += m_schedule.Tuesday; break;
+                        case DayOfWeek.Wednesday: result += m_schedule.Wednesday; break;
+                        case DayOfWeek.Thursday: result += m_schedule.Thursday; break;
+                        case DayOfWeek.Friday: result += m_schedule.Friday; break;
+                    }
+                }
+
+                return result;
+            }
+        }
+        public string RemainingHoursOfLessonsDisplay
+        {
+            get
+            {
+                return string.Format(GlobalConfig.GetStringResource("lang_RemainingHoursOfLessonsFormat"), RemainingHoursOfLessons);
+            }
+        }
+
+        //http://stackoverflow.com/questions/248273/count-number-of-mondays-in-a-given-date-range
+        private static int CountDays(DayOfWeek day, DateTime start, DateTime end)
+        {
+            TimeSpan ts = end - start;                       // Total duration
+            int count = (int)Math.Floor(ts.TotalDays / 7);   // Number of whole weeks
+            int remainder = (int)(ts.TotalDays % 7);         // Number of remaining days
+            int sinceLastDay = (int)(end.DayOfWeek - day);   // Number of days since last [day]
+            if (sinceLastDay < 0) sinceLastDay += 7;         // Adjust for negative days since last [day]
+
+            // If the days in excess of an even week are greater than or equal to the number days since the last [day], then count this one, too.
+            if (remainder >= sinceLastDay) count++;
+
+            return count;
+        }
+
+        public void RaiseRemainingHoursOfLessonsChanged()
+        {
+            RaisePropertyChanged("RemainingHoursOfLessons");
+            RaisePropertyChanged("RemainingHoursOfLessonsDisplay");
         }
 
         private void SubscribeRealizedSubjects()
@@ -106,6 +191,20 @@ namespace Dziennik.ViewModel
         private void m_realizedSubjects_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             RaisePropertyChanged("RealizedSubjectsDisplay");
+        }
+
+        public void SubscribeSchedule()
+        {
+            m_schedule.PropertyChanged += m_schedule_PropertyChanged;
+        }
+        public void UnsubscribeSchedule()
+        {
+            m_schedule.PropertyChanged += m_schedule_PropertyChanged;
+        }
+
+        private void m_schedule_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            RaiseRemainingHoursOfLessonsChanged();
         }
 
         private void SubscribeStudents()

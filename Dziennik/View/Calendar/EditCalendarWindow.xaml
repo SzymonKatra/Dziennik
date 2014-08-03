@@ -1,9 +1,11 @@
 ﻿<Window x:Class="Dziennik.View.EditCalendarWindow"
+        Name="root"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:my="clr-namespace:Dziennik.Controls"
         xmlns:local="clr-namespace:Dziennik"
-        Title="EditCalendarWindow" Height="300" Width="300">
+        Title="{DynamicResource lang_EditCalendarTitle}" Height="400" Width="550"
+        WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="70"/>
@@ -38,7 +40,7 @@
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_OffDays}"/>
-            <Button Grid.Row="1" Style="{StaticResource controlTitleStyle}" Margin="5,5,5,5" Command="{Binding AddOffDayCommand}">
+            <Button Grid.Row="1" Style="{StaticResource controlTitleStyle}" Margin="5,0,0,5" Command="{Binding AddOffDayCommand}">
                 <TextBlock Text="{DynamicResource lang_AddOffDay}" TextWrapping="Wrap"/>
             </Button>
         </Grid>
@@ -49,11 +51,12 @@
                   CanUserSortColumns="False"
                   SelectionMode="Single"
                   IsReadOnly="True"
-                  AutoGenerateColumns="False">
+                  AutoGenerateColumns="False"
+                  Style="{StaticResource inputControlStyle}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="{DynamicResource lang_Name}" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="{DynamicResource lang_From}" Binding="{Binding From, StringFormat={x:Static local:GlobalConfig.DateFormat}}"/>
-                <DataGridTextColumn Header="{DynamicResource lang_To}" Binding="{Binding To, StringFormat={x:Static local:GlobalConfig.DateFormat}}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_Description}" Binding="{Binding Description}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_From}" Binding="{Binding Start, StringFormat={x:Static local:GlobalConfig.DateFormat}}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_To}" Binding="{Binding End, StringFormat={x:Static local:GlobalConfig.DateFormat}}"/>
                 <DataGridTemplateColumn Header="Edytuj">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
