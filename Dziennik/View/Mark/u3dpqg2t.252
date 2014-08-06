@@ -27,25 +27,7 @@ namespace Dziennik.View
             }
 
             private string m_note;
-            public string Note
-            {
-                get { return m_note; }
-                private set
-                {
-                    m_note = value;
-                    RaisePropertyChanged("Note");
-                }
-            }
             private decimal m_value;
-            public decimal Value
-            {
-                get { return m_value; }
-                private set
-                {
-                    m_value = value;
-                    RaisePropertyChanged("Value");
-                }
-            }
             private bool m_inputValid;
             public bool InputValid
             {
@@ -78,50 +60,20 @@ namespace Dziennik.View
                 errorResult = EditMarkViewModel.GlobalValidateValue(m_input, out result);
                 if (string.IsNullOrEmpty(errorResult))
                 {
-                    Value = result;
+                    m_value = result;
                 }
                 else
                 {
                     errorResult = EditMarkViewModel.GlobalValidateNote(m_input);
-                    if(string.IsNullOrEmpty(errorResult))
-                    {
-                        Note = m_input;
-                    }
-                    else
+                    if(!string.IsNullOrEmpty(errorResult))
                     {
                         InputValid = false;
                         return "error";
                     }
                 }
 
-                InputValid = true;
                 return string.Empty;
             }
-        }
-
-        public AddMarksSetViewModel()
-        {
-            m_okCommand = new RelayCommand(Ok);
-            m_cancelCommand = new RelayCommand(Cancel);
-        }
-
-        private RelayCommand m_okCommand;
-        public ICommand OkCommand
-        {
-            get { return m_okCommand; }
-        }
-
-        private RelayCommand m_cancelCommand;
-        public ICommand CancelCommand
-        {
-            get { return m_cancelCommand; }
-        }
-
-        private void Ok(object e)
-        {
-        }
-        private void Cancel(object e)
-        {
         }
     }
 }

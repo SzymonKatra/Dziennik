@@ -205,49 +205,15 @@ namespace Dziennik.View
             if (m_noteSelected) return string.Empty;
             m_valueInputValid = false;
 
-            int integralResult;
-
-            string toParse = Ext.RemoveAllWhitespaces(m_valueInput);
-            bool hadDigit = false;
-            bool hadPlus = false;
-            foreach (char c in toParse)
-            {
-                if(char.IsDigit(c))
-                {
-                    hadDigit = true;
-                    continue;
-                }
-                if(c == '+')
-                {
-                    if(!hadDigit)
-                    {
-                        m_okCommand.RaiseCanExecuteChanged();
-                        return GlobalConfig.GetStringResource("lang_PlusMustBeAfterValue");
-                    }
-                    hadPlus = true;
-                    break;
-                }
-            }
-            if (toParse.Count(x => x == '+') > 1)
+            decimal result;
+            string errorResult = GlobalValidateValue(m_valueInput, out result);
+            if(!string.IsNullOrEmpty(errorResult))
             {
                 m_okCommand.RaiseCanExecuteChanged();
-                return GlobalConfig.GetStringResource("lang_PlusCanBeOnlyOne");
-            }
-            toParse = toParse.Replace("+", "");
-
-            if (!int.TryParse(toParse, out integralResult))
-            {
-                m_okCommand.RaiseCanExecuteChanged();
-                return GlobalConfig.GetStringResource("lang_InvalidCharacters");
+                return errorResult;
             }
 
-            if (integralResult < 1M || integralResult > 6M)
-            {
-                m_okCommand.RaiseCanExecuteChanged();
-                return GlobalConfig.GetStringResource("lang_TypeIntegerMarkRange1-6Plus");
-            }
-
-            m_value = (decimal)integralResult + (hadPlus ? 0.5M : 0M);
+            m_value = result;
             m_valueInputValid = true;
             m_okCommand.RaiseCanExecuteChanged();
 
@@ -258,30 +224,11 @@ namespace Dziennik.View
             if (!m_noteSelected) return string.Empty;
             m_noteInputValid = false;
 
-            if (string.IsNullOrWhiteSpace(m_noteInput) || m_noteInput.Length < 1 || m_noteInput.Length > 2)
+            string errorResult = GlobalValidateNote(m_noteInput);
+            if(!string.IsNullOrEmpty(errorResult))
             {
                 m_okCommand.RaiseCanExecuteChanged();
-                return GlobalConfig.GetStringResource("lang_LengthMustBe1Or2");
-            }
-
-            bool hasLetter = false;
-            for (int i = 0; i < m_noteInput.Length; i++)
-            {
-                if (!char.IsLetterOrDigit(m_noteInput[i]))
-                {
-                    m_okCommand.RaiseCanExecuteChanged();
-                    return GlobalConfig.GetStringResource("lang_InvalidCharacters");
-                }
-                if (char.IsLetter(m_noteInput[i]))
-                {
-                    hasLetter = true;
-                }
-            }
-
-            if (!hasLetter)
-            {
-                m_okCommand.RaiseCanExecuteChanged();
-                return GlobalConfig.GetStringResource("lang_TypeAtLeastOneLetter");
+                return errorResult;
             }
 
             m_note = m_noteInput;
@@ -297,21 +244,103 @@ namespace Dziennik.View
 
             int result;
 
-            if (!int.TryParse(m_weightInput, out result))
+            string errorResult = GlobalValidateWeightInput(m_weightInput, out result);
+            if(!string.IsNullOrEmpty(errorResult))
             {
                 m_okCommand.RaiseCanExecuteChanged();
-                return GlobalConfig.GetStringResource("lang_TypeValidInteger");
-            }
-
-            if (result < 0)
-            {
-                m_okCommand.RaiseCanExecuteChanged();
-                return GlobalConfig.GetStringResource("lang_TypePositiveValue");
+                return errorResult;
             }
 
             m_weight = result;
             m_weightInputValid = true;
             m_okCommand.RaiseCanExecuteChanged();
+
+            return string.Empty;
+        }
+
+        public static string GlobalValidateValue(string input, out decimal result)
+        {
+            result = 0M;
+            int integralResult;
+
+            string toParse = Ext.RemoveAllWhitespaces(input);
+            bool hadDigit = false;
+            bool hadPlus = false;
+            foreach (char c in toParse)
+            {
+                if (char.IsDigit(c))
+                {
+                    hadDigit = true;
+                    continue;
+                }
+                if (c == '+')
+                {
+                    if (!hadDigit)
+                    {
+                        return GlobalConfig.GetStringResource("lang_PlusMustBeAfterValue");
+                    }
+                    hadPlus = true;
+                    break;
+                }
+            }
+            if (toParse.Count(x => x == '+') > 1)
+            {
+                return GlobalConfig.GetStringResource("lang_PlusCanBeOnlyOne");
+            }
+            toParse = toParse.Replace("+", "");
+
+            if (!int.TryParse(toParse, out integralResult))
+            {
+                return GlobalConfig.GetStringResource("lang_InvalidCharacters");
+            }
+
+            if (integralResult < 1M || integralResult > 6M)
+            {
+                return GlobalConfig.GetStringResource("lang_TypeIntegerMarkRange1-6Plus");
+            }
+
+            result = (decimal)integralResult + (hadPlus ? 0.5M : 0M);
+
+            return string.Empty;
+        }
+        public static string GlobalValidateNote(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input) || input.Length < 1 || input.Length > 2)
+            {
+                return GlobalConfig.GetStringResource("lang_LengthMustBe1Or2");
+            }
+
+            bool hasLetter = false;
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (!char.IsLetterOrDigit(input[i]))
+                {
+                    return GlobalConfig.GetStringResource("lang_InvalidCharacters");
+                }
+                if (char.IsLetter(input[i]))
+                {
+                    hasLetter = true;
+                }
+            }
+
+            if (!hasLetter)
+            {
+                return GlobalConfig.GetStringResource("lang_TypeAtLeastOneLetter");
+            }
+
+            return string.Empty;
+        }
+        public static string GlobalValidateWeightInput(string input, out int result)
+        {
+            if (!int.TryParse(input, out result))
+            {
+                return GlobalConfig.GetStringResource("lang_TypeValidInteger");
+            }
+
+            if (result < 0)
+            {
+                return GlobalConfig.GetStringResource("lang_TypePositiveValue");
+            }
 
             return string.Empty;
         }

@@ -99,29 +99,17 @@ namespace Dziennik.View
             }
         }
 
-        public AddMarksSetViewModel()
-        {
-            m_okCommand = new RelayCommand(Ok);
-            m_cancelCommand = new RelayCommand(Cancel);
-        }
-
         private RelayCommand m_okCommand;
         public ICommand OkCommand
         {
             get { return m_okCommand; }
         }
-
         private RelayCommand m_cancelCommand;
-        public ICommand CancelCommand
+
+        public RelayCommand CancelCommand
         {
             get { return m_cancelCommand; }
-        }
-
-        private void Ok(object e)
-        {
-        }
-        private void Cancel(object e)
-        {
+            set { m_cancelCommand = value; }
         }
     }
 }
