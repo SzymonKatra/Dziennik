@@ -90,7 +90,7 @@ namespace Dziennik.View
         {
             if (m_selectedStudents.Count <= 0)
             {
-                if (MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Uwaga! Nie dodano żadnego ucznia do grupy." + Environment.NewLine + "Czy chcesz kontynuować?", "Dziennik", MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
+                if (GlobalConfig.MessageBox(this, GlobalConfig.GetStringResource("lang_NoAddedStudents") + Environment.NewLine + GlobalConfig.GetStringResource("lang_DoYouWantToContinue"), MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
             }
 
             if (!m_renumberFromOne) m_selectedStudents.Sort();
@@ -162,7 +162,7 @@ namespace Dziennik.View
             if (string.IsNullOrWhiteSpace(m_name))
             {
                 m_okCommand.RaiseCanExecuteChanged();
-                return "Wprowadź nazwę grupy";
+                return GlobalConfig.GetStringResource("lang_TypeGroupName");
             }
 
             m_nameValid = true;
@@ -187,7 +187,7 @@ namespace Dziennik.View
                 if (m_globalStudentCollection.FirstOrDefault((gs) => { return gs.Number == selStudent; }) == null)
                 {
                     m_okCommand.RaiseCanExecuteChanged();
-                    return string.Format("Ucznia o numerze {0} nie ma w bazie", selStudent);
+                    return string.Format(GlobalConfig.GetStringResource("lang_StudentNumberNotExistsFormat"), selStudent);
                 }
             }
 

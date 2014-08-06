@@ -3,7 +3,7 @@
                     xmlns:s="clr-namespace:System;assembly=mscorlib">
     
     <s:String x:Key="lang_AppName">Dziennik</s:String>
-    <s:String x:Key="lang_DoYouWantContinue">Czy chcesaz kontynuować?</s:String>
+    <s:String x:Key="lang_DoYouWantToContinue">Czy chcesaz kontynuować?</s:String>
     <s:String x:Key="lang_Ok">OK</s:String>
     <s:String x:Key="lang_Cancel">Anuluj</s:String>
     <s:String x:Key="lang_Close">Zamknij</s:String>
@@ -132,4 +132,30 @@
     <s:String x:Key="lang_ErrorTooHighFormat">Maksymalna wartość to {0}</s:String>
 
     <s:String x:Key="lang_RemainingHoursOfLessonsFormat">Pozostało {0} możliwych do zrealizowania godzin lekcyjnych</s:String>
+
+    <s:String x:Key="lang_AddMarksSetTitle">Dodaj oceny seryjnie</s:String>
+    <s:String x:Key="lang_MarkOrWeight">Ocena / Uwaga</s:String>
+
+    <s:String x:Key="lang_TypeValidClassName">Wprowadź poprawną nazwę klasy</s:String>
+    <s:String x:Key="lang_DoYouWantRemoveClass">Czy napewno chcesz usunąć klasę?</s:String>
+    <s:String x:Key="lang_NoAddedStudents">Uwaga! Nie dodano żadnego ucznia do grupy.</s:String>
+    <s:String x:Key="lang_TypeGroupName">Wprowadź nazwę grupy</s:String>
+    <s:String x:Key="lang_StudentNumberNotExistsFormat">Ucznia o numerze {0} nie ma w bazie</s:String>
+    <s:String x:Key="lang_SelectedStudentsToRemoveFormat">Zaznaczono {0} uczniów do usunięcia.</s:String>
+    <s:String x:Key="lang_TheyMarksAreGoingToBeRemove">Ich dotychczasowe oceny zostaną usunięte.</s:String>
+    <s:String x:Key="lang_OnListWillBeGaps">Na liście powstaną luki.</s:String>
+    <s:String x:Key="lang_TypeValidInteger">Wprowadź poprawną liczbę całkowitą</s:String>
+    <s:String x:Key="lang_TypeMarkRange1-6Or0">Wprowadź ocenę z zakresu &lt;1; 6&gt;lub 0 jeśli chcesz ją anulować</s:String>
+    <s:String x:Key="lang_PlusMustBeAfterValue">Znak plusa musi się znajdować za liczbą</s:String>
+    <s:String x:Key="lang_PlusCanBeOnlyOne">Znak plusa może być tylko jeden</s:String>
+    <s:String x:Key="lang_InvalidCharacters">Niedozwolone znaki</s:String>
+    <s:String x:Key="lang_TypeIntegerMarkRange1-6Plus">Wprowadź całkowitą ocenę z zakresu &lt;1; 6&gt;z ewentualnym plusem</s:String>
+    <s:String x:Key="lang_LengthMustBe1Or2">Długość musi być równa 1 lub 2 znaki</s:String>
+    <s:String x:Key="lang_TypeAtLeastOneLetter">Wprowadź przynajmniej jedną literę</s:String>
+    <s:String x:Key="lang_TypePositiveValue">Wprowadź liczbę dodatnią</s:String>
+    <s:String x:Key="lang_DoYouWantToRemoveSubject">Czy na pewno chcesz usunąć temat?</s:String>
+    <s:String x:Key="lang_AddedSubjectsFormat">Dodano {0} tematów</s:String>
+    <s:String x:Key="lang_ErrorOccurredWhileAddingSubjects">Wystąpił błąd podczas dodawania tematów.</s:String>
+    <s:String x:Key="lang_CheckClipboardForValidList">Sprawdź czy schowek zawiera prawidłowy format listy</s:String>
+    <s:String x:Key="lang_DoYouWantToRemoveRealizedSubject">Czy na pewno chcesz usunąć zrealizowany temat?</s:String>
 </ResourceDictionary>

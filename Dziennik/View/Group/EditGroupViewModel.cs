@@ -163,9 +163,13 @@ namespace Dziennik.View
             List<int> selectionResult = dialogViewModel.ResultSelection;
             if (dialogViewModel.Result && selectionResult.Count > 0)
             {
-                if (MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this),
-                                           "Zaznaczono " + selectionResult.Count + " uczniów do usunięcia." + Environment.NewLine + "Ich dotychczasowe oceny zostaną usunięte" + Environment.NewLine + "Na liście powstaną luki" + Environment.NewLine + "Czy chcesz kontynuować?",
-                                           "Dziennik",
+                if (GlobalConfig.MessageBox(this,
+                                           string.Format("{1}{0}{2}{0}{3}{0}{4}",
+                                           Environment.NewLine,
+                                           string.Format(GlobalConfig.GetStringResource("lang_SelectedStudentsToRemoveFormat"), selectionResult.Count),
+                                           GlobalConfig.GetStringResource("lang_TheyMarksAreGoingToBeRemove"),
+                                           GlobalConfig.GetStringResource("lang_OnListWillBeGaps"),
+                                           GlobalConfig.GetStringResource("lang_DoYouWantToContinue")),
                                            MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
 
                 foreach(int selRes in selectionResult)
@@ -214,7 +218,7 @@ namespace Dziennik.View
             if (string.IsNullOrWhiteSpace(m_name))
             {
                 m_okCommand.RaiseCanExecuteChanged();
-                return "Wprowadź nazwę grupy";
+                return GlobalConfig.GetStringResource("lang_TypeGroupName");
             }
 
             m_nameValid = true;

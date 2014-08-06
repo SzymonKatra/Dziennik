@@ -150,8 +150,7 @@ namespace Dziennik.View
         }
         private void RemoveClass(object param)
         {
-            if (MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this),
-                                        "Czy napewno chcesz klasę?", "Dziennik", MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
+            if (GlobalConfig.MessageBox(this, GlobalConfig.GetStringResource("lang_DoYouWantRemoveClass"), MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
 
             m_result = EditClassResult.RemoveClass;
             GlobalConfig.Dialogs.Close(this);
@@ -216,7 +215,7 @@ namespace Dziennik.View
             if (string.IsNullOrWhiteSpace(m_name))
             {
                 m_okCommand.RaiseCanExecuteChanged();
-                return "Wprowadź poprawną nazwę klasy";
+                return GlobalConfig.GetStringResource("lang_TypeValidClassName");
             }
 
             m_nameValid = true;

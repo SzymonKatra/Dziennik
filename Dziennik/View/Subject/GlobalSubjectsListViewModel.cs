@@ -68,7 +68,7 @@ namespace Dziennik.View
         }
         private void AutoAddSubjectsClipboard(object e)
         {
-            if (MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Czy chcesz kontynuować?", "Dziennik", MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
+            if (GlobalConfig.MessageBox(this, GlobalConfig.GetStringResource("lang_DoYouWantToContinue"), MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
             int currentNumber = GetNextSubjectNumber(m_subjects);
             try
             {
@@ -92,12 +92,12 @@ namespace Dziennik.View
                         ++added;
                     }
 
-                    MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Dodano " + added + " tematów", "Dziennik", MessageBoxSuperPredefinedButtons.OK);
+                    GlobalConfig.MessageBox(this, string.Format(GlobalConfig.GetStringResource("lang_AddedSubjectsFormat"), added), MessageBoxSuperPredefinedButtons.OK);
                 }
             }
             catch
             {
-                MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Wystąpił błąd podczas dodawania tematów" + Environment.NewLine + "Sprawdź czy schowek zawiera prawidłowy format listy", "Dziennik", MessageBoxSuperPredefinedButtons.OK);
+                GlobalConfig.MessageBox(this, string.Format("{1}{0}{2}", Environment.NewLine, GlobalConfig.GetStringResource("lang_ErrorOccurredWhileAddingSubjects"), GlobalConfig.GetStringResource("lang_CheckClipboardForValidList")), MessageBoxSuperPredefinedButtons.OK);
             }
         }
         private void EditSubject(object e)

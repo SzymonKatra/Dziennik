@@ -203,7 +203,7 @@ namespace Dziennik.View
         }
         private void RemoveSubject(object e)
         {
-            if (MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Czy na pewno chcesz usunąć zrealizowany temat?", "Dziennik", MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
+            if (GlobalConfig.MessageBox(this, GlobalConfig.GetStringResource("lang_DoYouWantToRemoveRealizedSubject"), MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
 
             foreach (var pair in m_pairs)
             {

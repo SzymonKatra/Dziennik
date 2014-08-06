@@ -85,6 +85,9 @@
     </ApplicationDefinition>
     <Compile Include="CommandUtils\RelayCommand.cs" />
     <Compile Include="CommonEventArgs.cs" />
+    <Compile Include="Controls\AddMarksSetHeaderWithContext.xaml.cs">
+      <DependentUpon>AddMarksSetHeaderWithContext.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\DecimalToBrushConverter.cs" />
     <Compile Include="Controls\DirectorySelector.xaml.cs">
       <DependentUpon>DirectorySelector.xaml</DependentUpon>
@@ -173,6 +176,10 @@
     <Compile Include="View\Group\AddGroupWindow.xaml.cs">
       <DependentUpon>AddGroupWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Mark\AddMarksSetViewModel.cs" />
+    <Compile Include="View\Mark\AddMarksSetWindow.xaml.cs">
+      <DependentUpon>AddMarksSetWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Mark\EditEndingMarkViewModel.cs" />
     <Compile Include="View\Mark\EditEndingMarkWindow.xaml.cs">
       <DependentUpon>EditEndingMarkWindow.xaml</DependentUpon>
@@ -239,6 +246,10 @@
     <Compile Include="View\Subject\SelectGlobalSubjectWindow.xaml.cs">
       <DependentUpon>SelectGlobalSubjectWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\AddMarksSetHeaderWithContext.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\DirectorySelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -308,6 +319,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Group\AddGroupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Mark\AddMarksSetWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

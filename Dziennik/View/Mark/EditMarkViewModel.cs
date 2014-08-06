@@ -139,7 +139,7 @@ namespace Dziennik.View
             {
                 m_mark.Note = m_note;
                 m_mark.Value = 0;
-                m_mark.Weight = 0;
+                //m_mark.Weight = 0;
             }
             else
             {
@@ -222,7 +222,7 @@ namespace Dziennik.View
                     if(!hadDigit)
                     {
                         m_okCommand.RaiseCanExecuteChanged();
-                        return "Znak plusa musi się znajdować za liczbą";
+                        return GlobalConfig.GetStringResource("lang_PlusMustBeAfterValue");
                     }
                     hadPlus = true;
                     break;
@@ -231,20 +231,20 @@ namespace Dziennik.View
             if (toParse.Count(x => x == '+') > 1)
             {
                 m_okCommand.RaiseCanExecuteChanged();
-                return "Znak plusa może być tylko jeden";
+                return GlobalConfig.GetStringResource("lang_PlusCanBeOnlyOne");
             }
             toParse = toParse.Replace("+", "");
 
             if (!int.TryParse(toParse, out integralResult))
             {
                 m_okCommand.RaiseCanExecuteChanged();
-                return "Niedozwolone znaki";
+                return GlobalConfig.GetStringResource("lang_InvalidCharacters");
             }
 
             if (integralResult < 1M || integralResult > 6M)
             {
                 m_okCommand.RaiseCanExecuteChanged();
-                return "Wprowadź całkowitą ocenę z zakresu <1; 6> z ewentualnym plusem";
+                return GlobalConfig.GetStringResource("lang_TypeIntegerMarkRange1-6Plus");
             }
 
             m_value = (decimal)integralResult + (hadPlus ? 0.5M : 0M);
@@ -261,7 +261,7 @@ namespace Dziennik.View
             if (string.IsNullOrWhiteSpace(m_noteInput) || m_noteInput.Length < 1 || m_noteInput.Length > 2)
             {
                 m_okCommand.RaiseCanExecuteChanged();
-                return "Długość musi być równa 1 lub 2 znaki";
+                return GlobalConfig.GetStringResource("lang_LengthMustBe1Or2");
             }
 
             bool hasLetter = false;
@@ -270,7 +270,7 @@ namespace Dziennik.View
                 if (!char.IsLetterOrDigit(m_noteInput[i]))
                 {
                     m_okCommand.RaiseCanExecuteChanged();
-                    return "Niedozwolone znaki";
+                    return GlobalConfig.GetStringResource("lang_InvalidCharacters");
                 }
                 if (char.IsLetter(m_noteInput[i]))
                 {
@@ -281,7 +281,7 @@ namespace Dziennik.View
             if (!hasLetter)
             {
                 m_okCommand.RaiseCanExecuteChanged();
-                return "Wprowadź przynajmniej jedną literę";
+                return GlobalConfig.GetStringResource("lang_TypeAtLeastOneLetter");
             }
 
             m_note = m_noteInput;
@@ -300,13 +300,13 @@ namespace Dziennik.View
             if (!int.TryParse(m_weightInput, out result))
             {
                 m_okCommand.RaiseCanExecuteChanged();
-                return "Wprowadź poprawną liczbę całkowitą";
+                return GlobalConfig.GetStringResource("lang_TypeValidInteger");
             }
 
             if (result < 0)
             {
                 m_okCommand.RaiseCanExecuteChanged();
-                return "Wprowadź liczbę dodatnią";
+                return GlobalConfig.GetStringResource("lang_TypePositiveValue");
             }
 
             m_weight = result;

@@ -105,12 +105,12 @@ namespace Dziennik.View
             if (!int.TryParse(m_markInput, out res))
             {
                 m_okCommand.RaiseCanExecuteChanged();
-                return "Wprowadź poprawną liczbę całkowitą";
+                return GlobalConfig.GetStringResource("lang_TypeValidInteger");
             }
             if (res < 0 || res > 6)
             {
                 m_okCommand.RaiseCanExecuteChanged();
-                return "Wprowadź ocenę z zakresu <1; 6> lub 0 jeśli chcesz ją anulować";
+                return GlobalConfig.GetStringResource("lang_TypeMarkRange1-6Or0");
             }
 
             m_mark = res;

@@ -288,6 +288,7 @@ namespace Dziennik
             windowViewModelMappings.Add(typeof(EditCalendarViewModel), vm => new EditCalendarWindow((EditCalendarViewModel)vm));
             windowViewModelMappings.Add(typeof(GlobalCalendarListViewModel), vm => new GlobalCalendarListWindow((GlobalCalendarListViewModel)vm));
             windowViewModelMappings.Add(typeof(EditOffDayViewModel), vm => new EditOffDayWindow((EditOffDayViewModel)vm));
+            windowViewModelMappings.Add(typeof(AddMarksSetViewModel), vm => new AddMarksSetWindow((AddMarksSetViewModel)vm));
 
             Dialogs = new DialogService(windowViewModelMappings);
         }

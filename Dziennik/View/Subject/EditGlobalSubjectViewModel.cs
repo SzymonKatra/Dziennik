@@ -96,7 +96,7 @@ namespace Dziennik.View
         }
         private void RemoveSubject(object e)
         {
-            if(MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this), "Czy na pewno chcesz usunąć temat?", "Dziennik", MessageBoxSuperPredefinedButtons.OKCancel) != MessageBoxSuperButton.OK)
+            if(GlobalConfig.MessageBox(this, GlobalConfig.GetStringResource("lang_DoYouWantToRemoveSubject"), MessageBoxSuperPredefinedButtons.OKCancel) != MessageBoxSuperButton.OK)
             {
                 return;
             }
