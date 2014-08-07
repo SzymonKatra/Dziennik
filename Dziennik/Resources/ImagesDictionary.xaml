@@ -7,5 +7,6 @@
     <BitmapImage x:Key="img_save" UriSource="save.png"/>
     <BitmapImage x:Key="img_save_all" UriSource="save_all.png"/>
     <BitmapImage x:Key="img_options" UriSource="options.png"/>
+    <BitmapImage x:Key="img_info" UriSource="info.png"/>
     
 </ResourceDictionary>

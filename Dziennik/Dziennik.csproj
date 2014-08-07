@@ -172,6 +172,10 @@
     <Compile Include="View\Calendar\EditOffDayWindow.xaml.cs">
       <DependentUpon>EditOffDayWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Common\InfoDialogViewModel.cs" />
+    <Compile Include="View\Common\InfoDialogWindow.xaml.cs">
+      <DependentUpon>InfoDialogWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Group\AddGroupViewModel.cs" />
     <Compile Include="View\Group\AddGroupWindow.xaml.cs">
       <DependentUpon>AddGroupWindow.xaml</DependentUpon>
@@ -315,6 +319,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Calendar\EditOffDayWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Common\InfoDialogWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -462,7 +470,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\info.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

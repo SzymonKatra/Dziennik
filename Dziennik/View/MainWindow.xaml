@@ -8,7 +8,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
         xmlns:c="clr-namespace:Dziennik.CommandUtils"
         xmlns:local="clr-namespace:Dziennik"
-        Title="Dziennik" Width="900" Height="500"
+        Title="{DynamicResource lang_AppName}" Width="900" Height="500"
         WindowStartupLocation="CenterOwner"
         WindowState="Maximized">
 
@@ -25,11 +25,14 @@
         </Grid.RowDefinitions>
 
         <WrapPanel Grid.Row="0" Orientation="Horizontal">
-            <Button Style="{StaticResource wrapPanelImageButtonStyle}"  ToolTip="Zapisz zmiany" Command="{Binding SaveCommand}">
+            <Button Style="{StaticResource wrapPanelImageButtonStyle}"  ToolTip="{DynamicResource lang_SaveChanges}" Command="{Binding SaveCommand}">
                 <Image Source="{StaticResource img_save}"/>
             </Button>
-            <Button Style="{StaticResource wrapPanelImageButtonStyle}"  ToolTip="Opcje" Command="{Binding OptionsCommand}">
+            <Button Style="{StaticResource wrapPanelImageButtonStyle}"  ToolTip="{DynamicResource lang_Options}" Command="{Binding OptionsCommand}">
                 <Image Source="{StaticResource img_options}"/>
+            </Button>
+            <Button Style="{StaticResource wrapPanelImageButtonStyle}"  ToolTip="{DynamicResource lang_Info}" Command="{Binding InfoCommand}">
+                <Image Source="{StaticResource img_info}"/>
             </Button>
         </WrapPanel>
 

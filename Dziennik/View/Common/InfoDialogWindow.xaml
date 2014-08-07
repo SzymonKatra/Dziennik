@@ -1,0 +1,57 @@
+﻿<Window x:Class="Dziennik.View.InfoDialogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{DynamicResource lang_InfoTitle}" Height="300" Width="350"
+        WindowStartupLocation="CenterOwner">
+
+    <Window.Resources>
+        <Style x:Key="selectableTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource inputControlStyle}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="70"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="200"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" FontSize="14" FontWeight="Bold" Text="{DynamicResource lang_Author}"/>
+        <TextBlock Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" FontSize="16" FontWeight="Bold" Text="{DynamicResource lang_AuthorName}"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" FontSize="14" FontWeight="Bold" VerticalAlignment="Top" Margin="0,10,0,0" Text="{DynamicResource lang_Icons}"/>
+        <Grid Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".5*"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1,1,1,0">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Style="{StaticResource inputControlStyle}" FontWeight="Bold" Text="{DynamicResource lang_IconsSource1Name}"/>
+                    <TextBox Style="{StaticResource selectableTextBox}" Text="{DynamicResource lang_IconsSource1Hyperlink1}"/>
+                    <TextBox Style="{StaticResource selectableTextBox}" Text="{DynamicResource lang_IconsSource1Hyperlink2}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Style="{StaticResource inputControlStyle}" FontWeight="Bold" Text="{DynamicResource lang_IconsSource2Name}"/>
+                    <TextBox Style="{StaticResource selectableTextBox}" Text="{DynamicResource lang_IconsSource2Hyperlink1}"/>
+                    <TextBox Style="{StaticResource selectableTextBox}" Text="{DynamicResource lang_IconsSource2Hyperlink2}"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <Button Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Style="{StaticResource commonButtonStyle}" Command="{Binding CloseCommand}" Content="{DynamicResource lang_Close}"/>
+    </Grid>
+</Window>

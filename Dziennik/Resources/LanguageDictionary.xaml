@@ -10,6 +10,10 @@
     <s:String x:Key="lang_Error">Błąd</s:String>
     <s:String x:Key="lang_ErrorFormat">Błąd {0}</s:String>
     
+    <s:String x:Key="lang_SaveChanges">Zapisz zmiany</s:String>
+    <s:String x:Key="lang_Options">Opcje</s:String>
+    <s:String x:Key="lang_Info">Informacje</s:String>
+    
     <s:String x:Key="lang_Subjects">Tematy</s:String>
     <s:String x:Key="lang_Marks">Oceny</s:String>
     <s:String x:Key="lang_Number">Numer</s:String>
@@ -136,6 +140,17 @@
     <s:String x:Key="lang_AddMarksSetTitle">Dodaj oceny seryjnie</s:String>
     <s:String x:Key="lang_MarkOrWeight">Ocena / Uwaga</s:String>
 
+    <s:String x:Key="lang_InfoTitle">Informacje</s:String>
+    <s:String x:Key="lang_Author">Autor</s:String>
+    <s:String x:Key="lang_AuthorName">Szymon Katra</s:String>
+    <s:String x:Key="lang_Icons">Ikony</s:String>
+    <s:String x:Key="lang_IconsSource1Name">Pixel Mixer</s:String>
+    <s:String x:Key="lang_IconsSource1Hyperlink1">http://www.pixel-mixer.com</s:String>
+    <s:String x:Key="lang_IconsSource1Hyperlink2">https://www.iconfinder.com/iconsets/basicset</s:String>
+    <s:String x:Key="lang_IconsSource2Name">Aha-Soft</s:String>
+    <s:String x:Key="lang_IconsSource2Hyperlink1">http://www.aha-soft.com/</s:String>
+    <s:String x:Key="lang_IconsSource2Hyperlink2">https://www.iconfinder.com/iconsets/32x32-free-design-icons</s:String>
+    
     <s:String x:Key="lang_TypeValidClassName">Wprowadź poprawną nazwę klasy</s:String>
     <s:String x:Key="lang_DoYouWantRemoveClass">Czy napewno chcesz usunąć klasę?</s:String>
     <s:String x:Key="lang_NoAddedStudents">Uwaga! Nie dodano żadnego ucznia do grupy.</s:String>

@@ -20,6 +20,7 @@ namespace Dziennik.View
         {
             m_saveCommand = new RelayCommand(Save);
             m_optionsCommand = new RelayCommand(Options);
+            m_infoCommand = new RelayCommand(Info);
         }
 
         private ObservableCollection<SchoolClassControlViewModel> m_openedSchoolClasses = new ObservableCollection<SchoolClassControlViewModel>();
@@ -66,6 +67,12 @@ namespace Dziennik.View
         public ICommand OptionsCommand
         {
             get { return m_optionsCommand; }
+        }
+
+        private RelayCommand m_infoCommand;
+        public ICommand InfoCommand
+        {
+            get { return m_infoCommand; }
         }
 
         private bool m_databasesDirectoryChanged = true;
@@ -120,6 +127,12 @@ namespace Dziennik.View
             GlobalConfig.Dialogs.ShowDialog(this, saveDialogViewModel);
             if (GlobalConfig.Notifier.AutoSave) GlobalConfig.GlobalDatabase.Save();
             if (m_databasesDirectoryChanged) ReloadSchoolClasses();
+        }
+        private void Info(object e)
+        {
+            //GlobalConfig.MessageBox(this, GlobalConfig.GetStringResource("lang_AuthorInfo"), MessageBoxSuperPredefinedButtons.OK);
+            InfoDialogViewModel dialogViewModel = new InfoDialogViewModel();
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
         private void OpenFromPath(string path)
         {
