@@ -196,14 +196,21 @@ namespace Dziennik.View
         {
             if (GlobalConfig.Notifier.AutoSave) m_saveCommand.Execute(null);
         }
-        private void Save(object param)
+        private void Save(object e)
         {
-            ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
+            if (e is NoActionDialogParameter)
             {
                 m_database.Save();
             }
-            , null, "Zapisywanie...");
-            GlobalConfig.Dialogs.ShowDialog((param == null ? GlobalConfig.Main : param), dialogViewModel);
+            else
+            {
+                ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
+                {
+                    m_database.Save();
+                }
+                , null, "Zapisywanie...");
+                GlobalConfig.Dialogs.ShowDialog((e == null ? GlobalConfig.Main : e), dialogViewModel);
+            }
         }
         private void RealizeSubject(object e)
         {

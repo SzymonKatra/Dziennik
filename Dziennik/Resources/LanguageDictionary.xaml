@@ -177,4 +177,8 @@
     <s:String x:Key="lang_NullInputStudentsFormat">Uwaga! U {0} uczniów nie wprowadzono żadnej oceny ani uwagi.</s:String>
     <s:String x:Key="lang_TheyAre">Są to:&#x20;</s:String>
     <s:String x:Key="lang_TheyAreSeparator"> ,</s:String>
+    <s:String x:Key="lang_Saving">Zapisywanie</s:String>
+    <s:String x:Key="lang_Registry">Rejestr</s:String>
+    <s:String x:Key="lang_GlobalDatabase">Globalna baza</s:String>
+    <s:String x:Key="lang_Opening">Otwieranie</s:String>
 </ResourceDictionary>

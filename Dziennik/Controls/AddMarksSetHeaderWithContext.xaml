@@ -6,12 +6,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="300">
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type UserControl}}}">
-        <TextBlock Text="{Binding Header}">
-            <TextBlock.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Dodaj oceny seryjnie" Command="{Binding CommandAddMarksSet}" CommandParameter="{Binding CommandParameterAll}"/>
-                </ContextMenu>
-            </TextBlock.ContextMenu>
-        </TextBlock>
+        <Grid.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="Dodaj oceny seryjnie" Command="{Binding CommandAddMarksSet}" CommandParameter="{Binding CommandParameterAll}"/>
+            </ContextMenu>
+        </Grid.ContextMenu>
+        <TextBlock Text="{Binding Header}"/>
     </Grid>
 </UserControl>

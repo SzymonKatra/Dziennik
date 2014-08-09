@@ -208,6 +208,7 @@
     <Compile Include="Model\GlobalStudent.cs" />
     <Compile Include="ObservableObject.cs" />
     <Compile Include="View\Mark\EditMarkViewModel.cs" />
+    <Compile Include="View\NoActionDialogParameter.cs" />
     <Compile Include="View\Student\EditStudentViewModel.cs" />
     <Compile Include="View\Student\EditStudentWindow.xaml.cs">
       <DependentUpon>EditStudentWindow.xaml</DependentUpon>

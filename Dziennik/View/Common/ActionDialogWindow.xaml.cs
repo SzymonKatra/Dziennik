@@ -22,6 +22,24 @@ namespace Dziennik.View
         {    
             InitializeComponent();
 
+            //if(viewModel.Size.Width >=0.0 && viewModel.Size.Height >=0.0)
+            if (viewModel.Size != null)
+            {
+                this.SizeToContent = System.Windows.SizeToContent.Manual;
+                this.Width = viewModel.Size.Value.Width;
+                this.Height = viewModel.Size.Value.Height;
+            }
+            //else if (viewModel.Size.Width >= 0.0 && viewModel.Size.Height < 0.0)
+            //{
+            //    this.SizeToContent = System.Windows.SizeToContent.Height;
+            //    this.Width = viewModel.Size.Width;
+            //}
+            //else if (viewModel.Size.Width < 0.0 && viewModel.Size.Height >= 0.0)
+            //{
+            //    this.SizeToContent = System.Windows.SizeToContent.Width;
+            //    this.Height = viewModel.Size.Height;
+            //}
+
             this.DataContext = viewModel;
             viewModel.PropertyChanged += viewModel_PropertyChanged;
 
@@ -39,6 +57,15 @@ namespace Dziennik.View
             {
                 textBlock.Text = m_viewModel.Content;
                 textBlock.Dispatcher.Invoke(Empty, System.Windows.Threading.DispatcherPriority.Render);
+            }
+            else if (e.PropertyName == "ProgressValue")
+            {
+                progressBar.Value = m_viewModel.ProgressValue;
+                progressBar.Dispatcher.Invoke(Empty, System.Windows.Threading.DispatcherPriority.Render);
+            }
+            else if (e.PropertyName == "ProgressVisible")
+            {
+                this.Dispatcher.Invoke(Empty, System.Windows.Threading.DispatcherPriority.Render);
             }
         }
 

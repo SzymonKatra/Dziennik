@@ -219,6 +219,7 @@ namespace Dziennik
         public static readonly string SchoolOptionsDatabaseFileExtension = ".dzo";
         public static readonly string FileDialogFilter = "Pliki dziennika (.dzs)|*.dzs|Dokumenty XML (.xml)|*.xml|Wszystkie pliki (*.*)|*.*";
         public static readonly string SchoolOptionsDatabaseFileName = "options" + SchoolOptionsDatabaseFileExtension;
+        public static readonly Size ActionDialogProgressSize = new Size(400, 200);
 
         public static readonly string RegistryKeyName = @"Software\Dziennik_Katra";
         public static readonly string RegistryValueNameShowName = "ShowName";
