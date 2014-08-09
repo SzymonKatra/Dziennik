@@ -36,11 +36,12 @@ namespace Dziennik.View
 
             m_name = schoolGroup.Name;
             m_schedule = new WeekScheduleViewModel();
-            m_schedule.Monday = schoolGroup.Schedule.Monday;
-            m_schedule.Tuesday = schoolGroup.Schedule.Tuesday;
-            m_schedule.Wednesday = schoolGroup.Schedule.Wednesday;
-            m_schedule.Thursday = schoolGroup.Schedule.Thursday;
-            m_schedule.Friday= schoolGroup.Schedule.Friday;
+            schoolGroup.Schedule.CopyTo(m_schedule);
+            //m_schedule.Monday = schoolGroup.Schedule.Monday;
+            //m_schedule.Tuesday = schoolGroup.Schedule.Tuesday;
+            //m_schedule.Wednesday = schoolGroup.Schedule.Wednesday;
+            //m_schedule.Thursday = schoolGroup.Schedule.Thursday;
+            //m_schedule.Friday= schoolGroup.Schedule.Friday;
         }
 
         private EditGroupResult m_result = EditGroupResult.Cancel;
@@ -108,11 +109,12 @@ namespace Dziennik.View
         {
             m_result = EditGroupResult.Ok;
             m_schoolGroup.Name = m_name;
-            m_schoolGroup.Schedule.Monday = m_schedule.Monday;
-            m_schoolGroup.Schedule.Tuesday = m_schedule.Tuesday;
-            m_schoolGroup.Schedule.Wednesday = m_schedule.Wednesday;
-            m_schoolGroup.Schedule.Thursday = m_schedule.Thursday;
-            m_schoolGroup.Schedule.Friday = m_schedule.Friday;
+            m_schedule.CopyTo(m_schoolGroup.Schedule);
+            //m_schoolGroup.Schedule.Monday = m_schedule.Monday;
+            //m_schoolGroup.Schedule.Tuesday = m_schedule.Tuesday;
+            //m_schoolGroup.Schedule.Wednesday = m_schedule.Wednesday;
+            //m_schoolGroup.Schedule.Thursday = m_schedule.Thursday;
+            //m_schoolGroup.Schedule.Friday = m_schedule.Friday;
 
             GlobalConfig.Dialogs.Close(this);
         }

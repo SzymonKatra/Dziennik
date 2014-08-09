@@ -139,14 +139,13 @@ namespace Dziennik.View
             {
                 m_mark.Note = m_note;
                 m_mark.Value = 0;
-                //m_mark.Weight = 0;
             }
             else
             {
                 m_mark.Value = m_value;
-                m_mark.Weight = m_weight;
                 m_mark.Note = string.Empty;
             }
+            m_mark.Weight = m_weight;
             m_mark.Description = m_description;
             m_mark.LastChangeDate = DateTime.Now;
             if (m_isAddingMode) m_mark.AddDate = m_mark.LastChangeDate;

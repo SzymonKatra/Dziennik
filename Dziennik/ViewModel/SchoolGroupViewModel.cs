@@ -193,11 +193,11 @@ namespace Dziennik.ViewModel
             RaisePropertyChanged("RealizedSubjectsDisplay");
         }
 
-        public void SubscribeSchedule()
+        private void SubscribeSchedule()
         {
             m_schedule.PropertyChanged += m_schedule_PropertyChanged;
         }
-        public void UnsubscribeSchedule()
+        private void UnsubscribeSchedule()
         {
             m_schedule.PropertyChanged += m_schedule_PropertyChanged;
         }
@@ -214,8 +214,8 @@ namespace Dziennik.ViewModel
         }
         private void UnsubscribeStudents()
         {
-            m_students.Added += m_students_Added;
-            m_students.Removed += m_students_Removed;
+            m_students.Added -= m_students_Added;
+            m_students.Removed -= m_students_Removed;
         }
 
         private void m_students_Added(object sender, NotifyCollectionChangedSimpleEventArgs<StudentInGroupViewModel> e)

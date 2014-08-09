@@ -12,8 +12,8 @@
         </Grid.RowDefinitions>
 
         <WrapPanel Grid.Row="0" Orientation="Horizontal">
-            <Button Content="{DynamicResource lang_AddSubject}" Style="{StaticResource wrapPanelButtonStyle}" Command="{Binding AddSubjectCommand}"/>
-            <Button Content="{DynamicResource lang_AutoAddSubjectsClipboard}" Style="{StaticResource wrapPanelButtonStyle}" Command="{Binding AutoAddSubjectsClipboardCommand}"/>
+            <Button Content="{DynamicResource lang_AddSubject}" Style="{StaticResource wrapPanelControlStyle}" Command="{Binding AddSubjectCommand}"/>
+            <Button Content="{DynamicResource lang_AutoAddSubjectsClipboard}" Style="{StaticResource wrapPanelControlStyle}" Command="{Binding AutoAddSubjectsClipboardCommand}"/>
         </WrapPanel>
 
         <DataGrid Grid.Row="1"

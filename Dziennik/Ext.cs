@@ -27,6 +27,8 @@ namespace Dziennik
 
         public static string RemoveAllWhitespaces(string value)
         {
+            if (value == null) return value;
+
             value = value.Replace(" ", "");
             value = value.Replace("\t", "");
             value = value.Replace("\n", "");

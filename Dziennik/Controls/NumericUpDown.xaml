@@ -11,7 +11,7 @@
             <ColumnDefinition Width="15"/>
         </Grid.ColumnDefinitions>
 
-        <TextBox Grid.Column="0" Margin="0,0,5,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsReadOnly="{Binding ButtonChangeOnly}" Text="{Binding ValueInput, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
+        <TextBox Grid.Column="0" Margin="0,0,1,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsReadOnly="{Binding ButtonChangeOnly}" Text="{Binding ValueInput, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height=".5*"/>
@@ -19,10 +19,10 @@
             </Grid.RowDefinitions>
 
             <Button Grid.Row="0" Command="{Binding UpCommand}">
-                <TextBlock Text="▲" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Text="▴" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Button>
             <Button Grid.Row="1" Command="{Binding DownCommand}">
-                <TextBlock Text="▼" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Text="▾" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Button>
         </Grid>
     </Grid>

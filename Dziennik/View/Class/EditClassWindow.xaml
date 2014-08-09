@@ -12,9 +12,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="60"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
@@ -25,20 +23,17 @@
         <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_ClassName}"/>
         <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
 
-        <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Groups}"/>
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".5*"/>
+            </Grid.RowDefinitions>
 
-            <ComboBox Grid.Column="0" Style="{StaticResource inputControlStyle}" ItemsSource="{Binding SchoolClass.Groups}" SelectedItem="{Binding SelectedGroup, Mode=TwoWay}" DisplayMemberPath="Name"/>
-            <WrapPanel Grid.Column="1">
-                <Button Style="{StaticResource wrapPanelImageButtonStyle}" Command="{Binding EditGroupCommand}" ToolTip="{DynamicResource lang_EditGroup}">
-                    <Image Source="{StaticResource img_edit}"/>
-                </Button>
-                <Button Style="{StaticResource wrapPanelImageButtonStyle}" Command="{Binding AddGroupCommand}" ToolTip="{DynamicResource lang_AddGroup}">
-                    <Image Source="{StaticResource img_add}"/>
-                </Button>
+            <ComboBox Grid.Row="0" Style="{StaticResource inputControlStyle}" ItemsSource="{Binding SchoolClass.Groups}" SelectedItem="{Binding SelectedGroup, Mode=TwoWay}" DisplayMemberPath="Name"/>
+            <WrapPanel Grid.Row="1" Style="{StaticResource inputControlStyle}">
+                <Button Margin="0,0,5,0" Command="{Binding EditGroupCommand}" Content="{DynamicResource lang_EditGroup}"/>
+                <Button Margin="0,0,5,0" Command="{Binding AddGroupCommand}" Content="{DynamicResource lang_AddGroup}"/>
             </WrapPanel>
         </Grid>
         
@@ -49,7 +44,7 @@
         <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_ClassCalendar}"/>
         <ComboBox Grid.Column="1" Grid.Row="3" Style="{StaticResource inputControlStyle}" ItemsSource="{Binding ViewModel.Calendars, Source={x:Static local:GlobalConfig.GlobalDatabase}}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedCalendar}"/>
         
-        <Grid Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2">
+        <Grid Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width=".65*"/>
                 <ColumnDefinition Width=".35*"/>
@@ -58,6 +53,6 @@
             <Button Grid.Column="1" Margin="10,5,10,5" Content="{DynamicResource lang_RemoveClass}" Command="{Binding RemoveClassCommand}"/>
         </Grid>
 
-        <my:OkCancelControl Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
+        <my:OkCancelControl Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>
 </Window>

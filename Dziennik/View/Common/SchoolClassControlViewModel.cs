@@ -31,6 +31,7 @@ namespace Dziennik.View
             m_putAllEndingMarksCommand = new RelayCommand<string>(PutAllEndingMarks);
             m_putNotAllEndingMarksCommand = new RelayCommand<string>(PutNotAllEndingMarks);
             m_cancelAllEndingMarksCommand = new RelayCommand<string>(CancelAllEndingMarks);
+            m_addMarksSetCommand = new RelayCommand<string>(AddMarksSet);
 
             m_database = database;
         }
@@ -131,6 +132,11 @@ namespace Dziennik.View
         public ICommand CancelAllEndingMarksCommand
         {
             get { return m_cancelAllEndingMarksCommand; }
+        }
+        private RelayCommand<string> m_addMarksSetCommand;
+        public RelayCommand<string> AddMarksSetCommand
+        {
+            get { return m_addMarksSetCommand; }
         }
 
         private void AddMark(ObservableCollection<MarkViewModel> param)
@@ -306,10 +312,16 @@ namespace Dziennik.View
 
             MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(GlobalConfig.Main), string.Format("Anulowano {0} ocen", completedCount), "Dziennik", MessageBoxSuperPredefinedButtons.OK);
         }
+        private void AddMarksSet(string e)
+        {
+            AddMarksSetViewModel dialogViewModel = new AddMarksSetViewModel(m_selectedGroup.Students, (e == "first" ? AddMarksSetViewModel.SemesterType.First : AddMarksSetViewModel.SemesterType.Second));
+            GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Main, dialogViewModel);
+            if (dialogViewModel.Result != AddMarksSetViewModel.AddMarksSetResult.Cancel) m_autoSaveCommand.Execute(null);
+        }
 
         private bool MessageBoxContinue()
         {
-            if (MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(GlobalConfig.Main), GlobalConfig.GetStringResource("langDoYouWantContinue"), "Dziennik", MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return false;
+            if (MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(GlobalConfig.Main), GlobalConfig.GetStringResource("lang_DoYouWantToContinue"), "Dziennik", MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return false;
             return true;
         }
     }

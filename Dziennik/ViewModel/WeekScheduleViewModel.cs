@@ -48,5 +48,14 @@ namespace Dziennik.ViewModel
             get { return m_model.Friday; }
             set { m_model.Friday = value; RaisePropertyChanged("Friday"); }
         }
+
+        public void CopyTo(WeekScheduleViewModel other)
+        {
+            other.Monday = this.Monday;
+            other.Tuesday = this.Tuesday;
+            other.Wednesday = this.Wednesday;
+            other.Thursday = this.Thursday;
+            other.Friday = this.Friday;
+        }
     }
 }

@@ -13,8 +13,8 @@
         </Grid.RowDefinitions>
         
         <WrapPanel Grid.Row="0" Orientation="Horizontal">
-            <Button Content="{DynamicResource lang_AddStudent}" Style="{StaticResource wrapPanelButtonStyle}"  Command="{Binding AddStudentCommand}"/>
-            <Button Content="{DynamicResource lang_AutoAddStudentClipboard}" Style="{StaticResource wrapPanelButtonStyle}" Command="{Binding AutoAddStudentsClipboardCommand}"/>
+            <Button Content="{DynamicResource lang_AddStudent}" Style="{StaticResource wrapPanelControlStyle}"  Command="{Binding AddStudentCommand}"/>
+            <Button Content="{DynamicResource lang_AutoAddStudentClipboard}" Style="{StaticResource wrapPanelControlStyle}" Command="{Binding AutoAddStudentsClipboardCommand}"/>
         </WrapPanel>
         <DataGrid Grid.Row="1"
                   ItemsSource="{Binding Students}"

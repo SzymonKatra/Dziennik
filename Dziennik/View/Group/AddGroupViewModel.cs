@@ -28,6 +28,8 @@ namespace Dziennik.View
                 m_selectedStudents.Add(gStudent.Number);
             }
             m_selectedStudentsInput = SelectionParser.Create(m_selectedStudents);
+
+            m_schedule = new WeekScheduleViewModel();
         }
 
         private SchoolGroupViewModel m_result = new SchoolGroupViewModel();
@@ -60,6 +62,13 @@ namespace Dziennik.View
         {
             get { return m_renumberFromOne; }
             set { m_renumberFromOne = value; RaisePropertyChanged("RenumberFromOne"); }
+        }
+
+        private WeekScheduleViewModel m_schedule;
+        public WeekScheduleViewModel Schedule
+        {
+            get { return m_schedule; }
+            set { m_schedule = value; RaisePropertyChanged("Schedule"); }
         }
 
         private RelayCommand m_okCommand;
@@ -98,6 +107,7 @@ namespace Dziennik.View
             int index = 1;
 
             m_result.Name = m_name;
+            m_schedule.CopyTo(m_result.Schedule);
             foreach (int selStudent in m_selectedStudents)
             {
                 StudentInGroupViewModel studentInGroup = new StudentInGroupViewModel();

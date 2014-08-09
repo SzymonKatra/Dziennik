@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:my="clr-namespace:Dziennik.Controls"
-        Title="{DynamicResource lang_AddMarksSetTitle}" Height="300" Width="300">
+        Title="{DynamicResource lang_AddMarksSetTitle}" Height="300" Width="300"
+        WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="70"/>
@@ -16,7 +17,7 @@
         </Grid.RowDefinitions>
         
         <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Weight}"/>
-        <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource validationTextBoxStyle}" Text="{Binding WeightInput, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
+        <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource validationTemplateTextBox}" Text="{Binding WeightInput, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
         
         <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Description}"/>
         <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" TextWrapping="Wrap" Text="{Binding Description,Mode=TwoWay}"/>
@@ -26,12 +27,11 @@
                   CanUserAddRows="False"
                   CanUserSortColumns="False"
                   SelectionMode="Single"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True">
+                  AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="{DynamicResource lang_NumberShort}" Binding="{Binding Student.Number}"/>
-                <DataGridTextColumn Header="{DynamicResource lang_SurnamePerson}" Binding="{Binding Student.GlobalStudent.Surname}"/>
-                <DataGridTextColumn Header="{DynamicResource lang_NamePerson}" Binding="{Binding Student.GlobalStudent.Name}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_NumberShort}" IsReadOnly="True" Binding="{Binding Student.Number}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_SurnamePerson}" IsReadOnly="True" Binding="{Binding Student.GlobalStudent.Surname}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_NamePerson}" IsReadOnly="True" Binding="{Binding Student.GlobalStudent.Name}"/>
                 <DataGridTextColumn Header="{DynamicResource lang_MarkOrWeight}" IsReadOnly="False" Binding="{Binding Input, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
             </DataGrid.Columns>
         </DataGrid>

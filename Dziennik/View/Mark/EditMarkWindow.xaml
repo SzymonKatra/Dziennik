@@ -20,9 +20,10 @@
         </Grid.RowDefinitions>
 
         <RadioButton Name="radioMark" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" GroupName="MarkType" IsChecked="True" Content="{DynamicResource lang_Mark}"/>
-        <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Weight}"/>
-        <RadioButton Name="radioNote" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" GroupName="MarkType" IsChecked="{Binding NoteSelected, Mode=TwoWay}" Content="{DynamicResource lang_Note}"/>
-
+        
+        <RadioButton Name="radioNote" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" GroupName="MarkType" IsChecked="{Binding NoteSelected, Mode=TwoWay}" Content="{DynamicResource lang_Note}"/>
+        <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Weight}"/>
+        
         <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Description}"/>
         <Grid Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
@@ -34,8 +35,8 @@
         </Grid>
 
         <TextBox x:Name="markTextBox" Grid.Column="1" Grid.Row="0" IsEnabled="{Binding IsChecked, ElementName=radioMark}" Text="{Binding ValueInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
-        <TextBox Grid.Column="1" Grid.Row="1" IsEnabled="{Binding IsChecked, ElementName=radioMark}" Text="{Binding WeightInput, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
-        <TextBox Grid.Column="1" Grid.Row="2" IsEnabled="{Binding IsChecked, ElementName=radioNote}" Text="{Binding NoteInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
+        <TextBox Grid.Column="1" Grid.Row="1" IsEnabled="{Binding IsChecked, ElementName=radioNote}" Text="{Binding NoteInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
+        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding WeightInput, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
         <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource inputControlStyle}" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Description, Mode=TwoWay}"/>
 
         <my:OkCancelControl Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>

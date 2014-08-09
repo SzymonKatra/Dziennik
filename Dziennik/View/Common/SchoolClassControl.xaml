@@ -66,6 +66,13 @@
                         <DataGridTextColumn Header="{DynamicResource lang_NamePerson}" Binding="{Binding GlobalStudent.Name}" Visibility="{Binding ShowName, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
                         <DataGridTextColumn Header="{DynamicResource lang_Email}" Binding="{Binding GlobalStudent.Email}" Visibility="{Binding ShowEmail, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
                         <DataGridTemplateColumn Header="{DynamicResource lang_MarksFirst}" Visibility="{Binding ShowFirstMarks, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <my:AddMarksSetHeaderWithContext Header="{TemplateBinding Content}"
+                                                                     CommandAddMarksSet="{Binding DataContext.AddMarksSetCommand,ElementName=rootSchoolClassControl}"
+                                                                     CommandParameterAll="first"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <my:MarksControl MarksSource="{Binding FirstSemester.Marks}" SelectedMark="{Binding DataContext.SelectedMark, ElementName=rootSchoolClassControl, Mode=TwoWay}"
@@ -105,6 +112,13 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="{DynamicResource lang_MarksSecond}" Visibility="{Binding ShowSecondMarks, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <my:AddMarksSetHeaderWithContext Header="{TemplateBinding Content}"
+                                                                     CommandAddMarksSet="{Binding DataContext.AddMarksSetCommand,ElementName=rootSchoolClassControl}"
+                                                                     CommandParameterAll="second"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <my:MarksControl MarksSource="{Binding SecondSemester.Marks}" SelectedMark="{Binding DataContext.SelectedMark, ElementName=rootSchoolClassControl, Mode=TwoWay}"

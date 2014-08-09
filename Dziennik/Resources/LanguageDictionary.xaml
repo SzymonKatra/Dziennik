@@ -3,7 +3,7 @@
                     xmlns:s="clr-namespace:System;assembly=mscorlib">
     
     <s:String x:Key="lang_AppName">Dziennik</s:String>
-    <s:String x:Key="lang_DoYouWantToContinue">Czy chcesaz kontynuować?</s:String>
+    <s:String x:Key="lang_DoYouWantToContinue">Czy chcesz kontynuować?</s:String>
     <s:String x:Key="lang_Ok">OK</s:String>
     <s:String x:Key="lang_Cancel">Anuluj</s:String>
     <s:String x:Key="lang_Close">Zamknij</s:String>
@@ -58,6 +58,7 @@
     <s:String x:Key="lang_Calendars">Kalendarze</s:String>
     <s:String x:Key="lang_EditCalendar">Edytuj kalendarz</s:String>    
     <s:String x:Key="lang_AllCalendars">Wszystkie kalendarze</s:String>
+    <s:String x:Key="lang_Groups">Grupy</s:String>
     
     <s:String x:Key="lang_AddGroupTitle">Dodaj grupę</s:String>
     <s:String x:Key="lang_Students">Uczniowie</s:String>
@@ -70,7 +71,7 @@
     <s:String x:Key="lang_AddStudent">Dodaj ucznia</s:String>
     <s:String x:Key="lang_RemoveStudents">Usuń uczniów</s:String>
     <s:String x:Key="lang_RemoveGroup">Usuń grupę</s:String>
-
+    
     <s:String x:Key="lang_EditMarkTitle">Edytuj ocenę</s:String>
     <s:String x:Key="lang_Mark">Ocena</s:String>
     <s:String x:Key="lang_Weight">Waga</s:String>
@@ -173,4 +174,7 @@
     <s:String x:Key="lang_ErrorOccurredWhileAddingSubjects">Wystąpił błąd podczas dodawania tematów.</s:String>
     <s:String x:Key="lang_CheckClipboardForValidList">Sprawdź czy schowek zawiera prawidłowy format listy</s:String>
     <s:String x:Key="lang_DoYouWantToRemoveRealizedSubject">Czy na pewno chcesz usunąć zrealizowany temat?</s:String>
+    <s:String x:Key="lang_NullInputStudentsFormat">Uwaga! U {0} uczniów nie wprowadzono żadnej oceny ani uwagi.</s:String>
+    <s:String x:Key="lang_TheyAre">Są to:&#x20;</s:String>
+    <s:String x:Key="lang_TheyAreSeparator"> ,</s:String>
 </ResourceDictionary>
