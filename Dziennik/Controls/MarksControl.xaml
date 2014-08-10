@@ -25,10 +25,18 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal" Width="18">
-                        <TextBlock Text="{Binding DisplayedMark}"/>
-                        <TextBlock Text="{Binding DisplayedWeight}" FontSize="8" VerticalAlignment="Bottom" Visibility="{Binding ShowWeights, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
-                    </StackPanel>
+                    <Grid Background="{Binding Category.Brush, Converter={StaticResource convertNullableBrushToBrush}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="2"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Width="20">
+                            <TextBlock Text="{Binding DisplayedMark}"/>
+                            <TextBlock Text="{Binding DisplayedWeight}" FontSize="8" VerticalAlignment="Bottom" Visibility="{Binding ShowWeights, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
+                        </StackPanel>
+                    </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

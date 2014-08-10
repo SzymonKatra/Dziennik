@@ -28,6 +28,9 @@ namespace Dziennik.View
             m_isAddingMode = isAddingMode;
 
             m_marksCategory = marksCategory;
+
+            m_name = m_marksCategory.Name;
+            m_selectedColor = m_marksCategory.Color;
         }
 
         private EditMarkCategoryResult m_result = EditMarkCategoryResult.Cancel;

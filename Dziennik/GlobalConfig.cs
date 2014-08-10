@@ -293,6 +293,7 @@ namespace Dziennik
             windowViewModelMappings.Add(typeof(AddMarksSetViewModel), vm => new AddMarksSetWindow((AddMarksSetViewModel)vm));
             windowViewModelMappings.Add(typeof(InfoDialogViewModel), vm => new InfoDialogWindow((InfoDialogViewModel)vm));
             windowViewModelMappings.Add(typeof(EditMarksCategoryViewModel), vm => new EditMarksCategoryWindow((EditMarksCategoryViewModel)vm));
+            windowViewModelMappings.Add(typeof(EditNoticeViewModel), vm => new EditNoticeWindow((EditNoticeViewModel)vm));
 
             Dialogs = new DialogService(windowViewModelMappings);
         }

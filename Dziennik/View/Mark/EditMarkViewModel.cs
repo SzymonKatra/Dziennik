@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using Dziennik.ViewModel;
@@ -22,6 +23,14 @@ namespace Dziennik.View
 
         public EditMarkViewModel(MarkViewModel mark, StudentInGroupViewModel owner = null, bool isAddingMode = false)
         {
+            m_okCommand = new RelayCommand(Ok, CanOk);
+            m_cancelCommand = new RelayCommand(Cancel);
+            m_removeMarkCommand = new RelayCommand(RemoveMark, CanRemoveMark);
+
+            m_availableCategories = new ObservableCollection<MarksCategoryViewModel>(GlobalConfig.GlobalDatabase.ViewModel.MarksCategories);
+            m_availableCategories.Insert(0, NoSelectionMarksCategory);
+            m_selectedCategory = NoSelectionMarksCategory;
+
             m_isAddingMode = isAddingMode;
 
             m_mark = mark;
@@ -30,16 +39,13 @@ namespace Dziennik.View
             m_note = m_mark.Note;
             m_weight = (isAddingMode ? 1 : m_mark.Weight);
             m_description = m_mark.Description;
+            m_selectedCategory = (m_mark.Category == null ? NoSelectionMarksCategory : m_mark.Category);
 
             m_valueInput = (isAddingMode ? string.Empty : MarkViewModel.GetValidDisplayedMark(m_value));
             m_noteInput = m_note;
             m_weightInput = m_weight.ToString();
 
-            m_noteSelected = !mark.IsValueValid;
-
-            m_okCommand = new RelayCommand(Ok, CanOk);
-            m_cancelCommand = new RelayCommand(Cancel);
-            m_removeMarkCommand = new RelayCommand(RemoveMark, CanRemoveMark);
+            m_noteSelected = !mark.IsValueValid;         
 
             if (owner != null) m_title = string.Format("{0} - {1} {2}", owner.Number, owner.GlobalStudent.Name, owner.GlobalStudent.Surname);
         }
@@ -115,6 +121,20 @@ namespace Dziennik.View
             }
         }
 
+        private ObservableCollection<MarksCategoryViewModel> m_availableCategories;
+        public ObservableCollection<MarksCategoryViewModel> AvailableCategories
+        {
+            get { return m_availableCategories; }
+        }
+
+        public static readonly MarksCategoryViewModel NoSelectionMarksCategory = new MarksCategoryViewModel() { Name = GlobalConfig.GetStringResource("lang_NoneSmall") };
+        private MarksCategoryViewModel m_selectedCategory;
+        public MarksCategoryViewModel SelectedCategory
+        {
+            get { return m_selectedCategory; }
+            set { m_selectedCategory = value; RaisePropertyChanged("SelectedCategory"); }
+        }
+
         private RelayCommand m_okCommand;
         public ICommand OkCommand
         {
@@ -148,6 +168,7 @@ namespace Dziennik.View
             m_mark.Weight = m_weight;
             m_mark.Description = m_description;
             m_mark.LastChangeDate = DateTime.Now;
+            m_mark.Category = (m_selectedCategory == NoSelectionMarksCategory ? null : m_selectedCategory);
             if (m_isAddingMode) m_mark.AddDate = m_mark.LastChangeDate;
 
             m_result = EditMarkResult.Ok;
@@ -336,9 +357,9 @@ namespace Dziennik.View
                 return GlobalConfig.GetStringResource("lang_TypeValidInteger");
             }
 
-            if (result < 0)
+            if (result < 0 || result > 9)
             {
-                return GlobalConfig.GetStringResource("lang_TypePositiveValue");
+                return GlobalConfig.GetStringResource("lang_TypeWeightRange0-9");
             }
 
             return string.Empty;

@@ -145,6 +145,11 @@ namespace Dziennik.View
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if(dialogViewModel.Result == EditCalendarViewModel.EditCalendarResult.Remove)
             {
+                foreach (var schoolClass in m_openedSchoolClasses)
+                {
+                    if (schoolClass.ViewModel.Calendar == m_selectedCalendar) schoolClass.ViewModel.Calendar = null;
+                }
+
                 GlobalConfig.GlobalDatabase.ViewModel.Calendars.Remove(m_selectedCalendar);
                 SelectedCalendar = null;
             }
@@ -193,6 +198,24 @@ namespace Dziennik.View
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if(dialogViewModel.Result == EditMarksCategoryViewModel.EditMarkCategoryResult.RemoveCategory)
             {
+                foreach (var schoolClass in m_openedSchoolClasses)
+                {
+                    foreach (var schoolGroup in schoolClass.ViewModel.Groups)
+                    {
+                        foreach (var student in schoolGroup.Students)
+                        {
+                            foreach (var mark in student.FirstSemester.Marks)
+                            {
+                                if (mark.Category == m_selectedMarksCategory) mark.Category = null;
+                            }
+                            foreach (var mark in student.SecondSemester.Marks)
+                            {
+                                if (mark.Category == m_selectedMarksCategory) mark.Category = null;
+                            }
+                        }
+                    }
+                }
+
                 GlobalConfig.GlobalDatabase.ViewModel.MarksCategories.Remove(m_selectedMarksCategory);
                 SelectedMarksCategory = null;
             }

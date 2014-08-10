@@ -105,6 +105,7 @@
     <Compile Include="Controls\EndingMarksHeaderWithContext.xaml.cs">
       <DependentUpon>EndingMarksHeaderWithContext.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\NullableBrushToBrushConverter.cs" />
     <Compile Include="Controls\MessageBoxSuper.xaml.cs">
       <DependentUpon>MessageBoxSuper.xaml</DependentUpon>
     </Compile>
@@ -180,6 +181,10 @@
     <Compile Include="View\Common\InfoDialogViewModel.cs" />
     <Compile Include="View\Common\InfoDialogWindow.xaml.cs">
       <DependentUpon>InfoDialogWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Notice\EditNoticeViewModel.cs" />
+    <Compile Include="View\Notice\EditNoticeWindow.xaml.cs">
+      <DependentUpon>EditNoticeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Mark\EditMarksCategoryViewModel.cs" />
     <Compile Include="View\Mark\EditMarksCategoryWindow.xaml.cs">
@@ -329,6 +334,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Common\InfoDialogWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Notice\EditNoticeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

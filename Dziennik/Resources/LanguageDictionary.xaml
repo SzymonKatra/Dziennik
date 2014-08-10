@@ -81,7 +81,9 @@
     <s:String x:Key="lang_Note">Uwaga</s:String>
     <s:String x:Key="lang_Description">Opis</s:String>
     <s:String x:Key="lang_RemoveMark">Usuń ocenę</s:String>
-
+    <s:String x:Key="lang_Category">Kategoria</s:String>
+    <s:String x:Key="lang_NoneSmall">brak</s:String>
+    
     <s:String x:Key="lang_EditStudentTitle">Edytuj ucznia</s:String>
     <s:String x:Key="lang_RemoveStudent">Usuń ucznia</s:String>
     <s:String x:Key="lang_AdditionalInformation">Dodatkowe informacje</s:String>
@@ -185,7 +187,7 @@
     <s:String x:Key="lang_TypeIntegerMarkRange1-6Plus">Wprowadź całkowitą ocenę z zakresu &lt;1; 6&gt;z ewentualnym plusem</s:String>
     <s:String x:Key="lang_LengthMustBe1Or2">Długość musi być równa 1 lub 2 znaki</s:String>
     <s:String x:Key="lang_TypeAtLeastOneLetter">Wprowadź przynajmniej jedną literę</s:String>
-    <s:String x:Key="lang_TypePositiveValue">Wprowadź liczbę dodatnią</s:String>
+    <s:String x:Key="lang_TypeWeightRange0-9">Wprowadź wagę z zakresu &lt;0; 9&gt;</s:String>
     <s:String x:Key="lang_DoYouWantToRemoveSubject">Czy na pewno chcesz usunąć temat?</s:String>
     <s:String x:Key="lang_AddedSubjectsFormat">Dodano {0} tematów</s:String>
     <s:String x:Key="lang_ErrorOccurredWhileAddingSubjects">Wystąpił błąd podczas dodawania tematów.</s:String>

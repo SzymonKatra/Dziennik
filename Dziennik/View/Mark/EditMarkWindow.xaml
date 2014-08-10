@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:my="clr-namespace:Dziennik.Controls"
-        Title="{Binding Title}" Height="250" Width="300"
+        Title="{Binding Title}" Height="300" Width="300"
         WindowStartupLocation="CenterOwner">
 
     <Grid>
@@ -14,31 +14,29 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
         <RadioButton Name="radioMark" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" GroupName="MarkType" IsChecked="True" Content="{DynamicResource lang_Mark}"/>
-        
-        <RadioButton Name="radioNote" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" GroupName="MarkType" IsChecked="{Binding NoteSelected, Mode=TwoWay}" Content="{DynamicResource lang_Note}"/>
-        <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Weight}"/>
-        
-        <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Description}"/>
-        <Grid Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width=".65*"/>
-                <ColumnDefinition Width=".35*"/>
-            </Grid.ColumnDefinitions>
-            
-            <Button Grid.Column="1" Grid.Row="0" Content="{DynamicResource lang_RemoveMark}" Margin="10,5,10,5" Command="{Binding RemoveMarkCommand}"/>
-        </Grid>
-
         <TextBox x:Name="markTextBox" Grid.Column="1" Grid.Row="0" IsEnabled="{Binding IsChecked, ElementName=radioMark}" Text="{Binding ValueInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
-        <TextBox Grid.Column="1" Grid.Row="1" IsEnabled="{Binding IsChecked, ElementName=radioNote}" Text="{Binding NoteInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
-        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding WeightInput, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
-        <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource inputControlStyle}" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Description, Mode=TwoWay}"/>
 
-        <my:OkCancelControl Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
+        <RadioButton Name="radioNote" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" GroupName="MarkType" IsChecked="{Binding NoteSelected, Mode=TwoWay}" Content="{DynamicResource lang_Note}"/>
+        <TextBox Grid.Column="1" Grid.Row="1" IsEnabled="{Binding IsChecked, ElementName=radioNote}" Text="{Binding NoteInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Weight}"/>
+        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding WeightInput, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
+        
+        <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Category}"/>
+        <ComboBox Grid.Column="1" Grid.Row="3" Style="{StaticResource inputControlStyle}" ItemsSource="{Binding AvailableCategories}" SelectedItem="{Binding SelectedCategory, Mode=TwoWay}" DisplayMemberPath="Name"/>
+        
+        <TextBlock Grid.Column="0" Grid.Row="4" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Description}"/>
+        <TextBox Grid.Column="1" Grid.Row="4" Style="{StaticResource inputControlStyle}" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Description, Mode=TwoWay}"/>
+        
+        <my:RemoveButtonControl Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Content="{DynamicResource lang_RemoveMark}" Command="{Binding RemoveMarkCommand}"/>
+        
+        <my:OkCancelControl Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>
 </Window>

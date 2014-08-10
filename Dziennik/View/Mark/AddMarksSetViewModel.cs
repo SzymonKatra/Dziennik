@@ -143,6 +143,11 @@ namespace Dziennik.View
             m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
 
+            m_availableCategories = new ObservableCollection<MarksCategoryViewModel>(GlobalConfig.GlobalDatabase.ViewModel.MarksCategories);
+            m_availableCategories.Insert(0, EditMarkViewModel.NoSelectionMarksCategory);
+
+            m_selectedCategory = EditMarkViewModel.NoSelectionMarksCategory;
+
             m_students = new ObservableCollection<StudentAddMarkPair>();
             foreach (StudentInGroupViewModel student in students)
             {
@@ -187,6 +192,19 @@ namespace Dziennik.View
         {
             get { return m_weightInput; }
             set { m_weightInput = value; RaisePropertyChanged("WeightInput"); }
+        }
+
+        private ObservableCollection<MarksCategoryViewModel> m_availableCategories;
+        public ObservableCollection<MarksCategoryViewModel> AvailableCategories
+        {
+            get { return m_availableCategories; }
+        }
+
+        private MarksCategoryViewModel m_selectedCategory;
+        public MarksCategoryViewModel SelectedCategory
+        {
+            get { return m_selectedCategory; }
+            set { m_selectedCategory = value; RaisePropertyChanged("SelectedCategory"); }
         }
 
         private RelayCommand m_okCommand;
@@ -237,6 +255,7 @@ namespace Dziennik.View
                     mark.AddDate = mark.LastChangeDate = nowDate;
                     mark.Description = m_description;
                     mark.Weight = m_weight;
+                    mark.Category = (m_selectedCategory == EditMarkViewModel.NoSelectionMarksCategory ? null : m_selectedCategory);
 
                     if (pair.IsValueValid)
                     {

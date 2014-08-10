@@ -14,16 +14,13 @@ using System.Windows.Shapes;
 namespace Dziennik.View
 {
     /// <summary>
-    /// Interaction logic for AddMarksSetWindow.xaml
+    /// Interaction logic for EditNoticeWindow.xaml
     /// </summary>
-    public partial class AddMarksSetWindow : Window
+    public partial class EditNoticeWindow : Window
     {
-        public AddMarksSetWindow(AddMarksSetViewModel viewModel)
+        public EditNoticeWindow(EditNoticeViewModel viewModel)
         {
             InitializeComponent();
-
-            this.Width = SystemParameters.PrimaryScreenWidth * 0.5;
-            this.Height = SystemParameters.PrimaryScreenHeight * 0.7;
 
             this.DataContext = viewModel;
 

@@ -34,18 +34,17 @@ namespace Dziennik.ViewModel
         {
             get
             {
+                if (m_model.Color == null) m_model.Color = new Dziennik.Model.Color();
                 return System.Windows.Media.Color.FromArgb(m_model.Color.A, m_model.Color.R, m_model.Color.G, m_model.Color.B);
             }
             set
             {
-                Dziennik.Model.Color col = new Dziennik.Model.Color();
+                if (m_model.Color == null) m_model.Color = new Dziennik.Model.Color();
 
-                col.A = value.A;
-                col.R = value.R;
-                col.G = value.G;
-                col.B = value.B;
-
-                m_model.Color = col;
+                m_model.Color.A = value.A;
+                m_model.Color.R = value.R;
+                m_model.Color.G = value.G;
+                m_model.Color.B = value.B;
 
                 RaisePropertyChanged("Color");
                 RaisePropertyChanged("Brush");
