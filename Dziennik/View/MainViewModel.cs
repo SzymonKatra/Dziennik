@@ -51,7 +51,7 @@ namespace Dziennik.View
         {
             get
             {
-                int result = (m_windowWidth / m_openedSchoolClasses.Count) - 29;
+                int result = (m_windowWidth / m_openedSchoolClasses.Count) - 30;
                 if (result < 0) return 0;
                 return result;
             }
@@ -137,6 +137,7 @@ namespace Dziennik.View
             GlobalConfig.Dialogs.ShowDialog(this, saveDialogViewModel);
             if (GlobalConfig.Notifier.AutoSave) GlobalConfig.GlobalDatabase.Save();
             if (m_databasesDirectoryChanged) ReloadSchoolClasses();
+            RaisePropertyChanged("TabWidth");
         }
         private void Info(object e)
         {

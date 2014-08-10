@@ -32,10 +32,9 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="35"/>
                 <RowDefinition Height="35"/>
+                <RowDefinition Height="30"/>
                 <RowDefinition Height="60"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
+                <RowDefinition Height="60"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
@@ -44,9 +43,25 @@
 
             <my:DirectorySelector x:Name="dirSelect" Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" SelectedPath="{Binding DatabasesDirectory, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}" IsTextBoxReadOnly="True"/>
             <my:DirectorySelector Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" SelectedPath="{Binding DatabasesArchiveDirectory, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}" IsTextBoxReadOnly="True"/>
+            
+            <Button Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_AllCalendars}" Command="{Binding ShowCalendarsListCommand}"/>
 
-            <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Classes}"/>
-            <Grid Grid.Column="1" Grid.Row="2">
+            <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_MarksCategories}"/>
+            <Grid Grid.Column="1" Grid.Row="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height=".5*"/>
+                    <RowDefinition Height=".5*"/>
+                </Grid.RowDefinitions>
+
+                <ComboBox Grid.Row="0" Style="{StaticResource inputControlStyle}" ItemsSource="{Binding ViewModel.MarksCategories, Source={x:Static local:GlobalConfig.GlobalDatabase}}" SelectedItem="{Binding SelectedMarksCategory, Mode=TwoWay}" DisplayMemberPath="Name"/>
+                <WrapPanel Grid.Row="1" Style="{StaticResource inputControlStyle}">
+                    <Button Margin="0,0,5,0" Command="{Binding EditMarksCategoryCommand}" Content="{DynamicResource lang_EditCategory}"/>
+                    <Button Margin="0,0,5,0" Command="{Binding AddMarksCategoryCommand}" Content="{DynamicResource lang_AddCategory}"/>
+                </WrapPanel>
+            </Grid>
+            
+            <TextBlock Grid.Column="0" Grid.Row="4" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Classes}"/>
+            <Grid Grid.Column="1" Grid.Row="4">
                 <Grid.RowDefinitions>
                     <RowDefinition Height=".5*"/>
                     <RowDefinition Height=".5*"/>
@@ -58,24 +73,6 @@
                     <Button Margin="0,0,5,0" Command="{Binding AddClassCommand}" Content="{DynamicResource lang_AddClass}"/>
                 </WrapPanel>
             </Grid>
-            
-            <Button Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_AllCalendars}" Command="{Binding ShowCalendarsListCommand}"/>
-            
-            <!--
-            <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Calendars}"/>
-            <Grid Grid.Column="1" Grid.Row="3">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height=".5*"/>
-                    <RowDefinition Height=".5*"/>
-                </Grid.RowDefinitions>
-
-                <ComboBox Grid.Row="0" Style="{StaticResource inputControlStyle}" ItemsSource="{Binding ViewModel.Calendars, Source={x:Static local:GlobalConfig.GlobalDatabase}}" SelectedItem="{Binding SelectedCalendar, Mode=TwoWay}" DisplayMemberPath="Name"/>
-                <WrapPanel Grid.Row="1" Style="{StaticResource inputControlStyle}">
-                    <Button Margin="0,0,5,0" Command="{Binding EditCalendarCommand}" Content="{DynamicResource lang_EditCalendar}"/>
-                    <Button Margin="0,0,5,0" Command="{Binding AddCalendarCommand}" Content="{DynamicResource lang_AddCalendar}"/>
-                </WrapPanel>
-            </Grid>
-            -->
         </Grid>
 
         <Grid Grid.Column="1" Grid.Row="0">

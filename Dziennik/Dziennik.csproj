@@ -77,6 +77,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\libs\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -88,6 +91,7 @@
     <Compile Include="Controls\AddMarksSetHeaderWithContext.xaml.cs">
       <DependentUpon>AddMarksSetHeaderWithContext.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ColorPickerEx.cs" />
     <Compile Include="Controls\DecimalToBrushConverter.cs" />
     <Compile Include="Controls\DirectorySelector.xaml.cs">
       <DependentUpon>DirectorySelector.xaml</DependentUpon>
@@ -104,9 +108,7 @@
     <Compile Include="Controls\MessageBoxSuper.xaml.cs">
       <DependentUpon>MessageBoxSuper.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\NumericUpDown.xaml.cs">
-      <DependentUpon>NumericUpDown.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Controls\NonEditableIntegerUpDown.cs" />
     <Compile Include="Controls\OkCancelControl.xaml.cs">
       <DependentUpon>OkCancelControl.xaml</DependentUpon>
     </Compile>
@@ -126,8 +128,10 @@
     <Compile Include="Ext.cs" />
     <Compile Include="INotifyCollectionChangedSimple.cs" />
     <Compile Include="Model\Calendar.cs" />
+    <Compile Include="Model\Color.cs" />
     <Compile Include="Model\GlobalSchool.cs" />
     <Compile Include="Model\GlobalSubject.cs" />
+    <Compile Include="Model\MarksCategory.cs" />
     <Compile Include="Model\ModelBase.cs" />
     <Compile Include="Model\OffDay.cs" />
     <Compile Include="Model\RealizedSubject.cs" />
@@ -145,6 +149,7 @@
     <Compile Include="ViewModel\DatabaseMain.cs" />
     <Compile Include="ViewModel\GlobalSchoolViewModel.cs" />
     <Compile Include="ViewModel\GlobalSubjectViewModel.cs" />
+    <Compile Include="ViewModel\MarksCategoryViewModel.cs" />
     <Compile Include="ViewModel\OffDayViewModel.cs" />
     <Compile Include="ViewModel\RealizedSubjectPresenceViewModel.cs" />
     <Compile Include="ViewModel\RealizedSubjectViewModel.cs" />
@@ -175,6 +180,10 @@
     <Compile Include="View\Common\InfoDialogViewModel.cs" />
     <Compile Include="View\Common\InfoDialogWindow.xaml.cs">
       <DependentUpon>InfoDialogWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Mark\EditMarksCategoryViewModel.cs" />
+    <Compile Include="View\Mark\EditMarksCategoryWindow.xaml.cs">
+      <DependentUpon>EditMarksCategoryWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Group\AddGroupViewModel.cs" />
     <Compile Include="View\Group\AddGroupWindow.xaml.cs">
@@ -275,10 +284,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\NumericUpDown.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controls\OkCancelControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -324,6 +329,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Common\InfoDialogWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Mark\EditMarksCategoryWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

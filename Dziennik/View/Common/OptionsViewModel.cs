@@ -43,6 +43,18 @@ namespace Dziennik.View
             get { return m_showCalendarsListCommand; }
         }
 
+        private RelayCommand m_editMarksCategoryCommand;
+        public ICommand EditMarksCategoryCommand
+        {
+            get { return m_editMarksCategoryCommand; }
+        }
+
+        private RelayCommand m_addMarksCategoryCommand;
+        public ICommand AddMarksCategoryCommand
+        {
+            get { return m_addMarksCategoryCommand; }
+        }
+
         private ObservableCollection<SchoolClassControlViewModel> m_openedSchoolClasses;
         public ObservableCollection<SchoolClassControlViewModel> OpenedSchoolClasses
         {
@@ -64,6 +76,13 @@ namespace Dziennik.View
             set { m_selectedCalendar = value; RaisePropertyChanged("SelectedCalendar"); m_editCalendarCommand.RaiseCanExecuteChanged(); }
         }
 
+        private MarksCategoryViewModel m_selectedMarksCategory;
+        public MarksCategoryViewModel SelectedMarksCategory
+        {
+            get { return m_selectedMarksCategory; }
+            set { m_selectedMarksCategory = value; RaisePropertyChanged("SelectedMarksCategory"); m_editMarksCategoryCommand.RaiseCanExecuteChanged(); }
+        }
+
         public OptionsViewModel(ObservableCollection<SchoolClassControlViewModel> openedSchoolClasses)
         {
             m_closeCommand = new RelayCommand(Close);
@@ -72,6 +91,8 @@ namespace Dziennik.View
             m_editCalendarCommand = new RelayCommand(EditCalendar, CanEditCalendar);
             m_addCalendarCommand = new RelayCommand(AddCalendar);
             m_showCalendarsListCommand = new RelayCommand(ShowCalendarsList);
+            m_editMarksCategoryCommand = new RelayCommand(EditMarksCategory, CanEditMarksCategory);
+            m_addMarksCategoryCommand = new RelayCommand(AddMarksCategory);
 
             m_openedSchoolClasses = openedSchoolClasses;
         }
@@ -165,6 +186,32 @@ namespace Dziennik.View
         {
             GlobalCalendarListViewModel dialogViewModel = new GlobalCalendarListViewModel(GlobalConfig.GlobalDatabase.ViewModel.Calendars, m_openedSchoolClasses, GlobalConfig.GlobalDatabaseAutoSaveCommand);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+        }
+        private void EditMarksCategory(object e)
+        {
+            EditMarksCategoryViewModel dialogViewModel = new EditMarksCategoryViewModel(m_selectedMarksCategory);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+            if(dialogViewModel.Result == EditMarksCategoryViewModel.EditMarkCategoryResult.RemoveCategory)
+            {
+                GlobalConfig.GlobalDatabase.ViewModel.MarksCategories.Remove(m_selectedMarksCategory);
+                SelectedMarksCategory = null;
+            }
+            if (dialogViewModel.Result != EditMarksCategoryViewModel.EditMarkCategoryResult.Cancel) GlobalConfig.GlobalDatabaseAutoSaveCommand.Execute(null);
+        }
+        private bool CanEditMarksCategory(object e)
+        {
+            return m_selectedMarksCategory != null;
+        }
+        private void AddMarksCategory(object e)
+        {
+            MarksCategoryViewModel marksCategory = new MarksCategoryViewModel();
+            EditMarksCategoryViewModel dialogViewModel = new EditMarksCategoryViewModel(marksCategory, true);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+            if (dialogViewModel.Result == EditMarksCategoryViewModel.EditMarkCategoryResult.Ok)
+            {
+                GlobalConfig.GlobalDatabase.ViewModel.MarksCategories.Add(marksCategory);
+            }
+            if (dialogViewModel.Result != EditMarksCategoryViewModel.EditMarkCategoryResult.Cancel) GlobalConfig.GlobalDatabaseAutoSaveCommand.Execute(null);
         }
     }
 }

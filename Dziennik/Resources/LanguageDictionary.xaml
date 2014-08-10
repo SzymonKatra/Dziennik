@@ -59,6 +59,9 @@
     <s:String x:Key="lang_EditCalendar">Edytuj kalendarz</s:String>    
     <s:String x:Key="lang_AllCalendars">Wszystkie kalendarze</s:String>
     <s:String x:Key="lang_Groups">Grupy</s:String>
+    <s:String x:Key="lang_MarksCategories">Kategorie ocen</s:String>
+    <s:String x:Key="lang_AddCategory">Dodaj kategorię</s:String>
+    <s:String x:Key="lang_EditCategory">Edytuj kategorię</s:String>
     
     <s:String x:Key="lang_AddGroupTitle">Dodaj grupę</s:String>
     <s:String x:Key="lang_Students">Uczniowie</s:String>
@@ -140,10 +143,23 @@
 
     <s:String x:Key="lang_AddMarksSetTitle">Dodaj oceny seryjnie</s:String>
     <s:String x:Key="lang_MarkOrWeight">Ocena / Uwaga</s:String>
-
+    
+    <s:String x:Key="lang_EditMarksCategoryTitle">Edytuj kategorię ocen</s:String>
+    <s:String x:Key="lang_Color">Kolor</s:String>
+    <s:String x:Key="lang_RemoveCategory">Usuń kategorię</s:String>
+    <s:String x:Key="lang_AvailableColors">Dostępne kolory</s:String>
+    <s:String x:Key="lang_RecentColors">Ostatnio używane kolory</s:String>
+    <s:String x:Key="lang_StandardColors">Standardowe kolory</s:String>
+    <s:String x:Key="lang_AdvancedMode">Tryb rozbudowany</s:String>
+    <s:String x:Key="lang_SimpleMode">Tryb prosty</s:String>
+    
     <s:String x:Key="lang_InfoTitle">Informacje</s:String>
     <s:String x:Key="lang_Author">Autor</s:String>
     <s:String x:Key="lang_AuthorName">Szymon Katra</s:String>
+    <s:String x:Key="lang_Controls">Kontrolki</s:String>
+    <s:String x:Key="lang_ControlsSourceName">Extended WPF Toolkit™ Community Edition</s:String>
+    <s:String x:Key="lang_ControlsSourceLicense">Licencja: Microsoft Public License (Ms-PL)</s:String>
+    <s:String x:Key="lang_ControlsSourceHyperlink">https://wpftoolkit.codeplex.com/</s:String>
     <s:String x:Key="lang_Icons">Ikony</s:String>
     <s:String x:Key="lang_IconsSource1Name">Pixel Mixer</s:String>
     <s:String x:Key="lang_IconsSource1Hyperlink1">http://www.pixel-mixer.com</s:String>
@@ -152,6 +168,7 @@
     <s:String x:Key="lang_IconsSource2Hyperlink1">http://www.aha-soft.com/</s:String>
     <s:String x:Key="lang_IconsSource2Hyperlink2">https://www.iconfinder.com/iconsets/32x32-free-design-icons</s:String>
     
+    <s:String x:Key="lang_TypeValidCategoryName">Wprowadź poprawną nazwę kategorii</s:String>
     <s:String x:Key="lang_TypeValidClassName">Wprowadź poprawną nazwę klasy</s:String>
     <s:String x:Key="lang_DoYouWantRemoveClass">Czy napewno chcesz usunąć klasę?</s:String>
     <s:String x:Key="lang_NoAddedStudents">Uwaga! Nie dodano żadnego ucznia do grupy.</s:String>

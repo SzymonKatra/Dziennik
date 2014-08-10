@@ -15,5 +15,6 @@ namespace Dziennik.Model
         public DateTime AddDate { get; set; }
         public DateTime LastChangeDate { get; set; }
         public string Description { get; set; }
+        public ulong? GlobalCategoryId { get; set; }
     }
 }

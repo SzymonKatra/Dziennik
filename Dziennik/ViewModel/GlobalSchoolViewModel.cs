@@ -17,6 +17,7 @@ namespace Dziennik.ViewModel
             m_model = model;
 
             m_calendars = new SynchronizedObservableCollection<CalendarViewModel, Calendar>(m_model.Calendars, m => new CalendarViewModel(m));
+            m_marksCategories = new SynchronizedObservableCollection<MarksCategoryViewModel, MarksCategory>(m_model.MarksCategories, m => new MarksCategoryViewModel(m));
         }
 
         private GlobalSchool m_model;
@@ -34,6 +35,17 @@ namespace Dziennik.ViewModel
                 m_calendars = value;
                 m_model.Calendars = value.ModelCollection;
                 RaisePropertyChanged("Calendars");
+            }
+        }
+        private SynchronizedObservableCollection<MarksCategoryViewModel, MarksCategory> m_marksCategories;
+        public SynchronizedObservableCollection<MarksCategoryViewModel, MarksCategory> MarksCategories
+        {
+            get { return m_marksCategories; }
+            set
+            {
+                m_marksCategories = value;
+                m_model.MarksCategories = value.ModelCollection;
+                RaisePropertyChanged("MarksCategories");
             }
         }
     }

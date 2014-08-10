@@ -72,7 +72,7 @@ namespace Dziennik.ViewModel
             set
             {
                 m_calendar = value;
-                m_model.GlobalCalendarId = m_calendar.Model.Id;
+                m_model.GlobalCalendarId = (m_calendar == null ? null : m_calendar.Model.Id);
                 RaisePropertyChanged("Calendar");
             }
         }

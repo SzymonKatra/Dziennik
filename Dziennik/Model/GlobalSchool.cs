@@ -9,10 +9,12 @@ namespace Dziennik.Model
     public class GlobalSchool : ModelBase
     {
         public List<Calendar> Calendars { get; set; }
+        public List<MarksCategory> MarksCategories { get; set; }
 
         public GlobalSchool()
         {
             Calendars = new List<Calendar>();
+            MarksCategories = new List<MarksCategory>();
         }
     }
 }

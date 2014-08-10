@@ -16,6 +16,7 @@ using Dziennik.Controls;
 using Dziennik.ViewModel;
 using System.Threading;
 using System.Globalization;
+using System.IO;
 
 namespace Dziennik.View
 {
@@ -43,6 +44,8 @@ namespace Dziennik.View
                 Thread.CurrentThread.CurrentCulture = culture;
             }
 
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
             InitializeComponent();
 
             MainViewModel viewModel = new MainViewModel();
@@ -54,6 +57,24 @@ namespace Dziennik.View
 
             this.Loaded += MainWindow_Loaded;
             this.SizeChanged += MainWindow_SizeChanged;
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(GlobalConfig.ErrorLogFileName, true))
+                {
+                    writer.WriteLine("====================");
+                    writer.WriteLine(DateTime.Now.ToString(GlobalConfig.DateTimeFormat));
+                    writer.WriteLine("====================");
+                    writer.WriteLine();
+                    writer.WriteLine("Is terminating: " + e.IsTerminating);
+                    writer.WriteLine();
+                    writer.WriteLine(e.ExceptionObject.ToString());
+                }
+            }
+            catch { }
         }
 
         private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)

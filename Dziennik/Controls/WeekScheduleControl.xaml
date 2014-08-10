@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:my="clr-namespace:Dziennik.Controls"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="60" d:DesignWidth="300">
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
@@ -20,18 +21,18 @@
         </Grid.ColumnDefinitions>
         
         <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_MondayShort}"/>
-        <my:NumericUpDown x:Name="numericMon" Grid.Row="1" Grid.Column="0" Margin="5,5,5,5" Value="{Binding WeekSchedule.Monday, Mode=TwoWay}" MinValue="0" MaxValue="100" ButtonChangeOnly="True"/>
-
+        <my:NonEditableIntegerUpDown x:Name="numericMon" Grid.Row="1" Grid.Column="0" Margin="5,5,5,5" Value="{Binding WeekSchedule.Monday, Mode=TwoWay}" Minimum="0" Maximum="99"/>
+        
         <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_TuesdayShort}"/>
-        <my:NumericUpDown x:Name="numericTue" Grid.Row="1" Grid.Column="1" Margin="5,5,5,5" Value="{Binding WeekSchedule.Tuesday, Mode=TwoWay}" MinValue="0" MaxValue="100" ButtonChangeOnly="True"/>
+        <my:NonEditableIntegerUpDown x:Name="numericTue" Grid.Row="1" Grid.Column="1" Margin="5,5,5,5" Value="{Binding WeekSchedule.Tuesday, Mode=TwoWay}" Minimum="0" Maximum="99"/>
 
         <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_WednesdayShort}"/>
-        <my:NumericUpDown x:Name="numericWed" Grid.Row="1" Grid.Column="2" Margin="5,5,5,5" Value="{Binding WeekSchedule.Wednesday, Mode=TwoWay}" MinValue="0" MaxValue="100" ButtonChangeOnly="True"/>
+        <my:NonEditableIntegerUpDown x:Name="numericWed" Grid.Row="1" Grid.Column="2" Margin="5,5,5,5" Value="{Binding WeekSchedule.Wednesday, Mode=TwoWay}" Minimum="0" Maximum="99"/>
 
         <TextBlock Grid.Row="0" Grid.Column="3" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_ThursdayShort}"/>
-        <my:NumericUpDown x:Name="numericThu" Grid.Row="1" Grid.Column="3" Margin="5,5,5,5" Value="{Binding WeekSchedule.Thursday, Mode=TwoWay}" MinValue="0" MaxValue="100" ButtonChangeOnly="True"/>
+        <my:NonEditableIntegerUpDown x:Name="numericThu" Grid.Row="1" Grid.Column="3" Margin="5,5,5,5" Value="{Binding WeekSchedule.Thursday, Mode=TwoWay}" Minimum="0" Maximum="99"/>
 
         <TextBlock Grid.Row="0" Grid.Column="4" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_FridayShort}"/>
-        <my:NumericUpDown x:Name="numericFri" Grid.Row="1" Grid.Column="4" Margin="5,5,5,5" Value="{Binding WeekSchedule.Friday, Mode=TwoWay}" MinValue="0" MaxValue="100" ButtonChangeOnly="True"/>
+        <my:NonEditableIntegerUpDown x:Name="numericFri" Grid.Row="1" Grid.Column="4" Margin="5,5,5,5" Value="{Binding WeekSchedule.Friday, Mode=TwoWay}" Minimum="0" Maximum="99"/>
     </Grid>
 </UserControl>

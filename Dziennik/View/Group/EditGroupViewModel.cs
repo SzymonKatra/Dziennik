@@ -177,7 +177,7 @@ namespace Dziennik.View
                 foreach(int selRes in selectionResult)
                 {
                     StudentInGroupViewModel student = m_schoolGroup.Students.First((x) => { return x.Number == selRes; });
-                    student.GlobalStudent = GlobalStudentViewModel.Dummy;
+                    student.GlobalStudent = null;
                     student.FirstSemester.Marks.Clear();
                     student.SecondSemester.Marks.Clear();
                 }

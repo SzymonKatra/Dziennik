@@ -51,7 +51,7 @@
                           Grid.Column="0"
                           Grid.Row="0"
                           Margin="2,2,2,0"
-                          IsItemsHost="true"/>
+                          IsItemsHost="True"/>
                         </ScrollViewer>
                         <ContentPresenter x:Name="PART_SelectedContentHost"
                                       SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"

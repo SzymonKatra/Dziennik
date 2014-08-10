@@ -17,6 +17,8 @@ namespace Dziennik.ViewModel
         public MarkViewModel(Mark mark)
         {
             m_model = mark;
+
+            m_category = GlobalConfig.GlobalDatabase.ViewModel.MarksCategories.FirstOrDefault(x => x.Model.Id == m_model.GlobalCategoryId);
         }
 
         private Mark m_model;
@@ -68,6 +70,17 @@ namespace Dziennik.ViewModel
         {
             get { return m_model.Description; }
             set { m_model.Description = value; RaisePropertyChanged("Description"); RaisePropertyChanged("ToolTipFormatted"); }
+        }
+        private MarksCategoryViewModel m_category;
+        public MarksCategoryViewModel Category
+        {
+            get { return m_category; }
+            set
+            {
+                m_category = value;
+                m_model.GlobalCategoryId = (m_category == null ? null : m_category.Model.Id);
+                RaisePropertyChanged("Category");
+            }
         }
 
         public bool IsValueValid

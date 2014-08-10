@@ -219,6 +219,7 @@ namespace Dziennik
         public static readonly string SchoolOptionsDatabaseFileExtension = ".dzo";
         public static readonly string FileDialogFilter = "Pliki dziennika (.dzs)|*.dzs|Dokumenty XML (.xml)|*.xml|Wszystkie pliki (*.*)|*.*";
         public static readonly string SchoolOptionsDatabaseFileName = "options" + SchoolOptionsDatabaseFileExtension;
+        public static readonly string ErrorLogFileName = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + '\\' + "Dziennik_Error.log";
         public static readonly Size ActionDialogProgressSize = new Size(400, 200);
 
         public static readonly string RegistryKeyName = @"Software\Dziennik_Katra";
@@ -291,6 +292,7 @@ namespace Dziennik
             windowViewModelMappings.Add(typeof(EditOffDayViewModel), vm => new EditOffDayWindow((EditOffDayViewModel)vm));
             windowViewModelMappings.Add(typeof(AddMarksSetViewModel), vm => new AddMarksSetWindow((AddMarksSetViewModel)vm));
             windowViewModelMappings.Add(typeof(InfoDialogViewModel), vm => new InfoDialogWindow((InfoDialogViewModel)vm));
+            windowViewModelMappings.Add(typeof(EditMarksCategoryViewModel), vm => new EditMarksCategoryWindow((EditMarksCategoryViewModel)vm));
 
             Dialogs = new DialogService(windowViewModelMappings);
         }
