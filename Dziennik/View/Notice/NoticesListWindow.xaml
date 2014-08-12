@@ -4,7 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:my="clr-namespace:Dziennik.Controls"
         xmlns:local="clr-namespace:Dziennik"
-        Title="NoticesListWindow" Height="400" Width="500"
+        Title="{DynamicResource lang_NoticesListTitle}" Height="400" Width="500"
         WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
