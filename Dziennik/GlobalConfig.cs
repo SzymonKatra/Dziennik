@@ -11,6 +11,7 @@ using Dziennik.Controls;
 using Dziennik.ViewModel;
 using System.Windows.Input;
 using Dziennik.CommandUtils;
+using fastJSON;
 
 namespace Dziennik
 {
@@ -269,7 +270,7 @@ namespace Dziennik
 
         static GlobalConfig()
         {
-            m_globalDatabaseAutoSaveCommand = new RelayCommand(x => { if (m_notifier.AutoSave)m_globalDatabase.Save(); });
+            m_globalDatabaseAutoSaveCommand = new RelayCommand(x => { if (m_notifier.AutoSave) m_globalDatabase.Save(); });
 
             Dictionary<Type, Func<object, Window>> windowViewModelMappings = new Dictionary<Type, Func<object, Window>>();
 
@@ -294,10 +295,23 @@ namespace Dziennik
             windowViewModelMappings.Add(typeof(InfoDialogViewModel), vm => new InfoDialogWindow((InfoDialogViewModel)vm));
             windowViewModelMappings.Add(typeof(EditMarksCategoryViewModel), vm => new EditMarksCategoryWindow((EditMarksCategoryViewModel)vm));
             windowViewModelMappings.Add(typeof(EditNoticeViewModel), vm => new EditNoticeWindow((EditNoticeViewModel)vm));
+            windowViewModelMappings.Add(typeof(NoticesListViewModel), vm => new NoticesListWindow((NoticesListViewModel)vm));
 
             Dialogs = new DialogService(windowViewModelMappings);
         }
 
+        public static void InitializeFastJSONCustom()
+        {
+            JSON.RegisterCustomType(typeof(TimeSpan), SerializeTimeSpan, DeserializeTimeSpan);
+        }
+        private static string SerializeTimeSpan(object data)
+        {
+            return ((TimeSpan)data).Ticks.ToString();
+        }
+        private static object DeserializeTimeSpan(string data)
+        {
+            return new TimeSpan(long.Parse(data));
+        }
         public static void InitializeNotifier()
         {
             if (m_notifier != null) throw new InvalidOperationException("Notifier already initialized");

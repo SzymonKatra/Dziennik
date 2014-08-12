@@ -46,6 +46,7 @@
     <s:String x:Key="lang_EditGroup">Edytuj grupę</s:String>
     <s:String x:Key="lang_AddGroup">Dodaj grupę</s:String>
     <s:String x:Key="lang_ClassCalendar">Kalendarz klasowy</s:String>
+    <s:String x:Key="lang_NoticesList">Lista powiadomień</s:String>
 
     <s:String x:Key="lang_OptionsTitle">Opcje</s:String>
     <s:String x:Key="lang_DatabaseDirectory">Katalog z bazą danych</s:String>
@@ -155,6 +156,16 @@
     <s:String x:Key="lang_AdvancedMode">Tryb rozbudowany</s:String>
     <s:String x:Key="lang_SimpleMode">Tryb prosty</s:String>
     
+    <s:String x:Key="lang_Date">Data</s:String>
+    <s:String x:Key="lang_NotifyIn">Powiadamiaj przed</s:String>
+    <s:String x:Key="lang_DaysSmall">dniami</s:String>
+    <s:String x:Key="lang_RemoveNotice">Usuń powiadomienie</s:String>
+    
+    <s:String x:Key="lang_NoticesListTitle">Lista powiadomień</s:String>
+    <s:String x:Key="lang_Notice">Powiadomienie</s:String>
+    <s:String x:Key="lang_AddNotice">Dodaj powiadomienie</s:String>
+    <s:String x:Key="lang_NotifyInDays">Powiadom przed (dni)</s:String>
+    
     <s:String x:Key="lang_InfoTitle">Informacje</s:String>
     <s:String x:Key="lang_Author">Autor</s:String>
     <s:String x:Key="lang_AuthorName">Szymon Katra</s:String>
@@ -180,6 +191,7 @@
     <s:String x:Key="lang_TheyMarksAreGoingToBeRemove">Ich dotychczasowe oceny zostaną usunięte.</s:String>
     <s:String x:Key="lang_OnListWillBeGaps">Na liście powstaną luki.</s:String>
     <s:String x:Key="lang_TypeValidInteger">Wprowadź poprawną liczbę całkowitą</s:String>
+    <s:String x:Key="lang_TypeValidNonNegativeInteger">Wprowadź poprawną nieujemną liczbę całkowitą</s:String>
     <s:String x:Key="lang_TypeMarkRange1-6Or0">Wprowadź ocenę z zakresu &lt;1; 6&gt;lub 0 jeśli chcesz ją anulować</s:String>
     <s:String x:Key="lang_PlusMustBeAfterValue">Znak plusa musi się znajdować za liczbą</s:String>
     <s:String x:Key="lang_PlusCanBeOnlyOne">Znak plusa może być tylko jeden</s:String>
@@ -194,10 +206,12 @@
     <s:String x:Key="lang_CheckClipboardForValidList">Sprawdź czy schowek zawiera prawidłowy format listy</s:String>
     <s:String x:Key="lang_DoYouWantToRemoveRealizedSubject">Czy na pewno chcesz usunąć zrealizowany temat?</s:String>
     <s:String x:Key="lang_NullInputStudentsFormat">Uwaga! U {0} uczniów nie wprowadzono żadnej oceny ani uwagi.</s:String>
-    <s:String x:Key="lang_TheyAre">Są to:&#x20;</s:String>
+    <s:String x:Key="lang_TheyAre">Są to:</s:String>
     <s:String x:Key="lang_TheyAreSeparator"> ,</s:String>
     <s:String x:Key="lang_Saving">Zapisywanie</s:String>
     <s:String x:Key="lang_Registry">Rejestr</s:String>
     <s:String x:Key="lang_GlobalDatabase">Globalna baza</s:String>
     <s:String x:Key="lang_Opening">Otwieranie</s:String>
+    <s:String x:Key="lang_Today">Dzisiaj.</s:String>
+    <s:String x:Key="lang_InDaysFormat">Za {0} dni.</s:String>
 </ResourceDictionary>

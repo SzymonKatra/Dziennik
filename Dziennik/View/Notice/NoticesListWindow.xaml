@@ -1,0 +1,41 @@
+﻿<Window x:Class="Dziennik.View.NoticesListWindow"
+        x:Name="root"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:my="clr-namespace:Dziennik.Controls"
+        xmlns:local="clr-namespace:Dziennik"
+        Title="NoticesListWindow" Height="400" Width="500"
+        WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <WrapPanel Orientation="Horizontal">
+            <Button Style="{StaticResource wrapPanelControlStyle}" Content="{DynamicResource lang_AddNotice}" Command="{Binding AddNoticeCommand}"/>
+        </WrapPanel>
+        
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding ViewModel.Notices, Source={x:Static local:GlobalConfig.GlobalDatabase}}"
+                  SelectedItem="{Binding SelectedNotice, Mode=TwoWay}"
+                  CanUserAddRows="False"
+                  CanUserSortColumns="False"
+                  SelectionMode="Single"
+                  IsReadOnly="True"
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{DynamicResource lang_Date}" Binding="{Binding Date, StringFormat={x:Static local:GlobalConfig.DateFormat}}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_NotifyInDays}" Binding="{Binding NotifyIn.Days}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_Notice}" Binding="{Binding DisplayedName}"/>
+                <DataGridTemplateColumn Header="{DynamicResource lang_Edit}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <my:EditButtonControl Command="{Binding DataContext.EditNoticeCommand, ElementName=root}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

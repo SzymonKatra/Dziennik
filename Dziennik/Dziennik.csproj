@@ -134,6 +134,7 @@
     <Compile Include="Model\GlobalSubject.cs" />
     <Compile Include="Model\MarksCategory.cs" />
     <Compile Include="Model\ModelBase.cs" />
+    <Compile Include="Model\Notice.cs" />
     <Compile Include="Model\OffDay.cs" />
     <Compile Include="Model\RealizedSubject.cs" />
     <Compile Include="Model\RealizedSubjectPresence.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="ViewModel\GlobalSchoolViewModel.cs" />
     <Compile Include="ViewModel\GlobalSubjectViewModel.cs" />
     <Compile Include="ViewModel\MarksCategoryViewModel.cs" />
+    <Compile Include="ViewModel\NoticeViewModel.cs" />
     <Compile Include="ViewModel\OffDayViewModel.cs" />
     <Compile Include="ViewModel\RealizedSubjectPresenceViewModel.cs" />
     <Compile Include="ViewModel\RealizedSubjectViewModel.cs" />
@@ -223,6 +225,10 @@
     <Compile Include="ObservableObject.cs" />
     <Compile Include="View\Mark\EditMarkViewModel.cs" />
     <Compile Include="View\NoActionDialogParameter.cs" />
+    <Compile Include="View\Notice\NoticesListViewModel.cs" />
+    <Compile Include="View\Notice\NoticesListWindow.xaml.cs">
+      <DependentUpon>NoticesListWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Student\EditStudentViewModel.cs" />
     <Compile Include="View\Student\EditStudentWindow.xaml.cs">
       <DependentUpon>EditStudentWindow.xaml</DependentUpon>
@@ -362,6 +368,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Mark\EditMarkWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Notice\NoticesListWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

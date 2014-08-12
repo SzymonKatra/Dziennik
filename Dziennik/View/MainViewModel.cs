@@ -79,6 +79,7 @@ namespace Dziennik.View
 
         public void Init()
         {
+            GlobalConfig.InitializeFastJSONCustom();
             GlobalConfig.Notifier.PropertyChanged += Notifier_PropertyChanged;
 
             //ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
@@ -88,7 +89,7 @@ namespace Dziennik.View
             //, null, "Odczytywanie ustawień z rejestru...");
             //GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
 
-            ReloadSchoolClasses(true);
+            Reload(true);
             
             //string[] args = Environment.GetCommandLineArgs();
             //if (args.Length >= 2) m_openFromPathCommand.Execute(args[1]);
@@ -136,7 +137,7 @@ namespace Dziennik.View
             , null, "Zapisywanie ustawień do rejestru...");
             GlobalConfig.Dialogs.ShowDialog(this, saveDialogViewModel);
             if (GlobalConfig.Notifier.AutoSave) GlobalConfig.GlobalDatabase.Save();
-            if (m_databasesDirectoryChanged) ReloadSchoolClasses();
+            if (m_databasesDirectoryChanged) Reload();
             RaisePropertyChanged("TabWidth");
         }
         private void Info(object e)
@@ -199,7 +200,7 @@ namespace Dziennik.View
                 m_openedSchoolClasses.Remove(tab);
             }
         }
-        private void ReloadSchoolClasses(bool loadRegistry = false)
+        private void Reload(bool loadRegistry = false)
         {
             ActionDialogViewModel saveDialogViewModel = new ActionDialogViewModel((d, p) =>
             {
@@ -250,6 +251,43 @@ namespace Dziennik.View
 
             //foreach (var item in GlobalConfig.Database.SchoolClasses) m_openedSchoolClasses.Add(new SchoolClassControlViewModel(new SchoolClassViewModel(item)));
             m_databasesDirectoryChanged = false;
+
+            CheckNotices();
+        }
+        private void CheckNotices()
+        {
+            List<NoticeViewModel> toRemove = new List<NoticeViewModel>();
+            StringBuilder sb = new StringBuilder();
+
+            DateTime today = DateTime.Now.Date;
+            foreach (NoticeViewModel notice in GlobalConfig.GlobalDatabase.ViewModel.Notices)
+            {
+                DateTime noticeDate = notice.Date.Date;
+                if (noticeDate >= today)
+                {
+                    if (noticeDate - notice.NotifyIn <= today)
+                    {
+                        sb.Clear();
+                        if (noticeDate == today)
+                        {
+                            sb.AppendLine(GlobalConfig.GetStringResource("lang_Today"));
+                        }
+                        else
+                        {
+                            sb.AppendLine(string.Format(GlobalConfig.GetStringResource("lang_InDaysFormat"), (noticeDate - today).Days));
+                        }
+                        sb.Append(notice.Name);
+
+                        GlobalConfig.MessageBox(this, sb.ToString(), MessageBoxSuperPredefinedButtons.OK);
+                    }
+                }
+                else
+                {
+                    toRemove.Add(notice);
+                }
+            }
+
+            foreach (var rem in toRemove) GlobalConfig.GlobalDatabase.ViewModel.Notices.Remove(rem);
         }
     }
 }

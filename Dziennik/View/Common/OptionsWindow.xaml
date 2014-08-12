@@ -35,6 +35,7 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="60"/>
+                <RowDefinition Height="30"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
@@ -73,6 +74,8 @@
                     <Button Margin="0,0,5,0" Command="{Binding AddClassCommand}" Content="{DynamicResource lang_AddClass}"/>
                 </WrapPanel>
             </Grid>
+            
+            <Button Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_NoticesList}" Command="{Binding ShowNoticesListCommand}"/>
         </Grid>
 
         <Grid Grid.Column="1" Grid.Row="0">

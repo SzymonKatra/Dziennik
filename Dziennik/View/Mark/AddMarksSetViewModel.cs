@@ -232,6 +232,7 @@ namespace Dziennik.View
                 string mboxtext = string.Format(GlobalConfig.GetStringResource("lang_NullInputStudentsFormat"), nullStudents.Count);
                 mboxtext += Environment.NewLine;
                 mboxtext += GlobalConfig.GetStringResource("lang_TheyAre");
+                mboxtext += ' ';
                 mboxtext += nullStudents[0];
                 for (int i = 1; i < nullStudents.Count; i++)
                 {

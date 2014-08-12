@@ -1,8 +1,41 @@
 ﻿<Window x:Class="Dziennik.View.EditNoticeWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="EditNoticeWindow" Height="300" Width="300">
+        xmlns:my="clr-namespace:Dziennik.Controls"
+        Title="EditNoticeWindow" Height="300" Width="300"
+        WindowStartupLocation="CenterOwner">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="70"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
         
+        <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Date}"/>
+        <DatePicker Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding Date, Mode=TwoWay}"/>
+        
+        <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Grid.Column="0" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_NotifyIn}"/>
+            <TextBox Grid.Column="1" Style="{StaticResource validationTemplateTextBox}" Text="{Binding NotifyInInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+            <TextBlock Grid.Column="2" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_DaysSmall}"/>
+        </Grid>
+        
+        <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Description}"/>
+        <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource inputControlStyle}" Text="{Binding Name, Mode=TwoWay}"/>
+        
+        <my:RemoveButtonControl Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Content="{DynamicResource lang_RemoveNotice}" Command="{Binding RemoveNoticeCommand}"/>
+        <my:OkCancelControl Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>
 </Window>
