@@ -173,6 +173,10 @@
     <s:String x:Key="lang_ControlsSourceName">Extended WPF Toolkit™ Community Edition</s:String>
     <s:String x:Key="lang_ControlsSourceLicense">Licencja: Microsoft Public License (Ms-PL)</s:String>
     <s:String x:Key="lang_ControlsSourceHyperlink">https://wpftoolkit.codeplex.com/</s:String>
+    <s:String x:Key="lang_Libraries">Biblioteki</s:String>
+    <s:String x:Key="lang_FastJSONSourceName">fastJSON</s:String>
+    <s:String x:Key="lang_FastJSONSourceLicense">Licencja: Apache License 2.0 (Apache)</s:String>
+    <s:String x:Key="lang_FastJSONSourceHyperlink">http://fastjson.codeplex.com/</s:String>
     <s:String x:Key="lang_Icons">Ikony</s:String>
     <s:String x:Key="lang_IconsSource1Name">Pixel Mixer</s:String>
     <s:String x:Key="lang_IconsSource1Hyperlink1">http://www.pixel-mixer.com</s:String>
