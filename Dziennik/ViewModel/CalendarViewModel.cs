@@ -6,44 +6,36 @@ using Dziennik.Model;
 
 namespace Dziennik.ViewModel
 {
-    public sealed class CalendarViewModel : ObservableObject, IModelExposable<Calendar>
+    public sealed class CalendarViewModel : ViewModelBase<CalendarViewModel, Calendar>
     {
         public CalendarViewModel()
             : this(new Calendar())
         {
         }
-        public CalendarViewModel(Calendar model)
+        public CalendarViewModel(Calendar model) : base(model)
         {
-            m_model = model;
-
-            m_offDays = new SynchronizedObservableCollection<OffDayViewModel, OffDay>(m_model.OffDays, m => new OffDayViewModel(m));
-        }
-
-        private Calendar m_model;
-        public Calendar Model
-        {
-            get { return m_model; }
+            m_offDays = new SynchronizedObservableCollection<OffDayViewModel, OffDay>(Model.OffDays, m => new OffDayViewModel(m));
         }
 
         public string Name
         {
-            get { return m_model.Name; }
-            set { m_model.Name = value; RaisePropertyChanged("Name"); }
+            get { return Model.Name; }
+            set { Model.Name = value; RaisePropertyChanged("Name"); }
         }
         public DateTime YearBeginning
         {
-            get { return m_model.YearBeginning; }
-            set { m_model.YearBeginning = value; RaisePropertyChanged("YearBeginning"); }
+            get { return Model.YearBeginning; }
+            set { Model.YearBeginning = value; RaisePropertyChanged("YearBeginning"); }
         }
         public DateTime SemesterSeparator
         {
-            get { return m_model.SemesterSeparator; }
-            set { m_model.SemesterSeparator = value; RaisePropertyChanged("SemesterSeparator"); }
+            get { return Model.SemesterSeparator; }
+            set { Model.SemesterSeparator = value; RaisePropertyChanged("SemesterSeparator"); }
         }
         public DateTime YearEnding
         {
-            get { return m_model.YearEnding; }
-            set { m_model.YearEnding = value; RaisePropertyChanged("YearEnding"); }
+            get { return Model.YearEnding; }
+            set { Model.YearEnding = value; RaisePropertyChanged("YearEnding"); }
         }
 
         private SynchronizedObservableCollection<OffDayViewModel, OffDay> m_offDays;
@@ -53,9 +45,18 @@ namespace Dziennik.ViewModel
             set
             {
                 m_offDays = value;
-                m_model.OffDays = value.ModelCollection;
+                Model.OffDays = value.ModelCollection;
                 RaisePropertyChanged("OffDays");
             }
+        }
+
+        public override void ShallowCopyDataTo(CalendarViewModel viewModel)
+        {
+            viewModel.Name = this.Name;
+            viewModel.YearBeginning = this.YearBeginning;
+            viewModel.SemesterSeparator = this.SemesterSeparator;
+            viewModel.YearEnding = this.YearEnding;
+            viewModel.OffDays = this.OffDays;
         }
     }
 }

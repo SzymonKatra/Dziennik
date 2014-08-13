@@ -64,5 +64,18 @@ namespace Dziennik.ViewModel
                 return result;
             }
         }
+
+        public GlobalStudentViewModel DeepClone()
+        {
+            GlobalStudentViewModel result = new GlobalStudentViewModel();
+
+            result.Number = this.Number;
+            result.Name = this.Name;
+            result.Surname = this.Surname;
+            result.Email = this.Email;
+            result.AdditionalInformation = this.AdditionalInformation;
+
+            return result;
+        }
     }
 }

@@ -86,6 +86,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="WorkingCollection.cs" />
     <Compile Include="CommandUtils\RelayCommand.cs" />
     <Compile Include="CommonEventArgs.cs" />
     <Compile Include="Controls\AddMarksSetHeaderWithContext.xaml.cs">
@@ -501,6 +503,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\info.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IViewModelShallowCopyable.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

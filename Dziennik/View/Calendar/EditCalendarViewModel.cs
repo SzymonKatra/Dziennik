@@ -34,6 +34,7 @@ namespace Dziennik.View
             m_yearBeginning = m_calendar.YearBeginning;
             m_semesterSeparator = m_calendar.SemesterSeparator;
             m_yearEnding = m_calendar.YearEnding;
+            m_offDaysWorkingCopy = new WorkingCollection<OffDayViewModel>(m_calendar.OffDays);
 
             if(isAddingMode)
             {
@@ -44,10 +45,6 @@ namespace Dziennik.View
         private ICommand m_autoSaveCommand;
 
         private CalendarViewModel m_calendar;
-        public CalendarViewModel Calendar
-        {
-            get { return m_calendar; }
-        }
 
         private EditCalendarResult m_result = EditCalendarResult.Cancel;
         public EditCalendarResult Result
@@ -119,6 +116,12 @@ namespace Dziennik.View
             set { m_yearEnding = value; RaisePropertyChanged("YearEnding"); }
         }
 
+        private WorkingCollection<OffDayViewModel> m_offDaysWorkingCopy;
+        public WorkingCollection<OffDayViewModel> OffDaysWorkingCopy
+        {
+            get { return m_offDaysWorkingCopy; }
+        }
+
         private OffDayViewModel m_selectedOffDay;
         public OffDayViewModel SelectedOffDay
         {
@@ -132,6 +135,7 @@ namespace Dziennik.View
             m_calendar.YearBeginning = m_yearBeginning;
             m_calendar.SemesterSeparator = m_semesterSeparator;
             m_calendar.YearEnding = m_yearEnding;
+            m_offDaysWorkingCopy.ApplyChangesToOriginalCollection();
 
             m_result = EditCalendarResult.Ok;
             GlobalConfig.Dialogs.Close(this);
@@ -157,7 +161,8 @@ namespace Dziennik.View
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if(dialogViewModel.Result == EditOffDayViewModel.EditOffDayResult.Ok)
             {
-                m_calendar.OffDays.Add(offDay);
+                //m_calendar.OffDays.Add(offDay);
+                m_offDaysWorkingCopy.Add(offDay);    
             }
             if (dialogViewModel.Result != EditOffDayViewModel.EditOffDayResult.Cancel) m_autoSaveCommand.Execute(null);
         }
@@ -165,10 +170,15 @@ namespace Dziennik.View
         {
             EditOffDayViewModel dialogViewModel = new EditOffDayViewModel(m_selectedOffDay);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
-            if(dialogViewModel.Result== EditOffDayViewModel.EditOffDayResult.Remove)
+            if (dialogViewModel.Result == EditOffDayViewModel.EditOffDayResult.Remove)
             {
-                m_calendar.OffDays.Remove(m_selectedOffDay);
+                //m_calendar.OffDays.Remove(m_selectedOffDay);
+                m_offDaysWorkingCopy.Remove(m_selectedOffDay);
                 SelectedOffDay = null;
+            }
+            else if(dialogViewModel.Result == EditOffDayViewModel.EditOffDayResult.Ok)
+            {
+                m_offDaysWorkingCopy.ApplyChange(m_selectedOffDay);
             }
             if (dialogViewModel.Result != EditOffDayViewModel.EditOffDayResult.Cancel) m_autoSaveCommand.Execute(null);
         }

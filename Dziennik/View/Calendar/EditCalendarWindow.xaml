@@ -45,7 +45,7 @@
             </Button>
         </Grid>
         <DataGrid Grid.Column="1" Grid.Row="4"
-                  ItemsSource="{Binding Calendar.OffDays}"
+                  ItemsSource="{Binding OffDaysWorkingCopy}"
                   SelectedItem="{Binding SelectedOffDay, Mode=TwoWay}"
                   CanUserAddRows="False"
                   CanUserSortColumns="False"

@@ -6,40 +6,42 @@ using Dziennik.Model;
 
 namespace Dziennik.ViewModel
 {
-    public sealed class OffDayViewModel : ObservableObject, IModelExposable<OffDay>
+    public sealed class OffDayViewModel : ViewModelBase<OffDayViewModel, OffDay>
     {
-        public OffDayViewModel() : this(new OffDay())
+        public OffDayViewModel()
+            : this(new OffDay())
         {
         }
         public OffDayViewModel(OffDay model)
+            : base(model)
         {
-            m_model = model;
-        }
-
-        private OffDay m_model;
-        public OffDay Model
-        {
-            get { return m_model; }
         }
 
         public DateTime Start
         {
-            get { return m_model.Start; }
-            set { m_model.Start = value; RaisePropertyChanged("Start"); RaisePropertyChanged("IsOneDay"); }
+            get { return Model.Start; }
+            set { Model.Start = value; RaisePropertyChanged("Start"); RaisePropertyChanged("IsOneDay"); }
         }
         public DateTime End
         {
-            get { return m_model.End; }
-            set { m_model.End = value; RaisePropertyChanged("End"); RaisePropertyChanged("IsOneDay"); }
+            get { return Model.End; }
+            set { Model.End = value; RaisePropertyChanged("End"); RaisePropertyChanged("IsOneDay"); }
         }
         public bool IsOneDay
         {
-            get { return m_model.Start == m_model.End; }
+            get { return Model.Start == Model.End; }
         }
         public string Description
         {
-            get { return m_model.Description; }
-            set { m_model.Description = value; RaisePropertyChanged("Description"); }
+            get { return Model.Description; }
+            set { Model.Description = value; RaisePropertyChanged("Description"); }
+        }
+
+        public override void ShallowCopyDataTo(OffDayViewModel viewModel)
+        {
+            viewModel.Description = this.Description;
+            viewModel.Start = this.Start;
+            viewModel.End = this.End;
         }
     }
 }
