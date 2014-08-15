@@ -8,69 +8,69 @@ using System.Xml.Linq;
 
 namespace Dziennik.ViewModel
 {
-    public sealed class MarkViewModel : ObservableObject, IModelExposable<Mark>
+    public sealed class MarkViewModel : ViewModelBase<MarkViewModel, Mark>
     {
         public MarkViewModel()
             : this(new Mark())
         {
         }
-        public MarkViewModel(Mark mark)
+        public MarkViewModel(Mark model)
+            : base(model)
         {
-            m_model = mark;
-
-            m_category = GlobalConfig.GlobalDatabase.ViewModel.MarksCategories.FirstOrDefault(x => x.Model.Id == m_model.GlobalCategoryId);
+            m_category = GlobalConfig.GlobalDatabase.ViewModel.MarksCategories.FirstOrDefault(x => x.Model.Id == Model.GlobalCategoryId);
         }
 
-        private Mark m_model;
-        public Mark Model
-        {
-            get { return m_model; }
-        }
-
+        private decimal m_valueCopy;
         public decimal Value
         {
-            get { return m_model.Value; }
+            get { return Model.Value; }
             set
             {
-                m_model.Value = value;
+                Model.Value = value;
                 RaisePropertyChanged("Value");
                 RaisePropertyChanged("IsValueValid");
                 RaisePropertyChanged("DisplayedMark");
                 RaisePropertyChanged("ToolTipFormatted");
             }
         }
+        private string m_noteCopy;
         public string Note
         {
-            get { return m_model.Note; }
+            get { return Model.Note; }
             set
             {
-                m_model.Note = value;
+                Model.Note = value;
                 RaisePropertyChanged("Note");
                 RaisePropertyChanged("IsValueValid");
                 RaisePropertyChanged("DisplayedMark");
                 RaisePropertyChanged("ToolTipFormatted");
             }
         }
+        private int m_weightCopy;
         public int Weight
         {
-            get { return m_model.Weight; }
-            set { m_model.Weight = value; RaisePropertyChanged("Weight"); RaisePropertyChanged("DisplayedWeight"); }
+            get { return Model.Weight; }
+            set { Model.Weight = value; RaisePropertyChanged("Weight"); RaisePropertyChanged("DisplayedWeight"); }
         }
+        private DateTime m_addDateCopy;
         public DateTime AddDate
         {
-            get { return m_model.AddDate; }
-            set { m_model.AddDate = value; RaisePropertyChanged("AddDate"); RaisePropertyChanged("ToolTipFormatted"); }
+            get { return Model.AddDate; }
+            set { Model.AddDate = value; RaisePropertyChanged("AddDate"); RaisePropertyChanged("ToolTipFormatted"); }
         }
+        private DateTime m_lastChangeDateCopy;
         public DateTime LastChangeDate
         {
-            get { return m_model.LastChangeDate; }
-            set { m_model.LastChangeDate = value; RaisePropertyChanged("LastChangeDate"); RaisePropertyChanged("ToolTipFormatted"); }
+            get { return Model.LastChangeDate; }
+            set { Model.LastChangeDate = value; RaisePropertyChanged("LastChangeDate"); RaisePropertyChanged("ToolTipFormatted"); }
         }
+        private string m_descriptionCopy;
         public string Description
         {
-            get { return m_model.Description; }
-            set { m_model.Description = value; RaisePropertyChanged("Description"); RaisePropertyChanged("ToolTipFormatted"); }
+            get { return Model.Description; }
+            set { Model.Description = value; RaisePropertyChanged("Description"); RaisePropertyChanged("ToolTipFormatted"); }
         }
+        private MarksCategoryViewModel m_categoryCopy;
         private MarksCategoryViewModel m_category;
         public MarksCategoryViewModel Category
         {
@@ -78,7 +78,7 @@ namespace Dziennik.ViewModel
             set
             {
                 m_category = value;
-                m_model.GlobalCategoryId = (m_category == null ? null : m_category.Model.Id);
+                Model.GlobalCategoryId = (m_category == null ? null : m_category.Model.Id);
                 RaisePropertyChanged("Category");
             }
         }
@@ -134,6 +134,30 @@ namespace Dziennik.ViewModel
             string result = truncated.ToString(CultureInfo.InvariantCulture);
             if (value - truncated == 0.5M) result += "+";
             return result;
+        }
+
+        protected override void OnWorkingCopyStarted()
+        {
+            m_valueCopy = this.Value;
+            m_noteCopy = this.Note;
+            m_weightCopy = this.Weight;
+            m_addDateCopy = this.AddDate;
+            m_lastChangeDateCopy = this.LastChangeDate;
+            m_descriptionCopy = this.Description;
+            m_categoryCopy = this.Category;
+        }
+        protected override void OnWorkingCopyEnded(WorkingCopyResult result)
+        {
+            if(result == WorkingCopyResult.Cancel)
+            {
+                this.Value = m_valueCopy;
+                this.Note = m_noteCopy;
+                this.Weight = m_weightCopy;
+                this.AddDate = m_addDateCopy;
+                this.LastChangeDate = m_lastChangeDateCopy;
+                this.Description = m_descriptionCopy;
+                this.Category = m_categoryCopy;
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ using System.ComponentModel;
 namespace Dziennik
 {
     public class ItemPropertyInCollectionChangedEventArgs<T> : PropertyChangedEventArgs
-                                                               where T : INotifyPropertyChanged
+                                                               where T : INotifyPropertyChanged, IWorkingCopyAvailable
     {
         public ItemPropertyInCollectionChangedEventArgs(T item, PropertyChangedEventArgs e)
             : this(item, e.PropertyName)
@@ -33,7 +33,7 @@ namespace Dziennik
     /// </summary>
     /// <typeparam name="T">Type</typeparam>
     public class PerItemObservableCollection<T> : ObservableCollectionExtended<T>
-                                                  where T : INotifyPropertyChanged
+                                                  where T : INotifyPropertyChanged, IWorkingCopyAvailable
     {
         public event EventHandler<ItemPropertyInCollectionChangedEventArgs<T>> ItemPropertyInCollectionChanged;
 

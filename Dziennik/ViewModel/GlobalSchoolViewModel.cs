@@ -6,25 +6,17 @@ using Dziennik.Model;
 
 namespace Dziennik.ViewModel
 {
-    public sealed class GlobalSchoolViewModel : ObservableObject, IModelExposable<GlobalSchool>
+    public sealed class GlobalSchoolViewModel : ViewModelBase<GlobalSchoolViewModel, GlobalSchool>
     {
         public GlobalSchoolViewModel()
             : this(new GlobalSchool())
         {
         }
-        public GlobalSchoolViewModel(GlobalSchool model)
+        public GlobalSchoolViewModel(GlobalSchool model) : base(model)
         {
-            m_model = model;
-
-            m_calendars = new SynchronizedObservableCollection<CalendarViewModel, Calendar>(m_model.Calendars, m => new CalendarViewModel(m));
-            m_marksCategories = new SynchronizedObservableCollection<MarksCategoryViewModel, MarksCategory>(m_model.MarksCategories, m => new MarksCategoryViewModel(m));
-            m_notices = new SynchronizedObservableCollection<NoticeViewModel, Notice>(m_model.Notices, m => new NoticeViewModel(m));
-        }
-
-        private GlobalSchool m_model;
-        public GlobalSchool Model
-        {
-            get { return m_model; }
+            m_calendars = new SynchronizedObservableCollection<CalendarViewModel, Calendar>(Model.Calendars, m => new CalendarViewModel(m));
+            m_marksCategories = new SynchronizedObservableCollection<MarksCategoryViewModel, MarksCategory>(Model.MarksCategories, m => new MarksCategoryViewModel(m));
+            m_notices = new SynchronizedObservableCollection<NoticeViewModel, Notice>(Model.Notices, m => new NoticeViewModel(m));
         }
 
         private SynchronizedObservableCollection<CalendarViewModel, Calendar> m_calendars;
@@ -34,7 +26,7 @@ namespace Dziennik.ViewModel
             set
             {
                 m_calendars = value;
-                m_model.Calendars = value.ModelCollection;
+                Model.Calendars = value.ModelCollection;
                 RaisePropertyChanged("Calendars");
             }
         }
@@ -46,7 +38,7 @@ namespace Dziennik.ViewModel
             set
             {
                 m_marksCategories = value;
-                m_model.MarksCategories = value.ModelCollection;
+                Model.MarksCategories = value.ModelCollection;
                 RaisePropertyChanged("MarksCategories");
             }
         }
@@ -58,9 +50,22 @@ namespace Dziennik.ViewModel
             set
             {
                 m_notices = value;
-                m_model.Notices = value.ModelCollection;
+                Model.Notices = value.ModelCollection;
                 RaisePropertyChanged("Notices");
             }
+        }
+
+        protected override void OnWorkingCopyStarted()
+        {
+            m_calendars.StartWorkingCopy();
+            m_marksCategories.StartWorkingCopy();
+            m_notices.StartWorkingCopy();
+        }
+        protected override void OnWorkingCopyEnded(WorkingCopyResult result)
+        {
+            m_calendars.EndWorkingCopy(result);
+            m_marksCategories.EndWorkingCopy(result);
+            m_notices.EndWorkingCopy(result);
         }
     }
 }

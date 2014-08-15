@@ -148,10 +148,13 @@ namespace Dziennik.View
         }
         private void EditCalendar(object e)
         {
+            m_selectedCalendar.StartWorkingCopy();
             EditCalendarViewModel dialogViewModel = new EditCalendarViewModel(m_selectedCalendar, GlobalConfig.GlobalDatabaseAutoSaveCommand);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if(dialogViewModel.Result == EditCalendarViewModel.EditCalendarResult.Remove)
             {
+                m_selectedCalendar.EndWorkingCopy(WorkingCopyResult.Ok);
+
                 foreach (var schoolClass in m_openedSchoolClasses)
                 {
                     if (schoolClass.ViewModel.Calendar == m_selectedCalendar) schoolClass.ViewModel.Calendar = null;
@@ -159,6 +162,14 @@ namespace Dziennik.View
 
                 GlobalConfig.GlobalDatabase.ViewModel.Calendars.Remove(m_selectedCalendar);
                 SelectedCalendar = null;
+            }
+            else if (dialogViewModel.Result== EditCalendarViewModel.EditCalendarResult.Ok)
+            {
+                m_selectedCalendar.EndWorkingCopy(WorkingCopyResult.Ok);
+            }
+            else if(dialogViewModel.Result == EditCalendarViewModel.EditCalendarResult.Cancel)
+            {
+                m_selectedCalendar.EndWorkingCopy(WorkingCopyResult.Cancel);
             }
             if (dialogViewModel.Result != EditCalendarViewModel.EditCalendarResult.Cancel)
             {

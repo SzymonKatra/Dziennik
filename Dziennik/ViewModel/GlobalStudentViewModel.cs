@@ -6,47 +6,45 @@ using Dziennik.Model;
 
 namespace Dziennik.ViewModel
 {
-    public sealed class GlobalStudentViewModel : ObservableObject, IModelExposable<GlobalStudent>
+    public sealed class GlobalStudentViewModel : ViewModelBase<GlobalStudentViewModel, GlobalStudent>
     {
         public GlobalStudentViewModel()
             : this(new GlobalStudent())
         {
         }
-        public GlobalStudentViewModel(GlobalStudent globalStudent)
+        public GlobalStudentViewModel(GlobalStudent model) : base(model)
         {
-            m_model = globalStudent;
         }
 
-        private GlobalStudent m_model;
-        public GlobalStudent Model
-        {
-            get { return m_model; }
-        }
-
+        private int m_numberCopy;
         public int Number
         {
-            get { return m_model.Number; }
-            set { m_model.Number = value; RaisePropertyChanged("Number"); }
+            get { return Model.Number; }
+            set { Model.Number = value; RaisePropertyChanged("Number"); }
         }
+        private string m_nameCopy;
         public string Name
         {
-            get { return m_model.Name; }
-            set { m_model.Name = value; RaisePropertyChanged("Name"); }
+            get { return Model.Name; }
+            set { Model.Name = value; RaisePropertyChanged("Name"); }
         }
+        private string m_surnameCopy;
         public string Surname
         {
-            get { return m_model.Surname; }
-            set { m_model.Surname = value; RaisePropertyChanged("Surname"); }
+            get { return Model.Surname; }
+            set { Model.Surname = value; RaisePropertyChanged("Surname"); }
         }
+        private string m_emailCopy;
         public string Email
         {
-            get { return m_model.Email; }
-            set { m_model.Email = value; RaisePropertyChanged("Email"); }
+            get { return Model.Email; }
+            set { Model.Email = value; RaisePropertyChanged("Email"); }
         }
+        private string m_additionalInformationCopy;
         public string AdditionalInformation
         {
-            get { return m_model.AdditionalInformation; }
-            set { m_model.AdditionalInformation = value; RaisePropertyChanged("AdditionalInformation"); }
+            get { return Model.AdditionalInformation; }
+            set { Model.AdditionalInformation = value; RaisePropertyChanged("AdditionalInformation"); }
         }
 
         public static GlobalStudentViewModel Dummy
@@ -76,6 +74,26 @@ namespace Dziennik.ViewModel
             result.AdditionalInformation = this.AdditionalInformation;
 
             return result;
+        }
+
+        protected override void OnWorkingCopyStarted()
+        {
+            m_numberCopy = this.Number;
+            m_nameCopy = this.Name;
+            m_surnameCopy = this.Surname;
+            m_emailCopy = this.Email;
+            m_additionalInformationCopy = this.AdditionalInformation;
+        }
+        protected override void OnWorkingCopyEnded(WorkingCopyResult result)
+        {
+            if(result == WorkingCopyResult.Cancel)
+            {
+                this.Number = m_numberCopy;
+                this.Name = m_nameCopy;
+                this.Surname = m_surnameCopy;
+                this.Email = m_emailCopy;
+                this.AdditionalInformation = m_additionalInformationCopy;
+            }
         }
     }
 }

@@ -20,13 +20,13 @@
         </Grid.RowDefinitions>
         
         <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Name}"/>
-        <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" Text="{Binding Description, Mode=TwoWay}"/>
+        <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" Text="{Binding OffDay.Description, Mode=TwoWay}"/>
         
         <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_From}"/>
-        <DatePicker Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding From, Mode=TwoWay}"/>
+        <DatePicker Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding OffDay.Start, Mode=TwoWay}"/>
         
         <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_To}"/>
-        <DatePicker Grid.Column="1" Grid.Row="2" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding To, Mode=TwoWay}"/>
+        <DatePicker Grid.Column="1" Grid.Row="2" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding OffDay.End, Mode=TwoWay}"/>
         
         <my:RemoveButtonControl Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Content="{DynamicResource lang_RemoveOffDay}" Command="{Binding RemoveOffDayCommand}"/>
         

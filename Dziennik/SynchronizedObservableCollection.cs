@@ -15,7 +15,7 @@ namespace Dziennik
     /// <typeparam name="T">ViewModel type</typeparam>
     /// <typeparam name="M">Model type</typeparam>
     public class SynchronizedObservableCollection<VM, M> : SynchronizedObservableCollection<VM, M, System.Collections.Generic.List<M>>
-                                                           where VM : IModelExposable<M>
+                                                           where VM : IModelExposable<M>, IWorkingCopyAvailable
     {
         public SynchronizedObservableCollection(System.Collections.Generic.List<M> modelCollection, Func<M, VM> createViewModelFunc)
             : base(modelCollection, createViewModelFunc)
@@ -32,7 +32,7 @@ namespace Dziennik
     /// <typeparam name="M">Model type</typeparam>
     /// <typeparam name="MC">Model collection</typeparam>
     public class SynchronizedObservableCollection<VM, M, MC> : ObservableCollectionExtended<VM>
-                                                               where VM : IModelExposable<M>
+                                                               where VM : IModelExposable<M>, IWorkingCopyAvailable
                                                                where MC : System.Collections.Generic.IList<M>
     {
         protected SynchronizedObservableCollection()

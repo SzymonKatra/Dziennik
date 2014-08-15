@@ -6,30 +6,23 @@ using Dziennik.Model;
 
 namespace Dziennik.ViewModel
 {
-    public class SchoolGroupViewModel : ObservableObject, IModelExposable<SchoolGroup>
+    public class SchoolGroupViewModel : ViewModelBase<SchoolGroupViewModel, SchoolGroup>
     {
         public SchoolGroupViewModel()
             : this(new SchoolGroup())
         {
         }
-        public SchoolGroupViewModel(SchoolGroup schoolGroup)
+        public SchoolGroupViewModel(SchoolGroup model)
+            : base(model)
         {
-            m_model = schoolGroup;
-
-            m_students = new SynchronizedPerItemObservableCollection<StudentInGroupViewModel, StudentInGroup>(m_model.Students, (m) => { return new StudentInGroupViewModel(m); });;
-            m_globalSubjects = new SynchronizedObservableCollection<GlobalSubjectViewModel, GlobalSubject>(m_model.Subjects, m => new GlobalSubjectViewModel(m));
-            m_realizedSubjects = new SynchronizedObservableCollection<RealizedSubjectViewModel, RealizedSubject>(m_model.RealizedSubjects, m => new RealizedSubjectViewModel(m));
-            m_schedule = new WeekScheduleViewModel(m_model.Schedule);
+            m_students = new SynchronizedPerItemObservableCollection<StudentInGroupViewModel, StudentInGroup>(Model.Students, (m) => { return new StudentInGroupViewModel(m); });;
+            m_globalSubjects = new SynchronizedObservableCollection<GlobalSubjectViewModel, GlobalSubject>(Model.Subjects, m => new GlobalSubjectViewModel(m));
+            m_realizedSubjects = new SynchronizedObservableCollection<RealizedSubjectViewModel, RealizedSubject>(Model.RealizedSubjects, m => new RealizedSubjectViewModel(m));
+            m_schedule = new WeekScheduleViewModel(Model.Schedule);
 
             SubscribeSchedule();
             SubscribeStudents();
             SubscribeRealizedSubjects();
-        }
-
-        private SchoolGroup m_model;
-        public SchoolGroup Model
-        {
-            get { return m_model; }
         }
 
         private SchoolClassViewModel m_ownerClass;
@@ -42,8 +35,8 @@ namespace Dziennik.ViewModel
 
         public string Name
         {
-            get { return m_model.Name; }
-            set { m_model.Name = value; RaisePropertyChanged("Name"); }
+            get { return Model.Name; }
+            set { Model.Name = value; RaisePropertyChanged("Name"); }
         }
         private SynchronizedPerItemObservableCollection<StudentInGroupViewModel, StudentInGroup> m_students;
         [DatabaseInversePropertyOwner("OwnerGroup", "SubscribeStudents")]
@@ -55,7 +48,7 @@ namespace Dziennik.ViewModel
                 UnsubscribeStudents();
                 m_students = value;
                 SubscribeStudents();
-                m_model.Students = value.ModelCollection;
+                Model.Students = value.ModelCollection;
                 RaisePropertyChanged("Students");
             }
         }
@@ -67,7 +60,7 @@ namespace Dziennik.ViewModel
             set
             {
                 m_globalSubjects = value;
-                m_model.Subjects = value.ModelCollection;
+                Model.Subjects = value.ModelCollection;
                 RaisePropertyChanged("GlobalSubjects");
             }
         }
@@ -81,7 +74,7 @@ namespace Dziennik.ViewModel
                 UnsubscribeRealizedSubjects();
                 m_realizedSubjects = value;
                 SubscribeRealizedSubjects();
-                m_model.RealizedSubjects = value.ModelCollection;
+                Model.RealizedSubjects = value.ModelCollection;
                 RaisePropertyChanged("RealizedSubjects");
             }
         }
@@ -98,7 +91,7 @@ namespace Dziennik.ViewModel
 
                 SubscribeSchedule();
 
-                m_model.Schedule = value.Model;
+                Model.Schedule = value.Model;
                 RaisePropertyChanged("Schedule");
             }
         }

@@ -13,6 +13,8 @@ namespace Dziennik
 
     public interface IWorkingCopyAvailable
     {
+        bool WorkingCopyStarted { get; }
+
         void StartWorkingCopy();
         void EndWorkingCopy(WorkingCopyResult result);
     }

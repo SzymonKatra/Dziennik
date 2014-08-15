@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Dziennik
 {
-    public class ObservableCollectionExtended<T> : ObservableCollection<T>, INotifyCollectionChangedSimple<T>, IWorkingCopyAvailable
+    public class ObservableCollectionExtended<T> : ObservableCollection<T>, INotifyCollectionChangedSimple<T>, IWorkingCopyAvailable where T : IWorkingCopyAvailable
     {
         private enum CollectionChangeType
         {
@@ -26,6 +26,11 @@ namespace Dziennik
             public List<T> ClearedList { get; set; }
         }
 
+        private bool m_workingCopyStarted = false;
+        public bool WorkingCopyStarted
+        {
+            get { return m_workingCopyStarted; }
+        }
         private List<CollectionChangedPair> m_changelog = new List<CollectionChangedPair>();
 
         public event EventHandler<NotifyCollectionChangedSimpleEventArgs<T>> Added;
@@ -119,18 +124,25 @@ namespace Dziennik
             if (handler != null) handler(this, e);
         }
 
-        private bool m_workingCopyStarted = false;
         public void StartWorkingCopy()
         {
             if (m_workingCopyStarted) throw new InvalidOperationException("Already started");
             m_workingCopyStarted = true;
             m_changelog.Clear();
+            foreach (var item in this)
+            {
+                item.StartWorkingCopy();
+            }
         }
         public void EndWorkingCopy(WorkingCopyResult result)
         {
             if (!m_workingCopyStarted) throw new InvalidOperationException("Must be started to end");
             m_workingCopyStarted = false;
-            Revert();
+            foreach (var item in this)
+            {
+                if (item.WorkingCopyStarted) item.EndWorkingCopy(result);
+            }
+            if (result == WorkingCopyResult.Cancel) Revert();
         }
 
         private void Revert()
@@ -138,6 +150,8 @@ namespace Dziennik
             for (int i = m_changelog.Count - 1; i >= 0; i--)
             {
                 CollectionChangedPair change = m_changelog[i];
+                if (change.OldValue != null && change.OldValue.WorkingCopyStarted) change.OldValue.EndWorkingCopy(WorkingCopyResult.Cancel);
+                if (change.NewValue != null && change.NewValue.WorkingCopyStarted) change.NewValue.EndWorkingCopy(WorkingCopyResult.Cancel);
 
                 switch (change.Change)
                 {

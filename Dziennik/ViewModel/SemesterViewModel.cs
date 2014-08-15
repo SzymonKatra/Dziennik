@@ -8,24 +8,17 @@ using System.Xml.Linq;
 
 namespace Dziennik.ViewModel
 {
-    public sealed class SemesterViewModel : ObservableObject, IModelExposable<Semester>
+    public sealed class SemesterViewModel : ViewModelBase<SemesterViewModel, Semester>
     {
         public SemesterViewModel()
             : this(new Semester())
         {
         }
-        public SemesterViewModel(Semester semester)
+        public SemesterViewModel(Semester model)
+            : base(model)
         {
-            m_model = semester;
-
-            m_marks = new SynchronizedPerItemObservableCollection<MarkViewModel, Mark>(m_model.Marks, (m) => { return new MarkViewModel(m); });
+            m_marks = new SynchronizedPerItemObservableCollection<MarkViewModel, Mark>(Model.Marks, (m) => { return new MarkViewModel(m); });
             SubscribeMarks();
-        }
-
-        private Semester m_model;
-        public Semester Model
-        {
-            get { return m_model; }
         }
 
         public event EventHandler MarksChanged;
@@ -42,7 +35,7 @@ namespace Dziennik.ViewModel
 
                 SubscribeMarks();
 
-                m_model.Marks = value.ModelCollection;
+                Model.Marks = value.ModelCollection;
                 RaisePropertyChanged("Marks");
             }
         }

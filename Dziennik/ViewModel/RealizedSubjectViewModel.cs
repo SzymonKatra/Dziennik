@@ -6,32 +6,26 @@ using Dziennik.Model;
 
 namespace Dziennik.ViewModel
 {
-    public sealed class RealizedSubjectViewModel : ObservableObject, IModelExposable<RealizedSubject>
+    public sealed class RealizedSubjectViewModel : ViewModelBase<RealizedSubjectViewModel,RealizedSubject>
     {
         public RealizedSubjectViewModel()
             : this(new RealizedSubject())
         {
         }
         public RealizedSubjectViewModel(RealizedSubject model)
+            : base(model)
         {
-            m_model = model;
-        }
-
-        private RealizedSubject m_model;
-        public RealizedSubject Model
-        {
-            get { return m_model; }
         }
 
         public DateTime RealizedDate
         {
-            get { return m_model.RealizedDate; }
-            set { m_model.RealizedDate = value; RaisePropertyChanged("RealizedDate"); }
+            get { return Model.RealizedDate; }
+            set { Model.RealizedDate = value; RaisePropertyChanged("RealizedDate"); }
         }
         public string CustomSubject
         {
-            get { return m_model.CustomSubject; }
-            set { m_model.CustomSubject = value; m_globalSubject = null; RaisePropertyChanged("CustomSubject"); RaisePropertyChanged("IsCustom"); }
+            get { return Model.CustomSubject; }
+            set { Model.CustomSubject = value; m_globalSubject = null; RaisePropertyChanged("CustomSubject"); RaisePropertyChanged("IsCustom"); }
         }
         public bool IsCustom
         {
@@ -50,7 +44,7 @@ namespace Dziennik.ViewModel
         public GlobalSubjectViewModel GlobalSubject
         {
             get { return m_globalSubject; }
-            set { m_globalSubject = value; m_model.CustomSubject = string.Empty; RaisePropertyChanged("GlobalSubject"); RaisePropertyChanged("IsCustom"); }
+            set { m_globalSubject = value; Model.CustomSubject = string.Empty; RaisePropertyChanged("GlobalSubject"); RaisePropertyChanged("IsCustom"); }
         }
     }
 }

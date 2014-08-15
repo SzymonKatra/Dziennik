@@ -22,16 +22,16 @@
         </Grid.RowDefinitions>
         
         <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Name}"/>
-        <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" Text="{Binding Name, Mode=TwoWay}"/>
+        <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" Text="{Binding Calendar.Name, Mode=TwoWay}"/>
 
         <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_YearBeginning}"/>
-        <DatePicker Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding YearBeginning, Mode=TwoWay}"/>
+        <DatePicker Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding Calendar.YearBeginning, Mode=TwoWay}"/>
 
         <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_SemesterSeparator}"/>
-        <DatePicker Grid.Column="1" Grid.Row="2" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding SemesterSeparator, Mode=TwoWay}"/>
+        <DatePicker Grid.Column="1" Grid.Row="2" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding Calendar.SemesterSeparator, Mode=TwoWay}"/>
 
         <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_YearEnding}"/>
-        <DatePicker Grid.Column="1" Grid.Row="3" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding YearEnding, Mode=TwoWay}"/>
+        <DatePicker Grid.Column="1" Grid.Row="3" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding Calendar.YearEnding, Mode=TwoWay}"/>
 
         <Grid Grid.Column="0" Grid.Row="4">
             <Grid.RowDefinitions>
@@ -45,7 +45,7 @@
             </Button>
         </Grid>
         <DataGrid Grid.Column="1" Grid.Row="4"
-                  ItemsSource="{Binding OffDaysWorkingCopy}"
+                  ItemsSource="{Binding Calendar.OffDays}"
                   SelectedItem="{Binding SelectedOffDay, Mode=TwoWay}"
                   CanUserAddRows="False"
                   CanUserSortColumns="False"

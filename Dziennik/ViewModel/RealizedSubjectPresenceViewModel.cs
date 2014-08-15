@@ -6,21 +6,15 @@ using Dziennik.Model;
 
 namespace Dziennik.ViewModel
 {
-    public sealed class RealizedSubjectPresenceViewModel : ObservableObject, IModelExposable<RealizedSubjectPresence>
+    public sealed class RealizedSubjectPresenceViewModel : ViewModelBase<RealizedSubjectPresenceViewModel, RealizedSubjectPresence>
     {
         public RealizedSubjectPresenceViewModel()
             : this(new RealizedSubjectPresence())
         {
         }
         public RealizedSubjectPresenceViewModel(RealizedSubjectPresence model)
+            : base(model)
         {
-            m_model = model;
-        }
-
-        private RealizedSubjectPresence m_model;
-        public RealizedSubjectPresence Model
-        {
-            get { return m_model; }
         }
 
         private RealizedSubjectViewModel m_realizedSubject;
@@ -33,8 +27,8 @@ namespace Dziennik.ViewModel
 
         public bool WasPresent
         {
-            get { return m_model.WasPresent; }
-            set { m_model.WasPresent = value; RaisePropertyChanged("WasPresent"); }
+            get { return Model.WasPresent; }
+            set { Model.WasPresent = value; RaisePropertyChanged("WasPresent"); }
         }
     }
 }

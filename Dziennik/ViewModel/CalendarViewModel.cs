@@ -17,21 +17,25 @@ namespace Dziennik.ViewModel
             m_offDays = new SynchronizedObservableCollection<OffDayViewModel, OffDay>(Model.OffDays, m => new OffDayViewModel(m));
         }
 
+        private string m_nameCopy;
         public string Name
         {
             get { return Model.Name; }
             set { Model.Name = value; RaisePropertyChanged("Name"); }
         }
+        private DateTime m_yearBeginningCopy;
         public DateTime YearBeginning
         {
             get { return Model.YearBeginning; }
             set { Model.YearBeginning = value; RaisePropertyChanged("YearBeginning"); }
         }
+        private DateTime m_semesterSeparatorCopy;
         public DateTime SemesterSeparator
         {
             get { return Model.SemesterSeparator; }
             set { Model.SemesterSeparator = value; RaisePropertyChanged("SemesterSeparator"); }
         }
+        private DateTime m_yearEndingCopy;
         public DateTime YearEnding
         {
             get { return Model.YearEnding; }
@@ -50,13 +54,35 @@ namespace Dziennik.ViewModel
             }
         }
 
-        public override void ShallowCopyDataTo(CalendarViewModel viewModel)
+        //public override void ShallowCopyDataTo(CalendarViewModel viewModel)
+        //{
+        //    viewModel.Name = this.Name;
+        //    viewModel.YearBeginning = this.YearBeginning;
+        //    viewModel.SemesterSeparator = this.SemesterSeparator;
+        //    viewModel.YearEnding = this.YearEnding;
+        //    viewModel.OffDays = this.OffDays;
+        //}
+
+        protected override void OnWorkingCopyStarted()
         {
-            viewModel.Name = this.Name;
-            viewModel.YearBeginning = this.YearBeginning;
-            viewModel.SemesterSeparator = this.SemesterSeparator;
-            viewModel.YearEnding = this.YearEnding;
-            viewModel.OffDays = this.OffDays;
+            m_nameCopy = this.Name;
+            m_yearBeginningCopy = this.YearBeginning;
+            m_semesterSeparatorCopy = this.SemesterSeparator;
+            m_yearEndingCopy = this.YearEnding;
+
+            m_offDays.StartWorkingCopy();
+        }
+        protected override void OnWorkingCopyEnded(WorkingCopyResult result)
+        {
+            if (result == WorkingCopyResult.Cancel)
+            {
+                this.Name = m_nameCopy;
+                this.YearBeginning = m_yearBeginningCopy;
+                this.SemesterSeparator = m_semesterSeparatorCopy;
+                this.YearEnding = m_yearEndingCopy;
+            }
+
+            m_offDays.EndWorkingCopy(result);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Dziennik
     /// <typeparam name="T">ViewModel type</typeparam>
     /// <typeparam name="M">Model type</typeparam>
     public class SynchronizedPerItemObservableCollection<VM, M> : SynchronizedPerItemObservableCollection<VM, M, System.Collections.Generic.List<M>>
-                                                                  where VM : IModelExposable<M>, INotifyPropertyChanged
+                                                                  where VM : IModelExposable<M>, INotifyPropertyChanged, IWorkingCopyAvailable
     {
         public SynchronizedPerItemObservableCollection(System.Collections.Generic.List<M> modelCollection, Func<M, VM> createViewModelFunc)
             : base(modelCollection, createViewModelFunc)
@@ -32,7 +32,7 @@ namespace Dziennik
     /// <typeparam name="M">Model type</typeparam>
     /// <typeparam name="MC">Model collection</typeparam>
     public class SynchronizedPerItemObservableCollection<VM, M, MC> : SynchronizedObservableCollection<VM, M, MC>
-                                                                      where VM : IModelExposable<M>, INotifyPropertyChanged
+                                                                      where VM : IModelExposable<M>, INotifyPropertyChanged, IWorkingCopyAvailable
                                                                       where MC : System.Collections.Generic.IList<M>
     {
         protected SynchronizedPerItemObservableCollection()
