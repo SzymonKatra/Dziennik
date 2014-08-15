@@ -13,17 +13,14 @@ namespace Dziennik.View
 {
     public sealed class GlobalStudentsListViewModel : ObservableObject
     {
-        public GlobalStudentsListViewModel(ObservableCollection<GlobalStudentViewModel> students, ICommand autoSaveCommand)
+        public GlobalStudentsListViewModel(WorkingCopyCollection<GlobalStudentViewModel> students)
         {
             m_addStudentCommand = new RelayCommand(AddStudent);
             m_editStudentCommand = new RelayCommand(EditStudent);
             m_autoAddStudentsClipboardCommand = new RelayCommand(AutoAddStudentsClipboard);
 
             m_students = students;
-            m_autoSaveCommand = autoSaveCommand;
         }
-
-        private ICommand m_autoSaveCommand;
 
         private RelayCommand m_addStudentCommand;
         public ICommand AddStudentCommand
@@ -43,11 +40,10 @@ namespace Dziennik.View
             get { return m_autoAddStudentsClipboardCommand; }
         }
 
-        private ObservableCollection<GlobalStudentViewModel> m_students;
-        public ObservableCollection<GlobalStudentViewModel> Students
+        private WorkingCopyCollection<GlobalStudentViewModel> m_students;
+        public WorkingCopyCollection<GlobalStudentViewModel> Students
         {
             get { return m_students; }
-            set { m_students = value; RaisePropertyChanged("Students"); }
         }
 
         private GlobalStudentViewModel m_selectedStudent;
@@ -75,7 +71,6 @@ namespace Dziennik.View
                 //    m_viewModel.Students[i].Id++;
                 //}
             }
-            if (dialogViewModel.Result != EditStudentViewModel.EditStudentResult.Cancel) m_autoSaveCommand.Execute(this);
         }
         private void EditStudent(object e)
         {
@@ -92,7 +87,7 @@ namespace Dziennik.View
 
                 m_students.RemoveAt(index);
             }
-            if (dialogViewModel.Result != EditStudentViewModel.EditStudentResult.Cancel) m_autoSaveCommand.Execute(this);
+            if (dialogViewModel.Result == EditStudentViewModel.EditStudentResult.Ok) m_students.ApplyChange(m_selectedStudent);
         }
         private void AutoAddStudentsClipboard(object param)
         {

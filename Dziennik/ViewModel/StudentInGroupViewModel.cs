@@ -7,28 +7,20 @@ using System.Globalization;
 
 namespace Dziennik.ViewModel
 {
-    public sealed class StudentInGroupViewModel : ObservableObject, IModelExposable<StudentInGroup>
+    public sealed class StudentInGroupViewModel : ViewModelBase<StudentInGroupViewModel, StudentInGroup>
     {
         public StudentInGroupViewModel()
             : this(new StudentInGroup())
         {
         }
-        public StudentInGroupViewModel(StudentInGroup studentInGroup)
+        public StudentInGroupViewModel(StudentInGroup model) : base(model)
         {
-            m_model = studentInGroup;
-
-            m_firstSemester = new SemesterViewModel(m_model.FirstSemester);
-            m_secondSemester = new SemesterViewModel(m_model.SecondSemester);
-            m_presence = new SynchronizedObservableCollection<RealizedSubjectPresenceViewModel, RealizedSubjectPresence>(m_model.Presence, m => new RealizedSubjectPresenceViewModel(m));
+            m_firstSemester = new SemesterViewModel(Model.FirstSemester);
+            m_secondSemester = new SemesterViewModel(Model.SecondSemester);
+            m_presence = new SynchronizedObservableCollection<RealizedSubjectPresenceViewModel, RealizedSubjectPresence>(Model.Presence, m => new RealizedSubjectPresenceViewModel(m));
 
             SemesterSubscribe(m_firstSemester);
             SemesterSubscribe(m_secondSemester);
-        }
-
-        private StudentInGroup m_model;
-        public StudentInGroup Model
-        {
-            get { return m_model; }
         }
 
         private SchoolGroupViewModel m_ownerGroup;
@@ -41,8 +33,8 @@ namespace Dziennik.ViewModel
 
         public int Number
         {
-            get { return m_model.Number; }
-            set { m_model.Number = value; RaisePropertyChanged("Number"); }
+            get { return Model.Number; }
+            set { Model.Number = value; RaisePropertyChanged("Number"); }
         }
         private SemesterViewModel m_firstSemester;
         public SemesterViewModel FirstSemester
@@ -56,7 +48,7 @@ namespace Dziennik.ViewModel
 
                 SemesterSubscribe(m_firstSemester);
 
-                m_model.FirstSemester = value.Model;
+                Model.FirstSemester = value.Model;
                 RaisePropertyChanged("FirstSemester");
             }
         }
@@ -72,7 +64,7 @@ namespace Dziennik.ViewModel
 
                 SemesterSubscribe(m_secondSemester);
 
-                m_model.FirstSemester = value.Model;
+                Model.FirstSemester = value.Model;
                 RaisePropertyChanged("SecondSemester");
             }
         }
@@ -83,7 +75,7 @@ namespace Dziennik.ViewModel
             set
             {
                 m_presence = value;
-                m_model.Presence = value.ModelCollection;
+                Model.Presence = value.ModelCollection;
                 RaisePropertyChanged("Presence");
             }
         }
@@ -113,13 +105,13 @@ namespace Dziennik.ViewModel
 
         public decimal HalfEndingMark
         {
-            get { return m_model.HalfEndingMark; }
-            set { m_model.HalfEndingMark = value; RaisePropertyChanged("HalfEndingMark"); }
+            get { return Model.HalfEndingMark; }
+            set { Model.HalfEndingMark = value; RaisePropertyChanged("HalfEndingMark"); }
         }
         public decimal YearEndingMark
         {
-            get { return m_model.YearEndingMark; }
-            set { m_model.YearEndingMark = value; RaisePropertyChanged("YearEndingMark"); }
+            get { return Model.YearEndingMark; }
+            set { Model.YearEndingMark = value; RaisePropertyChanged("YearEndingMark"); }
         }
 
         public IEnumerable<RealizedSubjectPresenceViewModel> FirstPresence
@@ -222,7 +214,6 @@ namespace Dziennik.ViewModel
             return result;
         }
 
-
         public void RaiseAttendanceChanged()
         {
             RaisePropertyChanged("FirstPresence");
@@ -247,6 +238,18 @@ namespace Dziennik.ViewModel
         private void SemesterUnsubscribe(SemesterViewModel semester)
         {
             semester.MarksChanged -= SemesterMarksChanged;
+        }
+
+        public override void CopyDataTo(StudentInGroupViewModel viewModel)
+        {
+            viewModel.OwnerGroup = this.OwnerGroup;
+            viewModel.Number = this.Number;
+            viewModel.FirstSemester = this.FirstSemester;
+            viewModel.SecondSemester = this.SecondSemester;
+            viewModel.Presence = this.Presence;
+            viewModel.GlobalStudent = this.GlobalStudent;
+            viewModel.HalfEndingMark = this.HalfEndingMark;
+            viewModel.YearEndingMark = this.YearEndingMark;
         }
     }
 }

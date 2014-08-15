@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Dziennik
 {
-    public interface IViewModelShallowCopyable<VM>
+    public interface IViewModelCopyable<VM>
     {
-        void ShallowCopyDataTo(VM viewModel);
+        void CopyDataTo(VM viewModel);
     }
 }

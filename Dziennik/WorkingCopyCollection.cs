@@ -20,7 +20,7 @@ namespace Dziennik
         Remove,
         Clear,
     }
-    public class WorkingCollection<T> : ObservableCollection<T> where T : IViewModelShallowCopyable<T>, new()
+    public class WorkingCopyCollection<T> : ObservableCollection<T> where T : IViewModelCopyable<T>, new()
     {
         private List<ChangelogPair<T>> m_changelogList = new List<ChangelogPair<T>>();
         private Collection<T> m_originalCollection;
@@ -28,7 +28,7 @@ namespace Dziennik
 
         private bool m_trackingPaused = false;
 
-        public WorkingCollection(Collection<T> originalCollection)
+        public WorkingCopyCollection(Collection<T> originalCollection)
         {
             PauseTracking();
 
@@ -37,7 +37,7 @@ namespace Dziennik
             foreach (var item in m_originalCollection)
             {
                 T copy = new T();
-                item.ShallowCopyDataTo(copy);
+                item.CopyDataTo(copy);
                 this.Add(copy);
                 m_originalItemsMapping.Add(copy, item);
             }
@@ -71,7 +71,7 @@ namespace Dziennik
                         break;
 
                     case ChangeType.Change:
-                        change.Value.ShallowCopyDataTo(m_originalItemsMapping[change.Value]);
+                        change.Value.CopyDataTo(m_originalItemsMapping[change.Value]);
                         break;
                 }
             }

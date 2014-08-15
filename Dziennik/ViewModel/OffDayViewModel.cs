@@ -37,7 +37,7 @@ namespace Dziennik.ViewModel
             set { Model.Description = value; RaisePropertyChanged("Description"); }
         }
 
-        public override void ShallowCopyDataTo(OffDayViewModel viewModel)
+        public override void CopyDataTo(OffDayViewModel viewModel)
         {
             viewModel.Description = this.Description;
             viewModel.Start = this.Start;

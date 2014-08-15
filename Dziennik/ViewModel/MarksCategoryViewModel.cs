@@ -8,43 +8,36 @@ using System.Windows.Media;
 
 namespace Dziennik.ViewModel
 {
-    public sealed class MarksCategoryViewModel : ObservableObject, IModelExposable<MarksCategory>
+    public sealed class MarksCategoryViewModel : ViewModelBase<MarksCategoryViewModel, MarksCategory>
     {
         public MarksCategoryViewModel()
             : this(new MarksCategory())
         {
         }
-        public MarksCategoryViewModel(MarksCategory model)
+        public MarksCategoryViewModel(MarksCategory model) : base(model)
         {
-            m_model = model;
-        }
-
-        private MarksCategory m_model;
-        public MarksCategory Model
-        {
-            get { return m_model; }
         }
 
         public string Name
         {
-            get { return m_model.Name; }
-            set { m_model.Name = value; RaisePropertyChanged("Name"); }
+            get { return Model.Name; }
+            set { Model.Name = value; RaisePropertyChanged("Name"); }
         }
         public System.Windows.Media.Color Color
         {
             get
             {
-                if (m_model.Color == null) m_model.Color = new Dziennik.Model.Color();
-                return System.Windows.Media.Color.FromArgb(m_model.Color.A, m_model.Color.R, m_model.Color.G, m_model.Color.B);
+                if (Model.Color == null) Model.Color = new Dziennik.Model.Color();
+                return System.Windows.Media.Color.FromArgb(Model.Color.A, Model.Color.R, Model.Color.G, Model.Color.B);
             }
             set
             {
-                if (m_model.Color == null) m_model.Color = new Dziennik.Model.Color();
+                if (Model.Color == null) Model.Color = new Dziennik.Model.Color();
 
-                m_model.Color.A = value.A;
-                m_model.Color.R = value.R;
-                m_model.Color.G = value.G;
-                m_model.Color.B = value.B;
+                Model.Color.A = value.A;
+                Model.Color.R = value.R;
+                Model.Color.G = value.G;
+                Model.Color.B = value.B;
 
                 RaisePropertyChanged("Color");
                 RaisePropertyChanged("Brush");
@@ -53,6 +46,12 @@ namespace Dziennik.ViewModel
         public System.Windows.Media.SolidColorBrush Brush
         {
             get { return new SolidColorBrush(this.Color); }
+        }
+
+        public override void CopyDataTo(MarksCategoryViewModel viewModel)
+        {
+            viewModel.Name = this.Name;
+            viewModel.Color = this.Color;
         }
     }
 }

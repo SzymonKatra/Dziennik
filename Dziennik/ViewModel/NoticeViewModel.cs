@@ -6,45 +6,45 @@ using Dziennik.Model;
 
 namespace Dziennik.ViewModel
 {
-    public sealed class NoticeViewModel : ObservableObject, IModelExposable<Notice>
+    public sealed class NoticeViewModel : ViewModelBase<NoticeViewModel, Notice>
     {
         public NoticeViewModel()
             : this(new Notice())
         {
         }
-        public NoticeViewModel(Notice model)
+        public NoticeViewModel(Notice model) : base(model)
         {
-            m_model = model;
-        }
-
-        private Notice m_model;
-        public Notice Model
-        {
-            get { return m_model; }
         }
 
         public string Name
         {
-            get { return m_model.Name; }
-            set { m_model.Name = value; RaisePropertyChanged("Name"); RaisePropertyChanged("DisplayedName"); }
+            get { return Model.Name; }
+            set { Model.Name = value; RaisePropertyChanged("Name"); RaisePropertyChanged("DisplayedName"); }
         }
         public DateTime Date
         {
-            get { return m_model.Date; }
-            set { m_model.Date = value; RaisePropertyChanged("Date"); }
+            get { return Model.Date; }
+            set { Model.Date = value; RaisePropertyChanged("Date"); }
         }
         public TimeSpan NotifyIn
         {
-            get { return m_model.NotifyIn; }
-            set { m_model.NotifyIn = value; RaisePropertyChanged("NotifyIn"); }
+            get { return Model.NotifyIn; }
+            set { Model.NotifyIn = value; RaisePropertyChanged("NotifyIn"); }
         }
 
         public string DisplayedName
         {
             get
             {
-                return (m_model.Name.Length > 15 ? m_model.Name.Remove(15) + "..." : m_model.Name);
+                return (Model.Name.Length > 15 ? Model.Name.Remove(15) + "..." : Model.Name);
             }
+        }
+
+        public override void CopyDataTo(NoticeViewModel viewModel)
+        {
+            viewModel.Name = this.Name;
+            viewModel.Date = this.Date;
+            viewModel.NotifyIn = this.NotifyIn;
         }
     }
 }

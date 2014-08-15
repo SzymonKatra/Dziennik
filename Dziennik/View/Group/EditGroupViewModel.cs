@@ -20,7 +20,7 @@ namespace Dziennik.View
             RemoveGroup,
         }
 
-        public EditGroupViewModel(SchoolGroupViewModel schoolGroup, ObservableCollection<GlobalStudentViewModel> globalStudents, ICommand autoSaveCommand)
+        public EditGroupViewModel(SchoolGroupViewModel schoolGroup, ObservableCollection<GlobalStudentViewModel> globalStudents)
         {
             m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
@@ -29,19 +29,15 @@ namespace Dziennik.View
             m_removeGroupCommand = new RelayCommand(RemoveGroup);
             m_showGlobalSubjectsListCommand = new RelayCommand(ShowGlobalSubjectsList);
 
-            m_autoSaveCommand = autoSaveCommand;
-
             m_schoolGroup = schoolGroup;
             m_globalStudents = globalStudents;
 
             m_name = schoolGroup.Name;
             m_schedule = new WeekScheduleViewModel();
-            schoolGroup.Schedule.CopyTo(m_schedule);
-            //m_schedule.Monday = schoolGroup.Schedule.Monday;
-            //m_schedule.Tuesday = schoolGroup.Schedule.Tuesday;
-            //m_schedule.Wednesday = schoolGroup.Schedule.Wednesday;
-            //m_schedule.Thursday = schoolGroup.Schedule.Thursday;
-            //m_schedule.Friday= schoolGroup.Schedule.Friday;
+            m_students = new WorkingCopyCollection<StudentInGroupViewModel>(schoolGroup.Students);
+            m_globalSubjects = new WorkingCopyCollection<GlobalSubjectViewModel>(schoolGroup.GlobalSubjects);
+            m_realizedSubjects = new WorkingCopyCollection<RealizedSubjectViewModel>(schoolGroup.RealizedSubjects);
+            schoolGroup.Schedule.CopyDataTo(m_schedule);
         }
 
         private EditGroupResult m_result = EditGroupResult.Cancel;
@@ -50,7 +46,6 @@ namespace Dziennik.View
             get { return m_result; }
         }
 
-        private ICommand m_autoSaveCommand;
         private SchoolGroupViewModel m_schoolGroup;
         private ObservableCollection<GlobalStudentViewModel> m_globalStudents;
 
@@ -60,6 +55,24 @@ namespace Dziennik.View
         {
             get { return m_name; }
             set { m_name = value; RaisePropertyChanged("Name"); }
+        }
+
+        private WorkingCopyCollection<StudentInGroupViewModel> m_students;
+        public WorkingCopyCollection<StudentInGroupViewModel> Students
+        {
+            get { return m_students; }
+        }
+
+        private WorkingCopyCollection<GlobalSubjectViewModel> m_globalSubjects;
+        public WorkingCopyCollection<GlobalSubjectViewModel> GlobalSubjects
+        {
+            get { return m_globalSubjects; }
+        }
+
+        private WorkingCopyCollection<RealizedSubjectViewModel> m_realizedSubjects;
+        public WorkingCopyCollection<RealizedSubjectViewModel> RealizedSubjects
+        {
+            get { return m_realizedSubjects; }
         }
 
         private WeekScheduleViewModel m_schedule;
@@ -107,15 +120,13 @@ namespace Dziennik.View
 
         private void Ok(object param)
         {
-            m_result = EditGroupResult.Ok;
             m_schoolGroup.Name = m_name;
-            m_schedule.CopyTo(m_schoolGroup.Schedule);
-            //m_schoolGroup.Schedule.Monday = m_schedule.Monday;
-            //m_schoolGroup.Schedule.Tuesday = m_schedule.Tuesday;
-            //m_schoolGroup.Schedule.Wednesday = m_schedule.Wednesday;
-            //m_schoolGroup.Schedule.Thursday = m_schedule.Thursday;
-            //m_schoolGroup.Schedule.Friday = m_schedule.Friday;
+            m_students.ApplyChangesToOriginalCollection();
+            m_globalSubjects.ApplyChangesToOriginalCollection();
+            m_realizedSubjects.ApplyChangesToOriginalCollection();
+            m_schedule.CopyDataTo(m_schoolGroup.Schedule);
 
+            m_result = EditGroupResult.Ok;
             GlobalConfig.Dialogs.Close(this);
         }
         private bool CanOk(object param)
@@ -136,7 +147,7 @@ namespace Dziennik.View
             ObservableCollection<GlobalStudentViewModel> canBeAdded = new ObservableCollection<GlobalStudentViewModel>();
             foreach(GlobalStudentViewModel globalStudent in m_globalStudents)
             {
-                var result = m_schoolGroup.Students.FirstOrDefault((x) => { return x.GlobalStudent.Model.Id == globalStudent.Model.Id; });
+                var result = m_students.FirstOrDefault((x) => { return x.GlobalStudent.Model.Id == globalStudent.Model.Id; });
                 if (result == null) canBeAdded.Add(globalStudent);
             }
 
@@ -154,13 +165,13 @@ namespace Dziennik.View
 
                 StudentInGroupViewModel studentInGroup = new StudentInGroupViewModel();
                 studentInGroup.GlobalStudent = m_globalStudents.First(x => x.Number == selectedGlobalNumber);
-                studentInGroup.Number = (m_schoolGroup.Students.Count <= 0 ? 1 : m_schoolGroup.Students[m_schoolGroup.Students.Count - 1].Number + 1);
-                m_schoolGroup.Students.Add(studentInGroup);
+                studentInGroup.Number = (m_students.Count <= 0 ? 1 : m_students[m_students.Count - 1].Number + 1);
+                m_students.Add(studentInGroup);
             }
         }
         private void RemoveStudents(object param)
         {
-            SelectStudentsViewModel dialogViewModel = new SelectStudentsViewModel(m_schoolGroup.Students, null);
+            SelectStudentsViewModel dialogViewModel = new SelectStudentsViewModel(m_students, null);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             List<int> selectionResult = dialogViewModel.ResultSelection;
             if (dialogViewModel.Result && selectionResult.Count > 0)
@@ -176,7 +187,7 @@ namespace Dziennik.View
 
                 foreach(int selRes in selectionResult)
                 {
-                    StudentInGroupViewModel student = m_schoolGroup.Students.First((x) => { return x.Number == selRes; });
+                    StudentInGroupViewModel student = m_students.First((x) => { return x.Number == selRes; });
                     student.GlobalStudent = null;
                     student.FirstSemester.Marks.Clear();
                     student.SecondSemester.Marks.Clear();
@@ -192,7 +203,7 @@ namespace Dziennik.View
         }
         private void ShowGlobalSubjectsList(object e)
         {
-            GlobalSubjectsListViewModel dialogViewModel = new GlobalSubjectsListViewModel(m_schoolGroup.GlobalSubjects, m_autoSaveCommand);
+            GlobalSubjectsListViewModel dialogViewModel = new GlobalSubjectsListViewModel(m_globalSubjects);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
 

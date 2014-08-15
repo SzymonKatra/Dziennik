@@ -114,7 +114,7 @@ namespace Dziennik.View
         private void EditClass(object e)
         {
             SchoolClassControlViewModel tab = m_selectedClass;
-            EditClassViewModel dialogViewModel = new EditClassViewModel(tab.ViewModel, tab.AutoSaveCommand);
+            EditClassViewModel dialogViewModel = new EditClassViewModel(tab.ViewModel);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditClassViewModel.EditClassResult.RemoveClass)
             {
@@ -132,7 +132,7 @@ namespace Dziennik.View
         private void AddClass(object e)
         {
             SchoolClassViewModel schoolClass = new SchoolClassViewModel();
-            EditClassViewModel dialogViewModel = new EditClassViewModel(schoolClass, new RelayCommand((x) => { }));
+            EditClassViewModel dialogViewModel = new EditClassViewModel(schoolClass);
             dialogViewModel.IsAddingMode = true;
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditClassViewModel.EditClassResult.Ok)
@@ -148,7 +148,7 @@ namespace Dziennik.View
         }
         private void EditCalendar(object e)
         {
-            EditCalendarViewModel dialogViewModel = new EditCalendarViewModel(m_selectedCalendar, GlobalConfig.GlobalDatabaseAutoSaveCommand);
+            EditCalendarViewModel dialogViewModel = new EditCalendarViewModel(m_selectedCalendar);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if(dialogViewModel.Result == EditCalendarViewModel.EditCalendarResult.Remove)
             {
@@ -186,7 +186,7 @@ namespace Dziennik.View
         private void AddCalendar(object e)
         {
             CalendarViewModel calendar = new CalendarViewModel();
-            EditCalendarViewModel dialogViewModel = new EditCalendarViewModel(calendar, GlobalConfig.GlobalDatabaseAutoSaveCommand, true);
+            EditCalendarViewModel dialogViewModel = new EditCalendarViewModel(calendar, true);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditCalendarViewModel.EditCalendarResult.Ok)
             {

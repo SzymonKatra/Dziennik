@@ -50,7 +50,7 @@ namespace Dziennik.ViewModel
             }
         }
 
-        public override void ShallowCopyDataTo(CalendarViewModel viewModel)
+        public override void CopyDataTo(CalendarViewModel viewModel)
         {
             viewModel.Name = this.Name;
             viewModel.YearBeginning = this.YearBeginning;

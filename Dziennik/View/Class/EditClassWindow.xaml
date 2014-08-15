@@ -34,7 +34,7 @@
                 <RowDefinition Height=".5*"/>
             </Grid.RowDefinitions>
 
-            <ComboBox Grid.Row="0" Style="{StaticResource inputControlStyle}" ItemsSource="{Binding SchoolClass.Groups}" SelectedItem="{Binding SelectedGroup, Mode=TwoWay}" DisplayMemberPath="Name"/>
+            <ComboBox Grid.Row="0" Style="{StaticResource inputControlStyle}" ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup, Mode=TwoWay}" DisplayMemberPath="Name"/>
             <WrapPanel Grid.Row="1" Style="{StaticResource inputControlStyle}">
                 <Button Margin="0,0,5,0" Command="{Binding EditGroupCommand}" Content="{DynamicResource lang_EditGroup}"/>
                 <Button Margin="0,0,5,0" Command="{Binding AddGroupCommand}" Content="{DynamicResource lang_AddGroup}"/>

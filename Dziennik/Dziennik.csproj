@@ -87,7 +87,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ViewModel\ViewModelBase.cs" />
-    <Compile Include="WorkingCollection.cs" />
+    <Compile Include="WorkingCopyCollection.cs" />
     <Compile Include="CommandUtils\RelayCommand.cs" />
     <Compile Include="CommonEventArgs.cs" />
     <Compile Include="Controls\AddMarksSetHeaderWithContext.xaml.cs">
