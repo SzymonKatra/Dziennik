@@ -30,47 +30,32 @@ namespace Dziennik
 
         protected override void ClearItems()
         {
-            if (Removed != null) // to save time
-            {
-                List<T> items = new List<T>(this);
-                OnRemoved(new NotifyCollectionChangedSimpleEventArgs<T>(items));
-            }
+            List<T> items = new List<T>(this);
+            OnRemoved(new NotifyCollectionChangedSimpleEventArgs<T>(items));
             base.ClearItems();
         }
         protected override void InsertItem(int index, T item)
         {
-            if (Added != null) // to save time
-            {
-                List<T> items = new List<T>();
-                items.Add(item);
-                OnAdded(new NotifyCollectionChangedSimpleEventArgs<T>(items));
-            }
+            List<T> items = new List<T>();
+            items.Add(item);
+            OnAdded(new NotifyCollectionChangedSimpleEventArgs<T>(items));
             base.InsertItem(index, item);
         }
         protected override void RemoveItem(int index)
         {
-            if (Removed != null) // to save time
-            {
-                List<T> items = new List<T>();
-                items.Add(this[index]);
-                OnRemoved(new NotifyCollectionChangedSimpleEventArgs<T>(items));
-            }
+            List<T> items = new List<T>();
+            items.Add(this[index]);
+            OnRemoved(new NotifyCollectionChangedSimpleEventArgs<T>(items));
             base.RemoveItem(index);
         }
         protected override void SetItem(int index, T item)
         {
-            if (Removed != null) // to save time
-            {
-                List<T> items = new List<T>();
-                items.Add(this[index]);
-                OnRemoved(new NotifyCollectionChangedSimpleEventArgs<T>(items));
-            }
-            if (Added != null) // to save time
-            {
-                List<T> items = new List<T>();
-                items.Add(item);
-                OnRemoved(new NotifyCollectionChangedSimpleEventArgs<T>(items));
-            }
+            List<T> items = new List<T>();
+            items.Add(this[index]);
+            OnRemoved(new NotifyCollectionChangedSimpleEventArgs<T>(items));
+            List<T> items = new List<T>();
+            items.Add(item);
+            OnRemoved(new NotifyCollectionChangedSimpleEventArgs<T>(items));
             base.SetItem(index, item);
         }
 
