@@ -107,7 +107,7 @@ namespace Dziennik.View
             int index = 1;
 
             m_result.Name = m_name;
-            m_schedule.CopyDataTo(m_result.Schedule);
+            m_schedule.CopyTo(m_result.Schedule);
             foreach (int selStudent in m_selectedStudents)
             {
                 StudentInGroupViewModel studentInGroup = new StudentInGroupViewModel();
@@ -143,7 +143,7 @@ namespace Dziennik.View
         }
         private void ShowGlobalSubjectsList(object e)
         {
-            GlobalSubjectsListViewModel dialogViewModel = new GlobalSubjectsListViewModel(m_result.GlobalSubjects);
+            GlobalSubjectsListViewModel dialogViewModel = new GlobalSubjectsListViewModel(m_result.GlobalSubjects, new RelayCommand((x) => { }));
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
 

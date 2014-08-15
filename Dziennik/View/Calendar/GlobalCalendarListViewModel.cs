@@ -54,7 +54,7 @@ namespace Dziennik.View
         private void AddCalendar(object e)
         {
             CalendarViewModel calendar = new CalendarViewModel();
-            EditCalendarViewModel dialogViewModel = new EditCalendarViewModel(calendar, true);
+            EditCalendarViewModel dialogViewModel = new EditCalendarViewModel(calendar, m_autoSaveCommand, true);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditCalendarViewModel.EditCalendarResult.Ok)
             {
@@ -64,7 +64,7 @@ namespace Dziennik.View
         }
         private void EditCalendar(object e)
         {
-            EditCalendarViewModel dialogViewModel = new EditCalendarViewModel(m_selectedCalendar);
+            EditCalendarViewModel dialogViewModel = new EditCalendarViewModel(m_selectedCalendar, m_autoSaveCommand);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditCalendarViewModel.EditCalendarResult.Remove)
             {

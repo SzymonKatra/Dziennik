@@ -6,22 +6,30 @@ using Dziennik.Model;
 
 namespace Dziennik.ViewModel
 {
-    public class SchoolGroupViewModel : ViewModelBase<SchoolGroupViewModel, SchoolGroup>
+    public class SchoolGroupViewModel : ObservableObject, IModelExposable<SchoolGroup>
     {
         public SchoolGroupViewModel()
             : this(new SchoolGroup())
         {
         }
-        public SchoolGroupViewModel(SchoolGroup model) : base(model)
+        public SchoolGroupViewModel(SchoolGroup schoolGroup)
         {
-            m_students = new SynchronizedPerItemObservableCollection<StudentInGroupViewModel, StudentInGroup>(Model.Students, (m) => { return new StudentInGroupViewModel(m); });;
-            m_globalSubjects = new SynchronizedObservableCollection<GlobalSubjectViewModel, GlobalSubject>(Model.Subjects, m => new GlobalSubjectViewModel(m));
-            m_realizedSubjects = new SynchronizedObservableCollection<RealizedSubjectViewModel, RealizedSubject>(Model.RealizedSubjects, m => new RealizedSubjectViewModel(m));
-            m_schedule = new WeekScheduleViewModel(Model.Schedule);
+            m_model = schoolGroup;
+
+            m_students = new SynchronizedPerItemObservableCollection<StudentInGroupViewModel, StudentInGroup>(m_model.Students, (m) => { return new StudentInGroupViewModel(m); });;
+            m_globalSubjects = new SynchronizedObservableCollection<GlobalSubjectViewModel, GlobalSubject>(m_model.Subjects, m => new GlobalSubjectViewModel(m));
+            m_realizedSubjects = new SynchronizedObservableCollection<RealizedSubjectViewModel, RealizedSubject>(m_model.RealizedSubjects, m => new RealizedSubjectViewModel(m));
+            m_schedule = new WeekScheduleViewModel(m_model.Schedule);
 
             SubscribeSchedule();
             SubscribeStudents();
             SubscribeRealizedSubjects();
+        }
+
+        private SchoolGroup m_model;
+        public SchoolGroup Model
+        {
+            get { return m_model; }
         }
 
         private SchoolClassViewModel m_ownerClass;
@@ -34,8 +42,8 @@ namespace Dziennik.ViewModel
 
         public string Name
         {
-            get { return Model.Name; }
-            set { Model.Name = value; RaisePropertyChanged("Name"); }
+            get { return m_model.Name; }
+            set { m_model.Name = value; RaisePropertyChanged("Name"); }
         }
         private SynchronizedPerItemObservableCollection<StudentInGroupViewModel, StudentInGroup> m_students;
         [DatabaseInversePropertyOwner("OwnerGroup", "SubscribeStudents")]
@@ -47,7 +55,7 @@ namespace Dziennik.ViewModel
                 UnsubscribeStudents();
                 m_students = value;
                 SubscribeStudents();
-                Model.Students = value.ModelCollection;
+                m_model.Students = value.ModelCollection;
                 RaisePropertyChanged("Students");
             }
         }
@@ -59,7 +67,7 @@ namespace Dziennik.ViewModel
             set
             {
                 m_globalSubjects = value;
-                Model.Subjects = value.ModelCollection;
+                m_model.Subjects = value.ModelCollection;
                 RaisePropertyChanged("GlobalSubjects");
             }
         }
@@ -73,7 +81,7 @@ namespace Dziennik.ViewModel
                 UnsubscribeRealizedSubjects();
                 m_realizedSubjects = value;
                 SubscribeRealizedSubjects();
-                Model.RealizedSubjects = value.ModelCollection;
+                m_model.RealizedSubjects = value.ModelCollection;
                 RaisePropertyChanged("RealizedSubjects");
             }
         }
@@ -90,7 +98,7 @@ namespace Dziennik.ViewModel
 
                 SubscribeSchedule();
 
-                Model.Schedule = value.Model;
+                m_model.Schedule = value.Model;
                 RaisePropertyChanged("Schedule");
             }
         }
@@ -225,14 +233,21 @@ namespace Dziennik.ViewModel
             }
         }
 
-        public override void CopyDataTo(SchoolGroupViewModel viewModel)
-        {
-            viewModel.OwnerClass = this.OwnerClass;
-            viewModel.Name = this.Name;
-            viewModel.Students = this.Students;
-            viewModel.GlobalSubjects = this.GlobalSubjects;
-            viewModel.RealizedSubjects = this.RealizedSubjects;
-            this.Schedule.CopyDataTo(viewModel.Schedule);
-        }
+        //private void SubscribeStudents()
+        //{
+        //    m_students.Removed += m_students_Removed;
+        //}
+        //private void UnsubscribeStudents()
+        //{
+        //    m_students.Removed -= m_students_Removed;
+        //}
+
+        //private void m_students_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<StudentInGroupViewModel> e)
+        //{
+        //    foreach (var item in e.Items)
+        //    {
+        //        GlobalConfig.Database.StudentsInGroups.Remove(item.Model);
+        //    }
+        //}
     }
 }

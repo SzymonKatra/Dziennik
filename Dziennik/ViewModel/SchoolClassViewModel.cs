@@ -8,25 +8,33 @@ using System.Xml.Serialization;
 
 namespace Dziennik.ViewModel
 {
-    public sealed class SchoolClassViewModel : ViewModelBase<SchoolClassViewModel, SchoolClass>
+    public sealed class SchoolClassViewModel : ObservableObject, IModelExposable<SchoolClass>
     {
         public SchoolClassViewModel()
             : this(new SchoolClass())
         {
         }
-        public SchoolClassViewModel(SchoolClass model) : base(model)
+        public SchoolClassViewModel(SchoolClass schoolClass)
         {
-            m_students = new SynchronizedPerItemObservableCollection<GlobalStudentViewModel, GlobalStudent>(Model.Students, (m) => { return new GlobalStudentViewModel(m); });
-            m_groups = new SynchronizedObservableCollection<SchoolGroupViewModel, SchoolGroup>(Model.Groups, (m) => { return new SchoolGroupViewModel(m); });
+            m_model = schoolClass;
+
+            m_students = new SynchronizedPerItemObservableCollection<GlobalStudentViewModel, GlobalStudent>(m_model.Students, (m) => { return new GlobalStudentViewModel(m); });
+            m_groups = new SynchronizedObservableCollection<SchoolGroupViewModel, SchoolGroup>(m_model.Groups, (m) => { return new SchoolGroupViewModel(m); });
             SubscribeGroups();
 
-            m_calendar = GlobalConfig.GlobalDatabase.ViewModel.Calendars.FirstOrDefault(x => x.Model.Id == Model.GlobalCalendarId);
+            m_calendar = GlobalConfig.GlobalDatabase.ViewModel.Calendars.FirstOrDefault(x => x.Model.Id == m_model.GlobalCalendarId);
+        }
+
+        private SchoolClass m_model;
+        public SchoolClass Model
+        {
+            get { return m_model; }
         }
 
         public string Name
         {
-            get { return Model.Name; }
-            set { Model.Name = value; RaisePropertyChanged("Name"); }
+            get { return m_model.Name; }
+            set { m_model.Name = value; RaisePropertyChanged("Name"); }
         }
         private SynchronizedPerItemObservableCollection<GlobalStudentViewModel, GlobalStudent> m_students;
         [DatabaseRelationCollection("GlobalStudents")]
@@ -38,7 +46,7 @@ namespace Dziennik.ViewModel
                 //UnsubscribeStudents();
                 m_students = value;
                 //SubscribeStudents();
-                Model.Students = value.ModelCollection;
+                m_model.Students = value.ModelCollection;
                 RaisePropertyChanged("Students");
             }
         }
@@ -52,7 +60,7 @@ namespace Dziennik.ViewModel
                 UnsubscribeGroups();
                 m_groups = value;
                 SubscribeGroups();
-                Model.Groups = value.ModelCollection;
+                m_model.Groups = value.ModelCollection;
                 RaisePropertyChanged("Groups");
             }
         }
@@ -64,7 +72,7 @@ namespace Dziennik.ViewModel
             set
             {
                 m_calendar = value;
-                Model.GlobalCalendarId = (m_calendar == null ? null : m_calendar.Model.Id);
+                m_model.GlobalCalendarId = (m_calendar == null ? null : m_calendar.Model.Id);
                 RaisePropertyChanged("Calendar");
             }
         }
@@ -93,14 +101,6 @@ namespace Dziennik.ViewModel
             {
                 item.OwnerClass = null;
             }
-        }
-
-        public override void CopyDataTo(SchoolClassViewModel viewModel)
-        {
-            viewModel.Name = this.Name;
-            viewModel.Students = this.Students;
-            viewModel.Groups = this.Groups;
-            viewModel.Calendar = this.Calendar;
-        }
+        }   
     }
 }

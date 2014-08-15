@@ -13,15 +13,18 @@ namespace Dziennik.View
 {
     public sealed class GlobalSubjectsListViewModel : ObservableObject
     {
-        public GlobalSubjectsListViewModel(ObservableCollection<GlobalSubjectViewModel> subjects)
+        public GlobalSubjectsListViewModel(ObservableCollection<GlobalSubjectViewModel> subjects, ICommand autoSaveCommand)
         {
             m_addSubjectCommand = new RelayCommand(AddSubject);
             m_autoAddSubjectsClipboardCommand = new RelayCommand(AutoAddSubjectsClipboard);
             m_editSubjectCommand = new RelayCommand(EditSubject);
 
+            m_autoSaveCommand = autoSaveCommand;
+
             m_subjects = subjects;
         }
 
+        private ICommand m_autoSaveCommand;
         private RelayCommand m_addSubjectCommand;
         public ICommand AddSubjectCommand
         {
@@ -61,6 +64,7 @@ namespace Dziennik.View
             {
                 m_subjects.Add(subject);
             }
+            if (dialogViewModel.Result != EditGlobalSubjectViewModel.EditGlobalSubjectResult.Cancel) m_autoSaveCommand.Execute(null);
         }
         private void AutoAddSubjectsClipboard(object e)
         {
@@ -105,6 +109,7 @@ namespace Dziennik.View
                 m_subjects.Remove(m_selectedSubject);
                 SelectedSubject = null;
             }
+            if (dialogViewModel.Result != EditGlobalSubjectViewModel.EditGlobalSubjectResult.Cancel) m_autoSaveCommand.Execute(null);
         }
 
         public static int GetNextSubjectNumber(IEnumerable<GlobalSubjectViewModel> subjects)

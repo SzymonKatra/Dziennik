@@ -18,7 +18,7 @@ namespace Dziennik.View
             Remove,
         }
 
-        public EditCalendarViewModel(CalendarViewModel calendar, bool isAddingMode = false)
+        public EditCalendarViewModel(CalendarViewModel calendar, ICommand autoSaveCommand, bool isAddingMode = false)
         {
             m_okCommand = new RelayCommand(Ok);
             m_cancelCommand = new RelayCommand(Cancel);
@@ -26,6 +26,7 @@ namespace Dziennik.View
             m_addOffDayCommand = new RelayCommand(AddOffDay);
             m_editOffDayCommand = new RelayCommand(EditOffDay);
 
+            m_autoSaveCommand = autoSaveCommand;
             m_calendar = calendar;
             m_isAddingMode = isAddingMode;
 
@@ -33,13 +34,15 @@ namespace Dziennik.View
             m_yearBeginning = m_calendar.YearBeginning;
             m_semesterSeparator = m_calendar.SemesterSeparator;
             m_yearEnding = m_calendar.YearEnding;
-            m_offDays = new WorkingCopyCollection<OffDayViewModel>(m_calendar.OffDays);
+            m_offDaysWorkingCopy = new WorkingCollection<OffDayViewModel>(m_calendar.OffDays);
 
             if(isAddingMode)
             {
                 m_yearBeginning = m_semesterSeparator = m_yearEnding = DateTime.Now.Date;
             }
         }
+
+        private ICommand m_autoSaveCommand;
 
         private CalendarViewModel m_calendar;
 
@@ -113,10 +116,10 @@ namespace Dziennik.View
             set { m_yearEnding = value; RaisePropertyChanged("YearEnding"); }
         }
 
-        private WorkingCopyCollection<OffDayViewModel> m_offDays;
-        public WorkingCopyCollection<OffDayViewModel> OffDays
+        private WorkingCollection<OffDayViewModel> m_offDaysWorkingCopy;
+        public WorkingCollection<OffDayViewModel> OffDaysWorkingCopy
         {
-            get { return m_offDays; }
+            get { return m_offDaysWorkingCopy; }
         }
 
         private OffDayViewModel m_selectedOffDay;
@@ -132,7 +135,7 @@ namespace Dziennik.View
             m_calendar.YearBeginning = m_yearBeginning;
             m_calendar.SemesterSeparator = m_semesterSeparator;
             m_calendar.YearEnding = m_yearEnding;
-            m_offDays.ApplyChangesToOriginalCollection();
+            m_offDaysWorkingCopy.ApplyChangesToOriginalCollection();
 
             m_result = EditCalendarResult.Ok;
             GlobalConfig.Dialogs.Close(this);
@@ -158,8 +161,10 @@ namespace Dziennik.View
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if(dialogViewModel.Result == EditOffDayViewModel.EditOffDayResult.Ok)
             {
-                m_offDays.Add(offDay);    
+                //m_calendar.OffDays.Add(offDay);
+                m_offDaysWorkingCopy.Add(offDay);    
             }
+            if (dialogViewModel.Result != EditOffDayViewModel.EditOffDayResult.Cancel) m_autoSaveCommand.Execute(null);
         }
         private void EditOffDay(object e)
         {
@@ -167,13 +172,15 @@ namespace Dziennik.View
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditOffDayViewModel.EditOffDayResult.Remove)
             {
-                m_offDays.Remove(m_selectedOffDay);
+                //m_calendar.OffDays.Remove(m_selectedOffDay);
+                m_offDaysWorkingCopy.Remove(m_selectedOffDay);
                 SelectedOffDay = null;
             }
             else if(dialogViewModel.Result == EditOffDayViewModel.EditOffDayResult.Ok)
             {
-                m_offDays.ApplyChange(m_selectedOffDay);
+                m_offDaysWorkingCopy.ApplyChange(m_selectedOffDay);
             }
+            if (dialogViewModel.Result != EditOffDayViewModel.EditOffDayResult.Cancel) m_autoSaveCommand.Execute(null);
         }
     }
 }

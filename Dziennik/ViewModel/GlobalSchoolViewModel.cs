@@ -6,18 +6,25 @@ using Dziennik.Model;
 
 namespace Dziennik.ViewModel
 {
-    public sealed class GlobalSchoolViewModel : ViewModelBase<GlobalSchoolViewModel, GlobalSchool>
+    public sealed class GlobalSchoolViewModel : ObservableObject, IModelExposable<GlobalSchool>
     {
         public GlobalSchoolViewModel()
             : this(new GlobalSchool())
         {
         }
         public GlobalSchoolViewModel(GlobalSchool model)
-            : base(model)
         {
-            m_calendars = new SynchronizedObservableCollection<CalendarViewModel, Calendar>(Model.Calendars, m => new CalendarViewModel(m));
-            m_marksCategories = new SynchronizedObservableCollection<MarksCategoryViewModel, MarksCategory>(Model.MarksCategories, m => new MarksCategoryViewModel(m));
-            m_notices = new SynchronizedObservableCollection<NoticeViewModel, Notice>(Model.Notices, m => new NoticeViewModel(m));
+            m_model = model;
+
+            m_calendars = new SynchronizedObservableCollection<CalendarViewModel, Calendar>(m_model.Calendars, m => new CalendarViewModel(m));
+            m_marksCategories = new SynchronizedObservableCollection<MarksCategoryViewModel, MarksCategory>(m_model.MarksCategories, m => new MarksCategoryViewModel(m));
+            m_notices = new SynchronizedObservableCollection<NoticeViewModel, Notice>(m_model.Notices, m => new NoticeViewModel(m));
+        }
+
+        private GlobalSchool m_model;
+        public GlobalSchool Model
+        {
+            get { return m_model; }
         }
 
         private SynchronizedObservableCollection<CalendarViewModel, Calendar> m_calendars;
@@ -27,7 +34,7 @@ namespace Dziennik.ViewModel
             set
             {
                 m_calendars = value;
-                Model.Calendars = value.ModelCollection;
+                m_model.Calendars = value.ModelCollection;
                 RaisePropertyChanged("Calendars");
             }
         }
@@ -39,7 +46,7 @@ namespace Dziennik.ViewModel
             set
             {
                 m_marksCategories = value;
-                Model.MarksCategories = value.ModelCollection;
+                m_model.MarksCategories = value.ModelCollection;
                 RaisePropertyChanged("MarksCategories");
             }
         }
@@ -51,16 +58,9 @@ namespace Dziennik.ViewModel
             set
             {
                 m_notices = value;
-                Model.Notices = value.ModelCollection;
+                m_model.Notices = value.ModelCollection;
                 RaisePropertyChanged("Notices");
             }
-        }
-
-        public override void CopyDataTo(GlobalSchoolViewModel viewModel)
-        {
-            viewModel.Calendars = this.Calendars;
-            viewModel.MarksCategories = this.MarksCategories;
-            viewModel.Notices = this.Notices;
         }
     }
 }

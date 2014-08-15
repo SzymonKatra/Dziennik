@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Dziennik.ViewModel
 {
-    public abstract class ViewModelBase<VM, M> : ObservableObject, IModelExposable<M>, IViewModelCopyable<VM>
+    public abstract class ViewModelBase<VM, M> : ObservableObject, IModelExposable<M>, IViewModelShallowCopyable<VM>
     {
         private M m_model;
         public M Model
@@ -19,6 +19,6 @@ namespace Dziennik.ViewModel
             m_model = model;
         }
 
-        public abstract void CopyDataTo(VM viewModel);
+        public abstract void ShallowCopyDataTo(VM viewModel);
     }
 }

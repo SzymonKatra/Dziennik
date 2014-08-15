@@ -8,23 +8,31 @@ using System.Xml.Linq;
 
 namespace Dziennik.ViewModel
 {
-    public sealed class MarkViewModel : ViewModelBase<MarkViewModel, Mark>
+    public sealed class MarkViewModel : ObservableObject, IModelExposable<Mark>
     {
         public MarkViewModel()
             : this(new Mark())
         {
         }
-        public MarkViewModel(Mark model) : base(model)
+        public MarkViewModel(Mark mark)
         {
-            m_category = GlobalConfig.GlobalDatabase.ViewModel.MarksCategories.FirstOrDefault(x => x.Model.Id == Model.GlobalCategoryId);
+            m_model = mark;
+
+            m_category = GlobalConfig.GlobalDatabase.ViewModel.MarksCategories.FirstOrDefault(x => x.Model.Id == m_model.GlobalCategoryId);
+        }
+
+        private Mark m_model;
+        public Mark Model
+        {
+            get { return m_model; }
         }
 
         public decimal Value
         {
-            get { return Model.Value; }
+            get { return m_model.Value; }
             set
             {
-                Model.Value = value;
+                m_model.Value = value;
                 RaisePropertyChanged("Value");
                 RaisePropertyChanged("IsValueValid");
                 RaisePropertyChanged("DisplayedMark");
@@ -33,10 +41,10 @@ namespace Dziennik.ViewModel
         }
         public string Note
         {
-            get { return Model.Note; }
+            get { return m_model.Note; }
             set
             {
-                Model.Note = value;
+                m_model.Note = value;
                 RaisePropertyChanged("Note");
                 RaisePropertyChanged("IsValueValid");
                 RaisePropertyChanged("DisplayedMark");
@@ -45,23 +53,23 @@ namespace Dziennik.ViewModel
         }
         public int Weight
         {
-            get { return Model.Weight; }
-            set { Model.Weight = value; RaisePropertyChanged("Weight"); RaisePropertyChanged("DisplayedWeight"); }
+            get { return m_model.Weight; }
+            set { m_model.Weight = value; RaisePropertyChanged("Weight"); RaisePropertyChanged("DisplayedWeight"); }
         }
         public DateTime AddDate
         {
-            get { return Model.AddDate; }
-            set { Model.AddDate = value; RaisePropertyChanged("AddDate"); RaisePropertyChanged("ToolTipFormatted"); }
+            get { return m_model.AddDate; }
+            set { m_model.AddDate = value; RaisePropertyChanged("AddDate"); RaisePropertyChanged("ToolTipFormatted"); }
         }
         public DateTime LastChangeDate
         {
-            get { return Model.LastChangeDate; }
-            set { Model.LastChangeDate = value; RaisePropertyChanged("LastChangeDate"); RaisePropertyChanged("ToolTipFormatted"); }
+            get { return m_model.LastChangeDate; }
+            set { m_model.LastChangeDate = value; RaisePropertyChanged("LastChangeDate"); RaisePropertyChanged("ToolTipFormatted"); }
         }
         public string Description
         {
-            get { return Model.Description; }
-            set { Model.Description = value; RaisePropertyChanged("Description"); RaisePropertyChanged("ToolTipFormatted"); }
+            get { return m_model.Description; }
+            set { m_model.Description = value; RaisePropertyChanged("Description"); RaisePropertyChanged("ToolTipFormatted"); }
         }
         private MarksCategoryViewModel m_category;
         public MarksCategoryViewModel Category
@@ -70,7 +78,7 @@ namespace Dziennik.ViewModel
             set
             {
                 m_category = value;
-                Model.GlobalCategoryId = (m_category == null ? null : m_category.Model.Id);
+                m_model.GlobalCategoryId = (m_category == null ? null : m_category.Model.Id);
                 RaisePropertyChanged("Category");
             }
         }
@@ -126,17 +134,6 @@ namespace Dziennik.ViewModel
             string result = truncated.ToString(CultureInfo.InvariantCulture);
             if (value - truncated == 0.5M) result += "+";
             return result;
-        }
-
-        public override void CopyDataTo(MarkViewModel viewModel)
-        {
-            viewModel.Value = this.Value;
-            viewModel.Note = this.Note;
-            viewModel.Weight = this.Weight;
-            viewModel.AddDate = this.AddDate;
-            viewModel.LastChangeDate = this.LastChangeDate;
-            viewModel.Description = this.Description;
-            viewModel.Category = this.Category;
         }
     }
 }
