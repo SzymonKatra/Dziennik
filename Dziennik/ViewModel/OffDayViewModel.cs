@@ -48,19 +48,27 @@ namespace Dziennik.ViewModel
         //    viewModel.End = this.End;
         //}
 
-        protected override void OnWorkingCopyStarted()
+        protected override void OnPushCopy()
         {
-            m_startCopy = this.Start;
-            m_endCopy = this.End;
-            m_descriptionCopy = this.Description;
+            ObjectsPack pack = new ObjectsPack();
+            pack.Write(this.Start);
+            pack.Write(this.End);
+            pack.Write(this.Description);
+
+            CopyStack.Push(pack);
+            //m_startCopy = this.Start;
+            //m_endCopy = this.End;
+            //m_descriptionCopy = this.Description;
         }
-        protected override void OnWorkingCopyEnded(WorkingCopyResult result)
+        protected override void OnPopCopy(WorkingCopyResult result)
         {
+            ObjectsPack pack = CopyStack.Pop();
+
             if(result == WorkingCopyResult.Cancel)
             {
-                this.Start = m_startCopy;
-                this.End = m_endCopy;
-                this.Description = m_descriptionCopy;
+                this.Start = (DateTime)pack.Read();
+                this.End = (DateTime)pack.Read();
+                this.Description = (string)pack.Read();
             }
         }
     }

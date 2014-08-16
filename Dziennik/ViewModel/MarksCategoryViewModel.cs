@@ -51,12 +51,12 @@ namespace Dziennik.ViewModel
             get { return new SolidColorBrush(this.Color); }
         }
 
-        protected override void OnWorkingCopyStarted()
+        protected override void OnPushCopy()
         {
             m_nameCopy = this.Name;
             m_colorCopy = this.Color;
         }
-        protected override void OnWorkingCopyEnded(WorkingCopyResult result)
+        protected override void OnPopCopy(WorkingCopyResult result)
         {
             if(result == WorkingCopyResult.Cancel)
             {

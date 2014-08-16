@@ -29,12 +29,12 @@ namespace Dziennik.ViewModel
             set { Model.Name = value; RaisePropertyChanged("Name"); }
         }
 
-        protected override void OnWorkingCopyStarted()
+        protected override void OnPushCopy()
         {
             m_numberCopy = this.Number;
             m_nameCopy = this.Name;
         }
-        protected override void OnWorkingCopyEnded(WorkingCopyResult result)
+        protected override void OnPopCopy(WorkingCopyResult result)
         {
             if(result == WorkingCopyResult.Cancel)
             {

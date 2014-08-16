@@ -44,13 +44,13 @@ namespace Dziennik.ViewModel
             }
         }
 
-        protected override void OnWorkingCopyStarted()
+        protected override void OnPushCopy()
         {
             m_nameCopy = this.Name;
             m_dateCopy = this.Date;
             m_notifyInCopy = this.NotifyIn;
         }
-        protected override void OnWorkingCopyEnded(WorkingCopyResult result)
+        protected override void OnPopCopy(WorkingCopyResult result)
         {
             if(result == WorkingCopyResult.Cancel)
             {

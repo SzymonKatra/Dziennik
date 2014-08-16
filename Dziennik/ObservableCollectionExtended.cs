@@ -25,13 +25,19 @@ namespace Dziennik
             public T NewValue { get; set; }
             public List<T> ClearedList { get; set; }
         }
+        private class CollectionCopy
+        {
+            public List<CollectionChangedPair> Changelog { get; set; }
+            public List<T> PushedItems { get; set; }
+        }
 
         private bool m_workingCopyStarted = false;
         public bool WorkingCopyStarted
         {
             get { return m_workingCopyStarted; }
         }
-        private List<CollectionChangedPair> m_changelog = new List<CollectionChangedPair>();
+        private Stack<CollectionCopy> m_copyStack = new Stack<CollectionCopy>();
+        private List<CollectionChangedPair> m_currentChangelog;
 
         public event EventHandler<NotifyCollectionChangedSimpleEventArgs<T>> Added;
         public event EventHandler<NotifyCollectionChangedSimpleEventArgs<T>> Removed;
@@ -55,9 +61,9 @@ namespace Dziennik
 
         protected override void ClearItems()
         {
-            if(m_workingCopyStarted)
+            if (m_currentChangelog != null)
             {
-                m_changelog.Add(new CollectionChangedPair() { Change = CollectionChangeType.Cleared, ClearedList = new List<T>(this) });
+                m_currentChangelog.Add(new CollectionChangedPair() { Change = CollectionChangeType.Cleared, ClearedList = new List<T>(this) });
             }
 
             List<T> items = new List<T>(this);
@@ -66,9 +72,9 @@ namespace Dziennik
         }
         protected override void InsertItem(int index, T item)
         {
-            if(m_workingCopyStarted)
+            if (m_currentChangelog != null)
             {
-                m_changelog.Add(new CollectionChangedPair() { Change = CollectionChangeType.Added, NewIndex = index, NewValue = item });
+                m_currentChangelog.Add(new CollectionChangedPair() { Change = CollectionChangeType.Added, NewIndex = index, NewValue = item });
             }
 
             List<T> items = new List<T>();
@@ -78,9 +84,9 @@ namespace Dziennik
         }
         protected override void RemoveItem(int index)
         {
-            if(m_workingCopyStarted)
+            if (m_currentChangelog != null)
             {
-                m_changelog.Add(new CollectionChangedPair() { Change = CollectionChangeType.Removed, OldIndex = index, OldValue = this[index] });
+                m_currentChangelog.Add(new CollectionChangedPair() { Change = CollectionChangeType.Removed, OldIndex = index, OldValue = this[index] });
             }
 
             List<T> items = new List<T>();
@@ -90,9 +96,9 @@ namespace Dziennik
         }
         protected override void SetItem(int index, T item)
         {
-            if(m_workingCopyStarted)
+            if (m_currentChangelog != null)
             {
-                m_changelog.Add(new CollectionChangedPair() { Change = CollectionChangeType.Changed, OldIndex = index, OldValue = this[index], NewIndex = index, NewValue = item });
+                m_currentChangelog.Add(new CollectionChangedPair() { Change = CollectionChangeType.Changed, OldIndex = index, OldValue = this[index], NewIndex = index, NewValue = item });
             }
 
             List<T> items = new List<T>();
@@ -105,9 +111,9 @@ namespace Dziennik
         }
         protected override void MoveItem(int oldIndex, int newIndex)
         {
-            if(m_workingCopyStarted)
+            if (m_currentChangelog != null)
             {
-                m_changelog.Add(new CollectionChangedPair() { Change = CollectionChangeType.Moved, OldIndex = oldIndex, NewIndex = newIndex });
+                m_currentChangelog.Add(new CollectionChangedPair() { Change = CollectionChangeType.Moved, OldIndex = oldIndex, NewIndex = newIndex });
             }
 
             base.MoveItem(oldIndex, newIndex);
@@ -124,34 +130,33 @@ namespace Dziennik
             if (handler != null) handler(this, e);
         }
 
-        public void StartWorkingCopy()
+        public void PushCopy()
         {
-            if (m_workingCopyStarted) throw new InvalidOperationException("Already started");
-            m_workingCopyStarted = true;
-            m_changelog.Clear();
-            foreach (var item in this)
-            {
-                item.StartWorkingCopy();
-            }
+            //if (m_workingCopyStarted) throw new InvalidOperationException("Already started");
+            //m_workingCopyStarted = true;
+            CollectionCopy copy = new CollectionCopy();
+            copy.Changelog = new List<CollectionChangedPair>();
+            copy.PushedItems = new List<T>(this);
+
+            m_copyStack.Push(copy);
+            m_currentChangelog = copy.Changelog;
+            foreach (var item in this) item.PushCopy();
         }
-        public void EndWorkingCopy(WorkingCopyResult result)
+        public void PopCopy(WorkingCopyResult result)
         {
-            if (!m_workingCopyStarted) throw new InvalidOperationException("Must be started to end");
-            m_workingCopyStarted = false;
-            foreach (var item in this)
-            {
-                if (item.WorkingCopyStarted) item.EndWorkingCopy(result);
-            }
+            ///if (!m_workingCopyStarted) throw new InvalidOperationException("Must be started to end");
+            //m_workingCopyStarted = false;
+            CollectionCopy copy = m_copyStack.Pop();
+            foreach (var item in copy.PushedItems) item.PopCopy(result);
             if (result == WorkingCopyResult.Cancel) Revert();
+            m_currentChangelog = null;
         }
 
         private void Revert()
         {
-            for (int i = m_changelog.Count - 1; i >= 0; i--)
+            for (int i = m_currentChangelog.Count - 1; i >= 0; i--)
             {
-                CollectionChangedPair change = m_changelog[i];
-                if (change.OldValue != null && change.OldValue.WorkingCopyStarted) change.OldValue.EndWorkingCopy(WorkingCopyResult.Cancel);
-                if (change.NewValue != null && change.NewValue.WorkingCopyStarted) change.NewValue.EndWorkingCopy(WorkingCopyResult.Cancel);
+                CollectionChangedPair change = m_currentChangelog[i];
 
                 switch (change.Change)
                 {

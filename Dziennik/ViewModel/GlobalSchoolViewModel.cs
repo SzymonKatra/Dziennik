@@ -55,17 +55,17 @@ namespace Dziennik.ViewModel
             }
         }
 
-        protected override void OnWorkingCopyStarted()
+        protected override void OnPushCopy()
         {
-            m_calendars.StartWorkingCopy();
-            m_marksCategories.StartWorkingCopy();
-            m_notices.StartWorkingCopy();
+            m_calendars.PushCopy();
+            m_marksCategories.PushCopy();
+            m_notices.PushCopy();
         }
-        protected override void OnWorkingCopyEnded(WorkingCopyResult result)
+        protected override void OnPopCopy(WorkingCopyResult result)
         {
-            m_calendars.EndWorkingCopy(result);
-            m_marksCategories.EndWorkingCopy(result);
-            m_notices.EndWorkingCopy(result);
+            m_calendars.PopCopy(result);
+            m_marksCategories.PopCopy(result);
+            m_notices.PopCopy(result);
         }
     }
 }

@@ -15,8 +15,6 @@ namespace Dziennik.View
             m_closeCommand = new RelayCommand(Close);
             m_editClassCommand = new RelayCommand(EditClass, CanEditClass);
             m_addClassCommand = new RelayCommand(AddClass);
-            m_editCalendarCommand = new RelayCommand(EditCalendar, CanEditCalendar);
-            m_addCalendarCommand = new RelayCommand(AddCalendar);
             m_showCalendarsListCommand = new RelayCommand(ShowCalendarsList);
             m_editMarksCategoryCommand = new RelayCommand(EditMarksCategory, CanEditMarksCategory);
             m_addMarksCategoryCommand = new RelayCommand(AddMarksCategory);
@@ -39,17 +37,6 @@ namespace Dziennik.View
         public ICommand AddClassCommand
         {
             get { return m_addClassCommand; }
-        }
-        private RelayCommand m_editCalendarCommand;
-        public ICommand EditCalendarCommand
-        {
-            get { return m_editCalendarCommand; }
-        }
-
-        private RelayCommand m_addCalendarCommand;
-        public ICommand AddCalendarCommand
-        {
-            get { return m_addCalendarCommand; }
         }
 
         private RelayCommand m_showCalendarsListCommand;
@@ -94,7 +81,7 @@ namespace Dziennik.View
         public CalendarViewModel SelectedCalendar
         {
             get { return m_selectedCalendar; }
-            set { m_selectedCalendar = value; RaisePropertyChanged("SelectedCalendar"); m_editCalendarCommand.RaiseCanExecuteChanged(); }
+            set { m_selectedCalendar = value; RaisePropertyChanged("SelectedCalendar"); }
         }
 
         private MarksCategoryViewModel m_selectedMarksCategory;
@@ -145,65 +132,6 @@ namespace Dziennik.View
                 SelectedClass = tab;
             }
             if (dialogViewModel.Result != EditClassViewModel.EditClassResult.Cancel) m_selectedClass.AutoSaveCommand.Execute(this);
-        }
-        private void EditCalendar(object e)
-        {
-            m_selectedCalendar.StartWorkingCopy();
-            EditCalendarViewModel dialogViewModel = new EditCalendarViewModel(m_selectedCalendar, GlobalConfig.GlobalDatabaseAutoSaveCommand);
-            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
-            if(dialogViewModel.Result == EditCalendarViewModel.EditCalendarResult.Remove)
-            {
-                m_selectedCalendar.EndWorkingCopy(WorkingCopyResult.Ok);
-
-                foreach (var schoolClass in m_openedSchoolClasses)
-                {
-                    if (schoolClass.ViewModel.Calendar == m_selectedCalendar) schoolClass.ViewModel.Calendar = null;
-                }
-
-                GlobalConfig.GlobalDatabase.ViewModel.Calendars.Remove(m_selectedCalendar);
-                SelectedCalendar = null;
-            }
-            else if (dialogViewModel.Result== EditCalendarViewModel.EditCalendarResult.Ok)
-            {
-                m_selectedCalendar.EndWorkingCopy(WorkingCopyResult.Ok);
-            }
-            else if(dialogViewModel.Result == EditCalendarViewModel.EditCalendarResult.Cancel)
-            {
-                m_selectedCalendar.EndWorkingCopy(WorkingCopyResult.Cancel);
-            }
-            if (dialogViewModel.Result != EditCalendarViewModel.EditCalendarResult.Cancel)
-            {
-                GlobalConfig.GlobalDatabaseAutoSaveCommand.Execute(null);
-                foreach (var schoolClass in m_openedSchoolClasses)
-                {
-                    if (schoolClass.ViewModel.Calendar == m_selectedCalendar)
-                    {
-                        foreach (var group in schoolClass.ViewModel.Groups)
-                        {
-                            foreach (var student in group.Students)
-                            {
-                                student.RaiseAttendanceChanged();
-                            }
-                        }
-                    }
-                }
-            }
-
-        }
-        private bool CanEditCalendar(object e)
-        {
-            return m_selectedCalendar != null;
-        }
-        private void AddCalendar(object e)
-        {
-            CalendarViewModel calendar = new CalendarViewModel();
-            EditCalendarViewModel dialogViewModel = new EditCalendarViewModel(calendar, GlobalConfig.GlobalDatabaseAutoSaveCommand, true);
-            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
-            if (dialogViewModel.Result == EditCalendarViewModel.EditCalendarResult.Ok)
-            {
-                GlobalConfig.GlobalDatabase.ViewModel.Calendars.Add(calendar);
-            }
-            if (dialogViewModel.Result != EditCalendarViewModel.EditCalendarResult.Cancel) GlobalConfig.GlobalDatabaseAutoSaveCommand.Execute(null);
         }
         private void ShowCalendarsList(object e)
         {

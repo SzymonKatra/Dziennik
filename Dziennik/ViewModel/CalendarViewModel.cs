@@ -54,35 +54,35 @@ namespace Dziennik.ViewModel
             }
         }
 
-        //public override void ShallowCopyDataTo(CalendarViewModel viewModel)
-        //{
-        //    viewModel.Name = this.Name;
-        //    viewModel.YearBeginning = this.YearBeginning;
-        //    viewModel.SemesterSeparator = this.SemesterSeparator;
-        //    viewModel.YearEnding = this.YearEnding;
-        //    viewModel.OffDays = this.OffDays;
-        //}
-
-        protected override void OnWorkingCopyStarted()
+        protected override void OnPushCopy()
         {
-            m_nameCopy = this.Name;
-            m_yearBeginningCopy = this.YearBeginning;
-            m_semesterSeparatorCopy = this.SemesterSeparator;
-            m_yearEndingCopy = this.YearEnding;
+            ObjectsPack pack = new ObjectsPack();
+            pack.Write(this.Name);
+            pack.Write(this.YearBeginning);
+            pack.Write(this.SemesterSeparator);
+            pack.Write(this.YearEnding);
 
-            m_offDays.StartWorkingCopy();
+            CopyStack.Push(pack);
+            //m_nameCopy = this.Name;
+            //m_yearBeginningCopy = this.YearBeginning;
+            //m_semesterSeparatorCopy = this.SemesterSeparator;
+            //m_yearEndingCopy = this.YearEnding;
+
+            m_offDays.PushCopy();
         }
-        protected override void OnWorkingCopyEnded(WorkingCopyResult result)
+        protected override void OnPopCopy(WorkingCopyResult result)
         {
+            ObjectsPack pack = CopyStack.Pop();
+
             if (result == WorkingCopyResult.Cancel)
             {
-                this.Name = m_nameCopy;
-                this.YearBeginning = m_yearBeginningCopy;
-                this.SemesterSeparator = m_semesterSeparatorCopy;
-                this.YearEnding = m_yearEndingCopy;
+                this.Name = (string)pack.Read();
+                this.YearBeginning = (DateTime)pack.Read();
+                this.SemesterSeparator = (DateTime)pack.Read();
+                this.YearEnding = (DateTime)pack.Read();
             }
 
-            m_offDays.EndWorkingCopy(result);
+            m_offDays.PopCopy(result);
         }
     }
 }

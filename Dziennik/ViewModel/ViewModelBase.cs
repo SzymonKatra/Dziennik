@@ -20,30 +20,27 @@ namespace Dziennik.ViewModel
         }
 
         //public abstract void ShallowCopyDataTo(VM viewModel);
-
-        private bool m_workingCopyStarted = false;
-        public bool WorkingCopyStarted
+        private Stack<ObjectsPack> m_copyStack = new Stack<ObjectsPack>();
+        protected Stack<ObjectsPack> CopyStack
         {
-            get { return m_workingCopyStarted; }
+            get { return m_copyStack; }
+        }
+        public int CopyDepth
+        {
+            get { return m_copyStack.Count; }
         }
 
-        public void StartWorkingCopy()
+        public void PushCopy()
         {
-            if (m_workingCopyStarted) throw new InvalidOperationException("Already started");
-            m_workingCopyStarted = true;
-
-            OnWorkingCopyStarted();
+            OnPushCopy();
         }
-        public void EndWorkingCopy(WorkingCopyResult result)
+        public void PopCopy(WorkingCopyResult result)
         {
-            if (!m_workingCopyStarted) throw new InvalidOperationException("Must be started to end");
-            m_workingCopyStarted = false;
-
-            OnWorkingCopyEnded(result);
+            OnPopCopy(result);
         }
 
-        protected virtual void OnWorkingCopyStarted() { }
-        protected virtual void OnWorkingCopyEnded(WorkingCopyResult result) { }
+        protected virtual void OnPushCopy() { }
+        protected virtual void OnPopCopy(WorkingCopyResult result) { }
         //protected abstract void OnWorkingCopyStarted();
         //protected abstract void OnWorkingCopyEnded(WorkingCopyResult result);
     }

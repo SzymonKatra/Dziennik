@@ -13,9 +13,9 @@ namespace Dziennik
 
     public interface IWorkingCopyAvailable
     {
-        bool WorkingCopyStarted { get; }
+        int CopyDepth { get; }
 
-        void StartWorkingCopy();
-        void EndWorkingCopy(WorkingCopyResult result);
+        void PushCopy();
+        void PopCopy(WorkingCopyResult result);
     }
 }

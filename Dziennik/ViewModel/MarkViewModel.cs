@@ -136,7 +136,7 @@ namespace Dziennik.ViewModel
             return result;
         }
 
-        protected override void OnWorkingCopyStarted()
+        protected override void OnPushCopy()
         {
             m_valueCopy = this.Value;
             m_noteCopy = this.Note;
@@ -146,7 +146,7 @@ namespace Dziennik.ViewModel
             m_descriptionCopy = this.Description;
             m_categoryCopy = this.Category;
         }
-        protected override void OnWorkingCopyEnded(WorkingCopyResult result)
+        protected override void OnPopCopy(WorkingCopyResult result)
         {
             if(result == WorkingCopyResult.Cancel)
             {

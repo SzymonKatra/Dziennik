@@ -64,22 +64,22 @@ namespace Dziennik.View
         }
         private void EditCalendar(object e)
         {
-            m_selectedCalendar.StartWorkingCopy();
+            m_selectedCalendar.PushCopy();
             EditCalendarViewModel dialogViewModel = new EditCalendarViewModel(m_selectedCalendar, m_autoSaveCommand);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditCalendarViewModel.EditCalendarResult.Remove)
             {
-                m_selectedCalendar.EndWorkingCopy(WorkingCopyResult.Ok);
+                m_selectedCalendar.PopCopy(WorkingCopyResult.Ok);
                 m_calendars.Remove(m_selectedCalendar);
                 SelectedCalendar = null;
             }
             else if(dialogViewModel.Result == EditCalendarViewModel.EditCalendarResult.Ok)
             {
-                m_selectedCalendar.EndWorkingCopy(WorkingCopyResult.Ok);
+                m_selectedCalendar.PopCopy(WorkingCopyResult.Ok);
             }
             else if(dialogViewModel.Result== EditCalendarViewModel.EditCalendarResult.Cancel)
             {
-                m_selectedCalendar.EndWorkingCopy(WorkingCopyResult.Cancel);
+                m_selectedCalendar.PopCopy(WorkingCopyResult.Cancel);
             }
             if (dialogViewModel.Result != EditCalendarViewModel.EditCalendarResult.Cancel)
             {

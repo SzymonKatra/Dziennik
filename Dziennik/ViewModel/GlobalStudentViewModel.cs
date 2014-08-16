@@ -76,23 +76,28 @@ namespace Dziennik.ViewModel
             return result;
         }
 
-        protected override void OnWorkingCopyStarted()
+        protected override void OnPushCopy()
         {
-            m_numberCopy = this.Number;
-            m_nameCopy = this.Name;
-            m_surnameCopy = this.Surname;
-            m_emailCopy = this.Email;
-            m_additionalInformationCopy = this.AdditionalInformation;
+            ObjectsPack pack = new ObjectsPack();
+            pack.Write(this.Number);
+            pack.Write(this.Name);
+            pack.Write(this.Surname);
+            pack.Write(this.Email);
+            pack.Write(this.AdditionalInformation);
+
+            CopyStack.Push(pack);
         }
-        protected override void OnWorkingCopyEnded(WorkingCopyResult result)
+        protected override void OnPopCopy(WorkingCopyResult result)
         {
+            ObjectsPack pack = CopyStack.Pop();
+
             if(result == WorkingCopyResult.Cancel)
             {
-                this.Number = m_numberCopy;
-                this.Name = m_nameCopy;
-                this.Surname = m_surnameCopy;
-                this.Email = m_emailCopy;
-                this.AdditionalInformation = m_additionalInformationCopy;
+                this.Number = (int)pack.Read();
+                this.Name = (string)pack.Read();
+                this.Surname = (string)pack.Read();
+                this.Email = (string)pack.Read();
+                this.AdditionalInformation = (string)pack.Read();
             }
         }
     }

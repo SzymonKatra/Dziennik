@@ -172,17 +172,24 @@ namespace Dziennik.View
         }
         private void EditOffDay(object e)
         {
+            m_selectedOffDay.PushCopy();
             EditOffDayViewModel dialogViewModel = new EditOffDayViewModel(m_selectedOffDay);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditOffDayViewModel.EditOffDayResult.Remove)
             {
+                m_selectedOffDay.PopCopy(WorkingCopyResult.Ok);
                 m_calendar.OffDays.Remove(m_selectedOffDay);
                 //m_offDaysWorkingCopy.Remove(m_selectedOffDay);
                 SelectedOffDay = null;
             }
             else if(dialogViewModel.Result == EditOffDayViewModel.EditOffDayResult.Ok)
             {
+                m_selectedOffDay.PopCopy(WorkingCopyResult.Ok);
                 //m_offDaysWorkingCopy.ApplyChange(m_selectedOffDay);
+            }
+            else if(dialogViewModel.Result == EditOffDayViewModel.EditOffDayResult.Cancel)
+            {
+                m_selectedOffDay.PopCopy(WorkingCopyResult.Cancel);
             }
             if (dialogViewModel.Result != EditOffDayViewModel.EditOffDayResult.Cancel) m_autoSaveCommand.Execute(null);
         }
