@@ -30,5 +30,24 @@ namespace Dziennik.ViewModel
             get { return Model.WasPresent; }
             set { Model.WasPresent = value; RaisePropertyChanged("WasPresent"); }
         }
+
+        protected override void OnPushCopy()
+        {
+            ObjectsPack pack = new ObjectsPack();
+            pack.Write(this.RealizedSubject);
+            pack.Write(this.WasPresent);
+
+            CopyStack.Push(pack);
+        }
+        protected override void OnPopCopy(WorkingCopyResult result)
+        {
+            ObjectsPack pack = CopyStack.Pop();
+
+            if(result == WorkingCopyResult.Cancel)
+            {
+                this.RealizedSubject = (RealizedSubjectViewModel)pack.Read();
+                this.WasPresent = (bool)pack.Read();
+            }
+        } 
     }
 }

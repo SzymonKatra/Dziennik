@@ -226,21 +226,31 @@ namespace Dziennik.ViewModel
             }
         }
 
-        //private void SubscribeStudents()
-        //{
-        //    m_students.Removed += m_students_Removed;
-        //}
-        //private void UnsubscribeStudents()
-        //{
-        //    m_students.Removed -= m_students_Removed;
-        //}
+        protected override void OnPushCopy()
+        {
+            ObjectsPack pack = new ObjectsPack();
+            pack.Write(this.Name);
 
-        //private void m_students_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<StudentInGroupViewModel> e)
-        //{
-        //    foreach (var item in e.Items)
-        //    {
-        //        GlobalConfig.Database.StudentsInGroups.Remove(item.Model);
-        //    }
-        //}
+            CopyStack.Push(pack);
+
+            this.Students.PushCopy();
+            this.GlobalSubjects.PushCopy();
+            this.RealizedSubjects.PushCopy();
+            this.Schedule.PushCopy();
+        }
+        protected override void OnPopCopy(WorkingCopyResult result)
+        {
+            ObjectsPack pack = CopyStack.Pop();
+
+            if (result == WorkingCopyResult.Cancel)
+            {
+                this.Name = (string)pack.Read();
+            }
+
+            this.Students.PopCopy(result);
+            this.GlobalSubjects.PopCopy(result);
+            this.RealizedSubjects.PopCopy(result);
+            this.Schedule.PopCopy(result);
+        }
     }
 }

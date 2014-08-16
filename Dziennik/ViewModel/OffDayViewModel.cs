@@ -17,19 +17,16 @@ namespace Dziennik.ViewModel
         {
         }
 
-        private DateTime m_startCopy;
         public DateTime Start
         {
             get { return Model.Start; }
             set { Model.Start = value; RaisePropertyChanged("Start"); RaisePropertyChanged("IsOneDay"); }
         }
-        private DateTime m_endCopy;
         public DateTime End
         {
             get { return Model.End; }
             set { Model.End = value; RaisePropertyChanged("End"); RaisePropertyChanged("IsOneDay"); }
         }
-        private string m_descriptionCopy;
         public string Description
         {
             get { return Model.Description; }
@@ -56,9 +53,6 @@ namespace Dziennik.ViewModel
             pack.Write(this.Description);
 
             CopyStack.Push(pack);
-            //m_startCopy = this.Start;
-            //m_endCopy = this.End;
-            //m_descriptionCopy = this.Description;
         }
         protected override void OnPopCopy(WorkingCopyResult result)
         {

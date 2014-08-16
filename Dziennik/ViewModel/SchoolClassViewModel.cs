@@ -94,6 +94,31 @@ namespace Dziennik.ViewModel
             {
                 item.OwnerClass = null;
             }
-        }   
+        }
+
+        protected override void OnPushCopy()
+        {
+            ObjectsPack pack = new ObjectsPack();
+            pack.Write(this.Name);
+            pack.Write(this.Calendar);
+
+            CopyStack.Push(pack);
+
+            this.Students.PushCopy();
+            this.Groups.PushCopy();
+        }
+        protected override void OnPopCopy(WorkingCopyResult result)
+        {
+            ObjectsPack pack = new ObjectsPack();
+
+            if (result == WorkingCopyResult.Cancel)
+            {
+                this.Name = (string)pack.Read();
+                this.Calendar = (CalendarViewModel)pack.Read();
+            }
+
+            this.Students.PopCopy(result);
+            this.Groups.PopCopy(result);
+        }
     }
 }

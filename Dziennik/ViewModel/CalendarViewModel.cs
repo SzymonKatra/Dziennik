@@ -17,25 +17,21 @@ namespace Dziennik.ViewModel
             m_offDays = new SynchronizedObservableCollection<OffDayViewModel, OffDay>(Model.OffDays, m => new OffDayViewModel(m));
         }
 
-        private string m_nameCopy;
         public string Name
         {
             get { return Model.Name; }
             set { Model.Name = value; RaisePropertyChanged("Name"); }
         }
-        private DateTime m_yearBeginningCopy;
         public DateTime YearBeginning
         {
             get { return Model.YearBeginning; }
             set { Model.YearBeginning = value; RaisePropertyChanged("YearBeginning"); }
         }
-        private DateTime m_semesterSeparatorCopy;
         public DateTime SemesterSeparator
         {
             get { return Model.SemesterSeparator; }
             set { Model.SemesterSeparator = value; RaisePropertyChanged("SemesterSeparator"); }
         }
-        private DateTime m_yearEndingCopy;
         public DateTime YearEnding
         {
             get { return Model.YearEnding; }

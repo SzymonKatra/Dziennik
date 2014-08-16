@@ -19,13 +19,11 @@ namespace Dziennik.ViewModel
         {
         }
 
-        private string m_nameCopy;
         public string Name
         {
             get { return Model.Name; }
             set { Model.Name = value; RaisePropertyChanged("Name"); }
         }
-        private System.Windows.Media.Color m_colorCopy;
         public System.Windows.Media.Color Color
         {
             get
@@ -53,15 +51,19 @@ namespace Dziennik.ViewModel
 
         protected override void OnPushCopy()
         {
-            m_nameCopy = this.Name;
-            m_colorCopy = this.Color;
+            ObjectsPack pack = new ObjectsPack();
+
+            pack.Write(this.Name);
+            pack.Write(this.Color);
         }
         protected override void OnPopCopy(WorkingCopyResult result)
         {
+            ObjectsPack pack = CopyStack.Pop();
+
             if(result == WorkingCopyResult.Cancel)
             {
-                this.Name = m_nameCopy;
-                this.Color = m_colorCopy;
+                this.Name = (string)pack.Read();
+                this.Color = (System.Windows.Media.Color)pack.Read();
             }
         }
     }

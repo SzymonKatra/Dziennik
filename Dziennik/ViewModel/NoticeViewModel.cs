@@ -46,17 +46,23 @@ namespace Dziennik.ViewModel
 
         protected override void OnPushCopy()
         {
-            m_nameCopy = this.Name;
-            m_dateCopy = this.Date;
-            m_notifyInCopy = this.NotifyIn;
+            ObjectsPack pack = new ObjectsPack();
+
+            pack.Write(this.Name);
+            pack.Write(this.Date);
+            pack.Write(this.NotifyIn);
+
+            CopyStack.Push(pack);
         }
         protected override void OnPopCopy(WorkingCopyResult result)
         {
+            ObjectsPack pack = CopyStack.Pop();
+
             if(result == WorkingCopyResult.Cancel)
             {
-                this.Name = m_nameCopy;
-                this.Date = m_dateCopy;
-                this.NotifyIn = m_notifyInCopy;
+                this.Name = (string)pack.Read();
+                this.Date = (DateTime)pack.Read();
+                this.NotifyIn = (TimeSpan)pack.Read();
             }
         }
     }

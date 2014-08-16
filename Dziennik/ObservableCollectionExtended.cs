@@ -31,11 +31,11 @@ namespace Dziennik
             public List<T> PushedItems { get; set; }
         }
 
-        private bool m_workingCopyStarted = false;
-        public bool WorkingCopyStarted
+        public int CopyDepth
         {
-            get { return m_workingCopyStarted; }
+            get { return m_copyStack.Count; }
         }
+
         private Stack<CollectionCopy> m_copyStack = new Stack<CollectionCopy>();
         private List<CollectionChangedPair> m_currentChangelog;
 

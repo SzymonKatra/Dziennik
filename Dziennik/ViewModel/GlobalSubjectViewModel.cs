@@ -16,13 +16,11 @@ namespace Dziennik.ViewModel
         {
         }
 
-        private int m_numberCopy;
         public int Number
         {
             get { return Model.Number; }
             set { Model.Number = value; RaisePropertyChanged("Number"); }
         }
-        private string m_nameCopy;
         public string Name
         {
             get { return Model.Name; }
@@ -31,15 +29,20 @@ namespace Dziennik.ViewModel
 
         protected override void OnPushCopy()
         {
-            m_numberCopy = this.Number;
-            m_nameCopy = this.Name;
+            ObjectsPack pack = new ObjectsPack();
+            pack.Write(this.Number);
+            pack.Write(this.Name);
+
+            CopyStack.Push(pack);
         }
         protected override void OnPopCopy(WorkingCopyResult result)
         {
+            ObjectsPack pack = CopyStack.Pop();
+
             if(result == WorkingCopyResult.Cancel)
             {
-                this.Number = m_numberCopy;
-                this.Name = m_nameCopy;
+                this.Number = (int)pack.Read();
+                this.Name = (string)pack.Read();
             }
         }
     }

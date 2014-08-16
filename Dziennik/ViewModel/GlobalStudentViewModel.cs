@@ -16,31 +16,26 @@ namespace Dziennik.ViewModel
         {
         }
 
-        private int m_numberCopy;
         public int Number
         {
             get { return Model.Number; }
             set { Model.Number = value; RaisePropertyChanged("Number"); }
         }
-        private string m_nameCopy;
         public string Name
         {
             get { return Model.Name; }
             set { Model.Name = value; RaisePropertyChanged("Name"); }
         }
-        private string m_surnameCopy;
         public string Surname
         {
             get { return Model.Surname; }
             set { Model.Surname = value; RaisePropertyChanged("Surname"); }
         }
-        private string m_emailCopy;
         public string Email
         {
             get { return Model.Email; }
             set { Model.Email = value; RaisePropertyChanged("Email"); }
         }
-        private string m_additionalInformationCopy;
         public string AdditionalInformation
         {
             get { return Model.AdditionalInformation; }

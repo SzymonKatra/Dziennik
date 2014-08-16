@@ -39,8 +39,8 @@ namespace Dziennik.ViewModel
             OnPopCopy(result);
         }
 
-        protected virtual void OnPushCopy() { }
-        protected virtual void OnPopCopy(WorkingCopyResult result) { }
+        protected abstract void OnPushCopy();
+        protected abstract void OnPopCopy(WorkingCopyResult result);
         //protected abstract void OnWorkingCopyStarted();
         //protected abstract void OnWorkingCopyEnded(WorkingCopyResult result);
     }

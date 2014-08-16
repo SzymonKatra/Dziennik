@@ -43,13 +43,29 @@ namespace Dziennik.ViewModel
             set { Model.Friday = value; RaisePropertyChanged("Friday"); }
         }
 
-        public void CopyTo(WeekScheduleViewModel other)
+        protected override void OnPushCopy()
         {
-            other.Monday = this.Monday;
-            other.Tuesday = this.Tuesday;
-            other.Wednesday = this.Wednesday;
-            other.Thursday = this.Thursday;
-            other.Friday = this.Friday;
+            ObjectsPack pack = new ObjectsPack();
+            pack.Write(this.Monday);
+            pack.Write(this.Tuesday);
+            pack.Write(this.Wednesday);
+            pack.Write(this.Thursday);
+            pack.Write(this.Friday);
+
+            CopyStack.Push(pack);
+        }
+        protected override void OnPopCopy(WorkingCopyResult result)
+        {
+            ObjectsPack pack = CopyStack.Pop();
+
+            if (result == WorkingCopyResult.Cancel)
+            {
+                this.Monday = (int)pack.Read();
+                this.Tuesday = (int)pack.Read();
+                this.Wednesday = (int)pack.Read();
+                this.Thursday = (int)pack.Read();
+                this.Friday = (int)pack.Read();
+            }
         }
     }
 }

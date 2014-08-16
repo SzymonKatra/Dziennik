@@ -57,15 +57,15 @@ namespace Dziennik.ViewModel
 
         protected override void OnPushCopy()
         {
-            m_calendars.PushCopy();
-            m_marksCategories.PushCopy();
-            m_notices.PushCopy();
+            this.Calendars.PushCopy();
+            this.MarksCategories.PushCopy();
+            this.Notices.PushCopy();
         }
         protected override void OnPopCopy(WorkingCopyResult result)
         {
-            m_calendars.PopCopy(result);
-            m_marksCategories.PopCopy(result);
-            m_notices.PopCopy(result);
+            this.Calendars.PopCopy(result);
+            this.MarksCategories.PopCopy(result);
+            this.Notices.PopCopy(result);
         }
     }
 }

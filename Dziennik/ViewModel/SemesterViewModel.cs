@@ -97,12 +97,13 @@ namespace Dziennik.ViewModel
             return decimal.Round(average - 0.1M, MidpointRounding.AwayFromZero);
         }
 
-        //private void m_marks_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<MarkViewModel> e)
-        //{
-        //    foreach (var item in e.Items)
-        //    {
-        //        GlobalConfig.Database.Marks.Remove(item.Model);
-        //    }
-        //}
+        protected override void OnPushCopy()
+        {
+            this.Marks.PushCopy();
+        }
+        protected override void OnPopCopy(WorkingCopyResult result)
+        {
+            this.Marks.PopCopy(result);
+        }
     }
 }

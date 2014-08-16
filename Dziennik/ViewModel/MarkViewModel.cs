@@ -20,7 +20,6 @@ namespace Dziennik.ViewModel
             m_category = GlobalConfig.GlobalDatabase.ViewModel.MarksCategories.FirstOrDefault(x => x.Model.Id == Model.GlobalCategoryId);
         }
 
-        private decimal m_valueCopy;
         public decimal Value
         {
             get { return Model.Value; }
@@ -33,7 +32,6 @@ namespace Dziennik.ViewModel
                 RaisePropertyChanged("ToolTipFormatted");
             }
         }
-        private string m_noteCopy;
         public string Note
         {
             get { return Model.Note; }
@@ -46,31 +44,26 @@ namespace Dziennik.ViewModel
                 RaisePropertyChanged("ToolTipFormatted");
             }
         }
-        private int m_weightCopy;
         public int Weight
         {
             get { return Model.Weight; }
             set { Model.Weight = value; RaisePropertyChanged("Weight"); RaisePropertyChanged("DisplayedWeight"); }
         }
-        private DateTime m_addDateCopy;
         public DateTime AddDate
         {
             get { return Model.AddDate; }
             set { Model.AddDate = value; RaisePropertyChanged("AddDate"); RaisePropertyChanged("ToolTipFormatted"); }
         }
-        private DateTime m_lastChangeDateCopy;
         public DateTime LastChangeDate
         {
             get { return Model.LastChangeDate; }
             set { Model.LastChangeDate = value; RaisePropertyChanged("LastChangeDate"); RaisePropertyChanged("ToolTipFormatted"); }
         }
-        private string m_descriptionCopy;
         public string Description
         {
             get { return Model.Description; }
             set { Model.Description = value; RaisePropertyChanged("Description"); RaisePropertyChanged("ToolTipFormatted"); }
         }
-        private MarksCategoryViewModel m_categoryCopy;
         private MarksCategoryViewModel m_category;
         public MarksCategoryViewModel Category
         {
@@ -138,25 +131,30 @@ namespace Dziennik.ViewModel
 
         protected override void OnPushCopy()
         {
-            m_valueCopy = this.Value;
-            m_noteCopy = this.Note;
-            m_weightCopy = this.Weight;
-            m_addDateCopy = this.AddDate;
-            m_lastChangeDateCopy = this.LastChangeDate;
-            m_descriptionCopy = this.Description;
-            m_categoryCopy = this.Category;
+            ObjectsPack pack = new ObjectsPack();
+            pack.Write(this.Value);
+            pack.Write(this.Note);
+            pack.Write(this.Weight);
+            pack.Write(this.AddDate);
+            pack.Write(this.LastChangeDate);
+            pack.Write(this.Description);
+            pack.Write(this.Category);
+
+            CopyStack.Push(pack);
         }
         protected override void OnPopCopy(WorkingCopyResult result)
         {
+            ObjectsPack pack = CopyStack.Pop();
+
             if(result == WorkingCopyResult.Cancel)
             {
-                this.Value = m_valueCopy;
-                this.Note = m_noteCopy;
-                this.Weight = m_weightCopy;
-                this.AddDate = m_addDateCopy;
-                this.LastChangeDate = m_lastChangeDateCopy;
-                this.Description = m_descriptionCopy;
-                this.Category = m_categoryCopy;
+                this.Value = (decimal)pack.Read();
+                this.Note = (string)pack.Read();
+                this.Weight = (int)pack.Read();
+                this.AddDate = (DateTime)pack.Read();
+                this.LastChangeDate = (DateTime)pack.Read();
+                this.Description = (string)pack.Read();
+                this.Category = (MarksCategoryViewModel)pack.Read();
             }
         }
     }

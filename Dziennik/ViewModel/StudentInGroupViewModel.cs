@@ -80,7 +80,6 @@ namespace Dziennik.ViewModel
                 RaisePropertyChanged("Presence");
             }
         }
-
         private GlobalStudentViewModel m_globalStudent;
         [DatabaseRelationProperty("GlobalStudents", "GlobalStudentId")]
         public GlobalStudentViewModel GlobalStudent
@@ -88,6 +87,7 @@ namespace Dziennik.ViewModel
             get { return m_globalStudent; }
             set { m_globalStudent = value; RaisePropertyChanged("GlobalStudent"); }
         }
+
         public decimal AverageMarkAll
         {
             get
@@ -240,6 +240,33 @@ namespace Dziennik.ViewModel
         private void SemesterUnsubscribe(SemesterViewModel semester)
         {
             semester.MarksChanged -= SemesterMarksChanged;
+        }
+
+        protected override void OnPushCopy()
+        {
+            ObjectsPack pack = new ObjectsPack();
+            pack.Write(this.Number);
+            pack.Write(this.GlobalStudent);
+
+            CopyStack.Push(pack);
+
+            this.FirstSemester.PushCopy();
+            this.SecondSemester.PushCopy();
+            this.Presence.PushCopy();
+        }
+        protected override void OnPopCopy(WorkingCopyResult result)
+        {
+            ObjectsPack pack = CopyStack.Pop();
+
+            if(result == WorkingCopyResult.Cancel)
+            {
+                this.Number = (int)pack.Read();
+                this.GlobalStudent = (GlobalStudentViewModel)pack.Read();
+            }
+
+            this.FirstSemester.PopCopy(result);
+            this.SecondSemester.PopCopy(result);
+            this.Presence.PopCopy(result);
         }
     }
 }
