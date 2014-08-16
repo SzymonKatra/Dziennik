@@ -21,7 +21,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_GroupName}"/>
-        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
+        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding NameInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
         
         <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
@@ -37,7 +37,7 @@
             <Button Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_AllSubjects}" Command="{Binding ShowGlobalSubjectsListCommand}"/>
         </Grid>
         
-        <my:WeekScheduleControl x:Name="scheduleControl" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Style="{StaticResource inputControlStyle}" WeekSchedule="{Binding Schedule}"/>
+        <my:WeekScheduleControl x:Name="scheduleControl" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Style="{StaticResource inputControlStyle}" WeekSchedule="{Binding SchoolGroup.Schedule}"/>
 
         <Grid Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>

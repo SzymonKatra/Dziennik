@@ -18,10 +18,10 @@
         </Grid.RowDefinitions>
         
         <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="Numer"/>
-        <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" IsEnabled="False" Text="{Binding Number}"/>
+        <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" IsEnabled="False" Text="{Binding Subject.Number}"/>
         
         <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="Temat"/>
-        <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding Name, Mode=TwoWay}"/>
+        <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding Subject.Name, Mode=TwoWay}"/>
 
         <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>

@@ -13,17 +13,14 @@ namespace Dziennik.View
 {
     public sealed class GlobalStudentsListViewModel : ObservableObject
     {
-        public GlobalStudentsListViewModel(ObservableCollection<GlobalStudentViewModel> students, ICommand autoSaveCommand)
+        public GlobalStudentsListViewModel(ObservableCollection<GlobalStudentViewModel> students)
         {
             m_addStudentCommand = new RelayCommand(AddStudent);
             m_editStudentCommand = new RelayCommand(EditStudent);
             m_autoAddStudentsClipboardCommand = new RelayCommand(AutoAddStudentsClipboard);
 
             m_students = students;
-            m_autoSaveCommand = autoSaveCommand;
         }
-
-        private ICommand m_autoSaveCommand;
 
         private RelayCommand m_addStudentCommand;
         public ICommand AddStudentCommand
@@ -75,14 +72,15 @@ namespace Dziennik.View
                 //    m_viewModel.Students[i].Id++;
                 //}
             }
-            if (dialogViewModel.Result != EditStudentViewModel.EditStudentResult.Cancel) m_autoSaveCommand.Execute(this);
         }
         private void EditStudent(object e)
         {
+            m_selectedStudent.PushCopy();
             EditStudentViewModel dialogViewModel = new EditStudentViewModel(m_selectedStudent);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditStudentViewModel.EditStudentResult.RemoveStudentCompletly)
             {
+                m_selectedStudent.PopCopy(WorkingCopyResult.Ok);
                 int index = m_students.IndexOf(m_selectedStudent);
                 if (index < 0) return;
                 for (int i = index + 1; i < m_students.Count; i++)
@@ -92,7 +90,18 @@ namespace Dziennik.View
 
                 m_students.RemoveAt(index);
             }
-            if (dialogViewModel.Result != EditStudentViewModel.EditStudentResult.Cancel) m_autoSaveCommand.Execute(this);
+            else if (dialogViewModel.Result == EditStudentViewModel.EditStudentResult.RemoveStudentCreateHole)
+            {
+                m_selectedStudent.PopCopy(WorkingCopyResult.Ok);
+            }
+            else if (dialogViewModel.Result == EditStudentViewModel.EditStudentResult.Ok)
+            {
+                m_selectedStudent.PopCopy(WorkingCopyResult.Ok);
+            }
+            else if (dialogViewModel.Result == EditStudentViewModel.EditStudentResult.Cancel)
+            {
+                m_selectedStudent.PopCopy(WorkingCopyResult.Cancel);
+            }
         }
         private void AutoAddStudentsClipboard(object param)
         {

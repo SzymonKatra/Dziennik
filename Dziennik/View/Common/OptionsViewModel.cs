@@ -101,15 +101,26 @@ namespace Dziennik.View
         private void EditClass(object e)
         {
             SchoolClassControlViewModel tab = m_selectedClass;
-            EditClassViewModel dialogViewModel = new EditClassViewModel(tab.ViewModel, tab.AutoSaveCommand);
+            tab.ViewModel.PushCopy();
+            EditClassViewModel dialogViewModel = new EditClassViewModel(tab.ViewModel);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditClassViewModel.EditClassResult.RemoveClass)
             {
+                tab.ViewModel.PopCopy(WorkingCopyResult.Ok);
                 //GlobalConfig.Database.SchoolClasses.Remove(m_selectedClass.ViewModel.Model);
                 SelectedClass = null;
                 m_openedSchoolClasses.Remove(tab);
                 return;
             }
+            else if(dialogViewModel.Result == EditClassViewModel.EditClassResult.Ok)
+            {
+                tab.ViewModel.PopCopy(WorkingCopyResult.Ok);
+            }
+            else if (dialogViewModel.Result == EditClassViewModel.EditClassResult.Cancel)
+            {
+                tab.ViewModel.PopCopy(WorkingCopyResult.Cancel);
+            }
+
             if (dialogViewModel.Result != EditClassViewModel.EditClassResult.Cancel) m_selectedClass.AutoSaveCommand.Execute(this);
         }
         private bool CanEditClass(object e)
@@ -119,7 +130,7 @@ namespace Dziennik.View
         private void AddClass(object e)
         {
             SchoolClassViewModel schoolClass = new SchoolClassViewModel();
-            EditClassViewModel dialogViewModel = new EditClassViewModel(schoolClass, new RelayCommand((x) => { }));
+            EditClassViewModel dialogViewModel = new EditClassViewModel(schoolClass);
             dialogViewModel.IsAddingMode = true;
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditClassViewModel.EditClassResult.Ok)
@@ -140,10 +151,12 @@ namespace Dziennik.View
         }
         private void EditMarksCategory(object e)
         {
+            m_selectedMarksCategory.PushCopy();
             EditMarksCategoryViewModel dialogViewModel = new EditMarksCategoryViewModel(m_selectedMarksCategory);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if(dialogViewModel.Result == EditMarksCategoryViewModel.EditMarkCategoryResult.RemoveCategory)
             {
+                m_selectedMarksCategory.PopCopy(WorkingCopyResult.Ok);
                 foreach (var schoolClass in m_openedSchoolClasses)
                 {
                     foreach (var schoolGroup in schoolClass.ViewModel.Groups)
@@ -165,6 +178,15 @@ namespace Dziennik.View
                 GlobalConfig.GlobalDatabase.ViewModel.MarksCategories.Remove(m_selectedMarksCategory);
                 SelectedMarksCategory = null;
             }
+            else if(dialogViewModel.Result == EditMarksCategoryViewModel.EditMarkCategoryResult.Ok)
+            {
+                m_selectedMarksCategory.PopCopy(WorkingCopyResult.Ok);
+            }
+            else if(dialogViewModel.Result == EditMarksCategoryViewModel.EditMarkCategoryResult.Cancel)
+            {
+                m_selectedMarksCategory.PopCopy(WorkingCopyResult.Cancel);
+            }
+
             if (dialogViewModel.Result != EditMarksCategoryViewModel.EditMarkCategoryResult.Cancel) GlobalConfig.GlobalDatabaseAutoSaveCommand.Execute(null);
         }
         private bool CanEditMarksCategory(object e)

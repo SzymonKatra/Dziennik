@@ -27,10 +27,15 @@ namespace Dziennik.View
             m_subject = subject;
             m_existingSubjects = existingSubjects;
 
-            m_number = m_firstNumber = (isAddingMode ? GlobalSubjectsListViewModel.GetNextSubjectNumber(existingSubjects) : subject.Number);
-            m_name = subject.Name;
+            //m_number = m_firstNumber = (isAddingMode ? GlobalSubjectsListViewModel.GetNextSubjectNumber(existingSubjects) : subject.Number);
+            //m_name = subject.Name;
 
-            m_isAddingMode = isAddingMode;
+            
+
+            if(isAddingMode)
+            {
+                subject.Number = GlobalSubjectsListViewModel.GetNextSubjectNumber(existingSubjects);
+            }
         }
 
         private RelayCommand m_okCommand;
@@ -56,6 +61,11 @@ namespace Dziennik.View
         }
 
         private GlobalSubjectViewModel m_subject;
+        public GlobalSubjectViewModel Subject
+        {
+            get { return m_subject; }
+        }
+
         private IEnumerable<GlobalSubjectViewModel> m_existingSubjects;
 
         private bool m_isAddingMode = false;
@@ -64,25 +74,11 @@ namespace Dziennik.View
             get { return m_isAddingMode; }
         }
 
-        private int m_firstNumber;
-        private int m_number;
-        public int Number
-        {
-            get { return m_number; }
-            set { m_number = value; RaisePropertyChanged("Number"); }
-        }
-
-        private string m_name;
-        public string Name
-        {
-            get { return m_name; }
-            set { m_name = value; RaisePropertyChanged("Name"); }
-        }
+        //private int m_firstNumber;
 
         private void Ok(object e)
         {
             m_subject.Number = GlobalSubjectsListViewModel.GetNextSubjectNumber(m_existingSubjects);
-            m_subject.Name = m_name;
             m_result = EditGlobalSubjectResult.Ok;
             GlobalConfig.Dialogs.Close(this);
         }

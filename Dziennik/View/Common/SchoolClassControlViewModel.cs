@@ -152,11 +152,21 @@ namespace Dziennik.View
         }
         private void EditMark(ObservableCollection<MarkViewModel> param)
         {
+            m_selectedMark.PushCopy();
             EditMarkViewModel dialogViewModel = new EditMarkViewModel(m_selectedMark, m_selectedStudent);
             GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Main, dialogViewModel);
             if (dialogViewModel.Result == EditMarkViewModel.EditMarkResult.RemoveMark)
             {
+                m_selectedMark.PopCopy(WorkingCopyResult.Ok);
                 param.Remove(m_selectedMark);
+            }
+            else if(dialogViewModel.Result == EditMarkViewModel.EditMarkResult.Ok)
+            {
+                m_selectedMark.PopCopy(WorkingCopyResult.Ok);
+            }
+            else if (dialogViewModel.Result == EditMarkViewModel.EditMarkResult.Cancel)
+            {
+                m_selectedMark.PopCopy(WorkingCopyResult.Cancel);
             }
             if (dialogViewModel.Result != EditMarkViewModel.EditMarkResult.Cancel) m_autoSaveCommand.Execute(null);
         }

@@ -35,15 +35,15 @@ namespace Dziennik.View
 
             m_mark = mark;
 
-            m_value = m_mark.Value;
-            m_note = m_mark.Note;
-            m_weight = (isAddingMode ? 1 : m_mark.Weight);
-            m_description = m_mark.Description;
+            if(isAddingMode)
+            {
+                m_mark.Weight = 1;
+            }
             m_selectedCategory = (m_mark.Category == null ? NoSelectionMarksCategory : m_mark.Category);
 
-            m_valueInput = (isAddingMode ? string.Empty : MarkViewModel.GetValidDisplayedMark(m_value));
-            m_noteInput = m_note;
-            m_weightInput = m_weight.ToString();
+            m_valueInput = (isAddingMode ? string.Empty : MarkViewModel.GetValidDisplayedMark(m_mark.Value));
+            m_noteInput = m_mark.Note;
+            m_weightInput = m_mark.Weight.ToString();
 
             m_noteSelected = !mark.IsValueValid;         
 
@@ -64,6 +64,10 @@ namespace Dziennik.View
         }
 
         private MarkViewModel m_mark;
+        public MarkViewModel Mark
+        {
+            get { return m_mark; }
+        }
 
         private string m_title = "Edytuj ocenę";
         public string Title
@@ -72,7 +76,6 @@ namespace Dziennik.View
             set { m_title = value; RaisePropertyChanged("Title"); }
         }
 
-        private decimal m_value;
         private bool m_valueInputValid = false;
         private string m_valueInput;
         public string ValueInput
@@ -81,7 +84,6 @@ namespace Dziennik.View
             set { m_valueInput = value; RaisePropertyChanged("ValueInput"); }
         }
 
-        private string m_note;
         private bool m_noteInputValid = false;
         private string m_noteInput;
         public string NoteInput
@@ -90,20 +92,12 @@ namespace Dziennik.View
             set { m_noteInput = value; RaisePropertyChanged("NoteInput"); }
         }
 
-        private int m_weight;
         private bool m_weightInputValid = false;
         private string m_weightInput;
         public string WeightInput
         {
             get { return m_weightInput; }
             set { m_weightInput = value; RaisePropertyChanged("WeightInput"); }
-        }
-
-        private string m_description;
-        public string Description
-        {
-            get { return m_description; }
-            set { m_description = value; RaisePropertyChanged("Description"); }
         }
 
         private bool m_noteSelected;
@@ -157,16 +151,12 @@ namespace Dziennik.View
         {
             if (m_noteSelected)
             {
-                m_mark.Note = m_note;
                 m_mark.Value = 0;
             }
             else
             {
-                m_mark.Value = m_value;
                 m_mark.Note = string.Empty;
             }
-            m_mark.Weight = m_weight;
-            m_mark.Description = m_description;
             m_mark.LastChangeDate = DateTime.Now;
             m_mark.Category = (m_selectedCategory == NoSelectionMarksCategory ? null : m_selectedCategory);
             if (m_isAddingMode) m_mark.AddDate = m_mark.LastChangeDate;
@@ -233,7 +223,7 @@ namespace Dziennik.View
                 return errorResult;
             }
 
-            m_value = result;
+            m_mark.Value = result;
             m_valueInputValid = true;
             m_okCommand.RaiseCanExecuteChanged();
 
@@ -251,7 +241,7 @@ namespace Dziennik.View
                 return errorResult;
             }
 
-            m_note = m_noteInput;
+            m_mark.Note = m_noteInput;
             m_noteInputValid = true;
             m_okCommand.RaiseCanExecuteChanged();
 
@@ -271,7 +261,7 @@ namespace Dziennik.View
                 return errorResult;
             }
 
-            m_weight = result;
+            m_mark.Weight = result;
             m_weightInputValid = true;
             m_okCommand.RaiseCanExecuteChanged();
 

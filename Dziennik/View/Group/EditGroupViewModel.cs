@@ -20,7 +20,7 @@ namespace Dziennik.View
             RemoveGroup,
         }
 
-        public EditGroupViewModel(SchoolGroupViewModel schoolGroup, ObservableCollection<GlobalStudentViewModel> globalStudents, ICommand autoSaveCommand)
+        public EditGroupViewModel(SchoolGroupViewModel schoolGroup, ObservableCollection<GlobalStudentViewModel> globalStudents)
         {
             m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
@@ -29,19 +29,10 @@ namespace Dziennik.View
             m_removeGroupCommand = new RelayCommand(RemoveGroup);
             m_showGlobalSubjectsListCommand = new RelayCommand(ShowGlobalSubjectsList);
 
-            m_autoSaveCommand = autoSaveCommand;
-
             m_schoolGroup = schoolGroup;
             m_globalStudents = globalStudents;
 
-            m_name = schoolGroup.Name;
-            m_schedule = new WeekScheduleViewModel();
-            schoolGroup.Schedule.CopyTo(m_schedule);
-            //m_schedule.Monday = schoolGroup.Schedule.Monday;
-            //m_schedule.Tuesday = schoolGroup.Schedule.Tuesday;
-            //m_schedule.Wednesday = schoolGroup.Schedule.Wednesday;
-            //m_schedule.Thursday = schoolGroup.Schedule.Thursday;
-            //m_schedule.Friday= schoolGroup.Schedule.Friday;
+            m_nameInput = m_schoolGroup.Name;
         }
 
         private EditGroupResult m_result = EditGroupResult.Cancel;
@@ -50,23 +41,19 @@ namespace Dziennik.View
             get { return m_result; }
         }
 
-        private ICommand m_autoSaveCommand;
         private SchoolGroupViewModel m_schoolGroup;
+        public SchoolGroupViewModel SchoolGroup
+        {
+            get { return m_schoolGroup; }
+        }
         private ObservableCollection<GlobalStudentViewModel> m_globalStudents;
 
-        private bool m_nameValid = false;
-        private string m_name;
-        public string Name
+        private bool m_nameInputValid = false;
+        private string m_nameInput;
+        public string NameInput
         {
-            get { return m_name; }
-            set { m_name = value; RaisePropertyChanged("Name"); }
-        }
-
-        private WeekScheduleViewModel m_schedule;
-        public WeekScheduleViewModel Schedule
-        {
-            get { return m_schedule; }
-            set { m_schedule = value; RaisePropertyChanged("Schedule"); }
+            get { return m_nameInput; }
+            set { m_nameInput = value; RaisePropertyChanged("NameInput"); }
         }
 
         private RelayCommand m_okCommand;
@@ -107,20 +94,14 @@ namespace Dziennik.View
 
         private void Ok(object param)
         {
-            m_result = EditGroupResult.Ok;
-            m_schoolGroup.Name = m_name;
-            m_schedule.CopyTo(m_schoolGroup.Schedule);
-            //m_schoolGroup.Schedule.Monday = m_schedule.Monday;
-            //m_schoolGroup.Schedule.Tuesday = m_schedule.Tuesday;
-            //m_schoolGroup.Schedule.Wednesday = m_schedule.Wednesday;
-            //m_schoolGroup.Schedule.Thursday = m_schedule.Thursday;
-            //m_schoolGroup.Schedule.Friday = m_schedule.Friday;
+            m_schoolGroup.Name = m_nameInput;
 
+            m_result = EditGroupResult.Ok;
             GlobalConfig.Dialogs.Close(this);
         }
         private bool CanOk(object param)
         {
-            return m_nameValid;
+            return m_nameInputValid;
         }
         private void Cancel(object e)
         {
@@ -192,7 +173,7 @@ namespace Dziennik.View
         }
         private void ShowGlobalSubjectsList(object e)
         {
-            GlobalSubjectsListViewModel dialogViewModel = new GlobalSubjectsListViewModel(m_schoolGroup.GlobalSubjects, m_autoSaveCommand);
+            GlobalSubjectsListViewModel dialogViewModel = new GlobalSubjectsListViewModel(m_schoolGroup.GlobalSubjects);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
 
@@ -206,24 +187,24 @@ namespace Dziennik.View
             {
                 switch (columnName)
                 {
-                    case "Name": return ValidateName();
+                    case "NameInput": return ValidateNameInput();
                 }
 
                 return string.Empty;
             }
         }
 
-        public string ValidateName()
+        public string ValidateNameInput()
         {
-            m_nameValid = false;
+            m_nameInputValid = false;
 
-            if (string.IsNullOrWhiteSpace(m_name))
+            if (string.IsNullOrWhiteSpace(m_nameInput))
             {
                 m_okCommand.RaiseCanExecuteChanged();
                 return GlobalConfig.GetStringResource("lang_TypeGroupName");
             }
 
-            m_nameValid = true;
+            m_nameInputValid = true;
             m_okCommand.RaiseCanExecuteChanged();
             return string.Empty;
         }

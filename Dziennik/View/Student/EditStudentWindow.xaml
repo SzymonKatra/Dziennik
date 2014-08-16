@@ -26,11 +26,11 @@
         <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Email}"/>
         <TextBlock Grid.Column="0" Grid.Row="4" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_AdditionalInformation}" TextWrapping="Wrap"/>
         
-        <TextBox Grid.Column="1" Grid.Row="0" IsEnabled="False" Text="{Binding IdInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
-        <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" Text="{Binding Surname, Mode=TwoWay}"/>
-        <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource inputControlStyle}" Text="{Binding Name, Mode=TwoWay}"/>
-        <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource inputControlStyle}" Text="{Binding Email, Mode=TwoWay}"/>
-        <TextBox Grid.Column="1" Grid.Row="4" Style="{StaticResource inputControlStyle}" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding AdditionalInformation, Mode=TwoWay}"/>
+        <TextBox Grid.Column="1" Grid.Row="0" IsEnabled="False" Text="{Binding NumberInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
+        <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" Text="{Binding Student.Surname, Mode=TwoWay}"/>
+        <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource inputControlStyle}" Text="{Binding Student.Name, Mode=TwoWay}"/>
+        <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource inputControlStyle}" Text="{Binding Student.Email, Mode=TwoWay}"/>
+        <TextBox Grid.Column="1" Grid.Row="4" Style="{StaticResource inputControlStyle}" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Student.AdditionalInformation, Mode=TwoWay}"/>
 
         <Grid Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>

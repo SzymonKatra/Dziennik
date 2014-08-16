@@ -50,12 +50,22 @@ namespace Dziennik.View
         }
         private void EditNotice(object e)
         {
+            m_selectedNotice.PushCopy();
             EditNoticeViewModel dialogViewModel = new EditNoticeViewModel(m_selectedNotice);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if(dialogViewModel.Result == EditNoticeViewModel.EditNoticeResult.RemoveNotice)
             {
+                m_selectedNotice.PopCopy(WorkingCopyResult.Ok);
                 GlobalConfig.GlobalDatabase.ViewModel.Notices.Remove(m_selectedNotice);
                 SelectedNotice = null;
+            }
+            else if(dialogViewModel.Result == EditNoticeViewModel.EditNoticeResult.Ok)
+            {
+                m_selectedNotice.PopCopy(WorkingCopyResult.Ok);
+            }
+            else if (dialogViewModel.Result == EditNoticeViewModel.EditNoticeResult.Cancel)
+            {
+                m_selectedNotice.PopCopy(WorkingCopyResult.Cancel);
             }
             if (dialogViewModel.Result != EditNoticeViewModel.EditNoticeResult.Cancel) GlobalConfig.GlobalDatabaseAutoSaveCommand.Execute(null);
         }

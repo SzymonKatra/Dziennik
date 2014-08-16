@@ -29,7 +29,7 @@ namespace Dziennik.View
 
             m_marksCategory = marksCategory;
 
-            m_name = m_marksCategory.Name;
+            m_nameInput = m_marksCategory.Name;
             m_selectedColor = m_marksCategory.Color;
         }
 
@@ -40,6 +40,10 @@ namespace Dziennik.View
         }
 
         private MarksCategoryViewModel m_marksCategory;
+        public MarksCategoryViewModel MarksCategory
+        {
+            get { return m_marksCategory; }
+        }
 
         private bool m_isAddingMode;
         public bool IsAddingMode
@@ -66,11 +70,11 @@ namespace Dziennik.View
         }
 
         private bool m_nameValid = false;
-        private string m_name;
-        public string Name
+        private string m_nameInput;
+        public string NameInput
         {
-            get { return m_name; }
-            set { m_name = value; RaisePropertyChanged("Name"); }
+            get { return m_nameInput; }
+            set { m_nameInput = value; RaisePropertyChanged("Name"); }
         }
 
         private System.Windows.Media.Color m_selectedColor;
@@ -82,7 +86,7 @@ namespace Dziennik.View
 
         private void Ok(object e)
         {
-            m_marksCategory.Name = m_name;
+            m_marksCategory.Name = m_nameInput;
             m_marksCategory.Color = m_selectedColor;
 
             m_result = EditMarkCategoryResult.Ok;
@@ -126,7 +130,7 @@ namespace Dziennik.View
         {
             m_nameValid = false;
 
-            if(string.IsNullOrWhiteSpace(m_name))
+            if(string.IsNullOrWhiteSpace(m_nameInput))
             {
                 m_okCommand.RaiseCanExecuteChanged();
                 return GlobalConfig.GetStringResource("lang_TypeValidCategoryName");

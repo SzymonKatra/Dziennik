@@ -20,7 +20,7 @@ namespace Dziennik.ViewModel
         public DateTime Start
         {
             get { return Model.Start; }
-            set { Model.Start = value; RaisePropertyChanged("Start"); RaisePropertyChanged("IsOneDay"); }
+            set { Model.Start = value; this.End = value; RaisePropertyChanged("Start"); RaisePropertyChanged("IsOneDay"); }
         }
         public DateTime End
         {

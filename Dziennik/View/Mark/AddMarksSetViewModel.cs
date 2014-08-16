@@ -153,6 +153,7 @@ namespace Dziennik.View
             {
                 StudentAddMarkPair pair = new StudentAddMarkPair(student);
                 pair.PropertyChanged += pair_PropertyChanged;
+                pair.ValidateInput();
                 m_students.Add(pair);
             }
             m_semester = semester;

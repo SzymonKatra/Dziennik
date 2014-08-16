@@ -109,7 +109,7 @@ namespace Dziennik.ViewModel
         }
         protected override void OnPopCopy(WorkingCopyResult result)
         {
-            ObjectsPack pack = new ObjectsPack();
+            ObjectsPack pack = CopyStack.Pop();
 
             if (result == WorkingCopyResult.Cancel)
             {

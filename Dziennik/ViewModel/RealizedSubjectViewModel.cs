@@ -52,8 +52,6 @@ namespace Dziennik.ViewModel
             ObjectsPack pack = new ObjectsPack();
             pack.Write(this.RealizedDate);
             pack.Write(this.CustomSubject);
-            pack.Write(this.IsCustom);
-            pack.Write(this.Name);
             pack.Write(this.GlobalSubject);
 
             CopyStack.Push(pack);

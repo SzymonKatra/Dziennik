@@ -29,6 +29,8 @@ namespace Dziennik
         {
             public List<CollectionChangedPair> Changelog { get; set; }
             public List<T> PushedItems { get; set; }
+
+            public static readonly CollectionCopy Separator = new CollectionCopy();
         }
 
         public int CopyDepth
@@ -36,6 +38,7 @@ namespace Dziennik
             get { return m_copyStack.Count; }
         }
 
+        private List<CollectionCopy> m_waitingList = new List<CollectionCopy>();
         private Stack<CollectionCopy> m_copyStack = new Stack<CollectionCopy>();
         private List<CollectionChangedPair> m_currentChangelog;
 
@@ -132,8 +135,6 @@ namespace Dziennik
 
         public void PushCopy()
         {
-            //if (m_workingCopyStarted) throw new InvalidOperationException("Already started");
-            //m_workingCopyStarted = true;
             CollectionCopy copy = new CollectionCopy();
             copy.Changelog = new List<CollectionChangedPair>();
             copy.PushedItems = new List<T>(this);
@@ -144,12 +145,20 @@ namespace Dziennik
         }
         public void PopCopy(WorkingCopyResult result)
         {
-            ///if (!m_workingCopyStarted) throw new InvalidOperationException("Must be started to end");
-            //m_workingCopyStarted = false;
             CollectionCopy copy = m_copyStack.Pop();
+            m_waitingList.Add(copy);
             foreach (var item in copy.PushedItems) item.PopCopy(result);
-            if (result == WorkingCopyResult.Cancel) Revert();
-            m_currentChangelog = null;
+            if (result == WorkingCopyResult.Cancel)
+            {
+                foreach (var oldCopy in m_waitingList)
+                {
+                    m_currentChangelog = oldCopy.Changelog;
+                    Revert();
+                }
+                m_waitingList.Clear();
+            }
+            m_currentChangelog = (m_copyStack.Count >= 1 ? m_copyStack.Peek().Changelog : null);
+            if (m_currentChangelog == null) m_waitingList.Clear();
         }
 
         private void Revert()

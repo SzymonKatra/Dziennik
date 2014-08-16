@@ -29,7 +29,7 @@ namespace Dziennik.View
             }
             m_selectedStudentsInput = SelectionParser.Create(m_selectedStudents);
 
-            m_schedule = new WeekScheduleViewModel();
+            m_result.Schedule = new WeekScheduleViewModel();
         }
 
         private SchoolGroupViewModel m_result = new SchoolGroupViewModel();
@@ -40,12 +40,12 @@ namespace Dziennik.View
 
         private ObservableCollection<GlobalStudentViewModel> m_globalStudentCollection;
 
-        private bool m_nameValid = false;
-        private string m_name;
-        public string Name
+        private bool m_nameInputValid = false;
+        private string m_nameInput;
+        public string NameInput
         {
-            get { return m_name; }
-            set { m_name = value; RaisePropertyChanged("Name"); }
+            get { return m_nameInput; }
+            set { m_nameInput = value; RaisePropertyChanged("NameInput"); }
         }
 
         private List<int> m_selectedStudents = new List<int>();
@@ -106,8 +106,7 @@ namespace Dziennik.View
 
             int index = 1;
 
-            m_result.Name = m_name;
-            m_schedule.CopyTo(m_result.Schedule);
+            m_result.Name = m_nameInput;
             foreach (int selStudent in m_selectedStudents)
             {
                 StudentInGroupViewModel studentInGroup = new StudentInGroupViewModel();
@@ -121,7 +120,7 @@ namespace Dziennik.View
         }
         private bool CanOk(object param)
         {
-            return m_nameValid && m_selectedStudentsInputValid;
+            return m_nameInputValid && m_selectedStudentsInputValid;
         }
         private void Cancel(object e)
         {
@@ -143,7 +142,7 @@ namespace Dziennik.View
         }
         private void ShowGlobalSubjectsList(object e)
         {
-            GlobalSubjectsListViewModel dialogViewModel = new GlobalSubjectsListViewModel(m_result.GlobalSubjects, new RelayCommand((x) => { }));
+            GlobalSubjectsListViewModel dialogViewModel = new GlobalSubjectsListViewModel(m_result.GlobalSubjects);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
 
@@ -157,7 +156,7 @@ namespace Dziennik.View
             {
                 switch (columnName)
                 {
-                    case "Name": return ValidateName();
+                    case "NameInput": return ValidateNameInput();
                     case "SelectedStudentsInput": return ValidateSelectedStudentsInput();
                 }
 
@@ -165,17 +164,17 @@ namespace Dziennik.View
             }
         }
 
-        public string ValidateName()
+        public string ValidateNameInput()
         {
-            m_nameValid = false;
+            m_nameInputValid = false;
 
-            if (string.IsNullOrWhiteSpace(m_name))
+            if (string.IsNullOrWhiteSpace(m_nameInput))
             {
                 m_okCommand.RaiseCanExecuteChanged();
                 return GlobalConfig.GetStringResource("lang_TypeGroupName");
             }
 
-            m_nameValid = true;
+            m_nameInputValid = true;
             m_okCommand.RaiseCanExecuteChanged();
             return string.Empty;
         }

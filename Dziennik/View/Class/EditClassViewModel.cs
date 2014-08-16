@@ -20,7 +20,7 @@ namespace Dziennik.View
             RemoveClass,
         }
 
-        public EditClassViewModel(SchoolClassViewModel schoolClass, ICommand autoSaveCommand)
+        public EditClassViewModel(SchoolClassViewModel schoolClass)
         {
             m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
@@ -30,13 +30,9 @@ namespace Dziennik.View
             m_editGroupCommand = new RelayCommand(EditGroup, CanEditGroup);
 
             m_schoolClass = schoolClass;
-            m_name = schoolClass.Name;
+            m_nameInput = schoolClass.Name;
             m_selectedCalendar = schoolClass.Calendar;
-
-            m_autoSaveCommand = autoSaveCommand;
         }
-
-        private ICommand m_autoSaveCommand;   
 
         private SchoolGroupViewModel m_selectedGroup;
         public SchoolGroupViewModel SelectedGroup
@@ -58,19 +54,19 @@ namespace Dziennik.View
             get { return m_result; }
         }
 
-        private bool m_nameValid = false;
-        private string m_name;
-        public string Name
+        private bool m_nameInputValid = false;
+        private string m_nameInput;
+        public string NameInput
         {
-            get { return m_name; }
-            set { m_name = value; RaisePropertyChanged("Name"); }
+            get { return m_nameInput; }
+            set { m_nameInput = value; RaisePropertyChanged("NameInput"); }
         }
 
         public string Path
         {
             get
             {
-                string result = GlobalConfig.Notifier.DatabasesDirectory + @"\" + m_name + GlobalConfig.SchoolClassDatabaseFileExtension;
+                string result = GlobalConfig.Notifier.DatabasesDirectory + @"\" + m_nameInput + GlobalConfig.SchoolClassDatabaseFileExtension;
                 foreach (char c in System.IO.Path.GetInvalidPathChars())
                 {
                     result = result.Replace(c.ToString(), "");
@@ -130,7 +126,7 @@ namespace Dziennik.View
 
         private void Ok(object param)
         {
-            m_schoolClass.Name = m_name;
+            m_schoolClass.Name = m_nameInput;
             m_schoolClass.Calendar = m_selectedCalendar;
 
             m_result = EditClassResult.Ok;
@@ -138,7 +134,7 @@ namespace Dziennik.View
         }
         private bool CanOk(object param)
         {
-            return m_nameValid;
+            return m_nameInputValid;
         }
         private void Cancel(object e)
         {
@@ -167,19 +163,27 @@ namespace Dziennik.View
             {
                 m_schoolClass.Groups.Add(dialogViewModel.Result);
                 SelectedGroup = dialogViewModel.Result;
-                m_autoSaveCommand.Execute(this);
             }
         }
         private void EditGroup(object param)
         {
-            EditGroupViewModel dialogViewModel = new EditGroupViewModel(m_selectedGroup, m_schoolClass.Students, m_autoSaveCommand);
+            m_selectedGroup.PushCopy();
+            EditGroupViewModel dialogViewModel = new EditGroupViewModel(m_selectedGroup, m_schoolClass.Students);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditGroupViewModel.EditGroupResult.RemoveGroup)
             {
+                m_selectedGroup.PopCopy(WorkingCopyResult.Ok);
                 m_schoolClass.Groups.Remove(m_selectedGroup);
                 SelectedGroup = null;
             }
-            if (dialogViewModel.Result != EditGroupViewModel.EditGroupResult.Cancel) m_autoSaveCommand.Execute(this);
+            else if(dialogViewModel.Result == EditGroupViewModel.EditGroupResult.Ok)
+            {
+                m_selectedGroup.PopCopy(WorkingCopyResult.Ok);
+            }
+            else if(dialogViewModel.Result == EditGroupViewModel.EditGroupResult.Cancel)
+            {
+                m_selectedGroup.PopCopy(WorkingCopyResult.Cancel);
+            }
         }
         private bool CanEditGroup(object param)
         {
@@ -187,7 +191,7 @@ namespace Dziennik.View
         }
         private void ShowGlobalStudentsList(object param)
         {
-            GlobalStudentsListViewModel dialogViewModel = new GlobalStudentsListViewModel(m_schoolClass.Students, m_autoSaveCommand);
+            GlobalStudentsListViewModel dialogViewModel = new GlobalStudentsListViewModel(m_schoolClass.Students);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
 
@@ -201,24 +205,24 @@ namespace Dziennik.View
             {
                 switch (columnName)
                 {
-                    case "Name": return ValidateName();
+                    case "NameInput": return ValidateNameInput();
                 }
 
                 return string.Empty;
             }
         }
 
-        private string ValidateName()
+        private string ValidateNameInput()
         {
-            m_nameValid = false;
+            m_nameInputValid = false;
 
-            if (string.IsNullOrWhiteSpace(m_name))
+            if (string.IsNullOrWhiteSpace(m_nameInput))
             {
                 m_okCommand.RaiseCanExecuteChanged();
                 return GlobalConfig.GetStringResource("lang_TypeValidClassName");
             }
 
-            m_nameValid = true;
+            m_nameInputValid = true;
             m_okCommand.RaiseCanExecuteChanged();
             return string.Empty;
         }

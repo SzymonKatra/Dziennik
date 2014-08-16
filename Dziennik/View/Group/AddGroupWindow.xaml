@@ -26,7 +26,7 @@
         <RadioButton Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="10,0,0,0" GroupName="NumerationType" Content="{DynamicResource lang_RenumberFromOne}" IsChecked="{Binding RenumberFromOne, Mode=TwoWay}"/>
         <RadioButton Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="10,0,0,0" GroupName="NumerationType" Content="{DynamicResource lang_SaveNumbers}"/>
 
-        <TextBox Grid.Column="1" Grid.Row="0" Margin="10,5,10,5" Text="{Binding Name, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
+        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding NameInput, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplateTextBox}"/>
         <Grid Grid.Column="1" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -41,7 +41,7 @@
             <Button Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_AllSubjects}" Command="{Binding ShowGlobalSubjectsListCommand}"/>
         </Grid>
 
-        <my:WeekScheduleControl x:Name="scheduleControl" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Style="{StaticResource inputControlStyle}" WeekSchedule="{Binding Schedule}"/>
+        <my:WeekScheduleControl x:Name="scheduleControl" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Style="{StaticResource inputControlStyle}" WeekSchedule="{Binding Result.Schedule}"/>
 
         <my:OkCancelControl Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>

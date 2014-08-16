@@ -27,11 +27,13 @@ namespace Dziennik.View
             m_notice = notice;
             m_isAddingMode = isAddingMode;
 
-            m_date = (isAddingMode ? DateTime.Now.Date : m_notice.Date);
-            m_notifyIn = (isAddingMode ? new TimeSpan(1,0,0,0): m_notice.NotifyIn);
-            m_name = m_notice.Name;
+            if(isAddingMode)
+            {
+                m_notice.Date = DateTime.Now.Date;
+                m_notice.NotifyIn = new TimeSpan(1, 0, 0, 0);
+            }
 
-            m_notifyInInput = m_notifyIn.Days.ToString();
+            m_notifyInInput = m_notice.NotifyIn.Days.ToString();
         }
 
         private EditNoticeResult m_result = EditNoticeResult.Cancel;
@@ -61,14 +63,7 @@ namespace Dziennik.View
             get { return m_removeNoticeCommand; }
         }
 
-        private DateTime m_date;
-        public DateTime Date
-        {
-            get { return m_date; }
-            set { m_date = value; RaisePropertyChanged("Date"); }
-        }
 
-        private TimeSpan m_notifyIn;
         private bool m_notifyInInputValid = false;
         private string m_notifyInInput;
         public string NotifyInInput
@@ -77,19 +72,8 @@ namespace Dziennik.View
             set { m_notifyInInput = value; RaisePropertyChanged("NotifyInput"); }
         }
 
-        private string m_name;
-        public string Name
-        {
-            get { return m_name; }
-            set { m_name = value; RaisePropertyChanged("Name"); }
-        }
-
         private void Ok(object e)
         {
-            m_notice.Date = m_date;
-            m_notice.NotifyIn = m_notifyIn;
-            m_notice.Name = m_name;
-
             m_result = EditNoticeResult.Ok;
             GlobalConfig.Dialogs.Close(this);
         }
@@ -140,7 +124,7 @@ namespace Dziennik.View
                 return GlobalConfig.GetStringResource("lang_TypeValidNonNegativeInteger");
             }
 
-            m_notifyIn = new TimeSpan(result, 0, 0, 0);
+            m_notice.NotifyIn = new TimeSpan(result, 0, 0, 0);
 
             m_notifyInInputValid = true;
             m_okCommand.RaiseCanExecuteChanged();

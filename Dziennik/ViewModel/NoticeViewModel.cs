@@ -17,19 +17,16 @@ namespace Dziennik.ViewModel
         {
         }
 
-        private string m_nameCopy;
         public string Name
         {
             get { return Model.Name; }
             set { Model.Name = value; RaisePropertyChanged("Name"); RaisePropertyChanged("DisplayedName"); }
         }
-        private DateTime m_dateCopy;
         public DateTime Date
         {
             get { return Model.Date; }
             set { Model.Date = value; RaisePropertyChanged("Date"); }
         }
-        private TimeSpan m_notifyInCopy;
         public TimeSpan NotifyIn
         {
             get { return Model.NotifyIn; }

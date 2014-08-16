@@ -28,16 +28,14 @@ namespace Dziennik.View
 
             m_student = student;
 
-            m_id = student.Number;
-            m_name = student.Name;
-            m_surname = student.Surname;
-            m_email = student.Email;
-            m_additionalInformation = student.AdditionalInformation;
-
-            m_idInput = m_id.ToString();
+            m_numberInput = m_student.Number.ToString();
         }
 
         private GlobalStudentViewModel m_student;
+        public GlobalStudentViewModel Student
+        {
+            get { return m_student; }
+        }
 
         private EditStudentResult m_result = EditStudentResult.Cancel;
         public EditStudentResult Result
@@ -52,41 +50,12 @@ namespace Dziennik.View
             set { m_isAddingMode = value; RaisePropertyChanged("IsAddingMode"); m_removeStudentCommand.RaiseCanExecuteChanged(); }
         }
 
-        private int m_id;
-        private bool m_idInputValid = false;
-        private string m_idInput;
-        public string IdInput
+        private bool m_numberInputValid = false;
+        private string m_numberInput;
+        public string NumberInput
         {
-            get { return m_idInput; }
-            set { m_idInput = value; RaisePropertyChanged("IdInput"); }
-        }
-
-        private string m_name;
-        public string Name
-        {
-            get { return m_name; }
-            set { m_name = value; RaisePropertyChanged("Name"); }
-        }
-
-        private string m_surname;
-        public string Surname
-        {
-            get { return m_surname; }
-            set { m_surname = value; RaisePropertyChanged("Surname"); }
-        }
-
-        private string m_email;
-        public string Email
-        {
-            get { return m_email; }
-            set { m_email = value; RaisePropertyChanged("Email"); }
-        }
-
-        private string m_additionalInformation;
-        public string AdditionalInformation
-        {
-            get { return m_additionalInformation; }
-            set { m_additionalInformation = value; RaisePropertyChanged("AdditionalInformation"); }
+            get { return m_numberInput; }
+            set { m_numberInput = value; RaisePropertyChanged("IdInput"); }
         }
 
         private RelayCommand m_okCommand;
@@ -109,26 +78,12 @@ namespace Dziennik.View
 
         private void Ok(object e)
         {
-            //if(m_isAddingMode && m_student.Id!=m_id)
-            //{
-            //    if(MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(this),"Nr ucznia został ręcznie zmieniony na inny i prawdopodobnie nie będzie zachowana kolejność"+Environment.NewLine+"Jeśli ten sam numer będzie posiadał inny uczeń to wszyscy znajdujący się poniżej uczniowie dostaną numer o 1 wyższy"+Environment.NewLine+"Czy chcesz kontynuować?", "Dziennik", MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes)
-            //    {
-            //        return;
-            //    }
-            //}
-
-            //m_student.Id = m_id;
-            m_student.Name = m_name;
-            m_student.Surname = m_surname;
-            m_student.Email = m_email;
-            m_student.AdditionalInformation = m_additionalInformation;
-
             m_result = EditStudentResult.Ok;
             GlobalConfig.Dialogs.Close(this);
         }
         private bool CanOk(object e)
         {
-            return m_idInputValid;
+            return m_numberInputValid;
         }
         private void Cancel(object e)
         {
@@ -169,33 +124,33 @@ namespace Dziennik.View
             {
                 switch(columnName)
                 {
-                    case "IdInput": return ValidateIdInput();
+                    case "NumberInput": return ValidateNumberInput();
                 }
 
                 return string.Empty;
             }
         }
 
-        public string ValidateIdInput()
+        private string ValidateNumberInput()
         {
             int result;
-            if (!int.TryParse(m_idInput, out result))
+            if (!int.TryParse(m_numberInput, out result))
             {
-                m_idInputValid = false;
+                m_numberInputValid = false;
                 m_okCommand.RaiseCanExecuteChanged();
                 return "Wprowadź poprawny numer";
             }
 
             if (result <= 0)
             {
-                m_idInputValid = false;
+                m_numberInputValid = false;
                 m_okCommand.RaiseCanExecuteChanged();
                 return "Numer musi być większy od 0";
             }
 
-            m_id = result;
+            m_student.Number = result;
 
-            m_idInputValid = true;
+            m_numberInputValid = true;
             m_okCommand.RaiseCanExecuteChanged();
 
             return string.Empty;
