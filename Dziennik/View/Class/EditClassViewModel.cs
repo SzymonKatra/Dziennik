@@ -66,7 +66,7 @@ namespace Dziennik.View
         {
             get
             {
-                string result = GlobalConfig.Notifier.DatabasesDirectory + @"\" + m_nameInput + GlobalConfig.SchoolClassDatabaseFileExtension;
+                string result = GlobalConfig.Notifier.DatabasesDirectory + @"\" + GlobalConfig.CurrentDatabaseSubdirectory + @"\" + m_nameInput + GlobalConfig.SchoolClassDatabaseFileExtension;
                 foreach (char c in System.IO.Path.GetInvalidPathChars())
                 {
                     result = result.Replace(c.ToString(), "");

@@ -86,6 +86,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Archiver.cs" />
     <Compile Include="ObjectsPacker.cs" />
     <Compile Include="IWorkingCopyAvailable.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />

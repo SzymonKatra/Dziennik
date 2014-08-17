@@ -26,6 +26,7 @@ namespace Dziennik.View
             m_cancelCommand = new RelayCommand(Cancel);
             m_addStudentCommand = new RelayCommand(AddStudent);
             m_removeStudentsCommand = new RelayCommand(RemoveStudents);
+            m_restoreStudentsCommand = new RelayCommand(RestoreStudents);
             m_removeGroupCommand = new RelayCommand(RemoveGroup);
             m_showGlobalSubjectsListCommand = new RelayCommand(ShowGlobalSubjectsList);
 
@@ -78,6 +79,12 @@ namespace Dziennik.View
         public ICommand RemoveStudentsCommand
         {
             get { return m_removeStudentsCommand; }
+        }
+
+        private RelayCommand m_restoreStudentsCommand;
+        public ICommand RestoreStudentsCommand
+        {
+            get { return m_restoreStudentsCommand; }
         }
 
         private RelayCommand m_removeGroupCommand;
@@ -141,7 +148,8 @@ namespace Dziennik.View
         }
         private void RemoveStudents(object param)
         {
-            SelectStudentsViewModel dialogViewModel = new SelectStudentsViewModel(m_schoolGroup.Students, null);
+            var toSelect = m_schoolGroup.Students.Where(x => !x.IsRemoved);
+            SelectStudentsViewModel dialogViewModel = new SelectStudentsViewModel(toSelect, null);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             List<int> selectionResult = dialogViewModel.ResultSelection;
             if (dialogViewModel.Result && selectionResult.Count > 0)
@@ -158,9 +166,38 @@ namespace Dziennik.View
                 foreach(int selRes in selectionResult)
                 {
                     StudentInGroupViewModel student = m_schoolGroup.Students.First((x) => { return x.Number == selRes; });
-                    student.GlobalStudent = null;
-                    student.FirstSemester.Marks.Clear();
-                    student.SecondSemester.Marks.Clear();
+                    student.IsRemoved = true;
+                    //student.GlobalStudent = null;
+                    //student.FirstSemester.Marks.Clear();
+                    //student.SecondSemester.Marks.Clear();
+                }
+            }
+        }
+        private void RestoreStudents(object param)
+        {
+            var toSelect = m_schoolGroup.Students.Where(x => x.IsRemoved);
+            SelectStudentsViewModel dialogViewModel = new SelectStudentsViewModel(toSelect, null);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+            List<int> selectionResult = dialogViewModel.ResultSelection;
+            if (dialogViewModel.Result && selectionResult.Count > 0)
+            {
+                StringBuilder msgTextBuilder = new StringBuilder();
+                msgTextBuilder.AppendLine(GlobalConfig.GetStringResource("lang_DoYouReallyWantToRestoreStudents"));
+
+                List<StudentInGroupViewModel> toRestore = new List<StudentInGroupViewModel>();
+                foreach (int selRes in selectionResult)
+                {
+                    var student = m_schoolGroup.Students.First(x => x.Number == selRes);
+                    toRestore.Add(student);
+
+                    msgTextBuilder.AppendLine(string.Format("{0}: {1} {2}", student.Number, student.GlobalStudent.Surname, student.GlobalStudent.Name));
+                }
+
+                if (GlobalConfig.MessageBox(this, msgTextBuilder.ToString(), MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
+
+                foreach (var student in toRestore)
+                {
+                    student.IsRemoved = false;
                 }
             }
         }

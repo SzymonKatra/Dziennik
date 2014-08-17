@@ -87,6 +87,11 @@ namespace Dziennik.ViewModel
             get { return m_globalStudent; }
             set { m_globalStudent = value; RaisePropertyChanged("GlobalStudent"); }
         }
+        public bool IsRemoved
+        {
+            get { return Model.IsRemoved; }
+            set { Model.IsRemoved = value; RaisePropertyChanged("IsRemoved"); }
+        }
 
         public decimal AverageMarkAll
         {
@@ -247,6 +252,7 @@ namespace Dziennik.ViewModel
             ObjectsPack pack = new ObjectsPack();
             pack.Write(this.Number);
             pack.Write(this.GlobalStudent);
+            pack.Write(this.IsRemoved);
 
             CopyStack.Push(pack);
 
@@ -262,6 +268,7 @@ namespace Dziennik.ViewModel
             {
                 this.Number = (int)pack.Read();
                 this.GlobalStudent = (GlobalStudentViewModel)pack.Read();
+                this.IsRemoved = (bool)pack.Read();
             }
 
             this.FirstSemester.PopCopy(result);

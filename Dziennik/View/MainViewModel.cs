@@ -21,6 +21,7 @@ namespace Dziennik.View
             m_saveCommand = new RelayCommand(Save);
             m_optionsCommand = new RelayCommand(Options);
             m_infoCommand = new RelayCommand(Info);
+            m_archiveDatabaseCommand = new RelayCommand(ArchiveDatabase);
         }
 
         private ObservableCollection<SchoolClassControlViewModel> m_openedSchoolClasses = new ObservableCollection<SchoolClassControlViewModel>();
@@ -73,6 +74,12 @@ namespace Dziennik.View
         public ICommand InfoCommand
         {
             get { return m_infoCommand; }
+        }
+
+        private RelayCommand m_archiveDatabaseCommand;
+        public ICommand ArchiveDatabaseCommand
+        {
+            get { return m_archiveDatabaseCommand; }
         }
 
         private bool m_databasesDirectoryChanged = true;
@@ -137,7 +144,11 @@ namespace Dziennik.View
             , null, "Zapisywanie ustawień do rejestru...");
             GlobalConfig.Dialogs.ShowDialog(this, saveDialogViewModel);
             if (GlobalConfig.Notifier.AutoSave) GlobalConfig.GlobalDatabase.Save();
-            if (m_databasesDirectoryChanged) Reload();
+            if (m_databasesDirectoryChanged)
+            {
+                Reload();
+                Options(null);
+            }
             RaisePropertyChanged("TabWidth");
         }
         private void Info(object e)
@@ -191,6 +202,45 @@ namespace Dziennik.View
                 SelectedClass.SelectedGroup = SelectedClass.ViewModel.Groups[0];
             }
         }
+        private void ArchiveDatabase(object param)
+        {
+            m_saveCommand.Execute(null);
+
+            ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
+            {
+                DateTime now = DateTime.Now;
+                IEnumerable<string> files = Directory.EnumerateFiles(GlobalConfig.Notifier.DatabasesDirectory + @"\" + GlobalConfig.CurrentDatabaseSubdirectory);
+                var validFiles = from f in files where f.EndsWith(GlobalConfig.SchoolClassDatabaseFileExtension) || f.EndsWith(GlobalConfig.SchoolOptionsDatabaseFileExtension) select f;
+
+                d.ProgressValue = 0;
+                d.ProgressStep = 100 / (double)(validFiles.Count() + 2);
+
+                d.Content = GlobalConfig.GetStringResource("lang_Starting");
+
+                Archiver archive = new Archiver(GlobalConfig.Notifier.DatabasesDirectory + @"\" + GlobalConfig.ArchiveDatabasesSubdirectory + @"\" + now.ToString(GlobalConfig.FileDateTimeFormat), now, Archiver.ArchiverMode.Write);
+                archive.Start();
+
+                d.StepProgress();
+
+                foreach (var file in validFiles)
+                {
+                    d.Content = file;
+                    archive.WriteFile(file);
+                    d.StepProgress();
+                }
+
+                d.Content = GlobalConfig.GetStringResource("lang_Ending");
+                archive.End();
+                d.StepProgress();
+
+                d.ProgressValue = 100;
+
+            }, null, "", GlobalConfig.GetStringResource("lang_Archiving"), GlobalConfig.ActionDialogProgressSize, true);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+
+            
+            
+        }
         private void CloseAllTabs()
         {
             if (GlobalConfig.GlobalDatabase != null) GlobalConfig.GlobalDatabase.Save();
@@ -206,27 +256,27 @@ namespace Dziennik.View
             {
                 CloseAllTabs();
 
-                IEnumerable<string> files = Directory.EnumerateFiles(GlobalConfig.Notifier.DatabasesDirectory);
-                var validFiles = from f in files where f.EndsWith(GlobalConfig.SchoolClassDatabaseFileExtension) select f;
-
                 d.ProgressValue = 0;
-                d.ProgressStep = 100.0 / (double)(validFiles.Count() + 1 + (loadRegistry ? 1 : 0));
 
                 if (loadRegistry)
                 {
                     d.Content = GlobalConfig.GetStringResource("lang_Registry");
                     GlobalConfig.Notifier.LoadRegistry();
-                    d.StepProgress();
                 }
-
-                d.Content = GlobalConfig.GetStringResource("lang_GlobalDatabase");
 
                 GlobalConfig.CreateDirectoriesIfNotExists();
 
-                string optionsPath = GlobalConfig.Notifier.DatabasesDirectory + @"\" + GlobalConfig.SchoolOptionsDatabaseFileName;
+                IEnumerable<string> files = Directory.EnumerateFiles(GlobalConfig.Notifier.DatabasesDirectory + @"\" + GlobalConfig.CurrentDatabaseSubdirectory);
+                var validFiles = from f in files where f.EndsWith(GlobalConfig.SchoolClassDatabaseFileExtension) select f;
+
+                d.ProgressStep = 100.0 / (double)(validFiles.Count() + 1 + (loadRegistry ? 1 : 0));
+
+                d.Content = GlobalConfig.GetStringResource("lang_GlobalDatabase");
+
+                string optionsPath = GlobalConfig.Notifier.DatabasesDirectory + @"\" + GlobalConfig.CurrentDatabaseSubdirectory + @"\" + GlobalConfig.SchoolOptionsDatabaseFileName;
                 if (File.Exists(optionsPath))
                 {
-                    GlobalConfig.GlobalDatabase = DatabaseGlobal.Load(GlobalConfig.Notifier.DatabasesDirectory + @"\" + GlobalConfig.SchoolOptionsDatabaseFileName);
+                    GlobalConfig.GlobalDatabase = DatabaseGlobal.Load(optionsPath);
                 }
                 else
                 {

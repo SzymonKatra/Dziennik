@@ -25,12 +25,14 @@
         
         <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width=".5*"/>
-                <ColumnDefinition Width=".5*"/>
+                <ColumnDefinition Width=".30*"/>
+                <ColumnDefinition Width=".30*"/>
+                <ColumnDefinition Width=".40*"/>
             </Grid.ColumnDefinitions>
             
             <Button Grid.Column="0" Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_AddStudent}" Command="{Binding AddStudentCommand}"/>
             <Button Grid.Column="1" Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_RemoveStudents}" Command="{Binding RemoveStudentsCommand}"/>
+            <Button Grid.Column="3" Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_RestoreStudents}" Command="{Binding RestoreStudentsCommand}"/>
         </Grid>
         
         <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">

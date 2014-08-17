@@ -1,4 +1,5 @@
 ﻿<Window x:Class="Dziennik.View.OptionsWindow"
+        x:Name="root"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:my="clr-namespace:Dziennik.Controls"
@@ -40,10 +41,8 @@
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_DatabaseDirectory}"/>
-            <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_DatabaseArchiveDirectory}"/>
 
-            <my:DirectorySelector x:Name="dirSelect" Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" SelectedPath="{Binding DatabasesDirectory, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}" IsTextBoxReadOnly="True"/>
-            <my:DirectorySelector Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" SelectedPath="{Binding DatabasesArchiveDirectory, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}" IsTextBoxReadOnly="True"/>
+            <my:DirectorySelector x:Name="dirSelect" Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" SelectedPath="{Binding SelectedDatabaseDirectory, ElementName=root, Mode=TwoWay}" IsTextBoxReadOnly="True"/>
             
             <Button Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_AllCalendars}" Command="{Binding ShowCalendarsListCommand}"/>
 

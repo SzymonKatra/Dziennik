@@ -91,4 +91,30 @@
 
     <s:String x:Key="attendanceConverterParameter">0.5-1-True</s:String>
     <s:String x:Key="averageMarkConverterParameter">1.6-6-False</s:String>
+
+    <Style x:Key="dataGridColumnStrikethrough" TargetType="{x:Type TextBlock}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsRemoved}" Value="True">
+                <Setter Property="TextDecorations" Value="Strikethrough"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+    <Style x:Key="dataGridRowStrikethrough" TargetType="{x:Type DataGridRow}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsRemoved}" Value="True">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type DataGridRow}">
+                            <Grid>
+                                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" ContentSource="Binding"/>
+                            </Grid>                              
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>

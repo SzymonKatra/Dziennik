@@ -124,18 +124,11 @@ namespace Dziennik
                 set { m_showWeights = value; RaisePropertyChanged("ShowWeights"); }
             }
 
-            private string m_databasesDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Dziennik_Klasy";
+            private string m_databasesDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Dziennik";
             public string DatabasesDirectory
             {
                 get { return m_databasesDirectory; }
                 set { m_databasesDirectory = value; RaisePropertyChanged("DatabasesDirectory"); }
-            }
-
-            private string m_databasesArchiveDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Dziennik_Archiwum";
-            public string DatabasesArchiveDirectory
-            {
-                get { return m_databasesArchiveDirectory; }
-                set { m_databasesArchiveDirectory = value; RaisePropertyChanged("DatabasesArchiveDirectory"); }
             }
 
             public void LoadRegistry()
@@ -157,7 +150,6 @@ namespace Dziennik
                 object autoSaveReg = key.GetValue(GlobalConfig.RegistryValueNameAutoSave);
                 object showWeightsReg = key.GetValue(GlobalConfig.RegistryValueNameShowWeights);
                 object databasesDirectoryReg = key.GetValue(GlobalConfig.RegistryValueNameDatabasesDirectory);
-                object databasesArchiveDirectoryReg = key.GetValue(GlobalConfig.RegistryValueNameDatabasesArchiveDirectory);
                 key.Close();
 
                 if (showNameReg != null) ShowName = Ext.BoolParseOrDefault(showNameReg.ToString(), m_showName);
@@ -176,7 +168,6 @@ namespace Dziennik
                 if (autoSaveReg != null) AutoSave = Ext.BoolParseOrDefault(autoSaveReg.ToString(), m_autoSave);
                 if (showWeightsReg != null) ShowWeights = Ext.BoolParseOrDefault(showWeightsReg.ToString(), m_showWeights);
                 if (databasesDirectoryReg != null) DatabasesDirectory = databasesDirectoryReg.ToString();
-                if (databasesArchiveDirectoryReg != null) DatabasesArchiveDirectory = databasesArchiveDirectoryReg.ToString();
                 //if (lastOpenedReg != null)
                 //{
                 //    string lastOpened = lastOpenedReg.ToString();
@@ -200,7 +191,6 @@ namespace Dziennik
                 key.SetValue(GlobalConfig.RegistryValueNameAutoSave, m_autoSave);
                 key.SetValue(GlobalConfig.RegistryValueNameShowWeights, m_showWeights);
                 key.SetValue(GlobalConfig.RegistryValueNameDatabasesDirectory, m_databasesDirectory);
-                key.SetValue(GlobalConfig.RegistryValueNameDatabasesArchiveDirectory, m_databasesArchiveDirectory);
                 //StringBuilder builder = new StringBuilder();
                 //foreach (SchoolClassControlViewModel item in m_openedSchoolClasses)
                 //{
@@ -216,8 +206,10 @@ namespace Dziennik
         public static readonly int DecimalRoundingPoints = 2;
         public static readonly string DateTimeFormat = "dd.MM.yyyy HH:mm";
         public static readonly string DateFormat = "dd.MM.yyyy";
+        public static readonly string FileDateTimeFormat = "ddMMyyy_HHmm";
         public static readonly string SchoolClassDatabaseFileExtension = ".dzs";
         public static readonly string SchoolOptionsDatabaseFileExtension = ".dzo";
+        public static readonly string DatabaseArchiveFileExtension = ".dza";
         public static readonly string FileDialogFilter = "Pliki dziennika (.dzs)|*.dzs|Dokumenty XML (.xml)|*.xml|Wszystkie pliki (*.*)|*.*";
         public static readonly string SchoolOptionsDatabaseFileName = "options" + SchoolOptionsDatabaseFileExtension;
         public static readonly string ErrorLogFileName = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + '\\' + "Dziennik_Error.log";
@@ -240,7 +232,8 @@ namespace Dziennik
         public static readonly string RegistryValueNameAutoSave = "AutoSave";
         public static readonly string RegistryValueNameShowWeights = "ShowWeights";
         public static readonly string RegistryValueNameDatabasesDirectory = "DatabasesDirectory";
-        public static readonly string RegistryValueNameDatabasesArchiveDirectory = "DatabasesArchiveDirectory";
+        public static readonly string CurrentDatabaseSubdirectory = "Baza";
+        public static readonly string ArchiveDatabasesSubdirectory = "Archiwum";
 
         public static readonly DialogService Dialogs;
 
@@ -320,7 +313,8 @@ namespace Dziennik
         public static void CreateDirectoriesIfNotExists()
         {
             if (!Directory.Exists(Notifier.DatabasesDirectory)) Directory.CreateDirectory(Notifier.DatabasesDirectory);
-            if (!Directory.Exists(Notifier.DatabasesArchiveDirectory)) Directory.CreateDirectory(Notifier.DatabasesArchiveDirectory);
+            if (!Directory.Exists(Notifier.DatabasesDirectory + @"\" + GlobalConfig.CurrentDatabaseSubdirectory)) Directory.CreateDirectory(Notifier.DatabasesDirectory + @"\" + GlobalConfig.CurrentDatabaseSubdirectory);
+            if (!Directory.Exists(Notifier.DatabasesDirectory + @"\" + GlobalConfig.ArchiveDatabasesSubdirectory)) Directory.CreateDirectory(Notifier.DatabasesDirectory + @"\" + GlobalConfig.ArchiveDatabasesSubdirectory);
         }
 
         public static string GetStringResource(object key)

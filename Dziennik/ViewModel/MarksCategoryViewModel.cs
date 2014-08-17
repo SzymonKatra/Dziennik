@@ -55,6 +55,8 @@ namespace Dziennik.ViewModel
 
             pack.Write(this.Name);
             pack.Write(this.Color);
+
+            CopyStack.Push(pack);
         }
         protected override void OnPopCopy(WorkingCopyResult result)
         {

@@ -34,7 +34,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="{DynamicResource lang_NumberShort}" IsReadOnly="True" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_NumberShort}" IsReadOnly="True" Binding="{Binding Number}"/>
                 <DataGridTextColumn Header="{DynamicResource lang_SurnamePerson}" IsReadOnly="True" Binding="{Binding Surname}"/>
                 <DataGridTextColumn Header="{DynamicResource lang_NamePerson}" IsReadOnly="True" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="{DynamicResource lang_Email}" IsReadOnly="True" Binding="{Binding Email}"/>

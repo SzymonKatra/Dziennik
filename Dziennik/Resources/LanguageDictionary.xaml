@@ -13,6 +13,7 @@
     <s:String x:Key="lang_SaveChanges">Zapisz zmiany</s:String>
     <s:String x:Key="lang_Options">Opcje</s:String>
     <s:String x:Key="lang_Info">Informacje</s:String>
+    <s:String x:Key="lang_Archive">Archiwizuj</s:String>
     
     <s:String x:Key="lang_Subjects">Tematy</s:String>
     <s:String x:Key="lang_Marks">Oceny</s:String>
@@ -75,6 +76,7 @@
     <s:String x:Key="lang_AddStudent">Dodaj ucznia</s:String>
     <s:String x:Key="lang_RemoveStudents">Usuń uczniów</s:String>
     <s:String x:Key="lang_RemoveGroup">Usuń grupę</s:String>
+    <s:String x:Key="lang_RestoreStudents">Przywróć uczniów</s:String>
     
     <s:String x:Key="lang_EditMarkTitle">Edytuj ocenę</s:String>
     <s:String x:Key="lang_Mark">Ocena</s:String>
@@ -199,7 +201,7 @@
     <s:String x:Key="lang_StudentNumberNotExistsFormat">Ucznia o numerze {0} nie ma w bazie</s:String>
     <s:String x:Key="lang_SelectedStudentsToRemoveFormat">Zaznaczono {0} uczniów do usunięcia.</s:String>
     <s:String x:Key="lang_TheyMarksAreGoingToBeRemove">Ich dotychczasowe oceny zostaną usunięte.</s:String>
-    <s:String x:Key="lang_OnListWillBeGaps">Na liście powstaną luki.</s:String>
+    <s:String x:Key="lang_OnListWillBeGaps">Na liście powstaną luki, lecz przywrócenie uczniów będzie możliwe.</s:String>
     <s:String x:Key="lang_TypeValidInteger">Wprowadź poprawną liczbę całkowitą</s:String>
     <s:String x:Key="lang_TypeValidNonNegativeInteger">Wprowadź poprawną nieujemną liczbę całkowitą</s:String>
     <s:String x:Key="lang_TypeMarkRange1-6Or0">Wprowadź ocenę z zakresu &lt;1; 6&gt;lub 0 jeśli chcesz ją anulować</s:String>
@@ -219,9 +221,15 @@
     <s:String x:Key="lang_TheyAre">Są to:</s:String>
     <s:String x:Key="lang_TheyAreSeparator"> ,</s:String>
     <s:String x:Key="lang_Saving">Zapisywanie</s:String>
+    <s:String x:Key="lang_Archiving">Archiwizowanie</s:String>
     <s:String x:Key="lang_Registry">Rejestr</s:String>
     <s:String x:Key="lang_GlobalDatabase">Globalna baza</s:String>
     <s:String x:Key="lang_Opening">Otwieranie</s:String>
     <s:String x:Key="lang_Today">Dzisiaj.</s:String>
     <s:String x:Key="lang_InDaysFormat">Za {0} dni.</s:String>
+    <s:String x:Key="lang_Removed">Usunięty</s:String>
+    <s:String x:Key="lang_DoYouReallyWantToRestoreStudents">Czy na pewno chcesz przywrócić uczniów?</s:String>
+    <s:String x:Key="lang_Starting">Rozpoczynanie</s:String>
+    <s:String x:Key="lang_Ending">Kończenie</s:String>
+
 </ResourceDictionary>

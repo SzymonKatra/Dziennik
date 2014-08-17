@@ -100,12 +100,6 @@ namespace Dziennik.View
                 return;
             }
 
-            m_student.Name = "----------";
-            m_student.Surname = "----------";
-            m_student.Email = "----------";
-            //m_student.FirstSemester.Marks.Clear();
-            //m_student.SecondSemester.Marks.Clear();
-
             m_result = EditStudentResult.RemoveStudentCreateHole;
             GlobalConfig.Dialogs.Close(this);
         }

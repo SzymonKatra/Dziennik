@@ -34,6 +34,8 @@
             <Button Style="{StaticResource wrapPanelImageButtonStyle}"  ToolTip="{DynamicResource lang_Info}" Command="{Binding InfoCommand}">
                 <Image Source="{StaticResource img_info}"/>
             </Button>
+            <Button Content="{DynamicResource lang_Archive}" ToolTip="{DynamicResource lang_Archive}" Command="{Binding ArchiveDatabaseCommand}">
+            </Button>
         </WrapPanel>
 
         <TabControl Grid.Row="1" ItemsSource="{Binding OpenedSchoolClasses}" SelectedValue="{Binding SelectedClass, Mode=TwoWay}">

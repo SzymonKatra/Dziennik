@@ -31,7 +31,8 @@
         <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource inputControlStyle}" Text="{Binding Student.Name, Mode=TwoWay}"/>
         <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource inputControlStyle}" Text="{Binding Student.Email, Mode=TwoWay}"/>
         <TextBox Grid.Column="1" Grid.Row="4" Style="{StaticResource inputControlStyle}" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Student.AdditionalInformation, Mode=TwoWay}"/>
-
+        
+        <!--
         <Grid Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width=".65*"/>
@@ -40,6 +41,7 @@
 
             <Button Grid.Column="1" Grid.Row="0" Content="{DynamicResource lang_RemoveStudent}" Margin="10,5,10,5" Command="{Binding RemoveStudentCommand}"/>
         </Grid>
+        -->
 
         <my:OkCancelControl Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>

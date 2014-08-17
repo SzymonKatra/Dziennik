@@ -91,6 +91,12 @@ namespace Dziennik.View
             set { m_selectedMarksCategory = value; RaisePropertyChanged("SelectedMarksCategory"); m_editMarksCategoryCommand.RaiseCanExecuteChanged(); }
         }
 
+        public string SelectedDatabaseDirectory
+        {
+            get { return GlobalConfig.Notifier.DatabasesDirectory; }
+            set { GlobalConfig.Notifier.DatabasesDirectory = value; RaisePropertyChanged("SelectedDatabaseDirectory"); GlobalConfig.Dialogs.Close(this); }
+        }
+
         private void Close(object e)
         {
             if (e == null) // if window is closed by X icon, e will be not null

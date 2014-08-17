@@ -35,7 +35,7 @@ namespace Dziennik.View
                 set { m_inGroup = value; m_global = null; AllChanged(); }
             }
 
-            public int Id
+            public int Number
             {
                 get
                 {
@@ -75,7 +75,7 @@ namespace Dziennik.View
             {
                 RaisePropertyChanged("Global");
                 RaisePropertyChanged("InGroup");
-                RaisePropertyChanged("Id");
+                RaisePropertyChanged("Number");
                 RaisePropertyChanged("Name");
                 RaisePropertyChanged("Surname");
                 RaisePropertyChanged("Email");
@@ -83,7 +83,7 @@ namespace Dziennik.View
             }
         }
 
-        public SelectStudentsViewModel(ObservableCollection<GlobalStudentViewModel> toSelect, List<int> initialSelection)
+        public SelectStudentsViewModel(IEnumerable<GlobalStudentViewModel> toSelect, List<int> initialSelection)
         {
             ObservableCollection<Selection> innerCopy = new ObservableCollection<Selection>();
             foreach(GlobalStudentViewModel global in toSelect)
@@ -92,7 +92,7 @@ namespace Dziennik.View
             }
             Initialize(innerCopy, initialSelection);
         }
-        public SelectStudentsViewModel(ObservableCollection<StudentInGroupViewModel> toSelect, List<int> initialSelection)
+        public SelectStudentsViewModel(IEnumerable<StudentInGroupViewModel> toSelect, List<int> initialSelection)
         {
             ObservableCollection<Selection> innerCopy = new ObservableCollection<Selection>();
             foreach (StudentInGroupViewModel inGroup in toSelect)
@@ -118,7 +118,7 @@ namespace Dziennik.View
             {
                 foreach (int already in initialSelection)
                 {
-                    Selection sel = toSelect.FirstOrDefault((x) => { return x.Id == already; });
+                    Selection sel = toSelect.FirstOrDefault((x) => { return x.Number == already; });
                     if (sel != null) sel.Selected = true;
                 }
             }
@@ -137,7 +137,7 @@ namespace Dziennik.View
 
                 foreach (Selection sel in m_toSelect)
                 {
-                    if (sel.Selected) selected.Add(sel.Id);
+                    if (sel.Selected) selected.Add(sel.Number);
                 }
 
                 return selected;
