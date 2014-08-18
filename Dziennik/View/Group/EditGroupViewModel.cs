@@ -155,10 +155,9 @@ namespace Dziennik.View
             if (dialogViewModel.Result && selectionResult.Count > 0)
             {
                 if (GlobalConfig.MessageBox(this,
-                                           string.Format("{1}{0}{2}{0}{3}{0}{4}",
+                                           string.Format("{1}{0}{2}{0}{3}",
                                            Environment.NewLine,
                                            string.Format(GlobalConfig.GetStringResource("lang_SelectedStudentsToRemoveFormat"), selectionResult.Count),
-                                           GlobalConfig.GetStringResource("lang_TheyMarksAreGoingToBeRemove"),
                                            GlobalConfig.GetStringResource("lang_OnListWillBeGaps"),
                                            GlobalConfig.GetStringResource("lang_DoYouWantToContinue")),
                                            MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;

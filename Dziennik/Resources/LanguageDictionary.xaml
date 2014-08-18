@@ -13,7 +13,8 @@
     <s:String x:Key="lang_SaveChanges">Zapisz zmiany</s:String>
     <s:String x:Key="lang_Options">Opcje</s:String>
     <s:String x:Key="lang_Info">Informacje</s:String>
-    <s:String x:Key="lang_Archive">Archiwizuj</s:String>
+    <s:String x:Key="lang_ArchiveAction">Archiwizuj</s:String>
+    <s:String x:Key="lang_Archive">Archiwum</s:String>
     
     <s:String x:Key="lang_Subjects">Tematy</s:String>
     <s:String x:Key="lang_Marks">Oceny</s:String>
@@ -48,6 +49,7 @@
     <s:String x:Key="lang_AddGroup">Dodaj grupę</s:String>
     <s:String x:Key="lang_ClassCalendar">Kalendarz klasowy</s:String>
     <s:String x:Key="lang_NoticesList">Lista powiadomień</s:String>
+    <s:String x:Key="lang_ArchivesList">Lista archiwów</s:String>
 
     <s:String x:Key="lang_OptionsTitle">Opcje</s:String>
     <s:String x:Key="lang_DatabaseDirectory">Katalog z bazą danych</s:String>
@@ -168,6 +170,10 @@
     <s:String x:Key="lang_AddNotice">Dodaj powiadomienie</s:String>
     <s:String x:Key="lang_NotifyInDays">Powiadom przed (dni)</s:String>
     
+    <s:String x:Key="lang_ArchiveListTitle">Lista archiwów</s:String>
+    <s:String x:Key="lang_PreviewArchive">Podgląd archiwum</s:String>
+    <s:String x:Key="lang_RestoreArchive">Przywróć archiwum</s:String>
+
     <s:String x:Key="lang_InfoTitle">Informacje</s:String>
     <s:String x:Key="lang_Author">Autor</s:String>
     <s:String x:Key="lang_AuthorName">Szymon Katra</s:String>
@@ -200,7 +206,6 @@
     <s:String x:Key="lang_TypeGroupName">Wprowadź nazwę grupy</s:String>
     <s:String x:Key="lang_StudentNumberNotExistsFormat">Ucznia o numerze {0} nie ma w bazie</s:String>
     <s:String x:Key="lang_SelectedStudentsToRemoveFormat">Zaznaczono {0} uczniów do usunięcia.</s:String>
-    <s:String x:Key="lang_TheyMarksAreGoingToBeRemove">Ich dotychczasowe oceny zostaną usunięte.</s:String>
     <s:String x:Key="lang_OnListWillBeGaps">Na liście powstaną luki, lecz przywrócenie uczniów będzie możliwe.</s:String>
     <s:String x:Key="lang_TypeValidInteger">Wprowadź poprawną liczbę całkowitą</s:String>
     <s:String x:Key="lang_TypeValidNonNegativeInteger">Wprowadź poprawną nieujemną liczbę całkowitą</s:String>
@@ -231,5 +236,11 @@
     <s:String x:Key="lang_DoYouReallyWantToRestoreStudents">Czy na pewno chcesz przywrócić uczniów?</s:String>
     <s:String x:Key="lang_Starting">Rozpoczynanie</s:String>
     <s:String x:Key="lang_Ending">Kończenie</s:String>
-
+    <s:String x:Key="lang_OpeningArchives">Odczytywanie archiwów</s:String>
+    <s:String x:Key="lang_AnErrorsOccurredWhileReadingSpecifiedArchives">Wystąpiły błędy przy odczytywaniu poniżej wymienionych archiwów:</s:String>
+    <s:String x:Key="lang_RestoreArchiveAsk">Czy na pewno chcesz przywrócić archiwum?</s:String>
+    <s:String x:Key="lang_CurrentDatabaseWillBeReplaced">Bieżąca baza zostanie zastąpiona odtworzoną z archiwum, lecz będzie możliwe jej przywrócenie</s:String>
+    <s:String x:Key="lang_ArchiveUnpacking">Rozpakowywanie archiwum</s:String>
+    <s:String x:Key="lang_LoadingArchives">Wczytywanie archiwów</s:String>
+    <s:String x:Key="lang_BeforeRestoringFromFormat">Przed przywróceniem archiwum z dnia: {0}</s:String>
 </ResourceDictionary>

@@ -88,6 +88,7 @@
     <BooleanToVisibilityConverter x:Key="convertBoolToVisibility"/>
     <my:DecimalToBrushConverter x:Key="convertDecimalToBrush"/>
     <my:NullableBrushToBrushConverter x:Key="convertNullableBrushToBrush"/>
+    <my:NegateBooleanConverter x:Key="convertBooleanNegate"/>
 
     <s:String x:Key="attendanceConverterParameter">0.5-1-True</s:String>
     <s:String x:Key="averageMarkConverterParameter">1.6-6-False</s:String>
@@ -114,6 +115,14 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+    <Style x:Key="dataGridRowRemoved" TargetType="{x:Type DataGridRow}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsRemoved}" Value="True">
+                <Setter Property="IsEnabled" Value="False"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>

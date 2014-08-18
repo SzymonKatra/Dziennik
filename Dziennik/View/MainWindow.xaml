@@ -34,7 +34,7 @@
             <Button Style="{StaticResource wrapPanelImageButtonStyle}"  ToolTip="{DynamicResource lang_Info}" Command="{Binding InfoCommand}">
                 <Image Source="{StaticResource img_info}"/>
             </Button>
-            <Button Content="{DynamicResource lang_Archive}" ToolTip="{DynamicResource lang_Archive}" Command="{Binding ArchiveDatabaseCommand}">
+            <Button Content="{DynamicResource lang_ArchiveAction}" ToolTip="{DynamicResource lang_ArchiveAction}" Command="{Binding ArchiveDatabaseCommand}">
             </Button>
         </WrapPanel>
 

@@ -87,9 +87,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Archiver.cs" />
+    <Compile Include="Controls\NegateBooleanConverter.cs" />
     <Compile Include="ObjectsPacker.cs" />
     <Compile Include="IWorkingCopyAvailable.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\Common\ArchivesListViewModel.cs" />
+    <Compile Include="View\Common\ArchivesListWindow.xaml.cs">
+      <DependentUpon>ArchivesListWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WorkingCollection.cs" />
     <Compile Include="CommandUtils\RelayCommand.cs" />
     <Compile Include="CommonEventArgs.cs" />
@@ -341,6 +346,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Calendar\EditOffDayWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Common\ArchivesListWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

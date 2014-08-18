@@ -54,6 +54,7 @@
 
             <TabItem Header="{DynamicResource lang_Marks}">
                 <DataGrid ItemsSource="{Binding SelectedGroup.Students}"
+                          RowStyle="{StaticResource dataGridRowRemoved}"
                   CanUserAddRows="False"
                   CanUserSortColumns="False"
                   SelectionMode="Single"

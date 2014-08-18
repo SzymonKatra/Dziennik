@@ -205,8 +205,9 @@ namespace Dziennik
 
         public static readonly int DecimalRoundingPoints = 2;
         public static readonly string DateTimeFormat = "dd.MM.yyyy HH:mm";
+        public static readonly string DateTimeWithSecondsFormat = "dd.MM.yyyy HH:mm:ss";
         public static readonly string DateFormat = "dd.MM.yyyy";
-        public static readonly string FileDateTimeFormat = "ddMMyyy_HHmm";
+        public static readonly string FileDateTimeFormat = "ddMMyyy_HHmmss";
         public static readonly string SchoolClassDatabaseFileExtension = ".dzs";
         public static readonly string SchoolOptionsDatabaseFileExtension = ".dzo";
         public static readonly string DatabaseArchiveFileExtension = ".dza";
@@ -289,6 +290,7 @@ namespace Dziennik
             windowViewModelMappings.Add(typeof(EditMarksCategoryViewModel), vm => new EditMarksCategoryWindow((EditMarksCategoryViewModel)vm));
             windowViewModelMappings.Add(typeof(EditNoticeViewModel), vm => new EditNoticeWindow((EditNoticeViewModel)vm));
             windowViewModelMappings.Add(typeof(NoticesListViewModel), vm => new NoticesListWindow((NoticesListViewModel)vm));
+            windowViewModelMappings.Add(typeof(ArchivesListViewModel), vm => new ArchivesListWindow((ArchivesListViewModel)vm));
 
             Dialogs = new DialogService(windowViewModelMappings);
         }

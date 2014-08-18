@@ -8,7 +8,7 @@
         WindowStyle="ToolWindow"> 
     <Grid>
         <DockPanel>
-            <TextBlock DockPanel.Dock="Top" Name="textBlock" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,15,20,15" Text="{Binding Content}"/>
+            <TextBlock DockPanel.Dock="Top" Name="textBlock" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Margin="20,15,20,15" Text="{Binding Content}"/>
             <ProgressBar DockPanel.Dock="Bottom" Name="progressBar" Margin="20,15,20,15" Height="25" Visibility="{Binding ProgressVisible, Converter={StaticResource convertBoolToVisibility}}"/>
         </DockPanel>
     </Grid>

@@ -19,6 +19,7 @@ namespace Dziennik.View
             m_editMarksCategoryCommand = new RelayCommand(EditMarksCategory, CanEditMarksCategory);
             m_addMarksCategoryCommand = new RelayCommand(AddMarksCategory);
             m_showNoticesListCommand = new RelayCommand(ShowNoticesList);
+            m_showArchivesListCommand = new RelayCommand(ShowArchivesList);
 
             m_openedSchoolClasses = openedSchoolClasses;
         }
@@ -63,6 +64,12 @@ namespace Dziennik.View
             get { return m_showNoticesListCommand; }
         }
 
+        private RelayCommand m_showArchivesListCommand;
+        public ICommand ShowArchivesListCommand
+        {
+            get { return m_showArchivesListCommand; }
+        }
+
         private ObservableCollection<SchoolClassControlViewModel> m_openedSchoolClasses;
         public ObservableCollection<SchoolClassControlViewModel> OpenedSchoolClasses
         {
@@ -91,10 +98,10 @@ namespace Dziennik.View
             set { m_selectedMarksCategory = value; RaisePropertyChanged("SelectedMarksCategory"); m_editMarksCategoryCommand.RaiseCanExecuteChanged(); }
         }
 
-        public string SelectedDatabaseDirectory
+        public string DatabasesDirectory
         {
             get { return GlobalConfig.Notifier.DatabasesDirectory; }
-            set { GlobalConfig.Notifier.DatabasesDirectory = value; RaisePropertyChanged("SelectedDatabaseDirectory"); GlobalConfig.Dialogs.Close(this); }
+            set { GlobalConfig.Notifier.DatabasesDirectory = value; RaisePropertyChanged("DatabasesDirectory"); GlobalConfig.Dialogs.Close(this); }
         }
 
         private void Close(object e)
@@ -214,6 +221,33 @@ namespace Dziennik.View
         {
             NoticesListViewModel dialogViewModel = new NoticesListViewModel();
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+        }
+        private void ShowArchivesList(object e)
+        {
+            ObservableCollection<ArchivesListViewModel.ArchiveInfo> archives = ArchivesListViewModel.LoadArchives(this);
+            ArchivesListViewModel dialogViewModel = new ArchivesListViewModel(archives);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+            if (dialogViewModel.Result == ArchivesListViewModel.ArchivesListResult.Preview)
+            {
+                GlobalConfig.Main.SaveCommand.Execute(null);
+                GlobalConfig.Main.BlockSaving = true;
+                GlobalConfig.Notifier.DatabasesDirectory = System.IO.Path.GetTempPath() + @"\Dziennik_" + Guid.NewGuid().ToString().Replace('-', '_');
+                GlobalConfig.CreateDirectoriesIfNotExists();
+                MainViewModel.UnpackArchive(GlobalConfig.Main, dialogViewModel.SelectedArchive.Path, GlobalConfig.Notifier.DatabasesDirectory + @"\" + GlobalConfig.CurrentDatabaseSubdirectory);
+                GlobalConfig.Dialogs.Close(this);
+            }
+            else if (dialogViewModel.Result == ArchivesListViewModel.ArchivesListResult.Restore)
+            {
+                GlobalConfig.Main.BlockSaving = true;
+                GlobalConfig.Main.SaveCommand.Execute(null);
+                GlobalConfig.Main.ArchiveDatabaseCommand.Execute(string.Format(GlobalConfig.GetStringResource("lang_BeforeRestoringFromFormat"), dialogViewModel.SelectedArchive.Date.ToString(GlobalConfig.DateTimeWithSecondsFormat)));
+                string unpackPath = GlobalConfig.Notifier.DatabasesDirectory + @"\" + GlobalConfig.CurrentDatabaseSubdirectory;
+                Ext.ClearDirectory(unpackPath);
+                MainViewModel.UnpackArchive(GlobalConfig.Main, dialogViewModel.SelectedArchive.Path, unpackPath);
+                GlobalConfig.Main.Reload();
+                GlobalConfig.Main.BlockSaving = false;
+                GlobalConfig.Dialogs.Close(this);
+            }
         }
     }
 }

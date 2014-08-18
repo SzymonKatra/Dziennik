@@ -18,10 +18,10 @@ namespace Dziennik.View
     {
         public MainViewModel()
         {
-            m_saveCommand = new RelayCommand(Save);
+            m_saveCommand = new RelayCommand(Save, CanSave);
             m_optionsCommand = new RelayCommand(Options);
             m_infoCommand = new RelayCommand(Info);
-            m_archiveDatabaseCommand = new RelayCommand(ArchiveDatabase);
+            m_archiveDatabaseCommand = new RelayCommand<string>(ArchiveDatabase);
         }
 
         private ObservableCollection<SchoolClassControlViewModel> m_openedSchoolClasses = new ObservableCollection<SchoolClassControlViewModel>();
@@ -52,7 +52,7 @@ namespace Dziennik.View
         {
             get
             {
-                int result = (m_windowWidth / m_openedSchoolClasses.Count) - 30;
+                int result = ((m_windowWidth - 70 - m_openedSchoolClasses.Count * 26) / m_openedSchoolClasses.Count);
                 if (result < 0) return 0;
                 return result;
             }
@@ -76,10 +76,17 @@ namespace Dziennik.View
             get { return m_infoCommand; }
         }
 
-        private RelayCommand m_archiveDatabaseCommand;
+        private RelayCommand<string> m_archiveDatabaseCommand;
         public ICommand ArchiveDatabaseCommand
         {
             get { return m_archiveDatabaseCommand; }
+        }
+
+        private bool m_blockSaving;
+        public bool BlockSaving
+        {
+            get { return m_blockSaving; }
+            set { m_blockSaving = value; RaisePropertyChanged("BlockSaving"); m_saveCommand.RaiseCanExecuteChanged(); }
         }
 
         private bool m_databasesDirectoryChanged = true;
@@ -133,13 +140,17 @@ namespace Dziennik.View
             }, null, "", GlobalConfig.GetStringResource("lang_Saving"), GlobalConfig.ActionDialogProgressSize, true);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
-        private void Options(object e)
+        private bool CanSave(object param)
+        {
+            return !m_blockSaving;
+        }
+        private void Options(object param)
         {
             OptionsViewModel dialogViewModel = new OptionsViewModel(m_openedSchoolClasses);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             ActionDialogViewModel saveDialogViewModel = new ActionDialogViewModel((d, p) =>
             {
-                GlobalConfig.Notifier.SaveRegistry();
+                if (!m_blockSaving) GlobalConfig.Notifier.SaveRegistry();
             }
             , null, "Zapisywanie ustawień do rejestru...");
             GlobalConfig.Dialogs.ShowDialog(this, saveDialogViewModel);
@@ -147,7 +158,7 @@ namespace Dziennik.View
             if (m_databasesDirectoryChanged)
             {
                 Reload();
-                Options(null);
+                if (!m_blockSaving) Options(null);
             }
             RaisePropertyChanged("TabWidth");
         }
@@ -202,7 +213,7 @@ namespace Dziennik.View
                 SelectedClass.SelectedGroup = SelectedClass.ViewModel.Groups[0];
             }
         }
-        private void ArchiveDatabase(object param)
+        private void ArchiveDatabase(string param)
         {
             m_saveCommand.Execute(null);
 
@@ -217,8 +228,17 @@ namespace Dziennik.View
 
                 d.Content = GlobalConfig.GetStringResource("lang_Starting");
 
-                Archiver archive = new Archiver(GlobalConfig.Notifier.DatabasesDirectory + @"\" + GlobalConfig.ArchiveDatabasesSubdirectory + @"\" + now.ToString(GlobalConfig.FileDateTimeFormat), now, Archiver.ArchiverMode.Write);
+                string path = GlobalConfig.Notifier.DatabasesDirectory + @"\" + GlobalConfig.ArchiveDatabasesSubdirectory + @"\" + now.ToString(GlobalConfig.FileDateTimeFormat) + GlobalConfig.DatabaseArchiveFileExtension;
+                int count = 1;
+                while (File.Exists(path))
+                {
+                    path = GlobalConfig.Notifier.DatabasesDirectory + @"\" + GlobalConfig.ArchiveDatabasesSubdirectory + @"\" + now.ToString(GlobalConfig.FileDateTimeFormat) + "(" + count.ToString() + ")" + GlobalConfig.DatabaseArchiveFileExtension;
+                    ++count;
+                }
+                Archiver archive = new Archiver(path, Archiver.ArchiverMode.Write, now);
                 archive.Start();
+                archive.WriteMetadataString((param == null ? GlobalConfig.GetStringResource("lang_Archive") : param));
+                archive.WriteMetadataArray(BitConverter.GetBytes(validFiles.Count()));
 
                 d.StepProgress();
 
@@ -236,21 +256,48 @@ namespace Dziennik.View
                 d.ProgressValue = 100;
 
             }, null, "", GlobalConfig.GetStringResource("lang_Archiving"), GlobalConfig.ActionDialogProgressSize, true);
-            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);         
+        }
+        public static void UnpackArchive(object viewModel, string archivePath, string unpackPath)
+        {
+            ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
+            {
+                d.Content = GlobalConfig.GetStringResource("lang_Starting");
+                Archiver archive = new Archiver(archivePath, Archiver.ArchiverMode.Read);
+                archive.Start();
+                archive.ReadMetadataString();
+                int filesCount = BitConverter.ToInt32(archive.ReadMetadataArray(), 0);
 
-            
-            
+                d.ProgressValue = 0;
+                d.ProgressStep = 100 / (double)(filesCount + 1);
+
+                for (int i = 0; i < filesCount; i++)
+                {
+                    archive.ReadFile(unpackPath);
+                }
+
+                d.Content = GlobalConfig.GetStringResource("lang_Ending");
+                archive.End();
+                d.StepProgress();
+
+                d.ProgressValue = 100;
+
+            }, null, "", GlobalConfig.GetStringResource("lang_ArchiveUnpacking"), GlobalConfig.ActionDialogProgressSize, true);
+            GlobalConfig.Dialogs.ShowDialog(viewModel, dialogViewModel);  
         }
         private void CloseAllTabs()
         {
-            if (GlobalConfig.GlobalDatabase != null) GlobalConfig.GlobalDatabase.Save();
-            foreach (SchoolClassControlViewModel tab in m_openedSchoolClasses)
+            if (!m_blockSaving)
             {
-                tab.SaveCommand.Execute(null);
-                m_openedSchoolClasses.Remove(tab);
+                if (GlobalConfig.GlobalDatabase != null) GlobalConfig.GlobalDatabase.Save();
+                foreach (SchoolClassControlViewModel tab in m_openedSchoolClasses)
+                {
+                    tab.SaveCommand.Execute(null);
+                }
             }
+            m_openedSchoolClasses.Clear();
         }
-        private void Reload(bool loadRegistry = false)
+        public void Reload(bool loadRegistry = false)
         {
             ActionDialogViewModel saveDialogViewModel = new ActionDialogViewModel((d, p) =>
             {

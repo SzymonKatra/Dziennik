@@ -37,6 +37,13 @@ namespace Dziennik
             return value;
         }
 
+        public static void ClearDirectory(string path)
+        {
+            DirectoryInfo info = new DirectoryInfo(path);
+            foreach (var file in info.GetFiles()) file.Delete();
+            foreach (var sub in info.GetDirectories()) sub.Delete(true);
+        }
+
         //private static BinaryFormatter s_formatter = new BinaryFormatter();
         //public static T DeepClone<T>(T original)
         //{

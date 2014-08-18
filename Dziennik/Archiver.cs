@@ -13,11 +13,16 @@ namespace Dziennik
             Write,
             Read,
         }
+        public enum ArchivedType : byte
+        {
+            File,
+            Metadata
+        }
 
-        public Archiver(string fileName, DateTime createdDateTime, ArchiverMode mode)
+        public Archiver(string fileName, ArchiverMode mode, DateTime? createdDateTime = null)
         {
             m_fileName = fileName;
-            m_createdDateTime = createdDateTime;
+            m_createdDateTime = (createdDateTime == null ? DateTime.Now : (DateTime)createdDateTime);
             m_mode = mode;
         }
 
@@ -84,9 +89,32 @@ namespace Dziennik
             m_createdDateTime = DateTime.FromBinary(BitConverter.ToInt64(createdDateTimeResult, 0));
         }
 
+        public void WriteMetadataString(string data)
+        {
+            byte[] dataBytes = Encoding.UTF8.GetBytes(data);
+            WriteMetadataArray(dataBytes);
+        }
+        public void WriteMetadataArray(byte[] data)
+        {
+            if (m_mode != ArchiverMode.Write) throw new InvalidOperationException("In order to write, mode must be set to ArchiverMode.Write");
+
+            m_stream.WriteByte((byte)ArchivedType.Metadata);
+
+            if (data == null)
+            {
+                m_stream.Write(BitConverter.GetBytes(0), 0, 4);
+            }
+            else
+            {
+                m_stream.Write(BitConverter.GetBytes(data.Length), 0, 4);
+                m_stream.Write(data, 0, data.Length);
+            }
+        }
         public void WriteFile(string filePath)
         {
             if (m_mode != ArchiverMode.Write) throw new InvalidOperationException("In order to write, mode must be set to ArchiverMode.Write");
+
+            m_stream.WriteByte((byte)ArchivedType.File);
 
             string name = Path.GetFileName(filePath);
             byte[] nameBytes = Encoding.UTF8.GetBytes(name);
@@ -107,30 +135,70 @@ namespace Dziennik
                 fileStream.Close();
             }
         }
+        public string ReadMetadataString()
+        {
+            return Encoding.UTF8.GetString(ReadMetadataArray());
+        }
+        public byte[] ReadMetadataArray()
+        {
+            if (m_mode != ArchiverMode.Read) throw new InvalidOperationException("In order to read, mode must be set to ArchiverMode.Read");
+
+            ArchivedType type = ReadType();
+            if (type != ArchivedType.Metadata) throw new InvalidDataException("Next archived type is not Metadata. It is: " + type.ToString());
+
+            m_stream.Read(m_buffer, 0, 4);
+            int length = BitConverter.ToInt32(m_buffer, 0);
+
+            byte[] result = new byte[length];
+
+            m_stream.Read(result, 0, length);
+
+            return result;
+        }
         public void ReadFile(string resultDirectory)
         {
             if (m_mode != ArchiverMode.Read) throw new InvalidOperationException("In order to read, mode must be set to ArchiverMode.Read");
+
+            ArchivedType type = ReadType();
+            if (type != ArchivedType.File) throw new InvalidDataException("Next archived type is not File. It is: " + type.ToString());
 
             m_stream.Read(m_buffer, 0, 4);
             int nameLength = BitConverter.ToInt32(m_buffer, 0);
 
             byte[] nameBytes = new byte[nameLength];
+            m_stream.Read(nameBytes, 0, nameBytes.Length);
             string name = Encoding.UTF8.GetString(nameBytes);
             string fullPath = resultDirectory + @"\" + name;
 
-            using (FileStream fileStream  = new FileStream(fullPath,FileMode.OpenOrCreate))
+            using (FileStream fileStream = new FileStream(fullPath, FileMode.OpenOrCreate))
             {
                 m_stream.Read(m_buffer, 0, 8);
                 long remainingFileLength = BitConverter.ToInt64(m_buffer, 0);
 
                 int readCount = -1;
-                while ((readCount = fileStream.Read(m_buffer, 0, (int)Math.Min((long)m_buffer.Length, remainingFileLength))) > 0)
+                while ((readCount = m_stream.Read(m_buffer, 0, (int)Math.Min((long)m_buffer.Length, remainingFileLength))) > 0)
                 {
                     fileStream.Write(m_buffer, 0, readCount);
+                    remainingFileLength -= readCount;
                 }
 
+                fileStream.Flush();
                 fileStream.Close();
             }
+        }
+
+        public ArchivedType NextAvailableType()
+        {
+            if (m_mode != ArchiverMode.Read) throw new InvalidOperationException("In order to read, mode must be set to ArchiverMode.Read");
+
+            ArchivedType type = ReadType();
+            m_stream.Position -= 1;
+
+            return type;
+        }
+        protected ArchivedType ReadType()
+        {
+            return (ArchivedType)((byte)m_stream.ReadByte());
         }
         public bool IsEndOfArchive()
         {
