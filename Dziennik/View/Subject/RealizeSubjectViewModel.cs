@@ -21,6 +21,24 @@ namespace Dziennik.View
 
         public class StudentPresencePair : ObservableObject
         {
+            public StudentPresencePair()
+            {
+                m_justifyCommand = new RelayCommand(Justify, CanJustify);
+                m_cancelJustifyCommand = new RelayCommand(CancelJustify, CanCancelJustify);
+            }
+
+            private RelayCommand m_justifyCommand;
+            public ICommand JustifyCommand
+            {
+                get { return m_justifyCommand; }
+            }
+
+            private RelayCommand m_cancelJustifyCommand;
+            public ICommand CancelJustifyCommand
+            {
+                get { return m_cancelJustifyCommand; }
+            }
+
             private StudentInGroupViewModel m_student;
             public StudentInGroupViewModel Student
             {
@@ -35,11 +53,59 @@ namespace Dziennik.View
                 set { m_presence = value; RaisePropertyChanged("Presence"); }
             }
 
-            private bool m_wasPresentCache;
-            public bool WasPresentCache
+            public bool IsRemoved
             {
-                get { return m_wasPresentCache; }
-                set { m_wasPresentCache = value; }
+                get { return m_student.IsRemoved; }
+            }
+
+            private Dziennik.Model.PresenceType m_presenceCache;
+            public Dziennik.Model.PresenceType PresenceCache
+            {
+                get { return m_presenceCache; }
+                set { m_presenceCache = value; RaiseAllPresenceChanged(); }
+            }
+
+            public bool WasPresent
+            {
+                get { return m_presenceCache == Model.PresenceType.Present; }
+                set { m_presenceCache = Model.PresenceType.Present; RaiseAllPresenceChanged(); }
+            }
+            public bool WasAbsent
+            {
+                get { return m_presenceCache == Model.PresenceType.Absent || m_presenceCache == Model.PresenceType.AbsentJustified; }
+                set { m_presenceCache = Model.PresenceType.Absent; RaiseAllPresenceChanged(); }
+            }
+            public bool WasLate
+            {
+                get { return m_presenceCache == Model.PresenceType.Late; }
+                set { m_presenceCache = Model.PresenceType.Late; RaiseAllPresenceChanged(); }
+            }
+
+            private void Justify(object param)
+            {
+                PresenceCache = Model.PresenceType.AbsentJustified;
+            }
+            private bool CanJustify(object param)
+            {
+                return m_presenceCache == Model.PresenceType.Absent;
+            }
+            private void CancelJustify(object param)
+            {
+                PresenceCache = Model.PresenceType.Absent;
+            }
+            private bool CanCancelJustify(object param)
+            {
+                return m_presenceCache == Model.PresenceType.AbsentJustified;
+            }
+
+            private void RaiseAllPresenceChanged()
+            {
+                RaisePropertyChanged("PresenceCache");
+                RaisePropertyChanged("WasPresent");
+                RaisePropertyChanged("WasAbsent");
+                RaisePropertyChanged("WasLate");
+                m_justifyCommand.RaiseCanExecuteChanged();
+                m_cancelJustifyCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -74,12 +140,14 @@ namespace Dziennik.View
                 if (isAddingMode)
                 {
                     pair.Presence = new RealizedSubjectPresenceViewModel() { RealizedSubject = m_realizedSubject };
-                    pair.Presence.WasPresent = pair.WasPresentCache = true;
+                    //pair.Presence.WasPresent = pair.WasPresentCache = true;
+                    pair.Presence.Presence = pair.PresenceCache = Model.PresenceType.Present;
                 }
                 else
                 {
                     pair.Presence = student.Presence.First(x => x.RealizedSubject == m_realizedSubject);
-                    pair.WasPresentCache = pair.Presence.WasPresent;
+                    //pair.WasPresentCache = pair.Presence.WasPresent;
+                    pair.PresenceCache = pair.Presence.Presence;
                 }
                 m_pairs.Add(pair);
             }
@@ -175,7 +243,8 @@ namespace Dziennik.View
             m_realizedSubject.RealizedDate = m_realizeDate;
             foreach (var pair in m_pairs)
             {
-                pair.Presence.WasPresent = pair.WasPresentCache;
+                //pair.Presence.WasPresent = pair.WasPresentCache;
+                pair.Presence.Presence = pair.PresenceCache;
                 if (!m_isAddingMode) pair.Student.RaiseAttendanceChanged();
             }
             if (m_isAddingMode)

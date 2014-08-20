@@ -96,6 +96,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
+                        <DataGridTextColumn Header="{DynamicResource lang_JustifiedFirst}" Binding="{Binding JustifiedFirstDisplay}" Visibility="{Binding ShowFirstJustified, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
                         <DataGridTemplateColumn Header="{DynamicResource lang_HalfEndingMark}" Visibility="{Binding ShowHalfEndingMark, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
                             <DataGridTemplateColumn.HeaderTemplate>
                                 <DataTemplate>
@@ -142,6 +143,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
+                        <DataGridTextColumn Header="{DynamicResource lang_JustifiedSecond}" Binding="{Binding JustifiedSecondDisplay}" Visibility="{Binding ShowSecondJustified, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
                         <DataGridTextColumn Header="{DynamicResource lang_AverageYear}" Binding="{Binding AverageMarkAll}" Visibility="{Binding ShowEndingAverage, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
@@ -156,6 +158,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
+                        <DataGridTextColumn Header="{DynamicResource lang_JustifiedYear}" Binding="{Binding JustifiedYearDisplay}" Visibility="{Binding ShowYearJustified, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"/>
                         <DataGridTemplateColumn Header="{DynamicResource lang_YearEndingMark}" Visibility="{Binding ShowYearEndingMark, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
                             <DataGridTemplateColumn.HeaderTemplate>
                                 <DataTemplate>

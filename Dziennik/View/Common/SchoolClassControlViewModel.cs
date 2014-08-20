@@ -263,6 +263,7 @@ namespace Dziennik.View
             int completedCount = 0;
             foreach (StudentInGroupViewModel student in m_selectedGroup.Students)
             {
+                if (student.IsRemoved) continue;
                 decimal average = (e == "half" ? student.FirstSemester.AverageMark : student.AverageMarkAll);
                 decimal endingMark = SemesterViewModel.ProposeMark(average);
                 if (endingMark == 0M) continue;
@@ -287,6 +288,7 @@ namespace Dziennik.View
             int completedCount = 0;
             foreach (StudentInGroupViewModel student in m_selectedGroup.Students)
             {
+                if (student.IsRemoved) continue;
                 decimal average = (e == "half" ? student.FirstSemester.AverageMark : student.AverageMarkAll);
                 decimal endingMark = SemesterViewModel.ProposeMark(average);
                 if (endingMark == 0M) continue;
@@ -313,6 +315,7 @@ namespace Dziennik.View
             int completedCount = 0;
             foreach (StudentInGroupViewModel student in m_selectedGroup.Students)
             {
+                if (student.IsRemoved) continue;
                 if (e == "half")
                 {
                     if (student.HalfEndingMark == 0M) continue;

@@ -61,6 +61,13 @@ namespace Dziennik
                 set { m_showFirstAttendance = value; RaisePropertyChanged("ShowFirstAttendance"); }
             }
 
+            private bool m_showFirstJustified = true;
+            public bool ShowFirstJustified
+            {
+                get { return m_showFirstJustified; }
+                set { m_showFirstJustified = value; RaisePropertyChanged("ShowFirstJustified"); }
+            }
+
             private bool m_showHalfEndingMark = true;
             public bool ShowHalfEndingMark
             {
@@ -89,6 +96,13 @@ namespace Dziennik
                 set { m_showSecondAttendance = value; RaisePropertyChanged("ShowSecondAttendance"); }
             }
 
+            private bool m_showSecondJustified = true;
+            public bool ShowSecondJustified
+            {
+                get { return m_showSecondJustified; }
+                set { m_showSecondJustified = value; RaisePropertyChanged("ShowSecondJustified"); }
+            }
+
             private bool m_showEndingAverage = true;
             public bool ShowEndingAverage
             {
@@ -101,6 +115,13 @@ namespace Dziennik
             {
                 get { return m_showYearAttendance; }
                 set { m_showYearAttendance = value; RaisePropertyChanged("ShowYearAttendance"); }
+            }
+
+            private bool m_showYearJustified = true;
+            public bool ShowYearJustified
+            {
+                get { return m_showYearJustified; }
+                set { m_showYearJustified = value; RaisePropertyChanged("ShowYearJustified"); }
             }
 
             private bool m_showYearEndingMark = true;
@@ -140,12 +161,15 @@ namespace Dziennik
                 object showFirstMarksReg = key.GetValue(GlobalConfig.RegistryValueNameShowFirstMarks);
                 object showFirstAverageReg = key.GetValue(GlobalConfig.RegistryValueNameShowFirstAverage);
                 object showFirstAttendanceReg = key.GetValue(GlobalConfig.RegistryValueNameShowFirstAttendance);
+                object showFirstJustifiedReg = key.GetValue(GlobalConfig.RegistryValueNameShowFirstJustified);
                 object showHalfEndingMarkReg = key.GetValue(GlobalConfig.RegistryValueNameShowHalfEndingMark);
                 object showSecondMarksReg = key.GetValue(GlobalConfig.RegistryValueNameShowSecondMarks);
                 object showSecondAverageReg = key.GetValue(GlobalConfig.RegistryValueNameShowSecondAverage);
                 object showSecondAttendanceReg = key.GetValue(GlobalConfig.RegistryValueNameShowSecondAttendance);
+                object showSecondJustifiedReg = key.GetValue(GlobalConfig.RegistryValueNameShowSecondJustified);
                 object showEndingAverageReg = key.GetValue(GlobalConfig.RegistryValueNameShowEndingAverage);
                 object showYearAttendanceReg = key.GetValue(GlobalConfig.RegistryValueNameShowYearAttendance);
+                object showYearJustifiedReg = key.GetValue(GlobalConfig.RegistryValueNameShowYearJustified);
                 object showYearEndingMarkReg = key.GetValue(GlobalConfig.RegistryValueNameShowYearEndingMark);
                 object autoSaveReg = key.GetValue(GlobalConfig.RegistryValueNameAutoSave);
                 object showWeightsReg = key.GetValue(GlobalConfig.RegistryValueNameShowWeights);
@@ -158,12 +182,15 @@ namespace Dziennik
                 if (showFirstMarksReg != null) ShowFirstMarks = Ext.BoolParseOrDefault(showFirstMarksReg.ToString(), m_showFirstMarks);
                 if (showFirstAverageReg != null) ShowFirstAverage = Ext.BoolParseOrDefault(showFirstAverageReg.ToString(), m_showFirstAverage);
                 if (showFirstAttendanceReg != null) ShowFirstAttendance = Ext.BoolParseOrDefault(showFirstAttendanceReg.ToString(), m_showFirstAttendance);
+                if (showFirstJustifiedReg != null) ShowFirstJustified = Ext.BoolParseOrDefault(showFirstJustifiedReg.ToString(), m_showFirstJustified);
                 if (showHalfEndingMarkReg != null) ShowHalfEndingMark = Ext.BoolParseOrDefault(showHalfEndingMarkReg.ToString(), m_showHalfEndingMark);
                 if (showSecondMarksReg != null) ShowSecondMarks = Ext.BoolParseOrDefault(showSecondMarksReg.ToString(), m_showSecondMarks);
                 if (showSecondAverageReg != null) ShowSecondAverage = Ext.BoolParseOrDefault(showSecondAverageReg.ToString(), m_showSecondAverage);
                 if (showSecondAttendanceReg != null) ShowSecondAttendance = Ext.BoolParseOrDefault(showSecondAttendanceReg.ToString(), m_showSecondAttendance);
+                if (showSecondJustifiedReg != null) ShowSecondJustified = Ext.BoolParseOrDefault(showSecondJustifiedReg.ToString(), m_showSecondJustified);
                 if (showEndingAverageReg != null) ShowEndingAverage = Ext.BoolParseOrDefault(showEndingAverageReg.ToString(), m_showEndingAverage);
                 if (showYearAttendanceReg != null) ShowYearAttendance = Ext.BoolParseOrDefault(showYearAttendanceReg.ToString(), m_showYearAttendance);
+                if (showYearJustifiedReg != null) ShowYearJustified = Ext.BoolParseOrDefault(showYearJustifiedReg.ToString(), m_showYearJustified);
                 if (showYearEndingMarkReg != null) ShowYearEndingMark = Ext.BoolParseOrDefault(showYearEndingMarkReg.ToString(), m_showYearEndingMark);
                 if (autoSaveReg != null) AutoSave = Ext.BoolParseOrDefault(autoSaveReg.ToString(), m_autoSave);
                 if (showWeightsReg != null) ShowWeights = Ext.BoolParseOrDefault(showWeightsReg.ToString(), m_showWeights);
@@ -183,10 +210,16 @@ namespace Dziennik
                 key.SetValue(GlobalConfig.RegistryValueNameShowEmail, m_showEmail);
                 key.SetValue(GlobalConfig.RegistryValueNameShowFirstMarks, m_showFirstMarks);
                 key.SetValue(GlobalConfig.RegistryValueNameShowFirstAverage, m_showFirstAverage);
+                key.SetValue(GlobalConfig.RegistryValueNameShowFirstAttendance, m_showFirstAttendance);
+                key.SetValue(GlobalConfig.RegistryValueNameShowFirstJustified, m_showFirstJustified);
                 key.SetValue(GlobalConfig.RegistryValueNameShowHalfEndingMark, m_showHalfEndingMark);
                 key.SetValue(GlobalConfig.RegistryValueNameShowSecondMarks, m_showSecondMarks);
                 key.SetValue(GlobalConfig.RegistryValueNameShowSecondAverage, m_showSecondAverage);
+                key.SetValue(GlobalConfig.RegistryValueNameShowSecondAttendance, m_showSecondAttendance);
+                key.SetValue(GlobalConfig.RegistryValueNameShowSecondJustified, m_showSecondJustified);
                 key.SetValue(GlobalConfig.RegistryValueNameShowEndingAverage, m_showEndingAverage);
+                key.SetValue(GlobalConfig.RegistryValueNameShowYearAttendance, m_showYearAttendance);
+                key.SetValue(GlobalConfig.RegistryValueNameShowYearJustified, m_showYearJustified);
                 key.SetValue(GlobalConfig.RegistryValueNameShowYearEndingMark, m_showYearEndingMark);
                 key.SetValue(GlobalConfig.RegistryValueNameAutoSave, m_autoSave);
                 key.SetValue(GlobalConfig.RegistryValueNameShowWeights, m_showWeights);
@@ -225,12 +258,15 @@ namespace Dziennik
         public static readonly string RegistryValueNameShowFirstMarks = "ShowFirstMarks";
         public static readonly string RegistryValueNameShowFirstAverage = "ShowFirstAverage";
         public static readonly string RegistryValueNameShowFirstAttendance = "ShowFirstAttendance";
+        public static readonly string RegistryValueNameShowFirstJustified = "ShowFirstJustified";
         public static readonly string RegistryValueNameShowHalfEndingMark = "ShowHalfEndingMark";
         public static readonly string RegistryValueNameShowSecondMarks = "ShowSecondMarks";
         public static readonly string RegistryValueNameShowSecondAverage = "ShowSecondAverage";
         public static readonly string RegistryValueNameShowSecondAttendance = "ShowSecondAttendance";
+        public static readonly string RegistryValueNameShowSecondJustified = "ShowSecondJustified";
         public static readonly string RegistryValueNameShowEndingAverage = "ShowEndingAverage";
         public static readonly string RegistryValueNameShowYearAttendance = "ShowYearAttendance";
+        public static readonly string RegistryValueNameShowYearJustified = "ShowYearJustified";
         public static readonly string RegistryValueNameShowYearEndingMark = "ShowYearEndingMark";
         public static readonly string RegistryValueNameAutoSave = "AutoSave";
         public static readonly string RegistryValueNameShowWeights = "ShowWeights";

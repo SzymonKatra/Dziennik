@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -28,6 +29,38 @@ namespace Dziennik.View
             this.DataContext = viewModel;
 
             GlobalConfig.Dialogs.Register(this, viewModel);
+        }
+
+        private void dataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter || e.Key == Key.Tab)
+            {
+                do
+                {
+                    if (dataGrid.Items.Count - 1 > dataGrid.SelectedIndex)
+                    {
+                        var uiElement = e.OriginalSource as UIElement;
+                        if (uiElement != null)
+                        {
+                            uiElement.MoveFocus(new TraversalRequest(FocusNavigationDirection.Down));
+                        }
+                    }
+                }
+                while (!(dataGrid.ItemContainerGenerator.ContainerFromIndex(dataGrid.SelectedIndex) as DataGridRow).IsEnabled);
+
+                e.Handled = true;
+            }
+        }
+
+        private IEnumerable<DataGridRow> GetDataGridRows()
+        {
+            var itemsSource = dataGrid.ItemsSource as IEnumerable;
+            if (null == itemsSource) yield return null;
+            foreach (var item in itemsSource)
+            {
+                var row = dataGrid.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
+                if (null != row) yield return row;
+            }
         }
     }
 }

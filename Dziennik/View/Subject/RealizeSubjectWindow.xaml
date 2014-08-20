@@ -18,25 +18,26 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        
+
         <RadioButton Name="radioFrom" Grid.Column="0" Grid.Row="0" Style="{StaticResource controlTitleStyle}" GroupName="SubjectType" IsChecked="True" Content="{DynamicResource lang_FromCurriculum}"/>
         <Grid Grid.Column="1" Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="30"/>
             </Grid.ColumnDefinitions>
-            
+
             <TextBox Grid.Column="0" IsReadOnly="True" IsEnabled="{Binding IsChecked, ElementName=radioFrom}" Style="{StaticResource validationTemplateTextBox}" Text="{Binding SelectedSubject.Name}"/>
             <Button Grid.Column="1" IsEnabled="{Binding IsChecked, ElementName=radioFrom}" Margin="0,5,5,5" Content="..." Command="{Binding ChooseSubjectCommand}"/>
         </Grid>
-        
+
         <RadioButton Name="radioOutside"  Grid.Column="0" Grid.Row="1" Style="{StaticResource controlTitleStyle}" GroupName="SubjectType" IsChecked="{Binding IsOutsideCurriculum, Mode=TwoWay}" Content="{DynamicResource lang_OutsideCurriculum}"/>
         <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" IsEnabled="{Binding IsChecked, ElementName=radioOutside}" Text="{Binding OutsideSubject}"/>
-        
+
         <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_RealizedDate}"/>
         <DatePicker Grid.Column="1" Grid.Row="2" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding RealizeDate}"/>
-        
+
         <DataGrid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2"
+                  RowStyle="{StaticResource dataGridRowRemoved}"
                   ItemsSource="{Binding Pairs}"
                   CanUserAddRows="False"
                   CanUserSortColumns="False"
@@ -44,20 +45,41 @@
                   AutoGenerateColumns="False"
                   IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="{DynamicResource lang_NumberShort}" Binding="{Binding Student.Number}"/>
-                <DataGridTemplateColumn Header="{DynamicResource lang_Presence}">
+                <DataGridTextColumn Header="{DynamicResource lang_NumberShort}" Binding="{Binding Student.Number}" ElementStyle="{StaticResource dataGridColumnStrikethrough}"/>
+                <DataGridTemplateColumn Header="{DynamicResource lang_PresenceShort}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding WasPresentCache, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <CheckBox IsChecked="{Binding WasPresent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="{DynamicResource lang_SurnamePerson}" Binding="{Binding Student.GlobalStudent.Surname}"/>
-                <DataGridTextColumn Header="{DynamicResource lang_NamePerson}" Binding="{Binding Student.GlobalStudent.Name}"/>
+                <DataGridTemplateColumn Header="{DynamicResource lang_AbsentShort}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding WasAbsent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource mouseOverBackgroundCheckBoxStyle}" Background="{Binding PresenceCache, Converter={StaticResource convertAbsentToBrush}}">
+                                <CheckBox.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="{DynamicResource lang_Justify}" Command="{Binding JustifyCommand}"/>
+                                        <MenuItem Header="{DynamicResource lang_CancelJustify}" Command="{Binding CancelJustifyCommand}"/>
+                                    </ContextMenu>
+                                </CheckBox.ContextMenu>
+                            </CheckBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="{DynamicResource lang_LateShort}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding WasLate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="{DynamicResource lang_SurnamePerson}" Binding="{Binding Student.GlobalStudent.Surname}" ElementStyle="{StaticResource dataGridColumnStrikethrough}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_NamePerson}" Binding="{Binding Student.GlobalStudent.Name}" ElementStyle="{StaticResource dataGridColumnStrikethrough}"/>
             </DataGrid.Columns>
         </DataGrid>
-        
+
         <my:RemoveButtonControl Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Content="{DynamicResource lang_RemoveSubject}" Command="{Binding RemoveSubjectCommand}"/>
         <my:OkCancelControl Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
-    </Grid> 
+    </Grid>
 </Window>

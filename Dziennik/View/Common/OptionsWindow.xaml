@@ -17,8 +17,8 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width=".5*"/>
-            <ColumnDefinition Width=".5*"/>
+            <ColumnDefinition Width=".4*"/>
+            <ColumnDefinition Width=".6*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -54,13 +54,16 @@
                 <CheckBox Content="{DynamicResource lang_Email}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowEmail, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
                 <CheckBox Content="{DynamicResource lang_MarksFirst}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowFirstMarks, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
                 <CheckBox Content="{DynamicResource lang_AttendanceFirst}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowFirstAttendance, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
+                <CheckBox Content="{DynamicResource lang_JustifiedFirst}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowFirstJustified, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
                 <CheckBox Content="{DynamicResource lang_AverageFirst}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowFirstAverage, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
                 <CheckBox Content="{DynamicResource lang_HalfEndingMark}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowHalfEndingMark, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
                 <CheckBox Content="{DynamicResource lang_MarksSecond}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowSecondMarks, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
                 <CheckBox Content="{DynamicResource lang_AverageSecond}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowSecondAverage, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
                 <CheckBox Content="{DynamicResource lang_AttendanceSecond}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowSecondAttendance, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
+                <CheckBox Content="{DynamicResource lang_JustifiedSecond}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowSecondJustified, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
                 <CheckBox Content="{DynamicResource lang_AverageYear}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowEndingAverage, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
                 <CheckBox Content="{DynamicResource lang_AttendanceYear}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowYearAttendance, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
+                <CheckBox Content="{DynamicResource lang_JustifiedYear}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowYearJustified, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
                 <CheckBox Content="{DynamicResource lang_YearEndingMark}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowYearEndingMark, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
                 <CheckBox Content="{DynamicResource lang_AutoSave}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding AutoSave, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>
                 <CheckBox Content="{DynamicResource lang_ShowWeights}" Style="{StaticResource inputControlStyle}" IsChecked="{Binding ShowWeights, Source={x:Static local:GlobalConfig.Notifier}, Mode=TwoWay}"/>

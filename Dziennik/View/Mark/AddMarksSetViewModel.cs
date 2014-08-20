@@ -38,6 +38,11 @@ namespace Dziennik.View
                 set { m_student = value; RaisePropertyChanged("Student"); }
             }
 
+            public bool IsRemoved
+            {
+                get { return m_student.IsRemoved; }
+            }
+
             private decimal m_value;
             public decimal Value
             {
@@ -77,7 +82,11 @@ namespace Dziennik.View
             public string Input
             {
                 get { return m_input; }
-                set { m_input = value; RaisePropertyChanged("Input"); }
+                set
+                {
+                    if (IsRemoved) return;
+                    m_input = value; RaisePropertyChanged("Input");
+                }
             }
             private bool m_isInputNull;
             public bool IsInputNull

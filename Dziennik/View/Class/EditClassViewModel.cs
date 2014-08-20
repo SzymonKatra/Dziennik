@@ -31,7 +31,7 @@ namespace Dziennik.View
 
             m_schoolClass = schoolClass;
             m_nameInput = schoolClass.Name;
-            m_selectedCalendar = schoolClass.Calendar;
+            m_selectedCalendar = m_originalCalendar =  schoolClass.Calendar;
         }
 
         private SchoolGroupViewModel m_selectedGroup;
@@ -41,6 +41,7 @@ namespace Dziennik.View
             set { m_selectedGroup = value; RaisePropertyChanged("SelectedGroup"); m_editGroupCommand.RaiseCanExecuteChanged(); }
         }
 
+        private CalendarViewModel m_originalCalendar;
         private CalendarViewModel m_selectedCalendar;
         public CalendarViewModel SelectedCalendar
         {
@@ -128,6 +129,17 @@ namespace Dziennik.View
         {
             m_schoolClass.Name = m_nameInput;
             m_schoolClass.Calendar = m_selectedCalendar;
+
+            if(m_originalCalendar!= m_selectedCalendar)
+            {
+                foreach (var group in m_schoolClass.Groups)
+                {
+                    foreach (var student in group.Students)
+                    {
+                        student.RaiseAttendanceChanged();
+                    }
+                }
+            }
 
             m_result = EditClassResult.Ok;
             GlobalConfig.Dialogs.Close(this);

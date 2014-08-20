@@ -25,17 +25,22 @@ namespace Dziennik.ViewModel
             set { m_realizedSubject = value; RaisePropertyChanged("RealizedSubject"); }
         }
 
+        public PresenceType Presence
+        {
+            get { return Model.Presence; }
+            set { Model.Presence = value; RaisePropertyChanged("Presence"); RaisePropertyChanged("WasPresent"); }
+        }
+
         public bool WasPresent
         {
-            get { return Model.WasPresent; }
-            set { Model.WasPresent = value; RaisePropertyChanged("WasPresent"); }
+            get { return Model.Presence == PresenceType.Present || Model.Presence == PresenceType.Late; }
         }
 
         protected override void OnPushCopy()
         {
             ObjectsPack pack = new ObjectsPack();
             pack.Write(this.RealizedSubject);
-            pack.Write(this.WasPresent);
+            pack.Write(this.Presence);
 
             CopyStack.Push(pack);
         }
@@ -46,7 +51,7 @@ namespace Dziennik.ViewModel
             if(result == WorkingCopyResult.Cancel)
             {
                 this.RealizedSubject = (RealizedSubjectViewModel)pack.Read();
-                this.WasPresent = (bool)pack.Read();
+                this.Presence = (PresenceType)pack.Read();
             }
         } 
     }

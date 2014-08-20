@@ -28,16 +28,19 @@
         <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource inputControlStyle}" TextWrapping="Wrap" Text="{Binding Description,Mode=TwoWay}"/>
 
         <DataGrid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2"
+                  x:Name="dataGrid"
+                  RowStyle="{StaticResource dataGridRowRemoved}"
                   ItemsSource="{Binding Students}"
                   CanUserAddRows="False"
                   CanUserSortColumns="False"
                   SelectionMode="Single"
-                  AutoGenerateColumns="False">
+                  AutoGenerateColumns="False"
+                  PreviewKeyDown="dataGrid_PreviewKeyDown">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="{DynamicResource lang_NumberShort}" IsReadOnly="True" Binding="{Binding Student.Number}"/>
-                <DataGridTextColumn Header="{DynamicResource lang_SurnamePerson}" IsReadOnly="True" Binding="{Binding Student.GlobalStudent.Surname}"/>
-                <DataGridTextColumn Header="{DynamicResource lang_NamePerson}" IsReadOnly="True" Binding="{Binding Student.GlobalStudent.Name}"/>
-                <DataGridTextColumn Header="{DynamicResource lang_MarkOrWeight}" IsReadOnly="False" Binding="{Binding Input, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_NumberShort}" IsReadOnly="True" Binding="{Binding Student.Number}" ElementStyle="{StaticResource dataGridColumnStrikethrough}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_SurnamePerson}" IsReadOnly="True" Binding="{Binding Student.GlobalStudent.Surname}" ElementStyle="{StaticResource dataGridColumnStrikethrough}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_NamePerson}" IsReadOnly="True" Binding="{Binding Student.GlobalStudent.Name}" ElementStyle="{StaticResource dataGridColumnStrikethrough}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_MarkOrWeight}" IsReadOnly="False" Binding="{Binding Input, Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged}"/>
             </DataGrid.Columns>
         </DataGrid>
 

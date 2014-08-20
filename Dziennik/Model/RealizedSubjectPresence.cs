@@ -5,11 +5,20 @@ using System.Text;
 
 namespace Dziennik.Model
 {
+    public enum PresenceType
+    {
+        Present,
+        Absent,
+        Late,
+        AbsentJustified,
+    }
+
     [Serializable]
     public class RealizedSubjectPresence : ModelBase
     {
         public ulong? RealizedSubjectId { get; set; }
 
-        public bool WasPresent { get; set; }
+        public PresenceType Presence { get; set; }
+        //public bool WasPresent { get; set; }
     }
 }

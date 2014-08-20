@@ -208,6 +208,56 @@ namespace Dziennik.ViewModel
                 return string.Format(GlobalConfig.GetStringResource("lang_AttendanceDisplayFormat"), wasPresentCount, valid.Count(), (AttendanceYear * 100M).ToString("G29", CultureInfo.InvariantCulture));
             }
         }
+        public string JustifiedFirstDisplay
+        {
+            get
+            {
+                var valid = FirstPresence;
+                if (valid == null) return ZeroFormatJustified();
+
+                int justified, notJustified, lates;
+                ComputeJustified(valid, out justified, out notJustified, out lates);
+
+                return string.Format(GlobalConfig.GetStringResource("lang_JustifiedDisplayFormat"), justified, notJustified, lates);
+            }
+        }
+        public string JustifiedSecondDisplay
+        {
+            get
+            {
+                var valid = SecondPresence;
+                if (valid == null) return ZeroFormatJustified();
+
+                int justified, notJustified, lates;
+                ComputeJustified(valid, out justified, out notJustified, out lates);
+
+                return string.Format(GlobalConfig.GetStringResource("lang_JustifiedDisplayFormat"), justified, notJustified, lates);
+            }
+        }
+        public string JustifiedYearDisplay
+        {
+            get
+            {
+                var valid = YearPresence;
+                if (valid == null) return ZeroFormatJustified();
+
+                int justified, notJustified, lates;
+                ComputeJustified(valid, out justified, out notJustified, out lates);
+
+                return string.Format(GlobalConfig.GetStringResource("lang_JustifiedDisplayFormat"), justified, notJustified, lates);
+            }
+        }
+
+        public void ComputeJustified(IEnumerable<RealizedSubjectPresenceViewModel> presence, out int justified, out int notJustified, out int lates)
+        {
+            justified = presence.Count(x => x.Presence == PresenceType.AbsentJustified);
+            notJustified = presence.Count(x => x.Presence == PresenceType.Absent);
+            lates = presence.Count(x => x.Presence == PresenceType.Late);
+        }
+        private string ZeroFormatJustified()
+        {
+            return string.Format(GlobalConfig.GetStringResource("lang_JustifiedDisplayFormat"), 0, 0, 0);
+        }
 
         private decimal ComputeAttendance(IEnumerable<RealizedSubjectPresenceViewModel> presence)
         {
@@ -220,7 +270,6 @@ namespace Dziennik.ViewModel
             return result;
         }
 
-
         public void RaiseAttendanceChanged()
         {
             RaisePropertyChanged("FirstPresence");
@@ -232,6 +281,9 @@ namespace Dziennik.ViewModel
             RaisePropertyChanged("AttendanceFirstDisplay");
             RaisePropertyChanged("AttendanceSecondDisplay");
             RaisePropertyChanged("AttendanceYearDisplay");
+            RaisePropertyChanged("JustifiedFirstDisplay");
+            RaisePropertyChanged("JustifiedSecondDisplay");
+            RaisePropertyChanged("JustifiedYearDisplay");
         }
         private void SemesterMarksChanged(object sender, EventArgs e)
         {
