@@ -28,9 +28,9 @@ namespace Dziennik.View
             m_isAddingMode = isAddingMode;
 
             m_marksCategory = marksCategory;
+            if (m_isAddingMode) m_marksCategory.DefaultWeight = 1;
 
             m_nameInput = m_marksCategory.Name;
-            m_selectedColor = m_marksCategory.Color;
         }
 
         private EditMarkCategoryResult m_result = EditMarkCategoryResult.Cancel;
@@ -77,18 +77,8 @@ namespace Dziennik.View
             set { m_nameInput = value; RaisePropertyChanged("Name"); }
         }
 
-        private System.Windows.Media.Color m_selectedColor;
-        public System.Windows.Media.Color SelectedColor
-        {
-            get { return m_selectedColor; }
-            set { m_selectedColor = value; RaisePropertyChanged("SelectedColor"); }
-        }
-
         private void Ok(object e)
         {
-            m_marksCategory.Name = m_nameInput;
-            m_marksCategory.Color = m_selectedColor;
-
             m_result = EditMarkCategoryResult.Ok;
             GlobalConfig.Dialogs.Close(this);
         }
@@ -121,7 +111,7 @@ namespace Dziennik.View
             {
                 switch (columnName)
                 {
-                    case "Name": return ValidateName();
+                    case "NameInput": return ValidateName();
                 }
                 return string.Empty;
             }
@@ -137,6 +127,7 @@ namespace Dziennik.View
             }
 
             m_nameValid = true;
+            m_marksCategory.Name = m_nameInput;
             m_okCommand.RaiseCanExecuteChanged();
             return string.Empty;
         }

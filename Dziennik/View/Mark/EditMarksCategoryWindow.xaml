@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:my="clr-namespace:Dziennik.Controls"
+        xmlns:local="clr-namespace:Dziennik"
         Title="{DynamicResource lang_EditMarksCategoryTitle}" Height="300" Width="300"
         WindowStartupLocation="CenterOwner">
     <Grid>
@@ -13,6 +14,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
@@ -22,12 +24,15 @@
         <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource validationTemplateTextBox}" Text="{Binding NameInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
         
         <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Color}"/>
-        <my:ColorPickerEx Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" SelectedColor="{Binding SelectedColor, Mode=TwoWay}"
+        <my:ColorPickerEx Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" SelectedColor="{Binding MarksCategory.Color, Mode=TwoWay}"
                           AvailableColorsHeader="{DynamicResource lang_AvailableColors}"
                           RecentColorsHeader="{DynamicResource lang_RecentColors}"
                           StandardColorsHeader="{DynamicResource lang_StandardColors}"/>
         
-        <my:RemoveButtonControl Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Content="{DynamicResource lang_RemoveCategory}"  Command="{Binding RemoveCategoryCommand}"/>
-        <my:OkCancelControl Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
+        <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_DefaultWeight}"/>
+        <my:NonEditableIntegerUpDown Grid.Column="1" Grid.Row="2" Style="{StaticResource inputControlStyle}"  HorizontalAlignment="Left" Width="50" Value="{Binding MarksCategory.DefaultWeight}" Minimum="{x:Static local:GlobalConfig.DefaultWeightMinValue}" Maximum="{x:Static local:GlobalConfig.DefaultWeightMaxValue}"/>
+        
+        <my:RemoveButtonControl Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Content="{DynamicResource lang_RemoveCategory}"  Command="{Binding RemoveCategoryCommand}"/>
+        <my:OkCancelControl Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>
 </Window>

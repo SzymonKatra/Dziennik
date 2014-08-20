@@ -215,6 +215,8 @@ namespace Dziennik
         public static readonly string SchoolOptionsDatabaseFileName = "options" + SchoolOptionsDatabaseFileExtension;
         public static readonly string ErrorLogFileName = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + '\\' + "Dziennik_Error.log";
         public static readonly Size ActionDialogProgressSize = new Size(400, 200);
+        public static readonly int DefaultWeightMinValue = 0;
+        public static readonly int DefaultWeightMaxValue = 9;
 
         public static readonly string RegistryKeyName = @"Software\Dziennik_Katra";
         public static readonly string RegistryValueNameShowName = "ShowName";

@@ -43,7 +43,7 @@ namespace Dziennik.View
 
             m_valueInput = (isAddingMode ? string.Empty : MarkViewModel.GetValidDisplayedMark(m_mark.Value));
             m_noteInput = m_mark.Note;
-            m_weightInput = m_mark.Weight.ToString();
+            //m_weightInput = m_mark.Weight.ToString();
 
             m_noteSelected = !mark.IsValueValid;         
 
@@ -92,14 +92,6 @@ namespace Dziennik.View
             set { m_noteInput = value; RaisePropertyChanged("NoteInput"); }
         }
 
-        private bool m_weightInputValid = false;
-        private string m_weightInput;
-        public string WeightInput
-        {
-            get { return m_weightInput; }
-            set { m_weightInput = value; RaisePropertyChanged("WeightInput"); }
-        }
-
         private bool m_noteSelected;
         public bool NoteSelected
         {
@@ -121,12 +113,16 @@ namespace Dziennik.View
             get { return m_availableCategories; }
         }
 
-        public static readonly MarksCategoryViewModel NoSelectionMarksCategory = new MarksCategoryViewModel() { Name = GlobalConfig.GetStringResource("lang_NoneSmall") };
+        public static readonly MarksCategoryViewModel NoSelectionMarksCategory = new MarksCategoryViewModel() { Name = GlobalConfig.GetStringResource("lang_NoneSmall"), DefaultWeight=1 };
         private MarksCategoryViewModel m_selectedCategory;
         public MarksCategoryViewModel SelectedCategory
         {
             get { return m_selectedCategory; }
-            set { m_selectedCategory = value; RaisePropertyChanged("SelectedCategory"); }
+            set
+            {
+                m_selectedCategory = value; RaisePropertyChanged("SelectedCategory");
+                Mark.Weight = m_selectedCategory.DefaultWeight;
+            }
         }
 
         private RelayCommand m_okCommand;
@@ -166,7 +162,7 @@ namespace Dziennik.View
         }
         private bool CanOk(object e)
         {
-            return (m_noteSelected ? m_noteInputValid : m_valueInputValid && m_weightInputValid);
+            return (m_noteSelected ? m_noteInputValid : m_valueInputValid);
         }
         private void Cancel(object e)
         {
@@ -203,7 +199,7 @@ namespace Dziennik.View
                 {
                     case "ValueInput": return ValidateValueInput();
                     case "NoteInput": return ValidateNoteInput();
-                    case "WeightInput": return ValidateWeightInput();
+                    //case "WeightInput": return ValidateWeightInput();
                 }
 
                 return string.Empty;
@@ -247,26 +243,26 @@ namespace Dziennik.View
 
             return string.Empty;
         }
-        private string ValidateWeightInput()
-        {
-            if (m_noteSelected) return string.Empty;
-            m_weightInputValid = false;
+        //private string ValidateWeightInput()
+        //{
+        //    if (m_noteSelected) return string.Empty;
+        //    m_weightInputValid = false;
 
-            int result;
+        //    int result;
 
-            string errorResult = GlobalValidateWeightInput(m_weightInput, out result);
-            if(!string.IsNullOrEmpty(errorResult))
-            {
-                m_okCommand.RaiseCanExecuteChanged();
-                return errorResult;
-            }
+        //    string errorResult = GlobalValidateWeightInput(m_weightInput, out result);
+        //    if(!string.IsNullOrEmpty(errorResult))
+        //    {
+        //        m_okCommand.RaiseCanExecuteChanged();
+        //        return errorResult;
+        //    }
 
-            m_mark.Weight = result;
-            m_weightInputValid = true;
-            m_okCommand.RaiseCanExecuteChanged();
+        //    m_mark.Weight = result;
+        //    m_weightInputValid = true;
+        //    m_okCommand.RaiseCanExecuteChanged();
 
-            return string.Empty;
-        }
+        //    return string.Empty;
+        //}
 
         public static string GlobalValidateValue(string input, out decimal result)
         {
@@ -340,19 +336,19 @@ namespace Dziennik.View
 
             return string.Empty;
         }
-        public static string GlobalValidateWeightInput(string input, out int result)
-        {
-            if (!int.TryParse(input, out result))
-            {
-                return GlobalConfig.GetStringResource("lang_TypeValidInteger");
-            }
+        //public static string GlobalValidateWeightInput(string input, out int result)
+        //{
+        //    if (!int.TryParse(input, out result))
+        //    {
+        //        return GlobalConfig.GetStringResource("lang_TypeValidInteger");
+        //    }
 
-            if (result < 0 || result > 9)
-            {
-                return GlobalConfig.GetStringResource("lang_TypeWeightRange0-9");
-            }
+        //    if (result < 0 || result > 9)
+        //    {
+        //        return GlobalConfig.GetStringResource("lang_TypeWeightRange0-9");
+        //    }
 
-            return string.Empty;
-        }
+        //    return string.Empty;
+        //}
     }
 }

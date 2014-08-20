@@ -157,7 +157,7 @@ namespace Dziennik.View
                 m_students.Add(pair);
             }
             m_semester = semester;
-            m_weightInput = m_weight.ToString();
+            //m_weightInput = m_weight.ToString();
         }
 
         private AddMarksSetResult m_result = AddMarksSetResult.Cancel;
@@ -186,14 +186,19 @@ namespace Dziennik.View
             set { m_description = value; RaisePropertyChanged("Description"); }
         }
 
-        private bool m_weightInputValid = false;
+        //private bool m_weightInputValid = false;
         private int m_weight = 1;
-        private string m_weightInput;
-        public string WeightInput
+        public int Weight
         {
-            get { return m_weightInput; }
-            set { m_weightInput = value; RaisePropertyChanged("WeightInput"); }
+            get { return m_weight; }
+            set { m_weight = value; RaisePropertyChanged("Weight"); }
         }
+        //private string m_weightInput;
+        //public string WeightInput
+        //{
+        //    get { return m_weightInput; }
+        //    set { m_weightInput = value; RaisePropertyChanged("WeightInput"); }
+        //}
 
         private ObservableCollection<MarksCategoryViewModel> m_availableCategories;
         public ObservableCollection<MarksCategoryViewModel> AvailableCategories
@@ -205,7 +210,11 @@ namespace Dziennik.View
         public MarksCategoryViewModel SelectedCategory
         {
             get { return m_selectedCategory; }
-            set { m_selectedCategory = value; RaisePropertyChanged("SelectedCategory"); }
+            set
+            {
+                m_selectedCategory = value; RaisePropertyChanged("SelectedCategory");
+                Weight = m_selectedCategory.DefaultWeight;
+            }
         }
 
         private RelayCommand m_okCommand;
@@ -281,7 +290,8 @@ namespace Dziennik.View
             {
                 if (!pair.InputValid) return false;
             }
-            return m_weightInputValid;
+            return true;
+            //return m_weightInputValid;
         }
         private void Cancel(object e)
         {
@@ -306,33 +316,33 @@ namespace Dziennik.View
         {
             get
             {
-                switch(columnName)
-                {
-                    case "WeightInput": return ValidateWeightInput();
-                }
+                //switch(columnName)
+                //{
+                //    //case "WeightInput": return ValidateWeightInput();
+                //}
 
                 return string.Empty;
             }
         }
 
-        private string ValidateWeightInput()
-        {
-            m_weightInputValid = false;
+        //private string ValidateWeightInput()
+        //{
+        //    m_weightInputValid = false;
 
-            int result;
+        //    int result;
 
-            string errorResult = EditMarkViewModel.GlobalValidateWeightInput(m_weightInput, out result);
-            if (!string.IsNullOrEmpty(errorResult))
-            {
-                m_okCommand.RaiseCanExecuteChanged();
-                return errorResult;
-            }
+        //    string errorResult = EditMarkViewModel.GlobalValidateWeightInput(m_weightInput, out result);
+        //    if (!string.IsNullOrEmpty(errorResult))
+        //    {
+        //        m_okCommand.RaiseCanExecuteChanged();
+        //        return errorResult;
+        //    }
 
-            m_weight = result;
-            m_weightInputValid = true;
-            m_okCommand.RaiseCanExecuteChanged();
+        //    m_weight = result;
+        //    m_weightInputValid = true;
+        //    m_okCommand.RaiseCanExecuteChanged();
 
-            return string.Empty;
-        }
+        //    return string.Empty;
+        //}
     }
 }

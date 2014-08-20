@@ -44,6 +44,12 @@ namespace Dziennik.ViewModel
                 RaisePropertyChanged("Brush");
             }
         }
+        public int DefaultWeight
+        {
+            get { return Model.DefaultWeight; }
+            set { Model.DefaultWeight = value; RaisePropertyChanged("DefaultWeight"); }
+        }
+
         public System.Windows.Media.SolidColorBrush Brush
         {
             get { return new SolidColorBrush(this.Color); }
@@ -55,6 +61,7 @@ namespace Dziennik.ViewModel
 
             pack.Write(this.Name);
             pack.Write(this.Color);
+            pack.Write(this.DefaultWeight);
 
             CopyStack.Push(pack);
         }
@@ -62,10 +69,11 @@ namespace Dziennik.ViewModel
         {
             ObjectsPack pack = CopyStack.Pop();
 
-            if(result == WorkingCopyResult.Cancel)
+            if (result == WorkingCopyResult.Cancel)
             {
                 this.Name = (string)pack.Read();
                 this.Color = (System.Windows.Media.Color)pack.Read();
+                this.DefaultWeight = (int)pack.Read();
             }
         }
     }

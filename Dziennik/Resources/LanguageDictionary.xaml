@@ -164,6 +164,7 @@
     <s:String x:Key="lang_StandardColors">Standardowe kolory</s:String>
     <s:String x:Key="lang_AdvancedMode">Tryb rozbudowany</s:String>
     <s:String x:Key="lang_SimpleMode">Tryb prosty</s:String>
+    <s:String x:Key="lang_DefaultWeight">Domyślna waga</s:String>
     
     <s:String x:Key="lang_Date">Data</s:String>
     <s:String x:Key="lang_NotifyIn">Powiadamiaj przed</s:String>
