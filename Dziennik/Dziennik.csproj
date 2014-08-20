@@ -58,9 +58,13 @@
     <Reference Include="fastJSON">
       <HintPath>..\libs\fastJSON.dll</HintPath>
     </Reference>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\libs\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -86,14 +90,24 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Archiver.cs" />
+    <Compile Include="Controls\ImageButton.xaml.cs">
+      <DependentUpon>ImageButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\NegateBooleanConverter.cs" />
     <Compile Include="ObjectsPacker.cs" />
     <Compile Include="IWorkingCopyAvailable.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\Class\ClassesListViewModel.cs" />
+    <Compile Include="View\Class\ClassesListWindow.xaml.cs">
+      <DependentUpon>ClassesListWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Common\ArchivesListViewModel.cs" />
     <Compile Include="View\Common\ArchivesListWindow.xaml.cs">
       <DependentUpon>ArchivesListWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Mark\MarksCategoriesListViewModel.cs" />
+    <Compile Include="View\Mark\MarksCategoriesListWindow.xaml.cs">
+      <DependentUpon>MarksCategoriesListWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WorkingCollection.cs" />
     <Compile Include="CommandUtils\RelayCommand.cs" />
@@ -301,6 +315,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ImageButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\MessageBoxSuper.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -329,6 +347,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Class\ClassesListWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Common\ActionDialogWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -354,6 +376,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Common\InfoDialogWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Mark\MarksCategoriesListWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -518,6 +544,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IViewModelShallowCopyable.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\calendar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\classes.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\notice.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\archive.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\marks_category.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

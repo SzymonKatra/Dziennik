@@ -2,9 +2,12 @@
 Ikony pochodzą od:
 ==================================================
 
-Pixel Mixer - http://www.pixel-mixer.com - https://www.iconfinder.com/iconsets/basicset
-Aha-Soft - http://www.aha-soft.com/ - https://www.iconfinder.com/iconsets/32x32-free-design-icons
-
+Pixel Mixer - http://www.pixel-mixer.com - https://www.iconfinder.com/iconsets/basicset - Free for commercial use
+Aha-Soft - http://www.aha-soft.com/ - https://www.iconfinder.com/iconsets/32x32-free-design-icons - Free for commercial use
+Everaldo Coelho - http://www.everaldo.com/ - https://www.iconfinder.com/icons/3755/agenda_calendar_date_event_icon - LGPL
+Neurovit - http://neurovit.deviantart.com/ - https://www.iconfinder.com/icons/48812/manage_school_icon - Creative Commons (Attribution-Share Alike 3.0 Unported)
+Lotcos - https://www.iconfinder.com/ATHtut - https://www.iconfinder.com/icons/254206/bell_icon - Creative Commons (Attribution 3.0 Unported)
+Visual Pharm - http://icons8.com/ - https://www.iconfinder.com/icons/27832/archive_compress_zip_icon - Creative Commons Attribution-No Derivative Works 3.0 Unported
 
 ==================================================
 Licencja Extended WPF Toolkit™ Community Edition:

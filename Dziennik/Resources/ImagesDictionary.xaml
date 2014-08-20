@@ -8,5 +8,11 @@
     <BitmapImage x:Key="img_save_all" UriSource="save_all.png"/>
     <BitmapImage x:Key="img_options" UriSource="options.png"/>
     <BitmapImage x:Key="img_info" UriSource="info.png"/>
-    
+    <BitmapImage x:Key="img_calendar" UriSource="calendar.png"/>
+    <BitmapImage x:Key="img_classes" UriSource="classes.png"/>
+    <BitmapImage x:Key="img_notice" UriSource="notice.png"/>
+    <BitmapImage x:Key="img_close" UriSource="close.png"/>
+    <BitmapImage x:Key="img_archive" UriSource="archive.png"/>
+    <BitmapImage x:Key="img_marks_category" UriSource="marks_category.png"/>
+
 </ResourceDictionary>

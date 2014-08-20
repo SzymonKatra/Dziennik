@@ -87,5 +87,10 @@ namespace Dziennik.View
             ((MainViewModel)this.DataContext).Init();
             ((MainViewModel)this.DataContext).WindowWidth = (int)this.ActualWidth;
         }
+
+        private void ComboBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ((MainViewModel)this.DataContext).SearchAndSelectClass(((ComboBox)sender).ItemsSource);
+        }
     }
 }

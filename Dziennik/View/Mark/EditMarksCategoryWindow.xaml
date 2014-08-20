@@ -19,7 +19,7 @@
         </Grid.RowDefinitions>
         
         <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Name}"/>
-        <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource validationTemplateTextBox}" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+        <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource validationTemplateTextBox}" Text="{Binding NameInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
         
         <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Color}"/>
         <my:ColorPickerEx Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" SelectedColor="{Binding SelectedColor, Mode=TwoWay}"

@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:s="clr-namespace:System;assembly=mscorlib">
     
-    <s:String x:Key="lang_AppName">Dziennik</s:String>
+    <s:String x:Key="lang_AppName">Dziennik ZSE</s:String>
     <s:String x:Key="lang_DoYouWantToContinue">Czy chcesz kontynuować?</s:String>
     <s:String x:Key="lang_Ok">OK</s:String>
     <s:String x:Key="lang_Cancel">Anuluj</s:String>
@@ -15,6 +15,11 @@
     <s:String x:Key="lang_Info">Informacje</s:String>
     <s:String x:Key="lang_ArchiveAction">Archiwizuj</s:String>
     <s:String x:Key="lang_Archive">Archiwum</s:String>
+    <s:String x:Key="lang_CloseArchivePreview">Zamknij podgląd archium</s:String>
+    <s:String x:Key="lang_ClassesList">Lista klas</s:String>
+    <s:String x:Key="lang_MarksCategoriesList">Lista kategorii ocen</s:String>
+    <s:String x:Key="lang_CalendarsList">Lista kalendarzy</s:String>
+    <s:String x:Key="lang_Notices">Powiadomienia</s:String>
     
     <s:String x:Key="lang_Subjects">Tematy</s:String>
     <s:String x:Key="lang_Marks">Oceny</s:String>
@@ -173,6 +178,11 @@
     <s:String x:Key="lang_ArchiveListTitle">Lista archiwów</s:String>
     <s:String x:Key="lang_PreviewArchive">Podgląd archiwum</s:String>
     <s:String x:Key="lang_RestoreArchive">Przywróć archiwum</s:String>
+    
+    <s:String x:Key="lang_ClassesListTitle">Lista klas</s:String>
+    <s:String x:Key="lang_GroupCount">Liczba grup</s:String>
+
+    <s:String x:Key="lang_MarksCategoriesListTitle">Lista kategorii ocen</s:String>
 
     <s:String x:Key="lang_InfoTitle">Informacje</s:String>
     <s:String x:Key="lang_Author">Autor</s:String>

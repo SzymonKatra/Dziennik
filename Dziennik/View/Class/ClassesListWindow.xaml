@@ -1,0 +1,39 @@
+﻿<Window x:Class="Dziennik.View.ClassesListWindow"
+        x:Name="root"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:my="clr-namespace:Dziennik.Controls"
+        Title="{DynamicResource lang_ClassesListTitle}" Height="400" Width="300"
+        WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <WrapPanel Grid.Row="0">
+            <Button Grid.Row="0" Style="{StaticResource wrapPanelControlStyle}" Content="{DynamicResource lang_AddClass}" Command="{Binding AddClassCommand}"/>
+        </WrapPanel>
+
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding OpenedClasses}"
+                  SelectedItem="{Binding SelectedClass, Mode=TwoWay}"
+                  CanUserAddRows="False"
+                  CanUserSortColumns="False"
+                  SelectionMode="Single"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{DynamicResource lang_Name}" Binding="{Binding ViewModel.Name}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_GroupCount}" Binding="{Binding ViewModel.Groups.Count}"/>
+                <DataGridTemplateColumn Header="{DynamicResource lang_Edit}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <my:EditButtonControl Command="{Binding DataContext.EditClassCommand, ElementName=root}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

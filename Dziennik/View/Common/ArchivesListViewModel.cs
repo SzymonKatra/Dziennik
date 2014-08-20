@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using Dziennik.CommandUtils;
 using System.Windows.Input;
 using System.IO;
+using Ionic.Zip;
 
 namespace Dziennik.View
 {
@@ -144,12 +145,20 @@ namespace Dziennik.View
                     ArchiveInfo archiveInfo = new ArchiveInfo();
                     try
                     {
-                        Archiver archive = new Archiver(item, Archiver.ArchiverMode.Read);
-                        archive.Start();
-                        archiveInfo.Date = archive.CreatedDateTime;
-                        archiveInfo.Description = archive.ReadMetadataString();
-                        archiveInfo.Path = item;
-                        archive.End();
+                        using (ZipFile zip = new ZipFile(item))
+                        {
+                            ZipEntry entry = zip.Entries.First(x => x.FileName == "metadata");
+                            MemoryStream metadataStream = new MemoryStream();
+                            entry.Extract(metadataStream);
+                            metadataStream.Position = 0;
+                            BinaryReader metadataReader = new BinaryReader(metadataStream);
+
+                            archiveInfo.Date = DateTime.FromBinary(metadataReader.ReadInt64());
+                            archiveInfo.Description = metadataReader.ReadString();
+                            archiveInfo.Path = item;
+
+                            metadataReader.Dispose();
+                        }   
 
                         result.Add(archiveInfo);
                     }

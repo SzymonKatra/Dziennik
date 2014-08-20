@@ -11,6 +11,7 @@ using Dziennik.ViewModel;
 using System.ComponentModel;
 using System.IO;
 using Microsoft.Win32;
+using Ionic.Zip;
 
 namespace Dziennik.View
 {
@@ -22,6 +23,11 @@ namespace Dziennik.View
             m_optionsCommand = new RelayCommand(Options);
             m_infoCommand = new RelayCommand(Info);
             m_archiveDatabaseCommand = new RelayCommand<string>(ArchiveDatabase);
+            m_closeArchivePreviewCommand = new RelayCommand(CloseArchivePreview, CanCloseArchivePreview);
+            m_showClassesListCommand = new RelayCommand(ShowClassesList);
+            m_showMarksCategoriesListCommand = new RelayCommand(ShowMarksCategoriesList);
+            m_showCalendarsListCommand = new RelayCommand(ShowCalendarsList);
+            m_showNoticesListCommand = new RelayCommand(ShowNoticesList);
         }
 
         private ObservableCollection<SchoolClassControlViewModel> m_openedSchoolClasses = new ObservableCollection<SchoolClassControlViewModel>();
@@ -82,11 +88,52 @@ namespace Dziennik.View
             get { return m_archiveDatabaseCommand; }
         }
 
+        private RelayCommand m_closeArchivePreviewCommand;
+        public ICommand CloseArchivePreviewCommand
+        {
+            get { return m_closeArchivePreviewCommand; }
+        }
+
+        private RelayCommand m_showClassesListCommand;
+        public ICommand ShowClassesListCommand
+        {
+            get { return m_showClassesListCommand; }
+        }
+
+        private RelayCommand m_showMarksCategoriesListCommand;
+        public ICommand ShowMarksCategoriesListCommand
+        {
+            get { return m_showMarksCategoriesListCommand; }
+        }
+
+        private RelayCommand m_showCalendarsListCommand;
+        public ICommand ShowCalendarsListCommand
+        {
+            get { return m_showCalendarsListCommand; }
+        }
+
+        private RelayCommand m_showNoticesListCommand;
+        public ICommand ShowNoticesListCommand
+        {
+            get { return m_showNoticesListCommand; }
+        }
+
+        private string m_originalDatabasePath;
+        public string OriginalDatabasePath
+        {
+            get { return m_originalDatabasePath; }
+            set
+            {
+                if (!m_blockSaving) throw new InvalidOperationException();
+                m_originalDatabasePath = value; RaisePropertyChanged("OriginalDatabasePath");
+            }
+        }
+
         private bool m_blockSaving;
         public bool BlockSaving
         {
             get { return m_blockSaving; }
-            set { m_blockSaving = value; RaisePropertyChanged("BlockSaving"); m_saveCommand.RaiseCanExecuteChanged(); }
+            set { m_blockSaving = value; RaisePropertyChanged("BlockSaving"); m_saveCommand.RaiseCanExecuteChanged(); m_closeArchivePreviewCommand.RaiseCanExecuteChanged(); }
         }
 
         private bool m_databasesDirectoryChanged = true;
@@ -224,7 +271,7 @@ namespace Dziennik.View
                 var validFiles = from f in files where f.EndsWith(GlobalConfig.SchoolClassDatabaseFileExtension) || f.EndsWith(GlobalConfig.SchoolOptionsDatabaseFileExtension) select f;
 
                 d.ProgressValue = 0;
-                d.ProgressStep = 100 / (double)(validFiles.Count() + 2);
+                d.ProgressStep = 100 / (double)(validFiles.Count() + 1);
 
                 d.Content = GlobalConfig.GetStringResource("lang_Starting");
 
@@ -235,23 +282,41 @@ namespace Dziennik.View
                     path = GlobalConfig.Notifier.DatabasesDirectory + @"\" + GlobalConfig.ArchiveDatabasesSubdirectory + @"\" + now.ToString(GlobalConfig.FileDateTimeFormat) + "(" + count.ToString() + ")" + GlobalConfig.DatabaseArchiveFileExtension;
                     ++count;
                 }
-                Archiver archive = new Archiver(path, Archiver.ArchiverMode.Write, now);
-                archive.Start();
-                archive.WriteMetadataString((param == null ? GlobalConfig.GetStringResource("lang_Archive") : param));
-                archive.WriteMetadataArray(BitConverter.GetBytes(validFiles.Count()));
 
-                d.StepProgress();
-
-                foreach (var file in validFiles)
+                using (ZipFile zip = new ZipFile(path))
                 {
-                    d.Content = file;
-                    archive.WriteFile(file);
+                    MemoryStream metadataStream = new MemoryStream();
+                    BinaryWriter metadataWriter = new BinaryWriter(metadataStream);
+
+                    metadataWriter.Write(now.ToBinary());
+                    metadataWriter.Write((param == null ? GlobalConfig.GetStringResource("lang_Archive") + (count > 1 ? (count - 1).ToString() : "") : param));
+                    metadataStream.Position = 0;
+                    zip.AddEntry("metadata", metadataStream);
+
+                    foreach (var file in validFiles)
+                    {
+                        zip.AddFile(file, string.Empty);
+                    }
                     d.StepProgress();
+
+                    ZipEntry entryTemp = null;
+                    zip.SaveProgress += (s, e) =>
+                    {
+                        if (e.CurrentEntry != entryTemp)
+                        {
+                            if (e.CurrentEntry == null) return;
+                            d.Content = e.CurrentEntry.FileName;
+                            entryTemp = e.CurrentEntry;
+                            d.StepProgress();
+                        }
+                    };
+
+                    zip.Save();
+
+                    metadataWriter.Dispose();
                 }
 
                 d.Content = GlobalConfig.GetStringResource("lang_Ending");
-                archive.End();
-                d.StepProgress();
 
                 d.ProgressValue = 100;
 
@@ -263,27 +328,73 @@ namespace Dziennik.View
             ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
             {
                 d.Content = GlobalConfig.GetStringResource("lang_Starting");
-                Archiver archive = new Archiver(archivePath, Archiver.ArchiverMode.Read);
-                archive.Start();
-                archive.ReadMetadataString();
-                int filesCount = BitConverter.ToInt32(archive.ReadMetadataArray(), 0);
+                //Archiver archive = new Archiver(archivePath, Archiver.ArchiverMode.Read);
+                //archive.Start();
+                //archive.ReadMetadataString();
+                //int filesCount = BitConverter.ToInt32(archive.ReadMetadataArray(), 0);
 
-                d.ProgressValue = 0;
-                d.ProgressStep = 100 / (double)(filesCount + 1);
-
-                for (int i = 0; i < filesCount; i++)
+                using (ZipFile zip = new ZipFile(archivePath))
                 {
-                    archive.ReadFile(unpackPath);
+                    IEnumerable<ZipEntry> validEntries = from e in zip.Entries
+                                                         where e.FileName.EndsWith(GlobalConfig.SchoolClassDatabaseFileExtension) ||
+                                                               e.FileName == GlobalConfig.SchoolOptionsDatabaseFileName
+                                                         select e;
+
+                    d.ProgressValue = 0;
+                    d.ProgressStep = 100 / (double)(validEntries.Count());
+
+                    foreach (var entry in validEntries)
+                    {
+                        entry.Extract(unpackPath, ExtractExistingFileAction.OverwriteSilently);
+                        d.StepProgress();
+                    }
                 }
 
+                
+
+                //for (int i = 0; i < filesCount; i++)
+                //{
+                //    archive.ReadFile(unpackPath);
+                //}
+
                 d.Content = GlobalConfig.GetStringResource("lang_Ending");
-                archive.End();
-                d.StepProgress();
+                //archive.End();
+                //d.StepProgress();
 
                 d.ProgressValue = 100;
 
             }, null, "", GlobalConfig.GetStringResource("lang_ArchiveUnpacking"), GlobalConfig.ActionDialogProgressSize, true);
             GlobalConfig.Dialogs.ShowDialog(viewModel, dialogViewModel);  
+        }
+        private void CloseArchivePreview(object e)
+        {
+            GlobalConfig.Notifier.DatabasesDirectory = m_originalDatabasePath;
+            Reload();
+            this.BlockSaving = false;
+        }
+        private bool CanCloseArchivePreview(object e)
+        {
+            return m_blockSaving;
+        }
+        private void ShowClassesList(object e)
+        {
+            ClassesListViewModel dialogViewModel = new ClassesListViewModel(m_openedSchoolClasses);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+        }
+        private void ShowMarksCategoriesList(object e)
+        {
+            MarksCategoriesListViewModel dialogViewModel = new MarksCategoriesListViewModel(GlobalConfig.GlobalDatabase.ViewModel.MarksCategories, m_openedSchoolClasses);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+        }
+        private void ShowCalendarsList(object e)
+        {
+            GlobalCalendarListViewModel dialogViewModel = new GlobalCalendarListViewModel(GlobalConfig.GlobalDatabase.ViewModel.Calendars, m_openedSchoolClasses, GlobalConfig.GlobalDatabaseAutoSaveCommand);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+        }
+        private void ShowNoticesList(object e)
+        {
+            NoticesListViewModel dialogViewModel = new NoticesListViewModel();
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
         private void CloseAllTabs()
         {
@@ -346,9 +457,9 @@ namespace Dziennik.View
            , null, "", GlobalConfig.GetStringResource("lang_Opening"), GlobalConfig.ActionDialogProgressSize,  true);
             GlobalConfig.Dialogs.ShowDialog(this, saveDialogViewModel);
 
-            //foreach (var item in GlobalConfig.Database.SchoolClasses) m_openedSchoolClasses.Add(new SchoolClassControlViewModel(new SchoolClassViewModel(item)));
             m_databasesDirectoryChanged = false;
 
+            RaisePropertyChanged("TabWidth");
             CheckNotices();
         }
         private void CheckNotices()
@@ -385,6 +496,18 @@ namespace Dziennik.View
             }
 
             foreach (var rem in toRemove) GlobalConfig.GlobalDatabase.ViewModel.Notices.Remove(rem);
+        }
+
+        public void SearchAndSelectClass(object comboBoxCollection)
+        {
+            foreach (var openedClass in m_openedSchoolClasses)
+            {
+                if (openedClass.ViewModel.Groups == comboBoxCollection)
+                {
+                    if (m_selectedClass == openedClass) return;
+                    SelectedClass = openedClass;
+                }
+            }
         }
     }
 }

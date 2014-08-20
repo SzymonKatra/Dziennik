@@ -75,6 +75,10 @@
     <Style x:Key="commonButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="Margin" Value="10,5,10,5"/>
     </Style>
+    
+    <Style x:Key="wrapPanelMainControlStyle" TargetType="{x:Type FrameworkElement}">
+        <Setter Property="Margin" Value="5,1,5,1"/>
+    </Style>
 
     <Style x:Key="wrapPanelControlStyle" TargetType="{x:Type FrameworkElement}">
         <Setter Property="Margin" Value="5,5,5,5"/>
