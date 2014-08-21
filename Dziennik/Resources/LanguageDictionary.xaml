@@ -125,6 +125,9 @@
     <s:String x:Key="lang_LateShort">sp</s:String>
     <s:String x:Key="lang_Justify">Usprawiedliw</s:String>
     <s:String x:Key="lang_CancelJustify">Odwołaj usprawiedliwienie</s:String>
+    <s:String x:Key="lang_StudentsPresentFormat">Obecnych: {0} ({1} spóźnionych)</s:String>
+    <s:String x:Key="lang_StudentsAbsentFormat">Nieobecnych: {0}</s:String>
+    <s:String x:Key="lang_StudentsSumFormat">Razem: {0}</s:String>
 
     <s:String x:Key="lang_SelectSubjectTitle">Wybierz temat</s:String>
 

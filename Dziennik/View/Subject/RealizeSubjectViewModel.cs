@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Dziennik.CommandUtils;
 using Dziennik.ViewModel;
 using Dziennik.Controls;
+using System.ComponentModel;
 
 namespace Dziennik.View
 {
@@ -137,6 +138,7 @@ namespace Dziennik.View
             {
                 StudentPresencePair pair = new StudentPresencePair();
                 pair.Student = student;
+                pair.PropertyChanged += pair_PropertyChanged;
                 if (isAddingMode)
                 {
                     pair.Presence = new RealizedSubjectPresenceViewModel() { RealizedSubject = m_realizedSubject };
@@ -230,6 +232,35 @@ namespace Dziennik.View
             get { return m_chooseSubjectCommand; }
         }
 
+        public string StudentsPresentDisplayed
+        {
+            get
+            {
+                int present = m_pairs.Count(x => x.WasPresent && !x.IsRemoved);
+                int lates = m_pairs.Count(x => x.WasLate && !x.IsRemoved);
+
+                return string.Format(GlobalConfig.GetStringResource("lang_StudentsPresentFormat"), present + lates, lates);
+            }
+        }
+        public string StudentsAbsentDisplayed
+        {
+            get
+            {
+                int absents = m_pairs.Count(x => x.WasAbsent && !x.IsRemoved);
+
+                return string.Format(GlobalConfig.GetStringResource("lang_StudentsAbsentFormat"), absents);
+            }
+        }
+        public string StudentsSumDisplayed
+        {
+            get
+            {
+                int sum = m_pairs.Count(x => !x.IsRemoved);
+
+                return string.Format(GlobalConfig.GetStringResource("lang_StudentsSumFormat"), sum);
+            }
+        }
+
         private void Ok(object e)
         {
             if(m_isOutsideCurriculum)
@@ -292,6 +323,12 @@ namespace Dziennik.View
             GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Main, dialogViewModel);
             if (dialogViewModel.Result != SelectGlobalSubjectViewModel.SelectedGlobalSubjectResult.Ok || dialogViewModel.SelectedSubject == null) return;
             SelectedSubject = dialogViewModel.SelectedSubject;
+        }
+        private void pair_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            RaisePropertyChanged("StudentsPresentDisplayed");
+            RaisePropertyChanged("StudentsAbsentDisplayed");
+            RaisePropertyChanged("StudentsSumDisplayed");
         }
     }
 }

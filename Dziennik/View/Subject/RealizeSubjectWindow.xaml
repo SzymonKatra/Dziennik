@@ -79,7 +79,21 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <my:RemoveButtonControl Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Content="{DynamicResource lang_RemoveSubject}" Command="{Binding RemoveSubjectCommand}"/>
+        <my:RemoveButtonControl Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Content="{DynamicResource lang_RemoveSubject}" Command="{Binding RemoveSubjectCommand}">
+            <my:RemoveButtonControl.FreeSpaceContent>
+                <WrapPanel>
+                    <WrapPanel.Resources>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Margin" Value="5,0,0,0"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Style>
+                    </WrapPanel.Resources>
+                    <TextBlock Text="{Binding StudentsPresentDisplayed}" Foreground="Green"/>
+                    <TextBlock Text="{Binding StudentsAbsentDisplayed}" Foreground="Red"/>
+                    <TextBlock Text="{Binding StudentsSumDisplayed}" Foreground="Black"/>
+                </WrapPanel>
+            </my:RemoveButtonControl.FreeSpaceContent>
+        </my:RemoveButtonControl>
         <my:OkCancelControl Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>
 </Window>

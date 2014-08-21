@@ -7,11 +7,12 @@
         <Setter Property="Margin" Value="10,5,10,5"/>
     </Style>
 
-    <Style TargetType="{x:Type DataGridRow}">
+    <Style x:Key="baseDataGridRow" TargetType="{x:Type DataGridRow}">
         <Style.Resources>
-            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"  Color="{x:Static SystemColors.HighlightColor}"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="{x:Static SystemColors.HighlightColor}"/>
         </Style.Resources>
     </Style>
+    <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource baseDataGridRow}"/>
 
     <Style TargetType="{x:Type DataGrid}">
         <Setter Property="AlternationCount" Value="2"/>
@@ -75,7 +76,7 @@
     <Style x:Key="commonButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="Margin" Value="10,5,10,5"/>
     </Style>
-    
+
     <Style x:Key="wrapPanelMainControlStyle" TargetType="{x:Type FrameworkElement}">
         <Setter Property="Margin" Value="5,1,5,1"/>
     </Style>
@@ -106,8 +107,8 @@
             </DataTrigger>
         </Style.Triggers>
     </Style>
-    
-    <Style x:Key="dataGridRowRemoved" TargetType="{x:Type DataGridRow}">
+
+    <Style x:Key="dataGridRowRemoved" TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource baseDataGridRow}">
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsRemoved}" Value="True">
                 <Setter Property="IsEnabled" Value="False"/>
