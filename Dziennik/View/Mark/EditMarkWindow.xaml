@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:my="clr-namespace:Dziennik.Controls"
         xmlns:local="clr-namespace:Dziennik"
-        Title="{Binding Title}" Height="300" Width="300"
+        Title="{Binding Title}" Height="350" Width="300"
         WindowStartupLocation="CenterOwner">
 
     <Grid>
@@ -16,6 +16,7 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
@@ -33,11 +34,13 @@
         <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Weight}"/>
         <my:NonEditableIntegerUpDown Grid.Column="1" Grid.Row="3" Style="{StaticResource inputControlStyle}"  HorizontalAlignment="Left" Width="50" Value="{Binding Mark.Weight}" Minimum="{x:Static local:GlobalConfig.DefaultWeightMinValue}" Maximum="{x:Static local:GlobalConfig.DefaultWeightMaxValue}"/>
         
-        <TextBlock Grid.Column="0" Grid.Row="4" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Description}"/>
-        <TextBox Grid.Column="1" Grid.Row="4" Style="{StaticResource inputControlStyle}" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Mark.Description, Mode=TwoWay}"/>
+        <TextBlock Grid.Column="0" Grid.Row="4" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_AddDate}"/>
+        <DatePicker Grid.Column="1" Grid.Row="4" Style="{StaticResource validationTemplateTextBox}" SelectedDate="{Binding AddDateInput, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsAddingMode}"/>
         
-        <my:RemoveButtonControl Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Content="{DynamicResource lang_RemoveMark}" Command="{Binding RemoveMarkCommand}"/>
+        <TextBlock Grid.Column="0" Grid.Row="5" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Description}"/>
+        <TextBox Grid.Column="1" Grid.Row="5" Style="{StaticResource inputControlStyle}" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Mark.Description, Mode=TwoWay}"/>
         
-        <my:OkCancelControl Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
+        <my:RemoveButtonControl Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" Content="{DynamicResource lang_RemoveMark}" Command="{Binding RemoveMarkCommand}"/>
+        <my:OkCancelControl Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>
 </Window>

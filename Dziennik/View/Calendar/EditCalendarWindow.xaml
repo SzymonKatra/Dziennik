@@ -28,10 +28,10 @@
         <DatePicker Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding Calendar.YearBeginning, Mode=TwoWay}"/>
 
         <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_SemesterSeparator}"/>
-        <DatePicker Grid.Column="1" Grid.Row="2" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding Calendar.SemesterSeparator, Mode=TwoWay}"/>
+        <DatePicker Grid.Column="1" Grid.Row="2" Style="{StaticResource validationTemplateTextBox}" SelectedDate="{Binding SemesterSeparatorInput, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
 
         <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_YearEnding}"/>
-        <DatePicker Grid.Column="1" Grid.Row="3" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding Calendar.YearEnding, Mode=TwoWay}"/>
+        <DatePicker Grid.Column="1" Grid.Row="3" Style="{StaticResource validationTemplateTextBox}" SelectedDate="{Binding YearEndingInput, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
 
         <Grid Grid.Column="0" Grid.Row="4">
             <Grid.RowDefinitions>

@@ -30,7 +30,12 @@ namespace Dziennik.ViewModel
         public SchoolClassViewModel OwnerClass
         {
             get { return m_ownerClass; }
-            set { m_ownerClass = value; }
+            set
+            {
+                m_ownerClass = value;
+                m_statistics = new StatisticsViewModel(this);
+                RaisePropertyChanged("Statistics");
+            }
         }
 
         public string Name
@@ -151,6 +156,12 @@ namespace Dziennik.ViewModel
             }
         }
 
+        private StatisticsViewModel m_statistics;
+        public StatisticsViewModel Statistics
+        {
+            get { return m_statistics; }
+        }
+
         //http://stackoverflow.com/questions/248273/count-number-of-mondays-in-a-given-date-range
         private static int CountDays(DayOfWeek day, DateTime start, DateTime end)
         {
@@ -210,7 +221,6 @@ namespace Dziennik.ViewModel
             m_students.Added -= m_students_Added;
             m_students.Removed -= m_students_Removed;
         }
-
         private void m_students_Added(object sender, NotifyCollectionChangedSimpleEventArgs<StudentInGroupViewModel> e)
         {
             foreach (var item in e.Items)

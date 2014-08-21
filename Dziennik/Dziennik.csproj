@@ -97,6 +97,7 @@
     <Compile Include="Controls\NegateBooleanConverter.cs" />
     <Compile Include="ObjectsPacker.cs" />
     <Compile Include="IWorkingCopyAvailable.cs" />
+    <Compile Include="ViewModel\StatisticsViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\Class\ClassesListViewModel.cs" />
     <Compile Include="View\Class\ClassesListWindow.xaml.cs">

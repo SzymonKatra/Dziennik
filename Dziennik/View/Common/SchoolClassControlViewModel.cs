@@ -21,8 +21,8 @@ namespace Dziennik.View
         }
         public SchoolClassControlViewModel(DatabaseMain database)
         {
-            m_addMarkCommand = new RelayCommand<ObservableCollection<MarkViewModel>>(AddMark);
-            m_editMarkCommand = new RelayCommand<ObservableCollection<MarkViewModel>>(EditMark);
+            m_addMarkCommand = new RelayCommand<string>(AddMark);
+            m_editMarkCommand = new RelayCommand<string>(EditMark);
             m_editEndingMarkCommand = new RelayCommand<string>(EditEndingMark);
             m_autoSaveCommand = new RelayCommand(AutoSave);
             m_saveCommand = new RelayCommand(Save);
@@ -32,6 +32,7 @@ namespace Dziennik.View
             m_putNotAllEndingMarksCommand = new RelayCommand<string>(PutNotAllEndingMarks);
             m_cancelAllEndingMarksCommand = new RelayCommand<string>(CancelAllEndingMarks);
             m_addMarksSetCommand = new RelayCommand<string>(AddMarksSet);
+            m_refreshStatisticsCommand = new RelayCommand(RefreshStatistics);
 
             m_database = database;
         }
@@ -76,13 +77,13 @@ namespace Dziennik.View
             set { m_selectedSubject = value; RaisePropertyChanged("SelectedSubject"); }
         }
 
-        private RelayCommand<ObservableCollection<MarkViewModel>> m_addMarkCommand;
+        private RelayCommand<string> m_addMarkCommand;
         public ICommand AddMarkCommand
         {
             get { return m_addMarkCommand; }
         }
 
-        private RelayCommand<ObservableCollection<MarkViewModel>> m_editMarkCommand;
+        private RelayCommand<string> m_editMarkCommand;
         public ICommand EditMarkCommand
         {
             get { return m_editMarkCommand; }
@@ -138,27 +139,40 @@ namespace Dziennik.View
         {
             get { return m_addMarksSetCommand; }
         }
-
-        private void AddMark(ObservableCollection<MarkViewModel> param)
+        private RelayCommand m_refreshStatisticsCommand;
+        public ICommand RefreshStatisticsCommand
         {
+            get { return m_refreshStatisticsCommand; }
+        }
+
+        private void AddMark(string param)
+        {
+            SemesterViewModel semester = (param == "first" ? m_selectedStudent.FirstSemester : m_selectedStudent.SecondSemester);
+            DateTime dStart, dEnd;
+            GetMarkParams(param, out dStart, out dEnd);
+
             MarkViewModel mark = new MarkViewModel();
-            EditMarkViewModel dialogViewModel = new EditMarkViewModel(mark, m_selectedStudent, true);
+            EditMarkViewModel dialogViewModel = new EditMarkViewModel(mark, dStart, dEnd, m_selectedStudent, true);
             GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Main, dialogViewModel);
             if (dialogViewModel.Result == EditMarkViewModel.EditMarkResult.Ok)
             {
-                param.Add(mark);
+                semester.Marks.Add(mark);
             }
             if (dialogViewModel.Result != EditMarkViewModel.EditMarkResult.Cancel) m_autoSaveCommand.Execute(null);
         }
-        private void EditMark(ObservableCollection<MarkViewModel> param)
+        private void EditMark(string param)
         {
+            SemesterViewModel semester = (param == "first" ? m_selectedStudent.FirstSemester : m_selectedStudent.SecondSemester);
+            DateTime dStart, dEnd;
+            GetMarkParams(param, out dStart, out dEnd);
+
             m_selectedMark.PushCopy();
-            EditMarkViewModel dialogViewModel = new EditMarkViewModel(m_selectedMark, m_selectedStudent);
+            EditMarkViewModel dialogViewModel = new EditMarkViewModel(m_selectedMark, dStart, dEnd, m_selectedStudent);
             GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Main, dialogViewModel);
             if (dialogViewModel.Result == EditMarkViewModel.EditMarkResult.RemoveMark)
             {
                 m_selectedMark.PopCopy(WorkingCopyResult.Ok);
-                param.Remove(m_selectedMark);
+                semester.Marks.Remove(m_selectedMark);
             }
             else if(dialogViewModel.Result == EditMarkViewModel.EditMarkResult.Ok)
             {
@@ -169,6 +183,11 @@ namespace Dziennik.View
                 m_selectedMark.PopCopy(WorkingCopyResult.Cancel);
             }
             if (dialogViewModel.Result != EditMarkViewModel.EditMarkResult.Cancel) m_autoSaveCommand.Execute(null);
+        }
+        private void GetMarkParams(string param, out DateTime dateStart, out DateTime dateEnd)
+        {
+            dateStart = (param == "first" ? m_selectedGroup.OwnerClass.Calendar.YearBeginning : m_selectedGroup.OwnerClass.Calendar.SemesterSeparator);
+            dateEnd = (param == "first" ? m_selectedGroup.OwnerClass.Calendar.SemesterSeparator.AddDays(-1) : m_selectedGroup.OwnerClass.Calendar.YearEnding);
         }
         private void EditEndingMark(string param)
         {
@@ -224,7 +243,7 @@ namespace Dziennik.View
         }
         private void RealizeSubject(object e)
         {
-            RealizeSubjectViewModel dialogViewModel = new RealizeSubjectViewModel(null, m_selectedGroup.Students, GetAvailableSubjects(m_selectedGroup), true);
+            RealizeSubjectViewModel dialogViewModel = new RealizeSubjectViewModel(null, m_selectedGroup.Students, GetAvailableSubjects(m_selectedGroup), m_selectedGroup.OwnerClass.Calendar, true);
             GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Main, dialogViewModel);
             if (dialogViewModel.Result == RealizeSubjectViewModel.RealizeSubjectResult.Ok)
             {
@@ -238,7 +257,7 @@ namespace Dziennik.View
         }
         private void EditRealizedSubject(object e)
         {
-            RealizeSubjectViewModel dialogViewModel = new RealizeSubjectViewModel(m_selectedSubject, m_selectedGroup.Students, GetAvailableSubjects(m_selectedGroup));
+            RealizeSubjectViewModel dialogViewModel = new RealizeSubjectViewModel(m_selectedSubject, m_selectedGroup.Students, GetAvailableSubjects(m_selectedGroup), m_selectedGroup.OwnerClass.Calendar);
             GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Main, dialogViewModel);
             if (dialogViewModel.Result == RealizeSubjectViewModel.RealizeSubjectResult.RemoveSubject)
             {
@@ -332,11 +351,19 @@ namespace Dziennik.View
 
             MessageBoxSuper.ShowBox(GlobalConfig.Dialogs.GetWindow(GlobalConfig.Main), string.Format("Anulowano {0} ocen", completedCount), "Dziennik", MessageBoxSuperPredefinedButtons.OK);
         }
-        private void AddMarksSet(string e)
+        private void AddMarksSet(string param)
         {
-            AddMarksSetViewModel dialogViewModel = new AddMarksSetViewModel(m_selectedGroup.Students, (e == "first" ? AddMarksSetViewModel.SemesterType.First : AddMarksSetViewModel.SemesterType.Second));
+            AddMarksSetViewModel.SemesterType semester = (param == "first" ? AddMarksSetViewModel.SemesterType.First : AddMarksSetViewModel.SemesterType.Second);
+            DateTime dStart, dEnd;
+            GetMarkParams(param, out dStart, out dEnd);
+
+            AddMarksSetViewModel dialogViewModel = new AddMarksSetViewModel(m_selectedGroup.Students, semester, dStart, dEnd);
             GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Main, dialogViewModel);
             if (dialogViewModel.Result != AddMarksSetViewModel.AddMarksSetResult.Cancel) m_autoSaveCommand.Execute(null);
+        }
+        private void RefreshStatistics(object e)
+        {
+            m_selectedGroup.Statistics.Refresh();
         }
 
         private bool MessageBoxContinue()

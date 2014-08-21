@@ -24,6 +24,8 @@ namespace Dziennik.ViewModel
             SemesterSubscribe(m_secondSemester);
         }
 
+        public event EventHandler<MarkChangedEventArgs> MarkChanged;
+
         private SchoolGroupViewModel m_ownerGroup;
         [DatabaseIgnoreSearchRelations]
         public SchoolGroupViewModel OwnerGroup
@@ -285,9 +287,10 @@ namespace Dziennik.ViewModel
             RaisePropertyChanged("JustifiedSecondDisplay");
             RaisePropertyChanged("JustifiedYearDisplay");
         }
-        private void SemesterMarksChanged(object sender, EventArgs e)
+        private void SemesterMarksChanged(object sender, MarkChangedEventArgs e)
         {
             RaisePropertyChanged("AverageMarkAll");
+            OnMarkChanged(e);
         }
 
         private void SemesterSubscribe(SemesterViewModel semester)
@@ -297,6 +300,12 @@ namespace Dziennik.ViewModel
         private void SemesterUnsubscribe(SemesterViewModel semester)
         {
             semester.MarksChanged -= SemesterMarksChanged;
+        }
+
+        private void OnMarkChanged(MarkChangedEventArgs e)
+        {
+            EventHandler<MarkChangedEventArgs> handler = MarkChanged;
+            if (handler != null) handler(this, e);
         }
 
         protected override void OnPushCopy()

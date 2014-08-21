@@ -11,7 +11,7 @@ using System.ComponentModel;
 
 namespace Dziennik.View
 {
-    public sealed class RealizeSubjectViewModel : ObservableObject
+    public sealed class RealizeSubjectViewModel : ObservableObject, IDataErrorInfo
     {
         public enum RealizeSubjectResult
         {
@@ -110,7 +110,7 @@ namespace Dziennik.View
             }
         }
 
-        public RealizeSubjectViewModel(RealizedSubjectViewModel realizedSubject, IEnumerable<StudentInGroupViewModel> students, IEnumerable<GlobalSubjectViewModel> availableSubjects, bool isAddingMode = false)
+        public RealizeSubjectViewModel(RealizedSubjectViewModel realizedSubject, IEnumerable<StudentInGroupViewModel> students, IEnumerable<GlobalSubjectViewModel> availableSubjects, CalendarViewModel calendar, bool isAddingMode = false)
         {
             m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
@@ -121,6 +121,7 @@ namespace Dziennik.View
             m_realizedSubject = realizedSubject;
             m_students = students;
             m_availableSubjects = new ObservableCollection<GlobalSubjectViewModel>(availableSubjects);
+            m_calendar = calendar;
 
             if (!m_isAddingMode)
             {
@@ -168,6 +169,8 @@ namespace Dziennik.View
             set { m_isAddingMode = value; RaisePropertyChanged("IsAddingMode"); m_removeSubjectCommand.RaiseCanExecuteChanged(); }
         }
 
+        private CalendarViewModel m_calendar;
+
         private RealizedSubjectViewModel m_realizedSubject;
         public RealizedSubjectViewModel RealizedSubject
         {
@@ -204,11 +207,19 @@ namespace Dziennik.View
             set { m_outsideSubject = value; RaisePropertyChanged("OutsideCurriculum"); }
         }
 
+        private bool m_realizeDateValid = false;
         private DateTime m_realizeDate;
         public DateTime RealizeDate
         {
             get { return m_realizeDate; }
             set { m_realizeDate = value; RaisePropertyChanged("RealizeDate"); }
+        }
+
+        private string m_semesterTypeText = string.Empty;
+        public string SemesterTypeText
+        {
+            get { return m_semesterTypeText; }
+            private set { m_semesterTypeText = value; RaisePropertyChanged("SemesterTypeText"); }
         }
 
         private RelayCommand m_okCommand;
@@ -291,7 +302,7 @@ namespace Dziennik.View
         }
         private bool CanOk(object e)
         {
-            return m_isOutsideCurriculum || (!m_isOutsideCurriculum && m_selectedSubject != null);
+            return m_isOutsideCurriculum || (!m_isOutsideCurriculum && m_selectedSubject != null) && m_realizeDateValid;
         }
         private void Cancel(object e)
         {
@@ -329,6 +340,45 @@ namespace Dziennik.View
             RaisePropertyChanged("StudentsPresentDisplayed");
             RaisePropertyChanged("StudentsAbsentDisplayed");
             RaisePropertyChanged("StudentsSumDisplayed");
+        }
+
+        public string Error
+        {
+            get { return string.Empty; }
+        }
+
+        public string this[string columnName]
+        {
+            get
+            {
+                switch(columnName)
+                {
+                    case "RealizeDate": return ValidateRealizeDate();
+                }
+
+                return string.Empty;
+            }
+        }
+
+        private string ValidateRealizeDate()
+        {
+            m_realizeDateValid = false;
+
+            if (m_realizeDate < m_calendar.YearBeginning || m_realizeDate > m_calendar.YearEnding)
+            {
+                m_okCommand.RaiseCanExecuteChanged();
+                return string.Format(GlobalConfig.GetStringResource("lang_RealizedSubjectDateNoticeFormat"),
+                                     m_calendar.YearBeginning.ToString(GlobalConfig.DateFormat),
+                                     m_calendar.SemesterSeparator.AddDays(-1).ToString(GlobalConfig.DateFormat),
+                                     m_calendar.SemesterSeparator.ToString(GlobalConfig.DateFormat),
+                                     m_calendar.YearEnding.ToString(GlobalConfig.DateFormat));
+            }
+
+            SemesterTypeText = GlobalConfig.GetStringResource((m_realizeDate < m_calendar.SemesterSeparator ? "lang_FirstSemesterName" : "lang_SecondSemesterName"));
+
+            m_realizeDateValid = true;
+            m_okCommand.RaiseCanExecuteChanged();
+            return string.Empty;
         }
     }
 }

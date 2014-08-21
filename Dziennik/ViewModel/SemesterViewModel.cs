@@ -8,6 +8,21 @@ using System.Xml.Linq;
 
 namespace Dziennik.ViewModel
 {
+    public class MarkChangedEventArgs : EventArgs
+    {
+        private MarkViewModel m_mark;
+        public MarkViewModel Mark
+        {
+            get { return m_mark; }
+            set { m_mark = value; }
+        }
+
+        public MarkChangedEventArgs(MarkViewModel mark)
+        {
+            m_mark = mark;
+        }
+    }
+
     public sealed class SemesterViewModel : ViewModelBase<SemesterViewModel, Semester>
     {
         public SemesterViewModel()
@@ -21,7 +36,7 @@ namespace Dziennik.ViewModel
             SubscribeMarks();
         }
 
-        public event EventHandler MarksChanged;
+        public event EventHandler<MarkChangedEventArgs> MarksChanged;
 
         private SynchronizedPerItemObservableCollection<MarkViewModel, Mark> m_marks;
         public SynchronizedPerItemObservableCollection<MarkViewModel, Mark> Marks
@@ -59,37 +74,48 @@ namespace Dziennik.ViewModel
             return m_marks.Sum((m) => { return (m.IsValueValid ? m.Weight : 0); });
         }
 
-        private void m_marks_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+
+        private void m_marks_Added(object sender, NotifyCollectionChangedSimpleEventArgs<MarkViewModel> e)
         {
-            PerformMarksChanged();
+            foreach (var item in e.Items)
+            {
+                PerformMarksChanged(item);
+            }
+        }
+        private void m_marks_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<MarkViewModel> e)
+        {
+            foreach (var item in e.Items)
+            {
+                PerformMarksChanged(item);
+            }
         }
         private void m_marks_ItemPropertyInCollectionChanged(object sender, ItemPropertyInCollectionChangedEventArgs<MarkViewModel> e)
         {
-            if (e.PropertyName == "Value" || e.PropertyName == "IsValueValid" || e.PropertyName == "Weight") PerformMarksChanged();
+            if (e.PropertyName == "Value" || e.PropertyName == "IsValueValid" || e.PropertyName == "Weight") PerformMarksChanged(e.Item);
         }
-        private void PerformMarksChanged()
+        private void PerformMarksChanged(MarkViewModel mark)
         {
             RaisePropertyChanged("AverageMark");
-            OnMarksChanged(EventArgs.Empty);
+            OnMarksChanged(new MarkChangedEventArgs(mark));
         }
 
-        private void OnMarksChanged(EventArgs e)
+        private void OnMarksChanged(MarkChangedEventArgs e)
         {
-            EventHandler handler = MarksChanged;
+            EventHandler<MarkChangedEventArgs> handler = MarksChanged;
             if (handler != null) handler(this, e);
         }
 
         private void SubscribeMarks()
         {
-            m_marks.CollectionChanged += m_marks_CollectionChanged;
+            m_marks.Added += m_marks_Added;
+            m_marks.Removed += m_marks_Removed;
             m_marks.ItemPropertyInCollectionChanged += m_marks_ItemPropertyInCollectionChanged;
-            //m_marks.Removed += m_marks_Removed;
         }
         private void UnsubscribeMarks()
         {
-            m_marks.CollectionChanged -= m_marks_CollectionChanged;
+            m_marks.Added -= m_marks_Added;
+            m_marks.Removed -= m_marks_Removed;
             m_marks.ItemPropertyInCollectionChanged -= m_marks_ItemPropertyInCollectionChanged;
-            //m_marks.Removed -= m_marks_Removed;
         }
 
         public static decimal ProposeMark(decimal average)

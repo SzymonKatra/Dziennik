@@ -34,7 +34,15 @@
         <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" IsEnabled="{Binding IsChecked, ElementName=radioOutside}" Text="{Binding OutsideSubject}"/>
 
         <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_RealizedDate}"/>
-        <DatePicker Grid.Column="1" Grid.Row="2" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding RealizeDate}"/>
+        <Grid Grid.Column="1" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="70"/>
+            </Grid.ColumnDefinitions>
+
+            <DatePicker Grid.Column="0" Style="{StaticResource validationTemplateTextBox}" SelectedDate="{Binding RealizeDate, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Grid.Column="1" Style="{StaticResource textBlockTitleStyle}" Text="{Binding SemesterTypeText}"/>
+        </Grid>
 
         <DataGrid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2"
                   RowStyle="{StaticResource dataGridRowRemoved}"

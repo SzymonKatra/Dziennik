@@ -6,10 +6,11 @@ using System.Windows.Input;
 using System.Collections.ObjectModel;
 using Dziennik.ViewModel;
 using Dziennik.CommandUtils;
+using System.ComponentModel;
 
 namespace Dziennik.View
 {
-    public class EditCalendarViewModel : ObservableObject
+    public class EditCalendarViewModel : ObservableObject, IDataErrorInfo
     {
         public enum EditCalendarResult
         {
@@ -20,7 +21,7 @@ namespace Dziennik.View
 
         public EditCalendarViewModel(CalendarViewModel calendar, bool isAddingMode = false)
         {
-            m_okCommand = new RelayCommand(Ok);
+            m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
             m_removeCalendarCommand = new RelayCommand(RemoveCalendar, CanRemoveCalendar);
             m_addOffDayCommand = new RelayCommand(AddOffDay);
@@ -33,6 +34,9 @@ namespace Dziennik.View
             {
                 calendar.YearBeginning = calendar.SemesterSeparator = calendar.YearEnding = DateTime.Now.Date;
             }
+
+            m_semesterSeparatorInput = calendar.SemesterSeparator;
+            m_yearEndingInput = calendar.YearEnding;
         }
 
         private CalendarViewModel m_calendar;
@@ -90,10 +94,33 @@ namespace Dziennik.View
             set { m_selectedOffDay = value; RaisePropertyChanged("SelectedOffDay"); }
         }
 
+        private bool m_semesterSeparatorInputValid = false;
+        private DateTime m_semesterSeparatorInput;
+        public DateTime SemesterSeparatorInput
+        {
+            get { return m_semesterSeparatorInput; }
+            set { m_semesterSeparatorInput = value; RaisePropertyChanged("SemesterSeparatorInput"); }
+        }
+
+        private bool m_yearEndingInputValid = false;
+        private DateTime m_yearEndingInput;
+        public DateTime YearEndingInput
+        {
+            get { return m_yearEndingInput; }
+            set { m_yearEndingInput = value; RaisePropertyChanged("YearEndingInput"); }
+        }
+
         private void Ok(object e)
         {
+            m_calendar.SemesterSeparator = m_semesterSeparatorInput;
+            m_calendar.YearEnding = m_yearEndingInput;
+
             m_result = EditCalendarResult.Ok;
             GlobalConfig.Dialogs.Close(this);
+        }
+        private bool CanOk(object e)
+        {
+            return m_semesterSeparatorInputValid && m_yearEndingInputValid;
         }
         private void Cancel(object e)
         {
@@ -139,6 +166,56 @@ namespace Dziennik.View
             {
                 m_selectedOffDay.PopCopy(WorkingCopyResult.Cancel);
             }
+        }
+
+        public string Error
+        {
+            get { return string.Empty; }
+        }
+
+        public string this[string columnName]
+        {
+            get
+            {
+                switch(columnName)
+                {
+                    case "SemesterSeparatorInput": return ValidateSemesterSeparator();
+                    case "YearEndingInput": return ValidateYearEnding();
+                }
+
+                return string.Empty;
+            }
+        }
+
+        public string ValidateSemesterSeparator()
+        {
+            m_semesterSeparatorInputValid = false;
+
+            if(m_semesterSeparatorInput <= m_calendar.YearBeginning)
+            {
+                m_okCommand.RaiseCanExecuteChanged();
+                return GlobalConfig.GetStringResource("lang_SemesterMustBeAfterBeginning");
+            }
+
+            m_semesterSeparatorInputValid = true;
+            m_calendar.SemesterSeparator = m_semesterSeparatorInput;
+            m_okCommand.RaiseCanExecuteChanged();
+            return string.Empty;
+        }
+        public string ValidateYearEnding()
+        {
+            m_yearEndingInputValid = false;
+
+            if(m_yearEndingInput <= m_semesterSeparatorInput)
+            {
+                m_okCommand.RaiseCanExecuteChanged();
+                return GlobalConfig.GetStringResource("lang_EndingMustBeAfterSemester");
+            }
+
+            m_yearEndingInputValid = true;
+            m_calendar.YearEnding = m_yearEndingInput;
+            m_okCommand.RaiseCanExecuteChanged();
+            return string.Empty;
         }
     }
 }

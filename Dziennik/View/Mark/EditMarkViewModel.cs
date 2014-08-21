@@ -21,7 +21,7 @@ namespace Dziennik.View
             RemoveMark,
         }
 
-        public EditMarkViewModel(MarkViewModel mark, StudentInGroupViewModel owner = null, bool isAddingMode = false)
+        public EditMarkViewModel(MarkViewModel mark, DateTime dateStart, DateTime dateEnd, StudentInGroupViewModel owner = null, bool isAddingMode = false)
         {
             m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
@@ -32,6 +32,8 @@ namespace Dziennik.View
             m_selectedCategory = NoSelectionMarksCategory;
 
             m_isAddingMode = isAddingMode;
+            m_dateStart = dateStart;
+            m_dateEnd = dateEnd;
 
             m_mark = mark;
 
@@ -43,11 +45,12 @@ namespace Dziennik.View
 
             m_valueInput = (isAddingMode ? string.Empty : MarkViewModel.GetValidDisplayedMark(m_mark.Value));
             m_noteInput = m_mark.Note;
+            m_addDateInput = (isAddingMode ? DateTime.Now.Date : m_mark.AddDate);
             //m_weightInput = m_mark.Weight.ToString();
 
             m_noteSelected = !mark.IsValueValid;         
 
-            if (owner != null) m_title = string.Format("{0} - {1} {2}", owner.Number, owner.GlobalStudent.Name, owner.GlobalStudent.Surname);
+            m_title = string.Format("{0} - {1} {2}", owner.Number, owner.GlobalStudent.Name, owner.GlobalStudent.Surname);
         }
 
         private EditMarkResult m_result = EditMarkResult.Cancel;
@@ -62,6 +65,9 @@ namespace Dziennik.View
             get { return m_isAddingMode; }
             //set { m_isAddingMode = value; RaisePropertyChanged("IsAddingMode"); m_removeMarkCommand.RaiseCanExecuteChanged(); }
         }
+
+        private DateTime m_dateStart;
+        private DateTime m_dateEnd;
 
         private MarkViewModel m_mark;
         public MarkViewModel Mark
@@ -90,6 +96,14 @@ namespace Dziennik.View
         {
             get { return m_noteInput; }
             set { m_noteInput = value; RaisePropertyChanged("NoteInput"); }
+        }
+
+        private bool m_addDateInputValid = false;
+        private DateTime m_addDateInput;
+        public DateTime AddDateInput
+        {
+            get { return m_addDateInput; }
+            set { m_addDateInput = value; RaisePropertyChanged("AddDateInput"); }
         }
 
         private bool m_noteSelected;
@@ -153,16 +167,18 @@ namespace Dziennik.View
             {
                 m_mark.Note = string.Empty;
             }
-            m_mark.LastChangeDate = DateTime.Now;
             m_mark.Category = (m_selectedCategory == NoSelectionMarksCategory ? null : m_selectedCategory);
-            if (m_isAddingMode) m_mark.AddDate = m_mark.LastChangeDate;
+            if(m_isAddingMode)
+            {
+                m_mark.AddDate = m_mark.LastChangeDate = m_addDateInput.Add(DateTime.Now.TimeOfDay);
+            }
 
             m_result = EditMarkResult.Ok;
             GlobalConfig.Dialogs.Close(this);
         }
         private bool CanOk(object e)
         {
-            return (m_noteSelected ? m_noteInputValid : m_valueInputValid);
+            return (m_noteSelected ? m_noteInputValid : m_valueInputValid) && m_addDateInputValid;
         }
         private void Cancel(object e)
         {
@@ -200,6 +216,7 @@ namespace Dziennik.View
                     case "ValueInput": return ValidateValueInput();
                     case "NoteInput": return ValidateNoteInput();
                     //case "WeightInput": return ValidateWeightInput();
+                    case "AddDateInput": return ValidateAddDateInput();
                 }
 
                 return string.Empty;
@@ -239,6 +256,23 @@ namespace Dziennik.View
 
             m_mark.Note = m_noteInput;
             m_noteInputValid = true;
+            m_okCommand.RaiseCanExecuteChanged();
+
+            return string.Empty;
+        }
+        private string ValidateAddDateInput()
+        {
+            m_addDateInputValid = false;
+
+            string errorResult = GlobalValidateAddDate(m_addDateInput, m_dateStart, m_dateEnd);
+            if (!string.IsNullOrEmpty(errorResult))
+            {
+                m_okCommand.RaiseCanExecuteChanged();
+                return errorResult;
+            }
+
+            m_mark.AddDate = m_addDateInput;
+            m_addDateInputValid = true;
             m_okCommand.RaiseCanExecuteChanged();
 
             return string.Empty;
@@ -332,6 +366,18 @@ namespace Dziennik.View
             if (!hasLetter)
             {
                 return GlobalConfig.GetStringResource("lang_TypeAtLeastOneLetter");
+            }
+
+            return string.Empty;
+        }
+        public static string GlobalValidateAddDate(DateTime input, DateTime dateStart, DateTime dateEnd)
+        {
+            DateTime dateStartDay = dateStart.Date;
+            DateTime dateEndDay = dateEnd.Date;
+
+            if (input < dateStart || input > dateEnd)
+            {
+                return string.Format(GlobalConfig.GetStringResource("lang_AddDateOnlyInRange"), dateStartDay.ToString(GlobalConfig.DateFormat), dateEndDay.ToString(GlobalConfig.DateFormat));
             }
 
             return string.Empty;

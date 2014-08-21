@@ -77,8 +77,8 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <my:MarksControl MarksSource="{Binding FirstSemester.Marks}" SelectedMark="{Binding DataContext.SelectedMark, ElementName=rootSchoolClassControl, Mode=TwoWay}"
-                                             CommandAddMark="{Binding DataContext.AddMarkCommand, ElementName=rootSchoolClassControl}" CommandParameterAddMark="{Binding FirstSemester.Marks}"
-                                             CommandEditMark="{Binding DataContext.EditMarkCommand, ElementName=rootSchoolClassControl}" CommandParameterEditMark="{Binding FirstSemester.Marks}"/>
+                                             CommandAddMark="{Binding DataContext.AddMarkCommand, ElementName=rootSchoolClassControl}" CommandParameterAddMark="first"
+                                             CommandEditMark="{Binding DataContext.EditMarkCommand, ElementName=rootSchoolClassControl}" CommandParameterEditMark="first"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -124,8 +124,8 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <my:MarksControl MarksSource="{Binding SecondSemester.Marks}" SelectedMark="{Binding DataContext.SelectedMark, ElementName=rootSchoolClassControl, Mode=TwoWay}"
-                                             CommandAddMark="{Binding DataContext.AddMarkCommand, ElementName=rootSchoolClassControl}" CommandParameterAddMark="{Binding SecondSemester.Marks}"
-                                             CommandEditMark="{Binding DataContext.EditMarkCommand, ElementName=rootSchoolClassControl}" CommandParameterEditMark="{Binding SecondSemester.Marks}"/>
+                                             CommandAddMark="{Binding DataContext.AddMarkCommand, ElementName=rootSchoolClassControl}" CommandParameterAddMark="second"
+                                             CommandEditMark="{Binding DataContext.EditMarkCommand, ElementName=rootSchoolClassControl}" CommandParameterEditMark="second"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -177,6 +177,34 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
+            </TabItem>
+            
+            <TabItem Header="{DynamicResource lang_Statistics}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <WrapPanel Orientation="Horizontal" Grid.Row="0">
+                        <Button Style="{StaticResource wrapPanelControlStyle}" Content="{DynamicResource lang_RefreshStatistics}" Command="{Binding RefreshStatisticsCommand}"/>
+                    </WrapPanel>
+                    
+                    <DataGrid Grid.Row="1"
+                        ItemsSource="{Binding SelectedGroup.Statistics.Collection}"
+                  CanUserAddRows="False"
+                  CanUserSortColumns="False"
+                  SelectionMode="Single"
+                  IsReadOnly="True"
+                  AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="{DynamicResource lang_Name}" Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="{DynamicResource lang_AverageAttendance}" Binding="{Binding AverageAttendanceDisplayed}"/>
+                            <DataGridTextColumn Header="{DynamicResource lang_AverageMark}" Binding="{Binding AverageMark}"/>
+                            <DataGridTextColumn Header="{DynamicResource lang_AverageEndingMark}" Binding="{Binding AverageEndingMark}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

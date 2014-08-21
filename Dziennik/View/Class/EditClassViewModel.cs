@@ -31,7 +31,8 @@ namespace Dziennik.View
 
             m_schoolClass = schoolClass;
             m_nameInput = schoolClass.Name;
-            m_selectedCalendar = m_originalCalendar =  schoolClass.Calendar;
+            m_selectedCalendar = m_originalCalendar = schoolClass.Calendar;
+            m_selectedGroup = (schoolClass.Groups.Count > 0 ? schoolClass.Groups[0] : null);
         }
 
         private SchoolGroupViewModel m_selectedGroup;
@@ -41,6 +42,7 @@ namespace Dziennik.View
             set { m_selectedGroup = value; RaisePropertyChanged("SelectedGroup"); m_editGroupCommand.RaiseCanExecuteChanged(); }
         }
 
+        private bool m_selectedCalendarValid = false;
         private CalendarViewModel m_originalCalendar;
         private CalendarViewModel m_selectedCalendar;
         public CalendarViewModel SelectedCalendar
@@ -146,7 +148,7 @@ namespace Dziennik.View
         }
         private bool CanOk(object param)
         {
-            return m_nameInputValid;
+            return m_nameInputValid && m_selectedCalendarValid;
         }
         private void Cancel(object e)
         {
@@ -218,6 +220,7 @@ namespace Dziennik.View
                 switch (columnName)
                 {
                     case "NameInput": return ValidateNameInput();
+                    case "SelectedCalendar": return ValidateSelectedCalendar();
                 }
 
                 return string.Empty;
@@ -235,6 +238,20 @@ namespace Dziennik.View
             }
 
             m_nameInputValid = true;
+            m_okCommand.RaiseCanExecuteChanged();
+            return string.Empty;
+        }
+        private string ValidateSelectedCalendar()
+        {
+            m_selectedCalendarValid = false;
+
+            if(m_selectedCalendar==null)
+            {
+                m_okCommand.RaiseCanExecuteChanged();
+                return GlobalConfig.GetStringResource("lang_ChooseCalendar");
+            }
+
+            m_selectedCalendarValid = true;
             m_okCommand.RaiseCanExecuteChanged();
             return string.Empty;
         }

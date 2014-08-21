@@ -147,7 +147,7 @@ namespace Dziennik.View
             }
         }
 
-        public AddMarksSetViewModel(IEnumerable<StudentInGroupViewModel> students, SemesterType semester)
+        public AddMarksSetViewModel(IEnumerable<StudentInGroupViewModel> students, SemesterType semester, DateTime dateStart, DateTime dateEnd)
         {
             m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
@@ -166,6 +166,9 @@ namespace Dziennik.View
                 m_students.Add(pair);
             }
             m_semester = semester;
+            m_addDateInput = DateTime.Now.Date;
+            m_dateStart = dateStart;
+            m_dateEnd = dateEnd;
             //m_weightInput = m_weight.ToString();
         }
 
@@ -174,6 +177,9 @@ namespace Dziennik.View
         {
             get { return m_result; }
         }
+
+        private DateTime m_dateStart;
+        private DateTime m_dateEnd;
 
         private SemesterType m_semester;
         public SemesterType Semester
@@ -201,6 +207,14 @@ namespace Dziennik.View
         {
             get { return m_weight; }
             set { m_weight = value; RaisePropertyChanged("Weight"); }
+        }
+
+        private bool m_addDateInputValid = false;
+        private DateTime m_addDateInput;
+        public DateTime AddDateInput
+        {
+            get { return m_addDateInput; }
+            set { m_addDateInput = value; RaisePropertyChanged("AddDateInput"); }
         }
         //private string m_weightInput;
         //public string WeightInput
@@ -264,7 +278,8 @@ namespace Dziennik.View
                 if (GlobalConfig.MessageBox(this, mboxtext, Controls.MessageBoxSuperPredefinedButtons.YesNo) != Controls.MessageBoxSuperButton.Yes) return;
             }
 
-            DateTime nowDate = DateTime.Now; // must be the same for all students
+            DateTime nowDate = m_addDateInput; // must be the same for all students
+            nowDate = nowDate.Add(DateTime.Now.TimeOfDay);
             foreach (StudentAddMarkPair pair in m_students)
             {
                 if (!pair.IsInputNull)
@@ -299,8 +314,7 @@ namespace Dziennik.View
             {
                 if (!pair.InputValid) return false;
             }
-            return true;
-            //return m_weightInputValid;
+            return m_addDateInputValid;
         }
         private void Cancel(object e)
         {
@@ -325,13 +339,29 @@ namespace Dziennik.View
         {
             get
             {
-                //switch(columnName)
-                //{
-                //    //case "WeightInput": return ValidateWeightInput();
-                //}
+                switch (columnName)
+                {
+                    case "AddDateInput": return ValidateAddDateInput();
+                }
 
                 return string.Empty;
             }
+        }
+
+        private string ValidateAddDateInput()
+        {
+            m_addDateInputValid = false;
+
+            string errorResult = EditMarkViewModel.GlobalValidateAddDate(m_addDateInput, m_dateStart, m_dateEnd);
+            if (!string.IsNullOrEmpty(errorResult))
+            {
+                m_okCommand.RaiseCanExecuteChanged();
+                return errorResult;
+            }
+
+            m_addDateInputValid = true;
+            m_okCommand.RaiseCanExecuteChanged();
+            return string.Empty;
         }
 
         //private string ValidateWeightInput()

@@ -23,6 +23,7 @@
     
     <s:String x:Key="lang_Subjects">Tematy</s:String>
     <s:String x:Key="lang_Marks">Oceny</s:String>
+    <s:String x:Key="lang_Statistics">Statystyki</s:String>
     <s:String x:Key="lang_Number">Numer</s:String>
     <s:String x:Key="lang_NumberShort">Nr</s:String>
     <s:String x:Key="lang_Edit">Edytuj</s:String>
@@ -31,6 +32,13 @@
     <s:String x:Key="lang_RealizeSubject">Zrealizuj temat</s:String>
     <s:String x:Key="lang_RealizedDate">Data zrealizowania</s:String>
     <s:String x:Key="lang_Subject">Temat</s:String>
+
+    <s:String x:Key="lang_AverageAttendance">Średnia frekwencja</s:String>
+    <s:String x:Key="lang_AverageMark">Średnia ocen</s:String>
+    <s:String x:Key="lang_AverageEndingMark">Średnia ocen wystawionych</s:String>
+    <s:String x:Key="lang_SemesterSeparatorName">półrocze</s:String>
+    <s:String x:Key="lang_YearEndingName">cały rok</s:String>
+    <s:String x:Key="lang_RefreshStatistics">Odśwież statystyki</s:String>
 
     <s:String x:Key="lang_SurnamePerson">Nazwisko</s:String>
     <s:String x:Key="lang_NamePerson">Imię</s:String>
@@ -96,6 +104,7 @@
     <s:String x:Key="lang_RemoveMark">Usuń ocenę</s:String>
     <s:String x:Key="lang_Category">Kategoria</s:String>
     <s:String x:Key="lang_NoneSmall">brak</s:String>
+    <s:String x:Key="lang_AddDate">Data dodania</s:String>
     
     <s:String x:Key="lang_EditStudentTitle">Edytuj ucznia</s:String>
     <s:String x:Key="lang_RemoveStudent">Usuń ucznia</s:String>
@@ -125,7 +134,7 @@
     <s:String x:Key="lang_LateShort">sp</s:String>
     <s:String x:Key="lang_Justify">Usprawiedliw</s:String>
     <s:String x:Key="lang_CancelJustify">Odwołaj usprawiedliwienie</s:String>
-    <s:String x:Key="lang_StudentsPresentFormat">Obecnych: {0} ({1} spóźnionych)</s:String>
+    <s:String x:Key="lang_StudentsPresentFormat">{0}/{1} &#x09; Obecnych: {0} ({1} spóźnionych)</s:String>
     <s:String x:Key="lang_StudentsAbsentFormat">Nieobecnych: {0}</s:String>
     <s:String x:Key="lang_StudentsSumFormat">Razem: {0}</s:String>
 
@@ -266,4 +275,14 @@
     <s:String x:Key="lang_ArchiveUnpacking">Rozpakowywanie archiwum</s:String>
     <s:String x:Key="lang_LoadingArchives">Wczytywanie archiwów</s:String>
     <s:String x:Key="lang_BeforeRestoringFromFormat">Przed przywróceniem archiwum z dnia: {0}</s:String>
+    <s:String x:Key="lang_AddDateOnlyInRange">Data dodania dla tego semestru musi się zawierać między {0} a {1}</s:String>
+    <s:String x:Key="lang_SemesterMustBeAfterBeginning">Data nowego semestru musi być późniejsza niż data rozpoczęcia roku szkolnego</s:String>
+    <s:String x:Key="lang_EndingMustBeAfterSemester">Data zakończenia roku szkolnego musi być późniejsza niż data nowego semestru</s:String>
+    <s:String x:Key="lang_ChooseCalendar">Wybierz kalendarz</s:String>
+    <s:String x:Key="lang_RealizedSubjectDateNoticeFormat" xml:space="preserve">Data zrealizowania tematu musi się zawierać pomiędzy:
+Pierwszy semestr {0} a {1}
+Drugi semestr {2} a {3}
+    </s:String>
+    <s:String x:Key="lang_FirstSemesterName">Pierwszy semestr</s:String>
+    <s:String x:Key="lang_SecondSemesterName">Drugi semestr</s:String>
 </ResourceDictionary>

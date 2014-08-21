@@ -13,6 +13,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
@@ -23,11 +24,14 @@
 
         <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Weight}"/>
         <my:NonEditableIntegerUpDown Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}"  HorizontalAlignment="Left" Width="50" Value="{Binding Weight}" Minimum="{x:Static local:GlobalConfig.DefaultWeightMinValue}" Maximum="{x:Static local:GlobalConfig.DefaultWeightMaxValue}"/>
+        
+        <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_AddDate}"/>
+        <DatePicker Grid.Column="1" Grid.Row="2" Style="{StaticResource validationTemplateTextBox}" SelectedDate="{Binding AddDateInput, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+        
+        <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Description}"/>
+        <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource inputControlStyle}" TextWrapping="Wrap" Text="{Binding Description,Mode=TwoWay}"/>
 
-        <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Description}"/>
-        <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource inputControlStyle}" TextWrapping="Wrap" Text="{Binding Description,Mode=TwoWay}"/>
-
-        <DataGrid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2"
+        <DataGrid Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2"
                   x:Name="dataGrid"
                   RowStyle="{StaticResource dataGridRowRemoved}"
                   ItemsSource="{Binding Students}"
@@ -44,6 +48,6 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <my:OkCancelControl Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
+        <my:OkCancelControl Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>
 </Window>

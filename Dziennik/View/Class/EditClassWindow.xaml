@@ -42,7 +42,7 @@
         </Grid>
 
         <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_ClassCalendar}"/>
-        <ComboBox Grid.Column="1" Grid.Row="3" Style="{StaticResource inputControlStyle}" ItemsSource="{Binding ViewModel.Calendars, Source={x:Static local:GlobalConfig.GlobalDatabase}}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedCalendar}"/>
+        <ComboBox Grid.Column="1" Grid.Row="3" Style="{StaticResource validationTemplateTextBox}" ItemsSource="{Binding ViewModel.Calendars, Source={x:Static local:GlobalConfig.GlobalDatabase}}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedCalendar, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
         
         <Grid Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
