@@ -210,26 +210,148 @@
     <s:String x:Key="lang_Author">Autor</s:String>
     <s:String x:Key="lang_AuthorName">Szymon Katra</s:String>
     <s:String x:Key="lang_AuthorAll">Autor: Szymon Katra</s:String>
-    <s:String x:Key="lang_Controls">Kontrolki</s:String>
-    <s:String x:Key="lang_ControlsSourceName">Extended WPF Toolkit™ Community Edition</s:String>
-    <s:String x:Key="lang_ControlsSourceAuthor">Autor: Xceed</s:String>
-    <s:String x:Key="lang_ControlsSourceLicense">Licencja: Microsoft Public License (Ms-PL)</s:String>
-    <s:String x:Key="lang_ControlsSourceHyperlink1">https://wpftoolkit.codeplex.com/</s:String>
-    <s:String x:Key="lang_ControlsSourceHyperlink2">http://xceed.com/</s:String>
-    <s:String x:Key="lang_Libraries">Biblioteki</s:String>
-    <s:String x:Key="lang_FastJSONSourceName">fastJSON</s:String>
-    <s:String x:Key="lang_FastJSONSourceAuthor">Autor: Mehdi Gholam</s:String>
-    <s:String x:Key="lang_FastJSONSourceLicense">Licencja: Apache License 2.0 (Apache)</s:String>
-    <s:String x:Key="lang_FastJSONSourceHyperlink">http://fastjson.codeplex.com/</s:String>
-    <s:String x:Key="lang_Icons">Ikony</s:String>
-    <s:String x:Key="lang_IconsSource1Name">Basic Set</s:String>
-    <s:String x:Key="lang_IconsSource1Author">Autor: Pixel Mixer</s:String>
-    <s:String x:Key="lang_IconsSource1Hyperlink1">http://www.pixel-mixer.com</s:String>
-    <s:String x:Key="lang_IconsSource1Hyperlink2">https://www.iconfinder.com/iconsets/basicset</s:String>
-    <s:String x:Key="lang_IconsSource2Name">32x32 Free Design Icons</s:String>
-    <s:String x:Key="lang_IconsSource2Author">Autor: Aha-Soft</s:String>
-    <s:String x:Key="lang_IconsSource2Hyperlink1">http://www.aha-soft.com/</s:String>
-    <s:String x:Key="lang_IconsSource2Hyperlink2">https://www.iconfinder.com/iconsets/32x32-free-design-icons</s:String>
+    <FlowDocument x:Key="infoDependenciesRichText">
+        <Paragraph>
+            <Bold>Extended WPF Toolkit™ Community Edition</Bold>
+        </Paragraph>
+        <List>
+            <ListItem>
+                <Paragraph>Autor: Xceed</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>Licencja: Microsoft Public License (Ms-PL)</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>https://wpftoolkit.codeplex.com/</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>http://xceed.com/</Paragraph>
+            </ListItem>
+        </List>
+        
+        <Paragraph>
+            <Bold>fastJSON</Bold>
+        </Paragraph>
+        <List>
+            <ListItem>
+                <Paragraph>Autor: Mehdi Gholam</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>Licencja: Apache License 2.0 (Apache)</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>http://fastjson.codeplex.com/</Paragraph>
+            </ListItem>
+        </List>
+
+        <Paragraph>
+            <Bold>Ikony - Basic Set</Bold>
+        </Paragraph>
+        <List>
+            <ListItem>
+                <Paragraph>Autor: Pixel Mixer</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>Licencja: Free for commercial use</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>http://www.pixel-mixer.com</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>https://www.iconfinder.com/iconsets/basicset</Paragraph>
+            </ListItem>
+        </List>
+
+        <Paragraph>
+            <Bold>Ikony - 32x32 Free Design Icons</Bold>
+        </Paragraph>
+        <List>
+            <ListItem>
+                <Paragraph>Autor: Aha-Soft</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>Licencja: Free for commercial use</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>http://www.aha-soft.com/</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>https://www.iconfinder.com/iconsets/32x32-free-design-icons</Paragraph>
+            </ListItem>
+        </List>
+
+        <Paragraph>
+            <Bold>Ikona - Kalendarz</Bold>
+        </Paragraph>
+        <List>
+            <ListItem>
+                <Paragraph>Autor: Everaldo Coelho</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>Licencja: LGPL</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>http://www.everaldo.com/</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>https://www.iconfinder.com/icons/3755/agenda_calendar_date_event_icon</Paragraph>
+            </ListItem>
+        </List>
+
+        <Paragraph>
+            <Bold>Ikona - Lista klas</Bold>
+        </Paragraph>
+        <List>
+            <ListItem>
+                <Paragraph>Autor: Neurovit</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>Licencja: Creative Commons (Attribution-Share Alike 3.0 Unported)</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>http://neurovit.deviantart.com/</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>https://www.iconfinder.com/icons/48812/manage_school_icon</Paragraph>
+            </ListItem>
+        </List>
+
+        <Paragraph>
+            <Bold>Ikona - Powiadomienia</Bold>
+        </Paragraph>
+        <List>
+            <ListItem>
+                <Paragraph>Autor: Lotcos</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>Licencja: Creative Commons (Attribution 3.0 Unported)</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>https://www.iconfinder.com/ATHtut</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>https://www.iconfinder.com/icons/254206/bell_icon</Paragraph>
+            </ListItem>
+        </List>
+
+        <Paragraph>
+            <Bold>Ikona - Archiwizuj</Bold>
+        </Paragraph>
+        <List>
+            <ListItem>
+                <Paragraph>Autor: Visual Pharm</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>Licencja: Creative Commons Attribution-No Derivative Works 3.0 Unported</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>http://icons8.com/</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>https://www.iconfinder.com/icons/27832/archive_compress_zip_icon</Paragraph>
+            </ListItem>
+        </List>
+    </FlowDocument>
     
     <s:String x:Key="lang_TypeValidCategoryName">Wprowadź poprawną nazwę kategorii</s:String>
     <s:String x:Key="lang_TypeValidClassName">Wprowadź poprawną nazwę klasy</s:String>
