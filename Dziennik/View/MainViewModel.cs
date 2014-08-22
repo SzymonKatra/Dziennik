@@ -9,9 +9,11 @@ using Dziennik.Controls;
 using Dziennik.CommandUtils;
 using Dziennik.ViewModel;
 using System.ComponentModel;
+using System.Windows;
 using System.IO;
 using Microsoft.Win32;
 using Ionic.Zip;
+using System.Timers;
 
 namespace Dziennik.View
 {
@@ -28,6 +30,7 @@ namespace Dziennik.View
             m_showMarksCategoriesListCommand = new RelayCommand(ShowMarksCategoriesList);
             m_showCalendarsListCommand = new RelayCommand(ShowCalendarsList);
             m_showNoticesListCommand = new RelayCommand(ShowNoticesList);
+            m_closeCommand = new RelayCommand<CancelEventArgs>(Close);
         }
 
         private ObservableCollection<SchoolClassControlViewModel> m_openedSchoolClasses = new ObservableCollection<SchoolClassControlViewModel>();
@@ -63,6 +66,10 @@ namespace Dziennik.View
                 return result;
             }
         }
+
+        private Timer m_activityTimer;
+        private object m_activityTimerLock = new object();
+        private bool m_passwordAsking = false;
 
         private RelayCommand m_saveCommand;
         public ICommand SaveCommand
@@ -118,6 +125,12 @@ namespace Dziennik.View
             get { return m_showNoticesListCommand; }
         }
 
+        private RelayCommand<CancelEventArgs> m_closeCommand;
+        public ICommand CloseCommand
+        {
+            get { return m_closeCommand; }
+        }
+
         private string m_originalDatabasePath;
         public string OriginalDatabasePath
         {
@@ -138,10 +151,22 @@ namespace Dziennik.View
 
         private bool m_databasesDirectoryChanged = true;
 
+        public Action<Action> InvokeWindow;
+
         public void Init()
         {
             GlobalConfig.InitializeFastJSONCustom();
             GlobalConfig.Notifier.PropertyChanged += Notifier_PropertyChanged;
+            GlobalConfig.Dialogs.ViewRegistered += (s, e) =>
+            {
+                e.View.PreviewKeyDown += View_PreviewKeyDown;
+                e.View.PreviewMouseDown += View_PreviewMouseDown;
+            };
+            GlobalConfig.Dialogs.ViewUnregistered += (s, e) =>
+            {
+                e.View.PreviewKeyDown -= View_PreviewKeyDown;
+                e.View.PreviewMouseDown -= View_PreviewMouseDown;
+            };
 
             //ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
             //{
@@ -151,13 +176,84 @@ namespace Dziennik.View
             //GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
 
             Reload(true);
+
+            CheckNotices();
+
+            AskPasswordIfNeeded();
             
             //string[] args = Environment.GetCommandLineArgs();
             //if (args.Length >= 2) m_openFromPathCommand.Execute(args[1]);
         }
+
+        private void View_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            ResetActivityTimer();
+        }
+        private void View_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ResetActivityTimer();
+        }
+        
+        private void AskPasswordIfNeeded()
+        {
+            if (GlobalConfig.Notifier.Password == null) return;
+            if (m_passwordAsking) return;
+            m_passwordAsking = true;
+
+            TypePasswordViewModel dialogViewModel = new TypePasswordViewModel();
+            Window view = Application.Current.Windows.OfType<Window>().FirstOrDefault(x => x.IsActive);
+            if (view != null && GlobalConfig.Dialogs.IsViewRegistered(view))
+            {
+                GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Dialogs.GetViewModel(view), dialogViewModel);
+            }
+            else
+            {
+                GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+            }
+            if (dialogViewModel.Result == TypePasswordViewModel.TypePasswordResult.CloseApplication) GlobalConfig.Dialogs.GetWindow(this).Close();
+            m_passwordAsking = false;
+        }
         private void Notifier_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "DatabasesDirectory") m_databasesDirectoryChanged = true;
+            else if (e.PropertyName == "BlockingMinutes") ResetActivityTimer();
+        }
+        private void ResetActivityTimer()
+        {
+            lock (m_activityTimerLock)
+            {
+                if (GlobalConfig.Notifier.BlockingMinutes > 0)
+                {
+                    if (m_activityTimer == null)
+                    {
+                        m_activityTimer = new Timer();
+                        m_activityTimer.AutoReset = true;
+                        m_activityTimer.Elapsed += m_activityTimer_Elapsed;
+                    }
+
+                    m_activityTimer.Stop();
+                    m_activityTimer.Interval = GlobalConfig.Notifier.BlockingMinutes * 60 * 1000; // in miliseconds
+                    m_activityTimer.Start();
+                }
+                else
+                {
+                    if (m_activityTimer != null)
+                    {
+                        m_activityTimer.Elapsed += m_activityTimer_Elapsed;
+                        m_activityTimer.Dispose();
+                        m_activityTimer = null;
+                    }
+                }
+            }
+        }
+
+        private void m_activityTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            lock (m_activityTimerLock) m_activityTimer.Stop();
+
+            InvokeWindow.Invoke(() => AskPasswordIfNeeded());
+
+            lock (m_activityTimerLock) m_activityTimer.Start();
         }
 
         private void Save(object param)
@@ -262,11 +358,12 @@ namespace Dziennik.View
         }
         private void ArchiveDatabase(string param)
         {
+            DateTime now = DateTime.Now;
+            GlobalConfig.GlobalDatabase.ViewModel.LastArchivedDate = now;
             m_saveCommand.Execute(null);
 
             ActionDialogViewModel dialogViewModel = new ActionDialogViewModel((d, p) =>
             {
-                DateTime now = DateTime.Now;
                 IEnumerable<string> files = Directory.EnumerateFiles(GlobalConfig.Notifier.DatabasesDirectory + @"\" + GlobalConfig.CurrentDatabaseSubdirectory);
                 var validFiles = from f in files where f.EndsWith(GlobalConfig.SchoolClassDatabaseFileExtension) || f.EndsWith(GlobalConfig.SchoolOptionsDatabaseFileExtension) select f;
 
@@ -321,7 +418,7 @@ namespace Dziennik.View
                 d.ProgressValue = 100;
 
             }, null, "", GlobalConfig.GetStringResource("lang_Archiving"), GlobalConfig.ActionDialogProgressSize, true);
-            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);         
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
         public static void UnpackArchive(object viewModel, string archivePath, string unpackPath)
         {
@@ -396,6 +493,24 @@ namespace Dziennik.View
             NoticesListViewModel dialogViewModel = new NoticesListViewModel();
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
+        private void Close(CancelEventArgs param)
+        {
+            string lastArchivedDateStr = (GlobalConfig.GlobalDatabase.ViewModel.LastArchivedDate.Ticks == 0 ? GlobalConfig.GetStringResource("lang_Never") : GlobalConfig.GlobalDatabase.ViewModel.LastArchivedDate.ToString(GlobalConfig.DateTimeFormat));
+            switch (GlobalConfig.MessageBox(this, string.Format(GlobalConfig.GetStringResource("lang_DoYouWantToArchiveFormat"), lastArchivedDateStr), MessageBoxSuperPredefinedButtons.YesNoCancel))
+            {
+                case MessageBoxSuperButton.Yes:
+                    m_archiveDatabaseCommand.Execute(null);
+                    break;
+
+                case MessageBoxSuperButton.No:
+                    m_saveCommand.Execute(null);
+                    break;
+
+                case MessageBoxSuperButton.Cancel:
+                    param.Cancel = true;
+                    break;
+            }
+        }
         private void CloseAllTabs()
         {
             if (!m_blockSaving)
@@ -460,7 +575,6 @@ namespace Dziennik.View
             m_databasesDirectoryChanged = false;
 
             RaisePropertyChanged("TabWidth");
-            CheckNotices();
         }
         private void CheckNotices()
         {

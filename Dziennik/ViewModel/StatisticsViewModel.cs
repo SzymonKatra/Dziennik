@@ -113,6 +113,36 @@ namespace Dziennik.ViewModel
                 }
             }
 
+            public string AverageMarkDisplayed
+            {
+                get
+                {
+                    decimal avg = AverageMark;
+                    if (avg <= 0M) return string.Empty;
+
+                    return avg.ToString(CultureInfo.InvariantCulture);
+                }
+            }
+            public string AverageEndingMarkDisplayed
+            {
+                get
+                {
+                    decimal avg = AverageEndingMark;
+                    if (avg <= 0M) return string.Empty;
+
+                    return avg.ToString(CultureInfo.InvariantCulture);
+                }
+            }
+            public System.Windows.FontWeight NameFontWeight
+            {
+                get
+                {
+                    if (m_month < 0) return System.Windows.FontWeights.Bold;
+
+                    return System.Windows.FontWeights.Normal;
+                }
+            }
+
             private void ComputeValidMarks(ref int weightsSum, ref decimal valuesSum, SemesterViewModel semester)
             {
                 foreach (var mark in semester.Marks)

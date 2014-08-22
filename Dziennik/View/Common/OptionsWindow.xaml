@@ -33,8 +33,6 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="35"/>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="60"/>
-                <RowDefinition Height="60"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="*"/>
@@ -44,7 +42,8 @@
 
             <my:DirectorySelector x:Name="dirSelect" Grid.Column="1" Grid.Row="0"  IsEnabled="{Binding BlockSaving, Source={x:Static local:GlobalConfig.Main}, Converter={StaticResource convertBooleanNegate}}" Style="{StaticResource inputControlStyle}" SelectedPath="{Binding DatabasesDirectory, Mode=TwoWay}" IsTextBoxReadOnly="True"/>
             
-            <Button Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2"  IsEnabled="{Binding BlockSaving, Source={x:Static local:GlobalConfig.Main}, Converter={StaticResource convertBooleanNegate}}" Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_ArchivesList}" Command="{Binding ShowArchivesListCommand}"/>
+            <Button Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_ArchivesList}" Command="{Binding ShowArchivesListCommand}"/>
+            <Button Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_ChangeBlockingOptions}" Command="{Binding ChangePasswordCommand}"/>
         </Grid>
 
         <Grid Grid.Column="1" Grid.Row="0">

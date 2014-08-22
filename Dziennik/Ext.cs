@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.InteropServices;
+using System.Security;
 
 namespace Dziennik
 {
@@ -19,6 +20,15 @@ namespace Dziennik
         {
             bool output;
             if (bool.TryParse(input, out output))
+            {
+                return output;
+            }
+            return def;
+        }
+        public static int IntParseOrDefault(string input, int def)
+        {
+            int output;
+            if (int.TryParse(input, out output))
             {
                 return output;
             }
@@ -44,17 +54,35 @@ namespace Dziennik
             foreach (var sub in info.GetDirectories()) sub.Delete(true);
         }
 
-        //private static BinaryFormatter s_formatter = new BinaryFormatter();
-        //public static T DeepClone<T>(T original)
-        //{
-        //    T result; 
-        //    using(MemoryStream stream = new MemoryStream())
-        //    {
-        //        s_formatter.Serialize(stream, original);
-        //        stream.Position = 0;
-        //        result = (T)s_formatter.Deserialize(stream);
-        //    }
-        //    return result;
-        //}
+        //thanks to: SwDevMan81
+        //http://stackoverflow.com/questions/4502676/c-sharp-compare-two-securestrings-for-equality
+        public static bool IsEqualTo(this SecureString ss1, SecureString ss2)
+        {
+            IntPtr bstr1 = IntPtr.Zero;
+            IntPtr bstr2 = IntPtr.Zero;
+            try
+            {
+                bstr1 = Marshal.SecureStringToBSTR(ss1);
+                bstr2 = Marshal.SecureStringToBSTR(ss2);
+                int length1 = Marshal.ReadInt32(bstr1, -4);
+                int length2 = Marshal.ReadInt32(bstr2, -4);
+                if (length1 == length2)
+                {
+                    for (int x = 0; x < length1; ++x)
+                    {
+                        byte b1 = Marshal.ReadByte(bstr1, x);
+                        byte b2 = Marshal.ReadByte(bstr2, x);
+                        if (b1 != b2) return false;
+                    }
+                }
+                else return false;
+                return true;
+            }
+            finally
+            {
+                if (bstr2 != IntPtr.Zero) Marshal.ZeroFreeBSTR(bstr2);
+                if (bstr1 != IntPtr.Zero) Marshal.ZeroFreeBSTR(bstr1);
+            }
+        }
     }
 }

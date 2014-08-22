@@ -11,6 +11,7 @@ namespace Dziennik.Model
         public List<Calendar> Calendars { get; set; }
         public List<MarksCategory> MarksCategories { get; set; }
         public List<Notice> Notices { get; set; }
+        public DateTime LastArchivedDate { get; set; }
 
         public GlobalSchool()
         {

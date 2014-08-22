@@ -14,7 +14,7 @@
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
-            <c:EventToCommand Command="{Binding SaveCommand}"/>
+            <c:EventToCommand Command="{Binding CloseCommand}" PassEventArgs="True"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
 

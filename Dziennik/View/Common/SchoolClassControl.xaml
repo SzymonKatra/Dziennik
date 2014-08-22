@@ -198,10 +198,16 @@
                   IsReadOnly="True"
                   AutoGenerateColumns="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="{DynamicResource lang_Name}" Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="{DynamicResource lang_Name}" Binding="{Binding Name}">
+                                <DataGridTextColumn.CellStyle>
+                                    <Style TargetType="{x:Type DataGridCell}">
+                                        <Setter Property="FontWeight" Value="{Binding NameFontWeight}"/>
+                                    </Style>
+                                </DataGridTextColumn.CellStyle>
+                            </DataGridTextColumn>
                             <DataGridTextColumn Header="{DynamicResource lang_AverageAttendance}" Binding="{Binding AverageAttendanceDisplayed}"/>
-                            <DataGridTextColumn Header="{DynamicResource lang_AverageMark}" Binding="{Binding AverageMark}"/>
-                            <DataGridTextColumn Header="{DynamicResource lang_AverageEndingMark}" Binding="{Binding AverageEndingMark}"/>
+                            <DataGridTextColumn Header="{DynamicResource lang_AverageMark}" Binding="{Binding AverageMarkDisplayed}"/>
+                            <DataGridTextColumn Header="{DynamicResource lang_AverageEndingMark}" Binding="{Binding AverageEndingMarkDisplayed}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

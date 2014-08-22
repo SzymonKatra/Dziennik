@@ -3,6 +3,7 @@ Użyte biblioteki:
 ==================================================
 Extended WPF Toolkit™ Community Edition - Xceed - https://wpftoolkit.codeplex.com/ - http://xceed.com/ - Microsoft Public License (Ms-PL)
 fastJSON - Mehdi Gholam - http://fastjson.codeplex.com/ - Apache License 2.0 (Apache)
+DotNetZip - Cheeso - http://dotnetzip.codeplex.com/ - Microsoft Public License (Ms-PL)
 
 ==================================================
 Ikony pochodzą od:

@@ -97,8 +97,10 @@
     <Compile Include="Controls\NegateBooleanConverter.cs" />
     <Compile Include="ObjectsPacker.cs" />
     <Compile Include="IWorkingCopyAvailable.cs" />
+    <Compile Include="PasswordEncryption.cs" />
     <Compile Include="ViewModel\StatisticsViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\Password\ChangePasswordViewModel.cs" />
     <Compile Include="View\Class\ClassesListViewModel.cs" />
     <Compile Include="View\Class\ClassesListWindow.xaml.cs">
       <DependentUpon>ClassesListWindow.xaml</DependentUpon>
@@ -107,9 +109,16 @@
     <Compile Include="View\Common\ArchivesListWindow.xaml.cs">
       <DependentUpon>ArchivesListWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Password\ChangePasswordWindow.xaml.cs">
+      <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Mark\MarksCategoriesListViewModel.cs" />
     <Compile Include="View\Mark\MarksCategoriesListWindow.xaml.cs">
       <DependentUpon>MarksCategoriesListWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Password\TypePasswordViewModel.cs" />
+    <Compile Include="View\Password\TypePasswordWindow.xaml.cs">
+      <DependentUpon>TypePasswordWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WorkingCollection.cs" />
     <Compile Include="CommandUtils\RelayCommand.cs" />
@@ -377,6 +386,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Password\ChangePasswordWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Common\InfoDialogWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -466,6 +479,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Subject\SelectGlobalSubjectWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Password\TypePasswordWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

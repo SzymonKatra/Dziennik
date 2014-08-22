@@ -17,6 +17,7 @@ using Dziennik.ViewModel;
 using System.Threading;
 using System.Globalization;
 using System.IO;
+using System.Security;
 
 namespace Dziennik.View
 {
@@ -49,6 +50,11 @@ namespace Dziennik.View
             InitializeComponent();
 
             MainViewModel viewModel = new MainViewModel();
+
+            viewModel.InvokeWindow = (param) =>
+            {
+                this.Dispatcher.BeginInvoke(param, null);
+            };
 
             GlobalConfig.Main = viewModel;
             this.DataContext = viewModel;

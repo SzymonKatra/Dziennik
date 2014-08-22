@@ -63,28 +63,37 @@ namespace Dziennik.View
         }
         private void EditClass(object e)
         {
+            bool forceSave = false;
+
             SchoolClassControlViewModel tab = m_selectedClass;
+            string originalPath = tab.Database.Path;
             tab.ViewModel.PushCopy();
             EditClassViewModel dialogViewModel = new EditClassViewModel(tab.ViewModel);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditClassViewModel.EditClassResult.RemoveClass)
             {
                 tab.ViewModel.PopCopy(WorkingCopyResult.Ok);
-                //GlobalConfig.Database.SchoolClasses.Remove(m_selectedClass.ViewModel.Model);
-                SelectedClass = null;
+                System.IO.File.Delete(tab.Database.Path);
                 m_openedClasses.Remove(tab);
+                SelectedClass = null;
                 return;
             }
             else if (dialogViewModel.Result == EditClassViewModel.EditClassResult.Ok)
             {
                 tab.ViewModel.PopCopy(WorkingCopyResult.Ok);
+                if (originalPath != dialogViewModel.Path)
+                {
+                    System.IO.File.Delete(tab.Database.Path);
+                    tab.Database.Path = dialogViewModel.Path;
+                    forceSave = true;
+                }
             }
             else if (dialogViewModel.Result == EditClassViewModel.EditClassResult.Cancel)
             {
                 tab.ViewModel.PopCopy(WorkingCopyResult.Cancel);
             }
 
-            if (dialogViewModel.Result != EditClassViewModel.EditClassResult.Cancel) m_selectedClass.AutoSaveCommand.Execute(this);
+            if (dialogViewModel.Result != EditClassViewModel.EditClassResult.Cancel || forceSave) m_selectedClass.AutoSaveCommand.Execute(this);
         }
     }
 }

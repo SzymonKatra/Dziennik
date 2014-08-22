@@ -55,14 +55,32 @@ namespace Dziennik.ViewModel
             }
         }
 
+        public DateTime LastArchivedDate
+        {
+            get { return Model.LastArchivedDate; }
+            set { Model.LastArchivedDate = value; RaisePropertyChanged("LastArchivedDate"); }
+        }
+
         protected override void OnPushCopy()
         {
+            ObjectsPack pack = new ObjectsPack();
+            pack.Write(this.LastArchivedDate);
+
+            CopyStack.Push(pack);
+
             this.Calendars.PushCopy();
             this.MarksCategories.PushCopy();
             this.Notices.PushCopy();
         }
         protected override void OnPopCopy(WorkingCopyResult result)
         {
+            ObjectsPack pack = CopyStack.Pop();
+
+            if (result == WorkingCopyResult.Cancel)
+            {
+                this.LastArchivedDate = (DateTime)pack.Read();
+            }
+
             this.Calendars.PopCopy(result);
             this.MarksCategories.PopCopy(result);
             this.Notices.PopCopy(result);

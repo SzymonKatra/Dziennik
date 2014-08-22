@@ -152,6 +152,20 @@ namespace Dziennik
                 set { m_databasesDirectory = value; RaisePropertyChanged("DatabasesDirectory"); }
             }
 
+            private byte[] m_password;
+            public byte[] Password
+            {
+                get { return m_password; }
+                set { m_password = value; RaisePropertyChanged("Password"); }
+            }
+
+            private int m_blockingMinutes = 0;
+            public int BlockingMinutes
+            {
+                get { return m_blockingMinutes; }
+                set { m_blockingMinutes = value; RaisePropertyChanged("BlockingMinutes"); }
+            }
+
             public void LoadRegistry()
             {
                 RegistryKey key = Registry.CurrentUser.CreateSubKey(GlobalConfig.RegistryKeyName);
@@ -174,6 +188,8 @@ namespace Dziennik
                 object autoSaveReg = key.GetValue(GlobalConfig.RegistryValueNameAutoSave);
                 object showWeightsReg = key.GetValue(GlobalConfig.RegistryValueNameShowWeights);
                 object databasesDirectoryReg = key.GetValue(GlobalConfig.RegistryValueNameDatabasesDirectory);
+                object passwordReg = key.GetValue(GlobalConfig.RegistryValueNameDatabasesPassword);
+                object blockingMinutesReg = key.GetValue(GlobalConfig.RegistryValueNameBlockingMinutes);
                 key.Close();
 
                 if (showNameReg != null) ShowName = Ext.BoolParseOrDefault(showNameReg.ToString(), m_showName);
@@ -195,6 +211,8 @@ namespace Dziennik
                 if (autoSaveReg != null) AutoSave = Ext.BoolParseOrDefault(autoSaveReg.ToString(), m_autoSave);
                 if (showWeightsReg != null) ShowWeights = Ext.BoolParseOrDefault(showWeightsReg.ToString(), m_showWeights);
                 if (databasesDirectoryReg != null) DatabasesDirectory = databasesDirectoryReg.ToString();
+                if (passwordReg != null) Password = (byte[])passwordReg;
+                if (blockingMinutesReg != null) BlockingMinutes = Ext.IntParseOrDefault(blockingMinutesReg.ToString(), m_blockingMinutes);
                 //if (lastOpenedReg != null)
                 //{
                 //    string lastOpened = lastOpenedReg.ToString();
@@ -224,6 +242,8 @@ namespace Dziennik
                 key.SetValue(GlobalConfig.RegistryValueNameAutoSave, m_autoSave);
                 key.SetValue(GlobalConfig.RegistryValueNameShowWeights, m_showWeights);
                 key.SetValue(GlobalConfig.RegistryValueNameDatabasesDirectory, m_databasesDirectory);
+                if (m_password != null) key.SetValue(GlobalConfig.RegistryValueNameDatabasesPassword, m_password);
+                key.SetValue(GlobalConfig.RegistryValueNameBlockingMinutes, m_blockingMinutes);
                 //StringBuilder builder = new StringBuilder();
                 //foreach (SchoolClassControlViewModel item in m_openedSchoolClasses)
                 //{
@@ -271,6 +291,8 @@ namespace Dziennik
         public static readonly string RegistryValueNameAutoSave = "AutoSave";
         public static readonly string RegistryValueNameShowWeights = "ShowWeights";
         public static readonly string RegistryValueNameDatabasesDirectory = "DatabasesDirectory";
+        public static readonly string RegistryValueNameDatabasesPassword = "Password";
+        public static readonly string RegistryValueNameBlockingMinutes = "BlockingMinutes";
         public static readonly string CurrentDatabaseSubdirectory = "Baza";
         public static readonly string ArchiveDatabasesSubdirectory = "Archiwum";
 
@@ -331,6 +353,8 @@ namespace Dziennik
             windowViewModelMappings.Add(typeof(ArchivesListViewModel), vm => new ArchivesListWindow((ArchivesListViewModel)vm));
             windowViewModelMappings.Add(typeof(ClassesListViewModel), vm => new ClassesListWindow((ClassesListViewModel)vm));
             windowViewModelMappings.Add(typeof(MarksCategoriesListViewModel), vm => new MarksCategoriesListWindow((MarksCategoriesListViewModel)vm));
+            windowViewModelMappings.Add(typeof(ChangePasswordViewModel), vm => new ChangePasswordWindow((ChangePasswordViewModel)vm));
+            windowViewModelMappings.Add(typeof(TypePasswordViewModel), vm => new TypePasswordWindow((TypePasswordViewModel)vm));
 
             Dialogs = new DialogService(windowViewModelMappings);
         }

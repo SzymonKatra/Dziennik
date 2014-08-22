@@ -6,6 +6,16 @@ using System.Windows;
 
 namespace Dziennik
 {
+    public class ViewRegisteredEventArgs : EventArgs
+    {
+        public Window View { get; set; }
+
+        public ViewRegisteredEventArgs(Window view)
+        {
+            this.View = view;
+        }
+    }
+
     public class DialogService
     {
         public DialogService()
@@ -27,21 +37,35 @@ namespace Dziennik
         private Dictionary<object, Window> m_registeredViews = new Dictionary<object, Window>();
         private Dictionary<object, Window> m_openedWindows = new Dictionary<object, Window>();
 
+        public event EventHandler<ViewRegisteredEventArgs> ViewRegistered;
+        public event EventHandler<ViewRegisteredEventArgs> ViewUnregistered;
+
+        public bool IsViewModelRegistered(object viewModel)
+        {
+            return m_registeredViews.ContainsKey(viewModel);
+        }
+        public bool IsViewRegistered(Window view)
+        {
+            return m_registeredViews.ContainsValue(view);
+        }
         public void Register(Window view, object viewModel, bool unregisterOnClose = true)
         {
             if (m_registeredViews.ContainsKey(viewModel)) throw new ArgumentException("This ViewModel is already registered");
             if (m_registeredViews.ContainsValue(view)) throw new ArgumentException("This View is already registered");
 
             m_registeredViews.Add(viewModel, view);
+            OnViewRegistered(new ViewRegisteredEventArgs(view));
             if (unregisterOnClose) view.Closed += view_Closed;
         }
         public void Unregister(Window view)
         {
-            m_registeredViews.Remove(m_registeredViews.First((kvp) => { return (kvp.Value == view); }).Key);
+            UnregisterViaViewModel(m_registeredViews.First((kvp) => { return (kvp.Value == view); }).Key);
         }
         public void UnregisterViaViewModel(object viewModel)
         {
+            Window view = m_registeredViews[viewModel];
             m_registeredViews.Remove(viewModel);
+            OnViewUnregistered(new ViewRegisteredEventArgs(view));
         }
 
         public Window GetWindow(object viewModel)
@@ -88,6 +112,17 @@ namespace Dziennik
 
             view.Closed -= view_Closed;
             Unregister(view);
+        }
+
+        protected virtual void OnViewRegistered(ViewRegisteredEventArgs e)
+        {
+            EventHandler<ViewRegisteredEventArgs> handler = ViewRegistered;
+            if (handler != null) handler(this, e);
+        }
+        protected virtual void OnViewUnregistered(ViewRegisteredEventArgs e)
+        {
+            EventHandler<ViewRegisteredEventArgs> handler = ViewUnregistered;
+            if (handler != null) handler(this, e);
         }
     }
 }

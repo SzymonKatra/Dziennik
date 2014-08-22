@@ -66,6 +66,7 @@
     <s:String x:Key="lang_ClassCalendar">Kalendarz klasowy</s:String>
     <s:String x:Key="lang_NoticesList">Lista powiadomień</s:String>
     <s:String x:Key="lang_ArchivesList">Lista archiwów</s:String>
+    <s:String x:Key="lang_ChangeBlockingOptions">Zmień ustawienia blokowania</s:String>
 
     <s:String x:Key="lang_OptionsTitle">Opcje</s:String>
     <s:String x:Key="lang_DatabaseDirectory">Katalog z bazą danych</s:String>
@@ -206,6 +207,19 @@
 
     <s:String x:Key="lang_MarksCategoriesListTitle">Lista kategorii ocen</s:String>
 
+    <s:String x:Key="lang_ChangePasswordTitle">Ustawienia blokowania</s:String>
+    <s:String x:Key="lang_CurrentPassword">Obecne hasło</s:String>
+    <s:String x:Key="lang_NewPassword">Nowe hasło</s:String>
+    <s:String x:Key="lang_RepeatNewPassword">Powtórz nowe hasło</s:String>
+    <s:String x:Key="lang_RemovePassword">Usuń hasło</s:String>
+    <s:String x:Key="lang_ChangePassword">Zmień hasło</s:String>
+    <s:String x:Key="lang_BlockAfter">Blokuj po</s:String>
+    <s:String x:Key="lang_MinutesFromLastActivity">min od ostatniej aktywności</s:String>
+
+    <s:String x:Key="lang_TypePasswordTitle">Podaj hasło</s:String>
+    <s:String x:Key="lang_TypePasswordToUnlock">Podaj hasło aby odblokować</s:String>
+    <s:String x:Key="lang_CloseApplication">Zamknij Dziennik</s:String>
+    
     <s:String x:Key="lang_InfoTitle">Informacje</s:String>
     <s:String x:Key="lang_Author">Autor</s:String>
     <s:String x:Key="lang_AuthorName">Szymon Katra</s:String>
@@ -241,6 +255,21 @@
             </ListItem>
             <ListItem>
                 <Paragraph>http://fastjson.codeplex.com/</Paragraph>
+            </ListItem>
+        </List>
+
+        <Paragraph>
+            <Bold>DotNetZip</Bold>
+        </Paragraph>
+        <List>
+            <ListItem>
+                <Paragraph>Autor: Cheeso</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>Licencja: Microsoft Public License (Ms-PL)</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>http://dotnetzip.codeplex.com/</Paragraph>
             </ListItem>
         </List>
 
@@ -407,4 +436,11 @@ Drugi semestr {2} a {3}
     </s:String>
     <s:String x:Key="lang_FirstSemesterName">Pierwszy semestr</s:String>
     <s:String x:Key="lang_SecondSemesterName">Drugi semestr</s:String>
+    <s:String x:Key="lang_DoYouWantToArchiveFormat" xml:space="preserve">Czy chcesz zarchiwizować bazę danych?
+Ostatnia archiwizacja odbyła się: {0}</s:String>
+    <s:String x:Key="lang_Never">nigdy</s:String>
+    <s:String x:Key="lang_CurrentPasswordNotValid">Wpisane "obecne hasło" jest błędne</s:String>
+    <s:String x:Key="lang_NewNotEqualsRepeatNew">Pole "powtórz nowe hasło" jest błędne</s:String>
+    <s:String x:Key="lang_BadPassword">Nieprawidłowe hasło</s:String>
+    <s:String x:Key="lang_SuccessfullyUnlocked">Pomyślnie odblokowano</s:String>
 </ResourceDictionary>

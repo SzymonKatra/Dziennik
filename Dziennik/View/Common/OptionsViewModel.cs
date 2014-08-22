@@ -13,7 +13,8 @@ namespace Dziennik.View
         public OptionsViewModel(ObservableCollection<SchoolClassControlViewModel> openedSchoolClasses)
         {
             m_closeCommand = new RelayCommand(Close);
-            m_showArchivesListCommand = new RelayCommand(ShowArchivesList);
+            m_showArchivesListCommand = new RelayCommand(ShowArchivesList, CanShowArchivesList);
+            m_changePasswordCommand = new RelayCommand(ChangePassword, CanChangePassword);
 
             m_openedSchoolClasses = openedSchoolClasses;
         }
@@ -28,6 +29,12 @@ namespace Dziennik.View
         public ICommand ShowArchivesListCommand
         {
             get { return m_showArchivesListCommand; }
+        }
+
+        private RelayCommand m_changePasswordCommand;
+        public ICommand ChangePasswordCommand
+        {
+            get { return m_changePasswordCommand; }
         }
 
         private ObservableCollection<SchoolClassControlViewModel> m_openedSchoolClasses;
@@ -49,6 +56,16 @@ namespace Dziennik.View
             {
                 GlobalConfig.Dialogs.Close(this);
             }
+        }
+
+        private void SaveRegistry()
+        {
+            ActionDialogViewModel saveDialogViewModel = new ActionDialogViewModel((d, p) =>
+            {
+                if (!GlobalConfig.Main.BlockSaving) GlobalConfig.Notifier.SaveRegistry();
+            }
+            , null, "Zapisywanie ustawień do rejestru...");
+            GlobalConfig.Dialogs.ShowDialog(this, saveDialogViewModel);
         }
         
         private void ShowArchivesList(object e)
@@ -78,6 +95,20 @@ namespace Dziennik.View
                 GlobalConfig.Main.BlockSaving = false;
                 GlobalConfig.Dialogs.Close(this);
             }
+        }
+        private bool CanShowArchivesList(object param)
+        {
+            return !GlobalConfig.Main.BlockSaving;
+        }
+        private void ChangePassword(object param)
+        {
+            ChangePasswordViewModel dialogViewModel = new ChangePasswordViewModel();
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+            if (dialogViewModel.Result != ChangePasswordViewModel.ChangePasswordResult.Cancel) SaveRegistry();
+        }
+        private bool CanChangePassword(object param)
+        {
+            return !GlobalConfig.Main.BlockSaving;
         }
     }
 }
