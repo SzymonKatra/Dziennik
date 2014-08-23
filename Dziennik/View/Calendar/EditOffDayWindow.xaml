@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:Dziennik"
         xmlns:my="clr-namespace:Dziennik.Controls"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         Title="{DynamicResource lang_EditOffDayTitle}" Height="300" Width="300"
         WindowStartupLocation="CenterOwner">
     <Grid>
@@ -20,7 +21,7 @@
         </Grid.RowDefinitions>
         
         <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Name}"/>
-        <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" Text="{Binding OffDay.Description, Mode=TwoWay}"/>
+        <xctk:WatermarkTextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" Text="{Binding OffDay.Description, Mode=TwoWay}" Watermark="{DynamicResource lang_TypeOffDayName}"/>
         
         <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_From}"/>
         <DatePicker Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding OffDay.Start, Mode=TwoWay}"/>

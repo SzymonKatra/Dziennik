@@ -242,7 +242,14 @@ namespace Dziennik
                 key.SetValue(GlobalConfig.RegistryValueNameAutoSave, m_autoSave);
                 key.SetValue(GlobalConfig.RegistryValueNameShowWeights, m_showWeights);
                 key.SetValue(GlobalConfig.RegistryValueNameDatabasesDirectory, m_databasesDirectory);
-                if (m_password != null) key.SetValue(GlobalConfig.RegistryValueNameDatabasesPassword, m_password);
+                if (m_password != null)
+                {
+                    key.SetValue(GlobalConfig.RegistryValueNameDatabasesPassword, m_password);
+                }
+                else
+                {
+                    key.DeleteValue(GlobalConfig.RegistryValueNameDatabasesPassword, false);
+                }
                 key.SetValue(GlobalConfig.RegistryValueNameBlockingMinutes, m_blockingMinutes);
                 //StringBuilder builder = new StringBuilder();
                 //foreach (SchoolClassControlViewModel item in m_openedSchoolClasses)

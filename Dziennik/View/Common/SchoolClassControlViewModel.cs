@@ -205,7 +205,7 @@ namespace Dziennik.View
                 averageMark = m_selectedStudent.AverageMarkAll;
             }
 
-            EditEndingMarkViewModel dialogViewModel = new EditEndingMarkViewModel(initialMark, averageMark);
+            EditEndingMarkViewModel dialogViewModel = new EditEndingMarkViewModel(initialMark, averageMark, (param == "half" ? EditEndingMarkViewModel.EndingMarkType.Half : EditEndingMarkViewModel.EndingMarkType.Year));
             GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Main, dialogViewModel);
 
             if (dialogViewModel.Result == EditEndingMarkViewModel.EditEndingMarkResult.Ok)

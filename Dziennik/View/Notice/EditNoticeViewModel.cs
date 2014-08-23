@@ -43,6 +43,11 @@ namespace Dziennik.View
         }
 
         private NoticeViewModel m_notice;
+        public NoticeViewModel Notice
+        {
+            get { return m_notice; }
+        }
+
         private bool m_isAddingMode;
 
         private RelayCommand m_okCommand;

@@ -17,8 +17,13 @@ namespace Dziennik.View
             Ok,
             Cancel,
         }
+        public enum EndingMarkType
+        {
+            Half,
+            Year,
+        }
 
-        public EditEndingMarkViewModel(decimal initialMark, decimal averageMark)
+        public EditEndingMarkViewModel(decimal initialMark, decimal averageMark, EndingMarkType type)
         {
             m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
@@ -30,6 +35,14 @@ namespace Dziennik.View
             }
 
             m_markInput = m_mark.ToString(CultureInfo.InvariantCulture);
+
+            m_title = string.Format(GlobalConfig.GetStringResource("lang_EditEndingMarkTitleFormat"), GlobalConfig.GetStringResource((type == EndingMarkType.Half ? "lang_HalfToFormat" : "lang_YearToFormat")));
+        }
+
+        private string m_title;
+        public string Title
+        {
+            get { return m_title; }
         }
 
         private EditEndingMarkResult m_result = EditEndingMarkResult.Cancel;

@@ -171,6 +171,12 @@ namespace Dziennik.View
         }
         private void AddGroup(object param)
         {
+            if (m_schoolClass.Students.Count <= 0)
+            {
+                GlobalConfig.MessageBox(this, GlobalConfig.GetStringResource("lang_FirstAddStudents"), MessageBoxSuperPredefinedButtons.OK);
+                return;
+            }
+
             AddGroupViewModel dialogViewModel = new AddGroupViewModel(m_schoolClass.Students);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result != null)

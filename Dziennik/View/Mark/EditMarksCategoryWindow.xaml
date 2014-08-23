@@ -21,7 +21,7 @@
         </Grid.RowDefinitions>
         
         <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Name}"/>
-        <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource validationTemplateTextBox}" Text="{Binding NameInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+        <xctk:WatermarkTextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource validationTemplateTextBox}" Text="{Binding NameInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Watermark="{DynamicResource lang_TypeMarkCategoryName}"/>
         
         <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Color}"/>
         <my:ColorPickerEx Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" SelectedColor="{Binding MarksCategory.Color, Mode=TwoWay}"

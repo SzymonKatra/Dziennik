@@ -9,6 +9,7 @@
     <s:String x:Key="lang_Close">Zamknij</s:String>
     <s:String x:Key="lang_Error">Błąd</s:String>
     <s:String x:Key="lang_ErrorFormat">Błąd {0}</s:String>
+    <s:String x:Key="lang_NoName">bez nazwy</s:String>
     
     <s:String x:Key="lang_SaveChanges">Zapisz zmiany</s:String>
     <s:String x:Key="lang_Options">Opcje</s:String>
@@ -16,9 +17,9 @@
     <s:String x:Key="lang_ArchiveAction">Archiwizuj</s:String>
     <s:String x:Key="lang_Archive">Archiwum</s:String>
     <s:String x:Key="lang_CloseArchivePreview">Zamknij podgląd archium</s:String>
-    <s:String x:Key="lang_ClassesList">Lista klas</s:String>
-    <s:String x:Key="lang_MarksCategoriesList">Lista kategorii ocen</s:String>
-    <s:String x:Key="lang_CalendarsList">Lista kalendarzy</s:String>
+    <s:String x:Key="lang_ClassesList">Listy klas</s:String>
+    <s:String x:Key="lang_MarksCategoriesList">Kategorie ocen</s:String>
+    <s:String x:Key="lang_CalendarsList">Kalendarze roku szkolengo</s:String>
     <s:String x:Key="lang_Notices">Powiadomienia</s:String>
     
     <s:String x:Key="lang_Subjects">Tematy</s:String>
@@ -59,11 +60,14 @@
 
     <s:String x:Key="lang_EditClassTitle">Edytuj klasę</s:String>
     <s:String x:Key="lang_ClassName">Nazwa klasy</s:String>
-    <s:String x:Key="lang_AllStudents">Wszyscy uczniowie</s:String>
+    <s:String x:Key="lang_TypeClassName">Wpisz nazwę klasy</s:String>
+    <s:String x:Key="lang_AllStudents">Wpisz / Edytuj listę klasy</s:String>
+    <s:String x:Key="lang_SelectGroup">Wybierz przedmiot (grupę)</s:String>
     <s:String x:Key="lang_RemoveClass">Usuń klasę</s:String>
-    <s:String x:Key="lang_EditGroup">Edytuj grupę</s:String>
-    <s:String x:Key="lang_AddGroup">Dodaj grupę</s:String>
-    <s:String x:Key="lang_ClassCalendar">Kalendarz klasowy</s:String>
+    <s:String x:Key="lang_EditGroup">Edytuj</s:String>
+    <s:String x:Key="lang_AddGroup">Utwórz przedmiot (grupę)</s:String>
+    <s:String x:Key="lang_FirstAddStudents">Najpierw dodaj listę klasy, aby utworzyć grupę</s:String>
+    <s:String x:Key="lang_ClassCalendar">Wybierz kalendarz roku szkolnego</s:String>
     <s:String x:Key="lang_NoticesList">Lista powiadomień</s:String>
     <s:String x:Key="lang_ArchivesList">Lista archiwów</s:String>
     <s:String x:Key="lang_ChangeBlockingOptions">Zmień ustawienia blokowania</s:String>
@@ -74,28 +78,37 @@
     <s:String x:Key="lang_AutoSave">Autozapis</s:String>
     <s:String x:Key="lang_ShowWeights">Pokazuj wagi</s:String>
     <s:String x:Key="lang_EditClass">Edytuj klasę</s:String>
-    <s:String x:Key="lang_AddClass">Dodaj klasę</s:String>
+    <s:String x:Key="lang_AddClass">Utwórz klasę</s:String>
     <s:String x:Key="lang_Classes">Klasy</s:String>
     <s:String x:Key="lang_Calendars">Kalendarze</s:String>
     <s:String x:Key="lang_EditCalendar">Edytuj kalendarz</s:String>    
     <s:String x:Key="lang_AllCalendars">Wszystkie kalendarze</s:String>
     <s:String x:Key="lang_Groups">Grupy</s:String>
     <s:String x:Key="lang_MarksCategories">Kategorie ocen</s:String>
-    <s:String x:Key="lang_AddCategory">Dodaj kategorię</s:String>
+    <s:String x:Key="lang_AddCategory">Dodaj kategorię ocen</s:String>
     <s:String x:Key="lang_EditCategory">Edytuj kategorię</s:String>
     
     <s:String x:Key="lang_AddGroupTitle">Dodaj grupę</s:String>
-    <s:String x:Key="lang_Students">Uczniowie</s:String>
+    <s:String x:Key="lang_Students">Uczniowie grupy</s:String>
     <s:String x:Key="lang_RenumberFromOne">Numeruj od 1</s:String>
     <s:String x:Key="lang_SaveNumbers">Zachowaj numery</s:String>
-    <s:String x:Key="lang_AllSubjects">Wszystkie tematy</s:String>
+    <s:String x:Key="lang_AllSubjects">Wpisz / Wstaw tematy z podstawy programowej</s:String>
     <s:String x:Key="lang_GroupName">Nazwa grupy</s:String>
+    <s:String x:Key="lang_TypeGroupName">Wpisz nazwę przedmiotu (grupy)</s:String>
+    <s:String x:Key="lang_TypeGroupStudents">Wybierz / Wpisz uczniów przedmiotu (grupy)</s:String>
+    <s:String x:Key="lang_TypeHoursInWeek">Wybierz liczbę godzin w tygodniu</s:String>
     
     <s:String x:Key="lang_EditGroupTitle">Edytuj grupę</s:String>
     <s:String x:Key="lang_AddStudent">Dodaj ucznia</s:String>
     <s:String x:Key="lang_RemoveStudents">Usuń uczniów</s:String>
     <s:String x:Key="lang_RemoveGroup">Usuń grupę</s:String>
     <s:String x:Key="lang_RestoreStudents">Przywróć uczniów</s:String>
+    <s:String x:Key="lang_EditSubjects">Edytuj tematy z podstawy programowej</s:String>
+    
+    <s:String x:Key="lang_EditEndingMarkTitleFormat">Edytuj ocenę {0}</s:String>
+    <s:String x:Key="lang_HalfToFormat">śródroczną</s:String>
+    <s:String x:Key="lang_YearToFormat">końcoworoczną</s:String>
+    <s:String x:Key="lang_Type0ToRemove">Wpisz ocenę lub 0 aby ją usunąć</s:String>
     
     <s:String x:Key="lang_EditMarkTitle">Edytuj ocenę</s:String>
     <s:String x:Key="lang_Mark">Ocena</s:String>
@@ -111,7 +124,7 @@
     <s:String x:Key="lang_RemoveStudent">Usuń ucznia</s:String>
     <s:String x:Key="lang_AdditionalInformation">Dodatkowe informacje</s:String>
 
-    <s:String x:Key="lang_GlobalStudentsTitle">Uczniowie</s:String>
+    <s:String x:Key="lang_GlobalStudentsTitle">Lista uczniowiów klasy</s:String>
     <s:String x:Key="lang_AutoAddStudentClipboard">Dodaj automatycznie ze schowka</s:String>
 
     <s:String x:Key="lang_SelectStudentsTitle">Wybierz uczniów</s:String>
@@ -120,6 +133,7 @@
     <s:String x:Key="lang_ClearAllStudents">Odznacz wszystkich</s:String>
 
     <s:String x:Key="lang_EditSubjectTitle">Edytuj temat</s:String>
+    <s:String x:Key="lang_TypeSubjectName">Wpisz temat</s:String>
     <s:String x:Key="lang_RemoveSubject">Usuń temat</s:String>
 
     <s:String x:Key="lang_GlobalSubjectsTitle">Tematy</s:String>
@@ -146,20 +160,22 @@
     <s:String x:Key="lang_RealizedSubjectsCountFormat">Liczba zrealizowanych tematów: {0}/{1} (+{2} dodatkowych)</s:String>
 
     <s:String x:Key="lang_GlobalCalendarListTitle">Kalendarze</s:String>
-    <s:String x:Key="lang_AddCalendar">Dodaj kalendarz</s:String>
-    <s:String x:Key="lang_YearBeginning">Rozpoczęcie</s:String>
-    <s:String x:Key="lang_SemesterSeparator">Semestr</s:String>
-    <s:String x:Key="lang_YearEnding">Zakończenie</s:String>
-    <s:String x:Key="lang_OffDays">Dni wolne</s:String>
+    <s:String x:Key="lang_AddCalendar">Dodaj kalendarz roku szkolnego</s:String>
+    <s:String x:Key="lang_YearBeginning">Rozpoczęcie roku szkolnego</s:String>
+    <s:String x:Key="lang_SemesterSeparator">Koniec pierwszego semestru</s:String>
+    <s:String x:Key="lang_YearEnding">Zakończenie roku szkolnego</s:String>
+    <s:String x:Key="lang_OffDays">Okresy wolne od nauki</s:String>
 
     <s:String x:Key="lang_EditCalendarTitle">Edytuj kalendarz</s:String>
+    <s:String x:Key="lang_TypeCalendarName">Wpisz nazwę kalendarza</s:String>
     <s:String x:Key="lang_RemoveCalendar">Usuń kalendarz</s:String>
-    <s:String x:Key="lang_AddOffDay">Dodaj dzień wolny</s:String>
+    <s:String x:Key="lang_AddOffDay">Dodaj wolny okres</s:String>
     <s:String x:Key="lang_From">Od</s:String>
     <s:String x:Key="lang_To">Do</s:String>
 
-    <s:String x:Key="lang_EditOffDayTitle">Edytuj dni wolne</s:String>
-    <s:String x:Key="lang_RemoveOffDay">Usuń dni wolne</s:String>
+    <s:String x:Key="lang_EditOffDayTitle">Edytuj wolny okres</s:String>
+    <s:String x:Key="lang_TypeOffDayName">Wpisz nazwę wolnego okresu</s:String>
+    <s:String x:Key="lang_RemoveOffDay">Usuń okres</s:String>
 
     <s:String x:Key="lang_CalendarsListTitle">Lista kalendarzy</s:String>
 
@@ -179,6 +195,7 @@
     <s:String x:Key="lang_MarkOrWeight">Ocena / Uwaga</s:String>
     
     <s:String x:Key="lang_EditMarksCategoryTitle">Edytuj kategorię ocen</s:String>
+    <s:String x:Key="lang_TypeMarkCategoryName">Wpisz nazwę kategorii</s:String>
     <s:String x:Key="lang_Color">Kolor</s:String>
     <s:String x:Key="lang_RemoveCategory">Usuń kategorię</s:String>
     <s:String x:Key="lang_AvailableColors">Dostępne kolory</s:String>
@@ -188,6 +205,7 @@
     <s:String x:Key="lang_SimpleMode">Tryb prosty</s:String>
     <s:String x:Key="lang_DefaultWeight">Domyślna waga</s:String>
     
+    <s:String x:Key="lang_EditNoticeTitle">Edytuj powiadomienie</s:String>
     <s:String x:Key="lang_Date">Data</s:String>
     <s:String x:Key="lang_NotifyIn">Powiadamiaj przed</s:String>
     <s:String x:Key="lang_DaysSmall">dniami</s:String>
@@ -212,7 +230,7 @@
     <s:String x:Key="lang_NewPassword">Nowe hasło</s:String>
     <s:String x:Key="lang_RepeatNewPassword">Powtórz nowe hasło</s:String>
     <s:String x:Key="lang_RemovePassword">Usuń hasło</s:String>
-    <s:String x:Key="lang_ChangePassword">Zmień hasło</s:String>
+    <s:String x:Key="lang_CheckToChangePassword">Zaznacz aby zmieńić hasło</s:String>
     <s:String x:Key="lang_BlockAfter">Blokuj po</s:String>
     <s:String x:Key="lang_MinutesFromLastActivity">min od ostatniej aktywności</s:String>
 
@@ -386,7 +404,6 @@
     <s:String x:Key="lang_TypeValidClassName">Wprowadź poprawną nazwę klasy</s:String>
     <s:String x:Key="lang_DoYouWantRemoveClass">Czy napewno chcesz usunąć klasę?</s:String>
     <s:String x:Key="lang_NoAddedStudents">Uwaga! Nie dodano żadnego ucznia do grupy.</s:String>
-    <s:String x:Key="lang_TypeGroupName">Wprowadź nazwę grupy</s:String>
     <s:String x:Key="lang_StudentNumberNotExistsFormat">Ucznia o numerze {0} nie ma w bazie</s:String>
     <s:String x:Key="lang_SelectedStudentsToRemoveFormat">Zaznaczono {0} uczniów do usunięcia.</s:String>
     <s:String x:Key="lang_OnListWillBeGaps">Na liście powstaną luki, lecz przywrócenie uczniów będzie możliwe.</s:String>

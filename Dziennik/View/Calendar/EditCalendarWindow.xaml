@@ -4,26 +4,27 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:my="clr-namespace:Dziennik.Controls"
         xmlns:local="clr-namespace:Dziennik"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         Title="{DynamicResource lang_EditCalendarTitle}" Height="400" Width="550"
         WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="70"/>
+            <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="45"/>
+            <RowDefinition Height="45"/>
+            <RowDefinition Height="45"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         
         <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Name}"/>
-        <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" Text="{Binding Calendar.Name, Mode=TwoWay}"/>
-
+        <xctk:WatermarkTextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" Text="{Binding Calendar.Name, Mode=TwoWay}" Watermark="{DynamicResource lang_TypeCalendarName}"/>
+        
         <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_YearBeginning}"/>
         <DatePicker Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding Calendar.YearBeginning, Mode=TwoWay}"/>
 

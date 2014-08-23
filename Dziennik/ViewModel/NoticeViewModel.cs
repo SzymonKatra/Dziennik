@@ -37,6 +37,7 @@ namespace Dziennik.ViewModel
         {
             get
             {
+                if (string.IsNullOrWhiteSpace(Model.Name)) return GlobalConfig.GetStringResource("lang_NoName");
                 return (Model.Name.Length > 15 ? Model.Name.Remove(15) + "..." : Model.Name);
             }
         }
