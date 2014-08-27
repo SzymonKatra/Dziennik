@@ -13,6 +13,7 @@
         </Grid.RowDefinitions>
         <WrapPanel Grid.Row="0">
             <Button Style="{StaticResource wrapPanelControlStyle}" Content="{DynamicResource lang_AddCalendar}" Command="{Binding AddCalendarCommand}"/>
+            <Button Style="{StaticResource wrapPanelControlStyle}" Content="{DynamicResource lang_EditLessonsHours}" Command="{Binding EditLessonsHoursCommand}"/>
         </WrapPanel>
         <DataGrid Grid.Row="1"
                   ItemsSource="{Binding Calendars}"
@@ -24,9 +25,9 @@
                   AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="{DynamicResource lang_Name}" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="{DynamicResource lang_YearBeginning}" Binding="{Binding YearBeginning, StringFormat={x:Static local:GlobalConfig.DateFormat}}"/>
-                <DataGridTextColumn Header="{DynamicResource lang_SemesterSeparator}" Binding="{Binding SemesterSeparator, StringFormat={x:Static local:GlobalConfig.DateFormat}}"/>
-                <DataGridTextColumn Header="{DynamicResource lang_YearEnding}" Binding="{Binding YearEnding, StringFormat={x:Static local:GlobalConfig.DateFormat}}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_CalendarListBeginning}" Binding="{Binding YearBeginning, StringFormat={x:Static local:GlobalConfig.DateFormat}}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_CalendarListSemesterSeparator}" Binding="{Binding SemesterSeparator, StringFormat={x:Static local:GlobalConfig.DateFormat}}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_CalendarListEnding}" Binding="{Binding YearEnding, StringFormat={x:Static local:GlobalConfig.DateFormat}}"/>
                 <DataGridTextColumn Header="{DynamicResource lang_OffDays}" Binding="{Binding OffDays.Count}"/>
                 <DataGridTemplateColumn Header="Edytuj">
                     <DataGridTemplateColumn.CellTemplate>

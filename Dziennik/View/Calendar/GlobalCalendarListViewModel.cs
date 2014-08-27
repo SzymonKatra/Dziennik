@@ -15,6 +15,7 @@ namespace Dziennik.View
         {
             m_addCalendarCommand = new RelayCommand(AddCalendar);
             m_editCalendarCommand = new RelayCommand(EditCalendar);
+            m_editLessonsHoursCommand = new RelayCommand(EditLessonsHours);
 
             m_autoSaveCommand = autoSaveCommand;
             m_schoolClasses = schoolClasses;
@@ -42,6 +43,12 @@ namespace Dziennik.View
         public ICommand EditCalendarCommand
         {
             get { return m_editCalendarCommand; }
+        }
+
+        private RelayCommand m_editLessonsHoursCommand;
+        public ICommand EditLessonsHoursCommand
+        {
+            get { return m_editLessonsHoursCommand; }
         }
 
         private CalendarViewModel m_selectedCalendar;
@@ -98,6 +105,21 @@ namespace Dziennik.View
                         }
                     }
                 }
+            }
+        }
+        private void EditLessonsHours(object param)
+        {
+            LessonsHoursViewModel hours = GlobalConfig.GlobalDatabase.ViewModel.Hours;
+            hours.PushCopy();
+            EditLessonsHoursViewModel dialogViewModel = new EditLessonsHoursViewModel(hours);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+            if (dialogViewModel.Result == EditLessonsHoursViewModel.EditLessonsHoursResult.Cancel)
+            {
+                hours.PopCopy(WorkingCopyResult.Cancel);
+            }
+            else if (dialogViewModel.Result == EditLessonsHoursViewModel.EditLessonsHoursResult.Ok)
+            {
+                hours.PopCopy(WorkingCopyResult.Ok);
             }
         }
     }

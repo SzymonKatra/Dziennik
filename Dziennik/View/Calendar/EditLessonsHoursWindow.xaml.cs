@@ -11,16 +11,20 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Dziennik.View.Calendar
+namespace Dziennik.View
 {
     /// <summary>
     /// Interaction logic for EditLessonsHoursWindow.xaml
     /// </summary>
     public partial class EditLessonsHoursWindow : Window
     {
-        public EditLessonsHoursWindow()
+        public EditLessonsHoursWindow(EditLessonsHoursViewModel viewModel)
         {
             InitializeComponent();
+
+            this.DataContext = viewModel;
+
+            GlobalConfig.Dialogs.Register(this, viewModel);
         }
     }
 }

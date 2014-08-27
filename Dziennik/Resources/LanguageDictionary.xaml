@@ -180,6 +180,10 @@
     <s:String x:Key="lang_RemoveOffDay">Usuń okres</s:String>
 
     <s:String x:Key="lang_CalendarsListTitle">Lista kalendarzy</s:String>
+    <s:String x:Key="lang_CalendarListBeginning">Rozpoczęcie</s:String>
+    <s:String x:Key="lang_CalendarListSemesterSeparator">Semestr</s:String>
+    <s:String x:Key="lang_CalendarListEnding">Zakończenie</s:String>
+    <s:String x:Key="lang_EditLessonsHours">Edytuj godziny lekcyjne</s:String>
 
     <s:String x:Key="lang_MondayShort">Pn</s:String>
     <s:String x:Key="lang_TuesdayShort">Wt</s:String>
@@ -235,6 +239,11 @@
     <s:String x:Key="lang_CheckToChangePassword">Zaznacz aby zmieńić hasło</s:String>
     <s:String x:Key="lang_BlockAfter">Blokuj po</s:String>
     <s:String x:Key="lang_MinutesFromLastActivity">min od ostatniej aktywności</s:String>
+
+    <s:String x:Key="lang_EditLessonsHoursTitle">Edytuj godziny lekcyjnie</s:String>
+    <s:String x:Key="lang_AddNextHour">Dodaj kolejną godzinę</s:String>
+    <s:String x:Key="lang_LessonHourBeginning">Początek</s:String>
+    <s:String x:Key="lang_LessonHourEnding">Koniec</s:String>
 
     <s:String x:Key="lang_TypePasswordTitle">Podaj hasło</s:String>
     <s:String x:Key="lang_TypePasswordToUnlock">Podaj hasło aby odblokować</s:String>

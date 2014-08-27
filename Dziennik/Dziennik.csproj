@@ -98,11 +98,19 @@
       <DependentUpon>ImageButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\NegateBooleanConverter.cs" />
+    <Compile Include="Model\LessonHour.cs" />
+    <Compile Include="Model\LessonsHours.cs" />
     <Compile Include="ObjectsPacker.cs" />
     <Compile Include="IWorkingCopyAvailable.cs" />
     <Compile Include="PasswordEncryption.cs" />
+    <Compile Include="ViewModel\LessonHourViewModel.cs" />
+    <Compile Include="ViewModel\LessonsHoursViewModel.cs" />
     <Compile Include="ViewModel\StatisticsViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\Calendar\EditLessonsHoursViewModel.cs" />
+    <Compile Include="View\Calendar\EditLessonsHoursWindow.xaml.cs">
+      <DependentUpon>EditLessonsHoursWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Password\ChangePasswordViewModel.cs" />
     <Compile Include="View\Class\ClassesListViewModel.cs" />
     <Compile Include="View\Class\ClassesListWindow.xaml.cs">
@@ -358,6 +366,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\StylesDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Calendar\EditLessonsHoursWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

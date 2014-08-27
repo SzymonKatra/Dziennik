@@ -12,12 +12,14 @@ namespace Dziennik.Model
         public List<MarksCategory> MarksCategories { get; set; }
         public List<Notice> Notices { get; set; }
         public DateTime LastArchivedDate { get; set; }
+        public LessonsHours Hours { get; set; }
 
         public GlobalSchool()
         {
             Calendars = new List<Calendar>();
             MarksCategories = new List<MarksCategory>();
             Notices = new List<Notice>();
+            Hours = new LessonsHours();
         }
     }
 }

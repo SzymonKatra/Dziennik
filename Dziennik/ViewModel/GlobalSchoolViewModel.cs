@@ -12,11 +12,13 @@ namespace Dziennik.ViewModel
             : this(new GlobalSchool())
         {
         }
-        public GlobalSchoolViewModel(GlobalSchool model) : base(model)
+        public GlobalSchoolViewModel(GlobalSchool model)
+            : base(model)
         {
             m_calendars = new SynchronizedObservableCollection<CalendarViewModel, Calendar>(Model.Calendars, m => new CalendarViewModel(m));
             m_marksCategories = new SynchronizedObservableCollection<MarksCategoryViewModel, MarksCategory>(Model.MarksCategories, m => new MarksCategoryViewModel(m));
             m_notices = new SynchronizedObservableCollection<NoticeViewModel, Notice>(Model.Notices, m => new NoticeViewModel(m));
+            m_hours = new LessonsHoursViewModel(Model.Hours);
         }
 
         private SynchronizedObservableCollection<CalendarViewModel, Calendar> m_calendars;
@@ -55,6 +57,18 @@ namespace Dziennik.ViewModel
             }
         }
 
+        private LessonsHoursViewModel m_hours;
+        public LessonsHoursViewModel Hours
+        {
+            get { return m_hours; }
+            set
+            {
+                m_hours = value;
+                Model.Hours = value.Model;
+                RaisePropertyChanged("Hours");
+            }
+        }
+
         public DateTime LastArchivedDate
         {
             get { return Model.LastArchivedDate; }
@@ -71,6 +85,7 @@ namespace Dziennik.ViewModel
             this.Calendars.PushCopy();
             this.MarksCategories.PushCopy();
             this.Notices.PushCopy();
+            this.Hours.PushCopy();
         }
         protected override void OnPopCopy(WorkingCopyResult result)
         {
@@ -84,6 +99,7 @@ namespace Dziennik.ViewModel
             this.Calendars.PopCopy(result);
             this.MarksCategories.PopCopy(result);
             this.Notices.PopCopy(result);
+            this.Hours.PopCopy(result);
         }
     }
 }

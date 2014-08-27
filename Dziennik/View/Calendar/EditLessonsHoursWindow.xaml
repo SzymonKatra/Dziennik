@@ -1,8 +1,49 @@
-﻿<Window x:Class="Dziennik.View.Calendar.EditLessonsHoursWindow"
+﻿<Window x:Class="Dziennik.View.EditLessonsHoursWindow"
+        Name="root"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="EditLessonsHoursWindow" Height="300" Width="300">
+        xmlns:my="clr-namespace:Dziennik.Controls"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:Dziennik"
+        Title="{DynamicResource lang_EditLessonsHoursTitle}" Height="300" Width="300"
+        WindowStartupLocation="CenterOwner">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <WrapPanel Grid.Row="0" Orientation="Horizontal">
+            <Button Style="{StaticResource wrapPanelControlStyle}" Content="{DynamicResource lang_AddNextHour}" Command="{Binding AddNextHourCommand}"/>
+        </WrapPanel>
+
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Hours}"
+                  CanUserAddRows="False"
+                  CanUserSortColumns="False"
+                  SelectionMode="Single"
+                  IsReadOnly="True"
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{DynamicResource lang_NumberShort}" Binding="{Binding Number}"/>
+                <DataGridTemplateColumn Header="{DynamicResource lang_LessonHourBeginning}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <xctk:DateTimeUpDown Value="{Binding Start, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Format="Custom"  FormatString="{x:Static local:GlobalConfig.TimeFormat}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="{DynamicResource lang_LessonHourEnding}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <xctk:DateTimeUpDown Value="{Binding End, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Format="Custom" FormatString="{x:Static local:GlobalConfig.TimeFormat}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <my:OkCancelControl Grid.Row="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>
 </Window>
