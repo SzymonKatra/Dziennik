@@ -78,6 +78,18 @@ namespace Dziennik
             if (!m_registeredViews.ContainsValue(view)) throw new ArgumentException("View not registered");
             return m_registeredViews.First(kvp => { return (kvp.Value == view); }).Key;
         }
+        public object GetActiveViewModel(object def)
+        {
+            Window view = Application.Current.Windows.OfType<Window>().FirstOrDefault(x => x.IsActive);
+            if (view != null && IsViewRegistered(view))
+            {
+                return GetViewModel(view);
+            }
+            else
+            {
+                return def;
+            }
+        }
 
         public bool? ShowDialog(object ownerViewModel, object viewModel)
         {

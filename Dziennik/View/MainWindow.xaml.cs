@@ -33,7 +33,7 @@ namespace Dziennik.View
             if (m_oneInstanceMutex == null)
             {
                 bool isCreated;
-                m_oneInstanceMutex = new Mutex(false, "Dziennik_Katra", out isCreated);
+                m_oneInstanceMutex = new Mutex(false, "Dziennik_Katra_e5d3b59b-f5d4-4cfd-b714-ecea7bd05f96", out isCreated);
                 if (!isCreated)
                 {
                     MessageBox.Show("Nie można uruchomić dwóch instancji Dziennika na raz", "Dziennik", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);

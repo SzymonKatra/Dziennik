@@ -90,6 +90,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="..\DziennikAktualizacja\VersionChecker.cs">
+      <Link>VersionChecker.cs</Link>
+    </Compile>
     <Compile Include="Controls\AbsentTypeToBrushConverter.cs" />
     <Compile Include="Controls\ImageButton.xaml.cs">
       <DependentUpon>ImageButton.xaml</DependentUpon>

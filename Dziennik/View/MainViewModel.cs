@@ -14,6 +14,8 @@ using System.IO;
 using Microsoft.Win32;
 using Ionic.Zip;
 using System.Timers;
+using DziennikAktualizacja;
+using System.Diagnostics;
 
 namespace Dziennik.View
 {
@@ -31,6 +33,7 @@ namespace Dziennik.View
             m_showCalendarsListCommand = new RelayCommand(ShowCalendarsList);
             m_showNoticesListCommand = new RelayCommand(ShowNoticesList);
             m_closeCommand = new RelayCommand<CancelEventArgs>(Close);
+            m_checkUpdatesCommand = new RelayCommand<string>(CheckUpdates, CanCheckUpdate);
         }
 
         private ObservableCollection<SchoolClassControlViewModel> m_openedSchoolClasses = new ObservableCollection<SchoolClassControlViewModel>();
@@ -131,6 +134,12 @@ namespace Dziennik.View
             get { return m_closeCommand; }
         }
 
+        private RelayCommand<string> m_checkUpdatesCommand;
+        public ICommand CheckUpdatesCommand
+        {
+            get { return m_checkUpdatesCommand; }
+        }
+
         private string m_originalDatabasePath;
         public string OriginalDatabasePath
         {
@@ -152,6 +161,27 @@ namespace Dziennik.View
         private bool m_databasesDirectoryChanged = true;
 
         public Action<Action> InvokeWindow;
+
+        private bool m_checkingUpdates = false;
+        private object m_checkingUpdatesLock = new object();
+        public bool CheckingUpdates
+        {
+            get
+            {
+                bool temp;
+                lock (m_checkingUpdatesLock) temp = m_checkingUpdates;
+                return temp;
+            }
+            private set
+            {
+                lock (m_checkingUpdatesLock)
+                {
+                    m_checkingUpdates = value;
+                    RaisePropertyChanged("CheckingUpdates");
+                    m_checkUpdatesCommand.RaiseCanExecuteChanged();
+                }
+            }
+        }
 
         public void Init()
         {
@@ -180,6 +210,8 @@ namespace Dziennik.View
             CheckNotices();
 
             AskPasswordIfNeeded();
+
+            if (DateTime.Now.Date > GlobalConfig.Notifier.LastUpdateCheck.Date)  m_checkUpdatesCommand.Execute(null);
             
             //string[] args = Environment.GetCommandLineArgs();
             //if (args.Length >= 2) m_openFromPathCommand.Execute(args[1]);
@@ -201,15 +233,16 @@ namespace Dziennik.View
             m_passwordAsking = true;
 
             TypePasswordViewModel dialogViewModel = new TypePasswordViewModel();
-            Window view = Application.Current.Windows.OfType<Window>().FirstOrDefault(x => x.IsActive);
-            if (view != null && GlobalConfig.Dialogs.IsViewRegistered(view))
-            {
-                GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Dialogs.GetViewModel(view), dialogViewModel);
-            }
-            else
-            {
-                GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
-            }
+            //Window view = Application.Current.Windows.OfType<Window>().FirstOrDefault(x => x.IsActive);
+            //if (view != null && GlobalConfig.Dialogs.IsViewRegistered(view))
+            //{
+            //    GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Dialogs.GetViewModel(view), dialogViewModel);
+            //}
+            //else
+            //{
+            //    GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+            //}
+            GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Dialogs.GetActiveViewModel(this), dialogViewModel);
             if (dialogViewModel.Result == TypePasswordViewModel.TypePasswordResult.CloseApplication) GlobalConfig.Dialogs.GetWindow(this).Close();
             m_passwordAsking = false;
         }
@@ -508,9 +541,61 @@ namespace Dziennik.View
 
                 case MessageBoxSuperButton.Cancel:
                     param.Cancel = true;
-                    break;
+                    return;
+            }
+
+            if (GlobalConfig.Notifier.UpdateRequest)
+            {
+                if (!File.Exists(GlobalConfig.AutoUpdaterPath))
+                {
+                    GlobalConfig.MessageBox(this, GlobalConfig.GetStringResource("lang_AutoupdaterNotFound"), MessageBoxSuperPredefinedButtons.OK);
+                }
+                else
+                {
+                    Process p = new Process();
+                    p.StartInfo.FileName = GlobalConfig.AutoUpdaterPath;
+                    p.StartInfo.Arguments = GlobalConfig.CurrentVersion.ToString() + " " + GlobalConfig.UpdateInfoLink;
+                    p.Start();
+                }
             }
         }
+        private void CheckUpdates(string param)
+        {
+            CheckingUpdates = true;
+            VersionChecker.CheckVersionAsync(GlobalConfig.UpdateInfoLink, (x) =>
+            {
+                InvokeWindow.Invoke(() =>
+                {
+                    bool error = false;
+                    error = x.NewestVersion == null;
+                    if (error || x.NewestVersion > GlobalConfig.CurrentVersion)
+                    {
+                        GlobalConfig.Notifier.LastUpdateCheck = DateTime.Now;
+
+                        if (error)
+                        {
+                            GlobalConfig.MessageBox(GlobalConfig.Dialogs.GetActiveViewModel(this), GlobalConfig.GetStringResource("lang_ErrorOccurredWhileCheckingUpdates"), MessageBoxSuperPredefinedButtons.OK);
+                            return;
+                        }
+
+                        if (GlobalConfig.MessageBox(GlobalConfig.Dialogs.GetActiveViewModel(this), GlobalConfig.GetStringResource("lang_NewVersionAvailable"), MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
+                        GlobalConfig.Notifier.UpdateRequest = true;
+
+                    }
+                    if (!error && x.NewestVersion <= GlobalConfig.CurrentVersion && param == "True")
+                    {
+                        GlobalConfig.MessageBox(GlobalConfig.Dialogs.GetActiveViewModel(this), GlobalConfig.GetStringResource("lang_NoUpdatesFound"), MessageBoxSuperPredefinedButtons.OK);
+                    }
+
+                    CheckingUpdates = false;
+                });
+            });
+        }
+        private bool CanCheckUpdate(string param)
+        {
+            return !CheckingUpdates;
+        }
+
         private void CloseAllTabs()
         {
             if (!m_blockSaving)

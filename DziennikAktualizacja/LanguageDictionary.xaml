@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib">
+    
+    <s:String x:Key="lang_AppName">Dziennik ZSE - Aktualizacja</s:String>
+    
+    <s:String x:Key="lang_RunApp">Uruchom Dziennik</s:String>
+    <s:String x:Key="lang_Close">Zamknij</s:String>
+    <s:String x:Key="lang_Init">Inicjalizacja</s:String>
+    <s:String x:Key="lang_InitError">Wystąpił błąd podczas inicjalizacji aktualizacji</s:String>
+    <s:String x:Key="lang_DownloadingUpdateInfo">Pobieranie informacji o aktualizacji</s:String>
+    <s:String x:Key="lang_DownloadingUpdateInfoError">Wystąpił błąd podczas pobierania informacji o aktualizacji</s:String>
+    <s:String x:Key="lang_YouHaveNewestVersion">Już posiadasz najnowszą wersję</s:String>
+    <s:String x:Key="lang_UpdateSuccessful">Aktualizacja zakończona pomyślnie</s:String>
+    <s:String x:Key="lang_UpdateDetected" xml:space="preserve">Znaleziono aktualizację
+Rozpoczynanie pobierania</s:String>
+    <s:String x:Key="lang_DownloadingFormat">Pobieranie {0}/{1} kB</s:String>
+    <s:String x:Key="lang_DownloadingError">Wystąpił błąd podczas pobierania aktualizacji</s:String>
+    <s:String x:Key="lang_DownloadSuccessful" xml:space="preserve">Pomyślnie pobrano aktualizację
+Rozpoczynanie rozpakowywania</s:String>
+    <s:String x:Key="lang_UnpackingFormat">Rozpakowywanie {0}/{1} kB</s:String>
+    <s:String x:Key="lang_UnpackingError">Wystąpił błąd podczas rozpakowywania</s:String>
+    
+</ResourceDictionary>

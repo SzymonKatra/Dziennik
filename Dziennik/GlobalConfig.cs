@@ -12,6 +12,9 @@ using Dziennik.ViewModel;
 using System.Windows.Input;
 using Dziennik.CommandUtils;
 using fastJSON;
+using DziennikAktualizacja;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace Dziennik
 {
@@ -19,6 +22,14 @@ namespace Dziennik
     {
         public class GlobalConfigNotifier : ObservableObject
         {
+            private bool m_updateRequest = false;
+            public bool UpdateRequest
+            {
+                get { return m_updateRequest; }
+                set { m_updateRequest = value; RaisePropertyChanged("UpdateRequest"); }
+            }
+
+            //to registry
             private bool m_showName = true;
             public bool ShowName
             {
@@ -166,6 +177,13 @@ namespace Dziennik
                 set { m_blockingMinutes = value; RaisePropertyChanged("BlockingMinutes"); }
             }
 
+            private DateTime m_lastUpdateCheck;
+            public DateTime LastUpdateCheck
+            {
+                get { return m_lastUpdateCheck; }
+                set { m_lastUpdateCheck = value; RaisePropertyChanged("LastUpdateCheck"); }
+            }
+
             public void LoadRegistry()
             {
                 RegistryKey key = Registry.CurrentUser.CreateSubKey(GlobalConfig.RegistryKeyName);
@@ -190,6 +208,8 @@ namespace Dziennik
                 object databasesDirectoryReg = key.GetValue(GlobalConfig.RegistryValueNameDatabasesDirectory);
                 object passwordReg = key.GetValue(GlobalConfig.RegistryValueNameDatabasesPassword);
                 object blockingMinutesReg = key.GetValue(GlobalConfig.RegistryValueNameBlockingMinutes);
+                object lastUpdateCheckReg = key.GetValue(GlobalConfig.RegistryValueNameLastUpdateCheck);
+
                 key.Close();
 
                 if (showNameReg != null) ShowName = Ext.BoolParseOrDefault(showNameReg.ToString(), m_showName);
@@ -213,6 +233,7 @@ namespace Dziennik
                 if (databasesDirectoryReg != null) DatabasesDirectory = databasesDirectoryReg.ToString();
                 if (passwordReg != null) Password = (byte[])passwordReg;
                 if (blockingMinutesReg != null) BlockingMinutes = Ext.IntParseOrDefault(blockingMinutesReg.ToString(), m_blockingMinutes);
+                if (lastUpdateCheckReg != null) LastUpdateCheck = DateTime.FromBinary(Ext.LongParseOrDefault(lastUpdateCheckReg.ToString(), m_lastUpdateCheck.ToBinary()));
                 //if (lastOpenedReg != null)
                 //{
                 //    string lastOpened = lastOpenedReg.ToString();
@@ -251,6 +272,7 @@ namespace Dziennik
                     key.DeleteValue(GlobalConfig.RegistryValueNameDatabasesPassword, false);
                 }
                 key.SetValue(GlobalConfig.RegistryValueNameBlockingMinutes, m_blockingMinutes);
+                key.SetValue(GlobalConfig.RegistryValueNameLastUpdateCheck, m_lastUpdateCheck.ToBinary());
                 //StringBuilder builder = new StringBuilder();
                 //foreach (SchoolClassControlViewModel item in m_openedSchoolClasses)
                 //{
@@ -277,6 +299,9 @@ namespace Dziennik
         public static readonly Size ActionDialogProgressSize = new Size(400, 200);
         public static readonly int DefaultWeightMinValue = 0;
         public static readonly int DefaultWeightMaxValue = 9;
+        public static readonly Version CurrentVersion;
+        public static readonly string UpdateInfoLink = "https://www.dropbox.com/s/z7phk39d6wyi9jn/update_info.xml?dl=1";
+        public static readonly string AutoUpdaterPath = "DziennikAktualizacja.exe";
 
         public static readonly string RegistryKeyName = @"Software\Dziennik_Katra";
         public static readonly string RegistryValueNameShowName = "ShowName";
@@ -300,6 +325,8 @@ namespace Dziennik
         public static readonly string RegistryValueNameDatabasesDirectory = "DatabasesDirectory";
         public static readonly string RegistryValueNameDatabasesPassword = "Password";
         public static readonly string RegistryValueNameBlockingMinutes = "BlockingMinutes";
+        public static readonly string RegistryValueNameLastUpdateCheck = "LastUpdateCheck";
+
         public static readonly string CurrentDatabaseSubdirectory = "Baza";
         public static readonly string ArchiveDatabasesSubdirectory = "Archiwum";
 
@@ -331,6 +358,10 @@ namespace Dziennik
 
         static GlobalConfig()
         {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(assembly.Location);
+            CurrentVersion = Version.Parse(fileVersion.ProductVersion);
+
             m_globalDatabaseAutoSaveCommand = new RelayCommand(x => { if (m_notifier.AutoSave) m_globalDatabase.Save(); });
 
             Dictionary<Type, Func<object, Window>> windowViewModelMappings = new Dictionary<Type, Func<object, Window>>();

@@ -71,6 +71,8 @@
     <s:String x:Key="lang_NoticesList">Lista powiadomień</s:String>
     <s:String x:Key="lang_ArchivesList">Lista archiwów</s:String>
     <s:String x:Key="lang_ChangeBlockingOptions">Zmień ustawienia blokowania</s:String>
+    <s:String x:Key="lang_NoUpdatesFound">Posiadasz aktualną wersję Dziennika</s:String>
+    <s:String x:Key="lang_CheckUpdates">Sprawdź aktualizacje</s:String>
 
     <s:String x:Key="lang_OptionsTitle">Opcje</s:String>
     <s:String x:Key="lang_DatabaseDirectory">Katalog z bazą danych</s:String>
@@ -400,6 +402,11 @@
         </List>
     </FlowDocument>
     
+    <s:String x:Key="lang_NewVersionAvailable" xml:space="preserve">Nowa wersja Dziennika jest dostępna.
+Czy chcesz zaktualizować program po jego zamknięciu?</s:String>
+    <s:String x:Key="lang_ErrorOccurredWhileCheckingUpdates">Wystąpił błąd podczas sprawdzania aktualizacji.
+Sprawdź swoje połączenie internetowe</s:String>
+    
     <s:String x:Key="lang_TypeValidCategoryName">Wprowadź poprawną nazwę kategorii</s:String>
     <s:String x:Key="lang_TypeValidClassName">Wprowadź poprawną nazwę klasy</s:String>
     <s:String x:Key="lang_DoYouWantRemoveClass">Czy napewno chcesz usunąć klasę?</s:String>
@@ -460,4 +467,6 @@ Ostatnia archiwizacja odbyła się: {0}</s:String>
     <s:String x:Key="lang_NewNotEqualsRepeatNew">Pole "powtórz nowe hasło" jest błędne</s:String>
     <s:String x:Key="lang_BadPassword">Nieprawidłowe hasło</s:String>
     <s:String x:Key="lang_SuccessfullyUnlocked">Pomyślnie odblokowano</s:String>
+    <s:String x:Key="lang_AutoupdaterNotFound" xml:space="preserve">Nie znaleziono modułu aktualizacji
+Spróbuj ponownie zainstalować Dziennik, aby rozwiązać problem.</s:String>
 </ResourceDictionary>

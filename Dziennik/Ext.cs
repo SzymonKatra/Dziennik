@@ -34,6 +34,15 @@ namespace Dziennik
             }
             return def;
         }
+        public static long LongParseOrDefault(string input, long def)
+        {
+            long output;
+            if (long.TryParse(input, out output))
+            {
+                return output;
+            }
+            return def;
+        }
 
         public static string RemoveAllWhitespaces(string value)
         {
