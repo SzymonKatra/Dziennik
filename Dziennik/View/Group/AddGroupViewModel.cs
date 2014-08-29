@@ -48,6 +48,21 @@ namespace Dziennik.View
             set { m_nameInput = value; RaisePropertyChanged("NameInput"); }
         }
 
+        //public List<LessonHourViewModel> AvailableHours
+        //{
+        //    get
+        //    {
+        //        //List<int> result = new List<int>();
+
+        //        //foreach (var item in GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours)
+        //        //{
+        //        //    result.Add(item.Number);
+        //        //}
+
+        //        return GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours;
+        //    }
+        //}
+
         private List<int> m_selectedStudents = new List<int>();
         private bool m_selectedStudentsInputValid = false;
         private string m_selectedStudentsInput;

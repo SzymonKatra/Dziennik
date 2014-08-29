@@ -249,7 +249,11 @@ namespace Dziennik.View
             {
                 m_selectedGroup.RealizedSubjects.Add(dialogViewModel.RealizedSubject);
             }
-            if (dialogViewModel.Result != RealizeSubjectViewModel.RealizeSubjectResult.Cancel) m_autoSaveCommand.Execute(null);
+            if (dialogViewModel.Result != RealizeSubjectViewModel.RealizeSubjectResult.Cancel)
+            {
+                SortSelectedGroupRealizedSubjects();
+                m_autoSaveCommand.Execute(null);
+            }
         }
         private bool CanRealizeSubject(object e)
         {
@@ -264,7 +268,11 @@ namespace Dziennik.View
                 m_selectedGroup.RealizedSubjects.Remove(m_selectedSubject);
                 m_selectedSubject = null;
             }
-            if (dialogViewModel.Result != RealizeSubjectViewModel.RealizeSubjectResult.Cancel) m_autoSaveCommand.Execute(null);
+            if (dialogViewModel.Result != RealizeSubjectViewModel.RealizeSubjectResult.Cancel)
+            {
+                SortSelectedGroupRealizedSubjects();
+                m_autoSaveCommand.Execute(null);
+            }
         }
         private IEnumerable<GlobalSubjectViewModel> GetAvailableSubjects(SchoolGroupViewModel group)
         {
@@ -364,6 +372,10 @@ namespace Dziennik.View
         private void RefreshStatistics(object e)
         {
             m_selectedGroup.Statistics.Refresh();
+        }
+        private void SortSelectedGroupRealizedSubjects()
+        {
+            m_selectedGroup.RealizedSubjects.Sort((x, y) => { return x.RealizedDate.CompareTo(y.RealizedDate); });
         }
 
         private bool MessageBoxContinue()

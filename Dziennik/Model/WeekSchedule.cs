@@ -8,10 +8,19 @@ namespace Dziennik.Model
     [Serializable]
     public class WeekSchedule : ModelBase
     {
-        public int Monday { get; set; }
-        public int Tuesday { get; set; }
-        public int Wednesday { get; set; }
-        public int Thursday { get; set; }
-        public int Friday { get; set; }
+        public DaySchedule Monday { get; set; }
+        public DaySchedule Tuesday { get; set; }
+        public DaySchedule Wednesday { get; set; }
+        public DaySchedule Thursday { get; set; }
+        public DaySchedule Friday { get; set; }
+
+        public WeekSchedule()
+        {
+            Monday = new DaySchedule();
+            Tuesday = new DaySchedule();
+            Wednesday = new DaySchedule();
+            Thursday = new DaySchedule();
+            Friday = new DaySchedule();
+        }
     }
 }

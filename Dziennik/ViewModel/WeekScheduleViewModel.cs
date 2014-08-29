@@ -15,57 +15,104 @@ namespace Dziennik.ViewModel
         public WeekScheduleViewModel(WeekSchedule model)
             : base(model)
         {
+            m_monday = new DayScheduleViewModel(Model.Monday);
+            m_tuesday = new DayScheduleViewModel(Model.Tuesday);
+            m_wednesday = new DayScheduleViewModel(Model.Wednesday);
+            m_thursday = new DayScheduleViewModel(Model.Thursday);
+            m_friday = new DayScheduleViewModel(Model.Friday);
         }
 
-        public int Monday
+        private DayScheduleViewModel m_monday;
+        public DayScheduleViewModel Monday
         {
-            get { return Model.Monday; }
-            set { Model.Monday = value; RaisePropertyChanged("Monday"); }
+            get { return m_monday; }
+            set
+            {
+                m_monday = value;
+                Model.Monday = value.Model;
+                RaisePropertyChanged("Monday");
+            }
         }
-        public int Tuesday
+        private DayScheduleViewModel m_tuesday;
+        public DayScheduleViewModel Tuesday
         {
-            get { return Model.Tuesday; }
-            set { Model.Tuesday = value; RaisePropertyChanged("Tuesday"); }
+            get { return m_tuesday; }
+            set
+            {
+                m_tuesday = value;
+                Model.Tuesday = value.Model;
+                RaisePropertyChanged("Tuesday");
+            }
         }
-        public int Wednesday
+        private DayScheduleViewModel m_wednesday;
+        public DayScheduleViewModel Wednesday
         {
-            get { return Model.Wednesday; }
-            set { Model.Wednesday = value; RaisePropertyChanged("Wednesday"); }
+            get { return m_wednesday; }
+            set
+            {
+                m_wednesday = value;
+                Model.Wednesday = value.Model;
+                RaisePropertyChanged("Wednesday");
+            }
         }
-        public int Thursday
+        private DayScheduleViewModel m_thursday;
+        public DayScheduleViewModel Thursday
         {
-            get { return Model.Thursday; }
-            set { Model.Thursday = value; RaisePropertyChanged("Thursday"); }
+            get { return m_thursday; }
+            set
+            {
+                m_thursday = value;
+                Model.Thursday = value.Model;
+                RaisePropertyChanged("Thursday");
+            }
         }
-        public int Friday
+        private DayScheduleViewModel m_friday;
+        public DayScheduleViewModel Friday
         {
-            get { return Model.Friday; }
-            set { Model.Friday = value; RaisePropertyChanged("Friday"); }
+            get { return m_friday; }
+            set
+            {
+                m_friday = value;
+                Model.Friday = value.Model;
+                RaisePropertyChanged("Friday");
+            }
         }
 
         protected override void OnPushCopy()
         {
-            ObjectsPack pack = new ObjectsPack();
-            pack.Write(this.Monday);
-            pack.Write(this.Tuesday);
-            pack.Write(this.Wednesday);
-            pack.Write(this.Thursday);
-            pack.Write(this.Friday);
+            //ObjectsPack pack = new ObjectsPack();
+            //pack.Write(this.Monday);
+            //pack.Write(this.Tuesday);
+            //pack.Write(this.Wednesday);
+            //pack.Write(this.Thursday);
+            //pack.Write(this.Friday);
 
-            CopyStack.Push(pack);
+            //CopyStack.Push(pack);
+
+            this.Monday.PushCopy();
+            this.Tuesday.PushCopy();
+            this.Wednesday.PushCopy();
+            this.Thursday.PushCopy();
+            this.Friday.PushCopy();
         }
         protected override void OnPopCopy(WorkingCopyResult result)
         {
-            ObjectsPack pack = CopyStack.Pop();
+            //ObjectsPack pack = CopyStack.Pop();
 
-            if (result == WorkingCopyResult.Cancel)
-            {
-                this.Monday = (int)pack.Read();
-                this.Tuesday = (int)pack.Read();
-                this.Wednesday = (int)pack.Read();
-                this.Thursday = (int)pack.Read();
-                this.Friday = (int)pack.Read();
-            }
+            //if (result == WorkingCopyResult.Cancel)
+            //{
+            //    this.Monday = (int)pack.Read();
+            //    this.Tuesday = (int)pack.Read();
+            //    this.Wednesday = (int)pack.Read();
+            //    this.Thursday = (int)pack.Read();
+            //    this.Friday = (int)pack.Read();
+            //}
+
+            this.Monday.PopCopy(result);
+            this.Tuesday.PopCopy(result);
+            this.Wednesday.PopCopy(result);
+            this.Thursday.PopCopy(result);
+            this.Friday.PopCopy(result);
         }
     }
 }

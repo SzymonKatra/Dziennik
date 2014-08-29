@@ -23,7 +23,7 @@ namespace Dziennik.View
             m_cancelCommand = new RelayCommand(Cancel);
             m_addNextHourCommand = new RelayCommand(AddNextHour);
 
-            m_hours = hours.Hours;
+            m_hours = hours;
         }
 
         private RelayCommand m_okCommand;
@@ -48,8 +48,8 @@ namespace Dziennik.View
             get { return m_result; }
         }
 
-        private ObservableCollection<LessonHourViewModel> m_hours;
-        public ObservableCollection<LessonHourViewModel> Hours
+        private LessonsHoursViewModel m_hours;
+        public LessonsHoursViewModel Hours
         {
             get { return m_hours; }
         }
@@ -66,7 +66,7 @@ namespace Dziennik.View
         }
         private void AddNextHour(object param)
         {
-            m_hours.Add(new LessonHourViewModel() { Number = (m_hours.Count > 0 ? m_hours[m_hours.Count - 1].Number + 1 : 1) });
+            m_hours.Hours.Add(new LessonHourViewModel() { Number = (m_hours.Hours.Count > 0 ? m_hours.Hours[m_hours.Hours.Count - 1].Number + 1 : 1) });
         }
     }
 }

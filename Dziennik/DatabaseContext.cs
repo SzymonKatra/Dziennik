@@ -265,7 +265,7 @@ namespace Dziennik
                     ownerPropertyName.SetValue(inverseProperty.Property, inverseProperty.Owner, null);
                 }
 
-                inverseProperty.Owner.GetType().GetMethod(inverseProperty.SubscribeOwnerOBEMethodName, BindingFlags.NonPublic | BindingFlags.InvokeMethod | BindingFlags.Instance).Invoke(inverseProperty.Owner, null);
+                //inverseProperty.Owner.GetType().GetMethod(inverseProperty.SubscribeOwnerOBEMethodName, BindingFlags.NonPublic | BindingFlags.InvokeMethod | BindingFlags.Instance).Invoke(inverseProperty.Owner, null);
             }
         }
 

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:my="clr-namespace:Dziennik.Controls"
-        Title="{DynamicResource lang_EditGroupTitle}" Height="300" Width="350"
+        Title="{DynamicResource lang_EditGroupTitle}" Height="400" Width="350"
         WindowStartupLocation="CenterOwner">
 
     <Grid>
@@ -15,8 +15,6 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
@@ -41,10 +39,9 @@
             <Button Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_EditSubjects}" Command="{Binding ShowGlobalSubjectsListCommand}"/>
         </Grid>
         
-        <TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_TypeHoursInWeek}"/>
-        <my:WeekScheduleControl x:Name="scheduleControl" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Style="{StaticResource inputControlStyle}" WeekSchedule="{Binding SchoolGroup.Schedule}"/>
+        <my:WeekScheduleControl x:Name="scheduleControl" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Style="{StaticResource inputControlStyle}" WeekSchedule="{Binding SchoolGroup.Schedule}"/>
 
-        <Grid Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2">
+        <Grid Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width=".65*"/>
                 <ColumnDefinition Width=".35*"/>

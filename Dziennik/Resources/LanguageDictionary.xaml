@@ -99,6 +99,7 @@
     <s:String x:Key="lang_TypeGroupName">Wpisz nazwę przedmiotu (grupy)</s:String>
     <s:String x:Key="lang_TypeGroupStudents">Wybierz / Wpisz uczniów przedmiotu (grupy)</s:String>
     <s:String x:Key="lang_TypeHoursInWeek">Wybierz liczbę godzin w tygodniu</s:String>
+    <s:String x:Key="lang_TypeHoursSchedule">Wybierz godziny zajęć lekcyjnych</s:String>
     
     <s:String x:Key="lang_EditGroupTitle">Edytuj grupę</s:String>
     <s:String x:Key="lang_AddStudent">Dodaj ucznia</s:String>
@@ -244,6 +245,7 @@
     <s:String x:Key="lang_AddNextHour">Dodaj kolejną godzinę</s:String>
     <s:String x:Key="lang_LessonHourBeginning">Początek</s:String>
     <s:String x:Key="lang_LessonHourEnding">Koniec</s:String>
+    <s:String x:Key="lang_LessonsHoursEnabled">Godziny lekcyjne włączone</s:String>
 
     <s:String x:Key="lang_TypePasswordTitle">Podaj hasło</s:String>
     <s:String x:Key="lang_TypePasswordToUnlock">Podaj hasło aby odblokować</s:String>

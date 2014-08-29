@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:my="clr-namespace:Dziennik.Controls"
-        Title="{DynamicResource lang_AddGroupTitle}" Height="350" Width="400"
+        Title="{DynamicResource lang_AddGroupTitle}" Height="450" Width="400"
         WindowStartupLocation="CenterOwner">
 
     <Grid>
@@ -17,8 +17,6 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
@@ -43,9 +41,8 @@
             <Button Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_AllSubjects}" Command="{Binding ShowGlobalSubjectsListCommand}"/>
         </Grid>
 
-        <TextBlock Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_TypeHoursInWeek}"/>
-        <my:WeekScheduleControl x:Name="scheduleControl" Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" Style="{StaticResource inputControlStyle}" WeekSchedule="{Binding Result.Schedule}"/>
+        <my:WeekScheduleControl x:Name="scheduleControl" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Style="{StaticResource inputControlStyle}" WeekSchedule="{Binding Result.Schedule}"/>
 
-        <my:OkCancelControl Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
+        <my:OkCancelControl Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>
 </Window>

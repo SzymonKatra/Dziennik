@@ -29,13 +29,29 @@ namespace Dziennik.ViewModel
                 RaisePropertyChanged("Hours");
             }
         }
+        public bool IsEnabled
+        {
+            get { return Model.IsEnabled; }
+            set { Model.IsEnabled = value; RaisePropertyChanged("IsEnabled"); }
+        }
 
         protected override void OnPushCopy()
         {
+            ObjectsPack pack = new ObjectsPack();
+            pack.Write(this.IsEnabled);
+
+            CopyStack.Push(pack);
+
             this.Hours.PushCopy();
         }
         protected override void OnPopCopy(WorkingCopyResult result)
         {
+            ObjectsPack pack = CopyStack.Pop();
+            if (result == WorkingCopyResult.Cancel)
+            {
+                this.IsEnabled = (bool)pack.Read();
+            }
+
             this.Hours.PopCopy(result);
         }
     }

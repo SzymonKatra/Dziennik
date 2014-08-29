@@ -33,5 +33,12 @@ namespace Dziennik.Controls
             get { return (WeekScheduleViewModel)GetValue(WeekScheduleProperty); }
             set { SetValue(WeekScheduleProperty, value); }
         }
+
+        public static readonly DependencyProperty AvailableProperty = DependencyProperty.Register("Available", typeof(List<int>), typeof(WeekScheduleControl), new PropertyMetadata(null));
+        public List<int> Available
+        {
+            get { return (List<int>)GetValue(AvailableProperty); }
+            set { SetValue(AvailableProperty, value); }
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Dziennik.Model
 {
+    [Serializable]
     public class LessonHour : ModelBase
     {
         public int Number { get; set; }

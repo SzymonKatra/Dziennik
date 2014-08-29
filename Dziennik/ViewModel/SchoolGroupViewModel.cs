@@ -137,11 +137,11 @@ namespace Dziennik.ViewModel
 
                     switch(i.DayOfWeek)
                     {
-                        case DayOfWeek.Monday: result += m_schedule.Monday; break;
-                        case DayOfWeek.Tuesday: result += m_schedule.Tuesday; break;
-                        case DayOfWeek.Wednesday: result += m_schedule.Wednesday; break;
-                        case DayOfWeek.Thursday: result += m_schedule.Thursday; break;
-                        case DayOfWeek.Friday: result += m_schedule.Friday; break;
+                        case DayOfWeek.Monday: result += m_schedule.Monday.HoursCount; break;
+                        case DayOfWeek.Tuesday: result += m_schedule.Tuesday.HoursCount; break;
+                        case DayOfWeek.Wednesday: result += m_schedule.Wednesday.HoursCount; break;
+                        case DayOfWeek.Thursday: result += m_schedule.Thursday.HoursCount; break;
+                        case DayOfWeek.Friday: result += m_schedule.Friday.HoursCount; break;
                     }
                 }
 

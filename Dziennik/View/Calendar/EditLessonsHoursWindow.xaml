@@ -10,16 +10,20 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-        <WrapPanel Grid.Row="0" Orientation="Horizontal">
-            <Button Style="{StaticResource wrapPanelControlStyle}" Content="{DynamicResource lang_AddNextHour}" Command="{Binding AddNextHourCommand}"/>
+        <CheckBox Grid.Row="0" IsChecked="{Binding Hours.IsEnabled,Mode=TwoWay}" Style="{StaticResource inputControlStyle}" Content="{DynamicResource lang_LessonsHoursEnabled}"/>
+        
+        <WrapPanel Grid.Row="1" Orientation="Horizontal">
+            <Button Style="{StaticResource wrapPanelControlStyle}" IsEnabled="{Binding Hours.IsEnabled}" Content="{DynamicResource lang_AddNextHour}" Command="{Binding AddNextHourCommand}"/>
         </WrapPanel>
 
-        <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding Hours}"
+        <DataGrid Grid.Row="2"
+                  IsEnabled="{Binding Hours.IsEnabled}"
+                  ItemsSource="{Binding Hours.Hours}"
                   CanUserAddRows="False"
                   CanUserSortColumns="False"
                   SelectionMode="Single"
@@ -44,6 +48,6 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <my:OkCancelControl Grid.Row="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
+        <my:OkCancelControl Grid.Row="3" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>
 </Window>

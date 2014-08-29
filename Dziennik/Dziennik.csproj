@@ -94,18 +94,28 @@
       <Link>VersionChecker.cs</Link>
     </Compile>
     <Compile Include="Controls\AbsentTypeToBrushConverter.cs" />
+    <Compile Include="Controls\ChangedStateEventArgs.cs" />
     <Compile Include="Controls\ImageButton.xaml.cs">
       <DependentUpon>ImageButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ListHoursSchedule.xaml.cs">
+      <DependentUpon>ListHoursSchedule.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\NegateBooleanConverter.cs" />
+    <Compile Include="Model\DaySchedule.cs" />
     <Compile Include="Model\LessonHour.cs" />
     <Compile Include="Model\LessonsHours.cs" />
+    <Compile Include="Model\SelectedHour.cs" />
+    <Compile Include="Model\ValueWrapper.cs" />
     <Compile Include="ObjectsPacker.cs" />
     <Compile Include="IWorkingCopyAvailable.cs" />
     <Compile Include="PasswordEncryption.cs" />
+    <Compile Include="ViewModel\DayScheduleViewModel.cs" />
     <Compile Include="ViewModel\LessonHourViewModel.cs" />
     <Compile Include="ViewModel\LessonsHoursViewModel.cs" />
+    <Compile Include="ViewModel\SelectedHourViewModel.cs" />
     <Compile Include="ViewModel\StatisticsViewModel.cs" />
+    <Compile Include="ViewModel\ValueWrapperViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\Calendar\EditLessonsHoursViewModel.cs" />
     <Compile Include="View\Calendar\EditLessonsHoursWindow.xaml.cs">
@@ -338,6 +348,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ImageButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ListHoursSchedule.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
