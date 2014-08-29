@@ -20,6 +20,7 @@ namespace Dziennik.View
             m_cancelCommand = new RelayCommand(Cancel);
             m_selectStudentsCommand = new RelayCommand(SelectStudents);
             m_showGlobalSubjectsListCommand = new RelayCommand(ShowGlobalSubjectsList);
+            m_showSchedulesListCommand = new RelayCommand(ShowSchedulesList);
 
             m_globalStudentCollection = globalStudentCollection;
 
@@ -28,8 +29,6 @@ namespace Dziennik.View
                 m_selectedStudents.Add(gStudent.Number);
             }
             m_selectedStudentsInput = SelectionParser.Create(m_selectedStudents);
-
-            m_result.Schedule = new WeekScheduleViewModel();
         }
 
         private SchoolGroupViewModel m_result = new SchoolGroupViewModel();
@@ -79,13 +78,6 @@ namespace Dziennik.View
             set { m_renumberFromOne = value; RaisePropertyChanged("RenumberFromOne"); }
         }
 
-        private WeekScheduleViewModel m_schedule;
-        public WeekScheduleViewModel Schedule
-        {
-            get { return m_schedule; }
-            set { m_schedule = value; RaisePropertyChanged("Schedule"); }
-        }
-
         private RelayCommand m_okCommand;
         public ICommand OkCommand
         {
@@ -108,6 +100,12 @@ namespace Dziennik.View
         public ICommand ShowGlobalSubjectsListCommand
         {
             get { return m_showGlobalSubjectsListCommand; }
+        }
+
+        private RelayCommand m_showSchedulesListCommand;
+        public ICommand ShowSchedulesListCommand
+        {
+            get { return m_showSchedulesListCommand; }
         }
 
         private void Ok(object param)
@@ -155,9 +153,14 @@ namespace Dziennik.View
                 SelectedStudentsInput = dialogViewModel.ResultSelectionString;
             }
         }
-        private void ShowGlobalSubjectsList(object e)
+        private void ShowGlobalSubjectsList(object param)
         {
             GlobalSubjectsListViewModel dialogViewModel = new GlobalSubjectsListViewModel(m_result.GlobalSubjects);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+        }
+        private void ShowSchedulesList(object param)
+        {
+            SchedulesListViewModel dialogViewModel = new SchedulesListViewModel(m_result.Schedules);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
 

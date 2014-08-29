@@ -29,6 +29,7 @@ namespace Dziennik.View
             m_restoreStudentsCommand = new RelayCommand(RestoreStudents);
             m_removeGroupCommand = new RelayCommand(RemoveGroup);
             m_showGlobalSubjectsListCommand = new RelayCommand(ShowGlobalSubjectsList);
+            m_showSchedulesListCommand = new RelayCommand(ShowSchedulesList);
 
             m_schoolGroup = schoolGroup;
             m_globalStudents = globalStudents;
@@ -97,6 +98,12 @@ namespace Dziennik.View
         public ICommand ShowGlobalSubjectsListCommand
         {
             get { return m_showGlobalSubjectsListCommand; }
+        }
+
+        private RelayCommand m_showSchedulesListCommand;
+        public ICommand ShowSchedulesListCommand
+        {
+            get { return m_showSchedulesListCommand; }
         }
 
         private void Ok(object param)
@@ -207,9 +214,14 @@ namespace Dziennik.View
             m_result = EditGroupResult.RemoveGroup;
             GlobalConfig.Dialogs.Close(this);
         }
-        private void ShowGlobalSubjectsList(object e)
+        private void ShowGlobalSubjectsList(object param)
         {
             GlobalSubjectsListViewModel dialogViewModel = new GlobalSubjectsListViewModel(m_schoolGroup.GlobalSubjects);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+        }
+        private void ShowSchedulesList(object param)
+        {
+            SchedulesListViewModel dialogViewModel = new SchedulesListViewModel(m_schoolGroup.Schedules);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
 

@@ -18,9 +18,8 @@ namespace Dziennik.ViewModel
             m_students = new SynchronizedPerItemObservableCollection<StudentInGroupViewModel, StudentInGroup>(Model.Students, (m) => { return new StudentInGroupViewModel(m); });;
             m_globalSubjects = new SynchronizedObservableCollection<GlobalSubjectViewModel, GlobalSubject>(Model.Subjects, m => new GlobalSubjectViewModel(m));
             m_realizedSubjects = new SynchronizedObservableCollection<RealizedSubjectViewModel, RealizedSubject>(Model.RealizedSubjects, m => new RealizedSubjectViewModel(m));
-            m_schedule = new WeekScheduleViewModel(Model.Schedule);
+            m_schedules = new SynchronizedObservableCollection<WeekScheduleViewModel, WeekSchedule>(Model.Schedules, m => new WeekScheduleViewModel(m));
 
-            SubscribeSchedule();
             SubscribeStudents();
             SubscribeRealizedSubjects();
         }
@@ -84,21 +83,56 @@ namespace Dziennik.ViewModel
             }
         }
 
-        private WeekScheduleViewModel m_schedule;
-        public WeekScheduleViewModel Schedule
+        private SynchronizedObservableCollection<WeekScheduleViewModel, WeekSchedule> m_schedules;
+        public SynchronizedObservableCollection<WeekScheduleViewModel, WeekSchedule> Schedules
         {
-            get { return m_schedule; }
+            get { return m_schedules; }
             set
             {
-                UnsubscribeSchedule();
-
-                m_schedule = value;
-
-                SubscribeSchedule();
-
-                Model.Schedule = value.Model;
-                RaisePropertyChanged("Schedule");
+                m_schedules = value;
+                Model.Schedules = value.ModelCollection;
+                RaisePropertyChanged("Schedules");
             }
+        }
+
+        private WeekScheduleViewModel m_previousSchedule;
+        public WeekScheduleViewModel CurrentSchedule
+        {
+            get
+            {
+                DateTime dateNow = DateTime.Now.Date;
+                for (int i = m_schedules.Count - 1; i >= 0; i--)
+                {
+                    if (m_schedules[i].StartDate >= dateNow)
+                    {
+                        if (m_previousSchedule != m_schedules[i])
+                        {
+                            WeekScheduleViewModel temp = m_previousSchedule;
+                            m_previousSchedule = m_schedules[i];
+                            ScheduleChanged(temp, m_schedules[i]);
+                        }
+                        return m_schedules[i];
+                    }
+                }
+
+                return new WeekScheduleViewModel();
+            }
+        }
+
+        private void ScheduleChanged(WeekScheduleViewModel oldSchedule, WeekScheduleViewModel newSchedule)
+        {
+            if (oldSchedule != null) oldSchedule.HoursCountChanged -= CurrentSchedule_HoursCountChanged;
+            if (newSchedule != null) newSchedule.HoursCountChanged += CurrentSchedule_HoursCountChanged;
+            RaiseCurrentScheduleChanged();
+        }
+
+        private void CurrentSchedule_HoursCountChanged(object sender, EventArgs e)
+        {
+            RaiseRemainingHoursOfLessonsChanged();
+        }
+        public void RaiseCurrentScheduleChanged()
+        {
+            RaisePropertyChanged("CurrentSchedule");
         }
 
         public string RealizedSubjectsDisplay
@@ -135,13 +169,14 @@ namespace Dziennik.ViewModel
                     }
                     if (nextDay) continue;
 
+                    WeekScheduleViewModel schedule = CurrentSchedule;
                     switch(i.DayOfWeek)
                     {
-                        case DayOfWeek.Monday: result += m_schedule.Monday.HoursCount; break;
-                        case DayOfWeek.Tuesday: result += m_schedule.Tuesday.HoursCount; break;
-                        case DayOfWeek.Wednesday: result += m_schedule.Wednesday.HoursCount; break;
-                        case DayOfWeek.Thursday: result += m_schedule.Thursday.HoursCount; break;
-                        case DayOfWeek.Friday: result += m_schedule.Friday.HoursCount; break;
+                        case DayOfWeek.Monday: result += schedule.Monday.HoursCount; break;
+                        case DayOfWeek.Tuesday: result += schedule.Tuesday.HoursCount; break;
+                        case DayOfWeek.Wednesday: result += schedule.Wednesday.HoursCount; break;
+                        case DayOfWeek.Thursday: result += schedule.Thursday.HoursCount; break;
+                        case DayOfWeek.Friday: result += schedule.Friday.HoursCount; break;
                     }
                 }
 
@@ -197,20 +232,6 @@ namespace Dziennik.ViewModel
             RaisePropertyChanged("RealizedSubjectsDisplay");
         }
 
-        private void SubscribeSchedule()
-        {
-            m_schedule.PropertyChanged += m_schedule_PropertyChanged;
-        }
-        private void UnsubscribeSchedule()
-        {
-            m_schedule.PropertyChanged += m_schedule_PropertyChanged;
-        }
-
-        private void m_schedule_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            RaiseRemainingHoursOfLessonsChanged();
-        }
-
         private void SubscribeStudents()
         {
             m_students.Added += m_students_Added;
@@ -246,7 +267,7 @@ namespace Dziennik.ViewModel
             this.Students.PushCopy();
             this.GlobalSubjects.PushCopy();
             this.RealizedSubjects.PushCopy();
-            this.Schedule.PushCopy();
+            this.Schedules.PushCopy();
         }
         protected override void OnPopCopy(WorkingCopyResult result)
         {
@@ -260,7 +281,7 @@ namespace Dziennik.ViewModel
             this.Students.PopCopy(result);
             this.GlobalSubjects.PopCopy(result);
             this.RealizedSubjects.PopCopy(result);
-            this.Schedule.PopCopy(result);
+            this.Schedules.PopCopy(result);
         }
     }
 }

@@ -13,14 +13,14 @@ namespace Dziennik.Model
         public List<StudentInGroup> Students { get; set; }
         public List<GlobalSubject> Subjects { get; set; }
         public List<RealizedSubject> RealizedSubjects { get; set; }
-        public WeekSchedule Schedule { get; set; }
+        public List<WeekSchedule> Schedules { get; set; }
 
         public SchoolGroup()
         {
             Students = new List<StudentInGroup>();
             Subjects = new List<GlobalSubject>();
             RealizedSubjects = new List<RealizedSubject>();
-            Schedule = new WeekSchedule();
+            Schedules = new List<WeekSchedule>();
         }
     }
 }

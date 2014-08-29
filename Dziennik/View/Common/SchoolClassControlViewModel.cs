@@ -145,6 +145,13 @@ namespace Dziennik.View
             get { return m_refreshStatisticsCommand; }
         }
 
+        private string m_overdueSubjectsText;
+        public string OverdueSubjectsText
+        {
+            get { return m_overdueSubjectsText; }
+            set { m_overdueSubjectsText = value; RaisePropertyChanged("OverdueSubjectsText"); }
+        }
+
         private void AddMark(string param)
         {
             SemesterViewModel semester = (param == "first" ? m_selectedStudent.FirstSemester : m_selectedStudent.SecondSemester);
@@ -376,6 +383,10 @@ namespace Dziennik.View
         private void SortSelectedGroupRealizedSubjects()
         {
             m_selectedGroup.RealizedSubjects.Sort((x, y) => { return x.RealizedDate.CompareTo(y.RealizedDate); });
+        }
+        private void UpdateOverdueSubjectsText()
+        {
+            
         }
 
         private bool MessageBoxContinue()

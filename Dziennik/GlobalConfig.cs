@@ -395,6 +395,8 @@ namespace Dziennik
             windowViewModelMappings.Add(typeof(ChangePasswordViewModel), vm => new ChangePasswordWindow((ChangePasswordViewModel)vm));
             windowViewModelMappings.Add(typeof(TypePasswordViewModel), vm => new TypePasswordWindow((TypePasswordViewModel)vm));
             windowViewModelMappings.Add(typeof(EditLessonsHoursViewModel), vm => new EditLessonsHoursWindow((EditLessonsHoursViewModel)vm));
+            windowViewModelMappings.Add(typeof(EditScheduleViewModel), vm => new EditScheduleWindow((EditScheduleViewModel)vm));
+            windowViewModelMappings.Add(typeof(SchedulesListViewModel), vm => new SchedulesListWindow((SchedulesListViewModel)vm));
 
             Dialogs = new DialogService(windowViewModelMappings);
         }

@@ -1,0 +1,38 @@
+﻿<Window x:Class="Dziennik.View.SchedulesListWindow"
+        x:Name="root"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:my="clr-namespace:Dziennik.Controls"
+        xmlns:local="clr-namespace:Dziennik"
+        Title="{DynamicResource lang_SchedulesListTitle}" Height="300" Width="300"
+        WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <WrapPanel Grid.Row="0" Orientation="Horizontal">
+            <Button Style="{StaticResource wrapPanelControlStyle}" Content="{DynamicResource lang_AddSchedule}" Command="{Binding AddScheduleCommand}"/>
+        </WrapPanel>
+
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Schedules}"
+                  CanUserAddRows="False"
+                  CanUserSortColumns="False"
+                  SelectionMode="Single"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{DynamicResource lang_ValidFrom}" Binding="{Binding StartDate, StringFormat={x:Static local:GlobalConfig.DateFormat}}"/>
+                <DataGridTemplateColumn Header="{DynamicResource lang_Edit}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <my:EditButtonControl Command="{Binding DataContext.EditScheduleCommand, ElementName=root}" CommandParameter="{Binding}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

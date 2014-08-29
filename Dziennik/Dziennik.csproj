@@ -121,6 +121,10 @@
     <Compile Include="View\Calendar\EditLessonsHoursWindow.xaml.cs">
       <DependentUpon>EditLessonsHoursWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Group\EditScheduleViewModel.cs" />
+    <Compile Include="View\Group\EditScheduleWindow.xaml.cs">
+      <DependentUpon>EditScheduleWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Password\ChangePasswordViewModel.cs" />
     <Compile Include="View\Class\ClassesListViewModel.cs" />
     <Compile Include="View\Class\ClassesListWindow.xaml.cs">
@@ -140,6 +144,9 @@
     <Compile Include="View\Password\TypePasswordViewModel.cs" />
     <Compile Include="View\Password\TypePasswordWindow.xaml.cs">
       <DependentUpon>TypePasswordWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Group\SchedulesListWindow.xaml.cs">
+      <DependentUpon>SchedulesListWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WorkingCollection.cs" />
     <Compile Include="CommandUtils\RelayCommand.cs" />
@@ -415,6 +422,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Group\EditScheduleWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Password\ChangePasswordWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -456,6 +467,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Notice\NoticesListWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Group\SchedulesListWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -610,6 +625,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\marks_category.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="View\Group\SchedulesListViewModel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
