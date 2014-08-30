@@ -22,6 +22,8 @@ namespace Dziennik.ViewModel
 
             SubscribeStudents();
             SubscribeRealizedSubjects();
+
+            RaiseCurrentScheduleChanged();
         }
 
         private SchoolClassViewModel m_ownerClass;
@@ -103,7 +105,7 @@ namespace Dziennik.ViewModel
                 DateTime dateNow = DateTime.Now.Date;
                 for (int i = m_schedules.Count - 1; i >= 0; i--)
                 {
-                    if (m_schedules[i].StartDate >= dateNow)
+                    if (m_schedules[i].StartDate <= dateNow)
                     {
                         if (m_previousSchedule != m_schedules[i])
                         {
@@ -133,6 +135,7 @@ namespace Dziennik.ViewModel
         public void RaiseCurrentScheduleChanged()
         {
             RaisePropertyChanged("CurrentSchedule");
+            RaiseRemainingHoursOfLessonsChanged();
         }
 
         public string RealizedSubjectsDisplay
@@ -191,6 +194,63 @@ namespace Dziennik.ViewModel
             }
         }
 
+        public IEnumerable<DateTime> OverdueSubjects
+        {
+            get
+            {
+                List<DateTime> overdues = new List<DateTime>();
+
+                if (OwnerClass == null || OwnerClass.Calendar == null) return overdues;
+
+                for (int i = 0; i < this.Schedules.Count; i++)
+                {
+                    WeekScheduleViewModel schedule = this.Schedules[i];
+                    DateTime endDate = (i < this.Schedules.Count - 1 ? this.Schedules[i + 1].StartDate.AddDays(-1.0) : this.OwnerClass.Calendar.YearEnding);
+                    if (endDate > DateTime.Now.Date) endDate = DateTime.Now.Date;
+
+                    for (DateTime date = schedule.StartDate; date <= endDate; date = date.AddDays(1.0))
+                    {
+                        bool nextDay = false;
+                        foreach (var offDay in this.OwnerClass.Calendar.OffDays)
+                        {
+                            if (date >= offDay.Start && date <= offDay.End)
+                            {
+                                nextDay = true;
+                                break;
+                            }
+                        }
+                        if (nextDay) continue;
+
+                        int toRealize = 0;
+                        switch (date.DayOfWeek)
+                        {
+                            case DayOfWeek.Monday: toRealize += schedule.Monday.HoursCount; break;
+                            case DayOfWeek.Tuesday: toRealize += schedule.Tuesday.HoursCount; break;
+                            case DayOfWeek.Wednesday: toRealize += schedule.Wednesday.HoursCount; break;
+                            case DayOfWeek.Thursday: toRealize += schedule.Thursday.HoursCount; break;
+                            case DayOfWeek.Friday: toRealize += schedule.Friday.HoursCount; break;
+                        }
+
+                        int realizedCount = this.RealizedSubjects.Count(x => x.RealizedDate.Date == date.Date);
+
+                        for (int j = 0; j < toRealize - realizedCount; j++)
+                        {
+                            overdues.Add(date);
+                        }
+                    }
+                }
+
+                return overdues;
+            }
+        }
+        public string OverdueSubjectsDisplay
+        {
+            get
+            {
+                return string.Format(GlobalConfig.GetStringResource("lang_OverdueSubjectsFormat"), OverdueSubjects.Count());
+            }
+        }
+
         private StatisticsViewModel m_statistics;
         public StatisticsViewModel Statistics
         {
@@ -216,6 +276,8 @@ namespace Dziennik.ViewModel
         {
             RaisePropertyChanged("RemainingHoursOfLessons");
             RaisePropertyChanged("RemainingHoursOfLessonsDisplay");
+            RaisePropertyChanged("OverdueSubjects");
+            RaisePropertyChanged("OverdueSubjectsDisplay");
         }
 
         private void SubscribeRealizedSubjects()
@@ -230,6 +292,8 @@ namespace Dziennik.ViewModel
         private void m_realizedSubjects_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             RaisePropertyChanged("RealizedSubjectsDisplay");
+            RaisePropertyChanged("OverdueSubjects");
+            RaisePropertyChanged("OverdueSubjectsDisplay");
         }
 
         private void SubscribeStudents()

@@ -397,6 +397,8 @@ namespace Dziennik
             windowViewModelMappings.Add(typeof(EditLessonsHoursViewModel), vm => new EditLessonsHoursWindow((EditLessonsHoursViewModel)vm));
             windowViewModelMappings.Add(typeof(EditScheduleViewModel), vm => new EditScheduleWindow((EditScheduleViewModel)vm));
             windowViewModelMappings.Add(typeof(SchedulesListViewModel), vm => new SchedulesListWindow((SchedulesListViewModel)vm));
+            windowViewModelMappings.Add(typeof(SelectGroupViewModel), vm => new SelectGroupWindow((SelectGroupViewModel)vm));
+            windowViewModelMappings.Add(typeof(OverdueSubjectsListViewModel), vm => new OverdueSubjectsListWindow((OverdueSubjectsListViewModel)vm));
 
             Dialogs = new DialogService(windowViewModelMappings);
         }

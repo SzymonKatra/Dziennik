@@ -254,6 +254,8 @@
     <s:String x:Key="lang_SchedulesListTitle">Lista planów lekcji</s:String>
     <s:String x:Key="lang_AddSchedule">Dodaj plan lekcji</s:String>
 
+    <s:String x:Key="lang_OverdueSubjectsTitle">Zaległe tematy</s:String>
+
     <s:String x:Key="lang_TypePasswordTitle">Podaj hasło</s:String>
     <s:String x:Key="lang_TypePasswordToUnlock">Podaj hasło aby odblokować</s:String>
     <s:String x:Key="lang_CloseApplication">Zamknij Dziennik</s:String>

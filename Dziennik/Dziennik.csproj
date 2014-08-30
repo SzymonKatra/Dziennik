@@ -125,6 +125,10 @@
     <Compile Include="View\Group\EditScheduleWindow.xaml.cs">
       <DependentUpon>EditScheduleWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Subject\OverdueSubjectsListWindow.xaml.cs">
+      <DependentUpon>OverdueSubjectsListWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Subject\OverdueSubjectsListViewModel.cs" />
     <Compile Include="View\Password\ChangePasswordViewModel.cs" />
     <Compile Include="View\Class\ClassesListViewModel.cs" />
     <Compile Include="View\Class\ClassesListWindow.xaml.cs">
@@ -147,6 +151,10 @@
     </Compile>
     <Compile Include="View\Group\SchedulesListWindow.xaml.cs">
       <DependentUpon>SchedulesListWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Group\SelectGroupViewModel.cs" />
+    <Compile Include="View\Group\SelectGroupWindow.xaml.cs">
+      <DependentUpon>SelectGroupWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WorkingCollection.cs" />
     <Compile Include="CommandUtils\RelayCommand.cs" />
@@ -426,6 +434,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Subject\OverdueSubjectsListWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Password\ChangePasswordWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -471,6 +483,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Group\SchedulesListWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Group\SelectGroupWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

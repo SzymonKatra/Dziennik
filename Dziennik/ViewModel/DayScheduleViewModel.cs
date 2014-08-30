@@ -16,15 +16,18 @@ namespace Dziennik.ViewModel
             : base(viewModel)
         {
             m_hoursSchedule = new SynchronizedObservableCollection<SelectedHourViewModel, SelectedHour>(Model.HoursSchedule, m => new SelectedHourViewModel(m));
+
+            SubscribeHoursSchedule();
         }
 
         public int HoursCount
         {
-            get { return Model.HoursCount; }
+            get { return Model.HoursSchedule.Count; }
             set
             {
-                Model.HoursCount = value; RaisePropertyChanged("HoursCount");
-                int diff = Model.HoursCount - this.HoursSchedule.Count;
+                //Model.HoursCount = value;
+                RaisePropertyChanged("HoursCount");
+                int diff = value - this.HoursSchedule.Count;
                 if (diff == 0) return;
                 for (int i = 0; i < Math.Abs(diff); i++)
                 {
@@ -45,28 +48,47 @@ namespace Dziennik.ViewModel
             get { return m_hoursSchedule; }
             set
             {
+                UnsubscribeHoursSchedule();
+
                 m_hoursSchedule = value;
+
+                SubscribeHoursSchedule();
+
                 Model.HoursSchedule = value.ModelCollection;
                 RaisePropertyChanged("HoursSchedule");
             }
         }
 
+        private void SubscribeHoursSchedule()
+        {
+            m_hoursSchedule.CollectionChanged += m_hoursSchedule_CollectionChanged;
+        }
+        private void UnsubscribeHoursSchedule()
+        {
+            m_hoursSchedule.CollectionChanged -= m_hoursSchedule_CollectionChanged;
+        }
+
+        private void m_hoursSchedule_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            RaisePropertyChanged("HoursCount");
+        }
+
         protected override void OnPushCopy()
         {
-            ObjectsPack pack = new ObjectsPack();
-            pack.Write(this.HoursCount);
+            //ObjectsPack pack = new ObjectsPack();
+            //pack.Write(this.HoursCount);
 
-            CopyStack.Push(pack);
+            //CopyStack.Push(pack);
 
             this.HoursSchedule.PushCopy();
         }
         protected override void OnPopCopy(WorkingCopyResult result)
         {
-            ObjectsPack pack = CopyStack.Pop();
-            if (result == WorkingCopyResult.Cancel)
-            {
-                this.HoursCount = (int)pack.Read();
-            }
+            //ObjectsPack pack = CopyStack.Pop();
+            //if (result == WorkingCopyResult.Cancel)
+            //{
+            //    this.HoursCount = (int)pack.Read();
+            //}
 
             this.HoursSchedule.PopCopy(result);
         }

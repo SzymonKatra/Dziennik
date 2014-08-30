@@ -26,7 +26,7 @@
                         <Button Content="{DynamicResource lang_RealizeSubject}" Style="{StaticResource wrapPanelControlStyle}" Command="{Binding RealizeSubjectCommand}"/>
                         <TextBlock Text="{Binding SelectedGroup.RealizedSubjectsDisplay}" Style="{StaticResource wrapPanelControlStyle}" Foreground="Green"/>
                         <TextBlock Text="{Binding SelectedGroup.RemainingHoursOfLessonsDisplay}" Style="{StaticResource wrapPanelControlStyle}" Foreground="Red"/>
-                        <Button Content="{Binding OverdueSubjectsText}" Style="{StaticResource wrapPanelControlStyle}"/>
+                        <Button Content="{Binding SelectedGroup.OverdueSubjectsDisplay}" Style="{StaticResource wrapPanelControlStyle}" Command="{Binding ShowOverdueSubjectsCommand}"/>
                     </WrapPanel>
 
                     <DataGrid Grid.Row="1"

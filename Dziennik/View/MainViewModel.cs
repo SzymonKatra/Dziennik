@@ -567,7 +567,7 @@ namespace Dziennik.View
                 InvokeWindow.Invoke(() =>
                 {
                     bool error = false;
-                    error = x.NewestVersion == null;
+                    error = x == null;
                     if (error || x.NewestVersion > GlobalConfig.CurrentVersion)
                     {
                         GlobalConfig.Notifier.LastUpdateCheck = DateTime.Now;
@@ -575,6 +575,7 @@ namespace Dziennik.View
                         if (error)
                         {
                             GlobalConfig.MessageBox(GlobalConfig.Dialogs.GetActiveViewModel(this), GlobalConfig.GetStringResource("lang_ErrorOccurredWhileCheckingUpdates"), MessageBoxSuperPredefinedButtons.OK);
+                            CheckingUpdates = false;
                             return;
                         }
 

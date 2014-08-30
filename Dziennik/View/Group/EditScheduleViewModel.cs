@@ -70,14 +70,14 @@ namespace Dziennik.View
 
         private void Ok(object param)
         {
-            m_schedule.StartDate = m_validFrom;
+            m_schedule.StartDate = m_validFrom.Date;
 
             m_result = EditScheduleResult.Ok;
             GlobalConfig.Dialogs.Close(this);
         }
         private bool CanOk(object param)
         {
-            return m_validFromValid && !m_isAddingMode;
+            return m_validFromValid;
         }
         private void Cancel(object param)
         {

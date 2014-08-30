@@ -90,7 +90,7 @@ namespace DziennikAktualizacja
             VersionChecker.CheckVersionAsync(m_updateInfoLink, (x) =>
             {
                 bool error = false;
-                error = x.NewestVersion == null;
+                error = x == null;
                 InvokeWindow.Invoke(() =>
                 {
                     if(error)

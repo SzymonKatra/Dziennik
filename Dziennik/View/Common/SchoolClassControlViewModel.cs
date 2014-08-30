@@ -28,6 +28,7 @@ namespace Dziennik.View
             m_saveCommand = new RelayCommand(Save);
             m_realizeSubjectCommand = new RelayCommand(RealizeSubject, CanRealizeSubject);
             m_editRealizedSubjectCommand = new RelayCommand(EditRealizedSubject);
+            m_showOverdueSubjectsCommand = new RelayCommand(ShowOverdueSubjects);
             m_putAllEndingMarksCommand = new RelayCommand<string>(PutAllEndingMarks);
             m_putNotAllEndingMarksCommand = new RelayCommand<string>(PutNotAllEndingMarks);
             m_cancelAllEndingMarksCommand = new RelayCommand<string>(CancelAllEndingMarks);
@@ -119,6 +120,12 @@ namespace Dziennik.View
             get { return m_editRealizedSubjectCommand; }
         }
 
+        private RelayCommand m_showOverdueSubjectsCommand;
+        public ICommand ShowOverdueSubjectsCommand
+        {
+            get { return m_showOverdueSubjectsCommand; }
+        }
+
         private RelayCommand<string> m_putAllEndingMarksCommand;
         public ICommand PutAllEndingMarksCommand
         {
@@ -143,13 +150,6 @@ namespace Dziennik.View
         public ICommand RefreshStatisticsCommand
         {
             get { return m_refreshStatisticsCommand; }
-        }
-
-        private string m_overdueSubjectsText;
-        public string OverdueSubjectsText
-        {
-            get { return m_overdueSubjectsText; }
-            set { m_overdueSubjectsText = value; RaisePropertyChanged("OverdueSubjectsText"); }
         }
 
         private void AddMark(string param)
@@ -281,6 +281,11 @@ namespace Dziennik.View
                 m_autoSaveCommand.Execute(null);
             }
         }
+        private void ShowOverdueSubjects(object param)
+        {
+            OverdueSubjectsListViewModel dialogViewModel = new OverdueSubjectsListViewModel(m_selectedGroup.OverdueSubjects);
+            GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Main, dialogViewModel);
+        }
         private IEnumerable<GlobalSubjectViewModel> GetAvailableSubjects(SchoolGroupViewModel group)
         {
             List<GlobalSubjectViewModel> available = new List<GlobalSubjectViewModel>();
@@ -383,10 +388,6 @@ namespace Dziennik.View
         private void SortSelectedGroupRealizedSubjects()
         {
             m_selectedGroup.RealizedSubjects.Sort((x, y) => { return x.RealizedDate.CompareTo(y.RealizedDate); });
-        }
-        private void UpdateOverdueSubjectsText()
-        {
-            
         }
 
         private bool MessageBoxContinue()
