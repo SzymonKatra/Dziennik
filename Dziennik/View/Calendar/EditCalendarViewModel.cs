@@ -143,7 +143,8 @@ namespace Dziennik.View
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if(dialogViewModel.Result == EditOffDayViewModel.EditOffDayResult.Ok)
             {
-                m_calendar.OffDays.Add(offDay);    
+                m_calendar.OffDays.Add(offDay);
+                SortOffDays();
             }
         }
         private void EditOffDay(object e)
@@ -164,8 +165,14 @@ namespace Dziennik.View
             }
             else if(dialogViewModel.Result == EditOffDayViewModel.EditOffDayResult.Cancel)
             {
+                SortOffDays();
                 m_selectedOffDay.PopCopy(WorkingCopyResult.Cancel);
             }
+        }
+
+        private void SortOffDays()
+        {
+            m_calendar.OffDays.Sort((x, y) => { return x.Start.CompareTo(y.End); });
         }
 
         public string Error

@@ -11,13 +11,16 @@ namespace Dziennik.View
 {
     public sealed class SchedulesListViewModel : ObservableObject
     {
-        public SchedulesListViewModel(ObservableCollection<WeekScheduleViewModel> schedules)
+        public SchedulesListViewModel(ObservableCollection<WeekScheduleViewModel> schedules, CalendarViewModel calendar)
         {
             m_addScheduleCommand = new RelayCommand(AddSchedule);
             m_editScheduleCommand = new RelayCommand<WeekScheduleViewModel>(EditSchedule);
 
             m_schedules = schedules;
+            m_calendar = calendar;
         }
+
+        private CalendarViewModel m_calendar;
 
         private ObservableCollection<WeekScheduleViewModel> m_schedules;
         public ObservableCollection<WeekScheduleViewModel> Schedules
@@ -39,7 +42,7 @@ namespace Dziennik.View
         private void AddSchedule(object param)
         {
             WeekScheduleViewModel schedule = new WeekScheduleViewModel();
-            EditScheduleViewModel dialogViewModel = new EditScheduleViewModel(schedule, GetMinValidFrom(), true);
+            EditScheduleViewModel dialogViewModel = new EditScheduleViewModel(schedule, GetMinValidFrom(schedule), GetMaxValidFrom(schedule), true);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditScheduleViewModel.EditScheduleResult.Ok)
             {
@@ -49,7 +52,7 @@ namespace Dziennik.View
         private void EditSchedule(WeekScheduleViewModel param)
         {
             param.PushCopy();
-            EditScheduleViewModel dialogViewModel = new EditScheduleViewModel(param, GetMinValidFrom());
+            EditScheduleViewModel dialogViewModel = new EditScheduleViewModel(param, GetMinValidFrom(param), GetMaxValidFrom(param));
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if(dialogViewModel.Result == EditScheduleViewModel.EditScheduleResult.Cancel)
             {
@@ -61,9 +64,29 @@ namespace Dziennik.View
             }
         }
 
-        private DateTime GetMinValidFrom()
+        private DateTime GetMinValidFrom(WeekScheduleViewModel schedule)
         {
-            return (m_schedules.Count > 1 ? m_schedules[m_schedules.Count - 1].StartDate : DateTime.MinValue);
+            int index = (schedule == null ? -1 : m_schedules.IndexOf(schedule));
+            if (index > 0)
+            {
+                return m_schedules[index - 1].StartDate;
+            }
+            else
+            {
+                return m_calendar.YearBeginning.AddDays(-1.0);
+            }
+        }
+        private DateTime GetMaxValidFrom(WeekScheduleViewModel schedule)
+        {
+            int index = (schedule == null ? -1 : m_schedules.IndexOf(schedule));
+            if (index < m_schedules.Count - 1)
+            {
+                return m_schedules[index + 1].StartDate;
+            }
+            else
+            {
+                return m_calendar.YearEnding.AddDays(1.0);
+            }
         }
     }
 }

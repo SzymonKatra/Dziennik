@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_ValidFrom}"/>
-        <DatePicker Grid.Column="1" Grid.Row="0" IsEnabled="{Binding IsAddingMode}" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding ValidFrom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+        <DatePicker Grid.Column="1" Grid.Row="0" Style="{StaticResource inputControlStyle}" SelectedDate="{Binding ValidFrom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
         
         <my:WeekScheduleControl Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" WeekSchedule="{Binding Schedule}"/>
         

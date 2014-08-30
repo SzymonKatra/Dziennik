@@ -18,7 +18,7 @@ namespace Dziennik.View
             Cancel,
         }
 
-        public EditScheduleViewModel(WeekScheduleViewModel schedule, DateTime minValidFrom, bool isAddingMode = false)
+        public EditScheduleViewModel(WeekScheduleViewModel schedule, DateTime minValidFrom, DateTime maxValidFrom, bool isAddingMode = false)
         {
             m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
@@ -26,6 +26,7 @@ namespace Dziennik.View
             m_schedule = schedule;
             m_isAddingMode = isAddingMode;
             m_minValidFrom = minValidFrom;
+            m_maxValidFrom = maxValidFrom;
 
             m_validFrom = (isAddingMode ? DateTime.Now.Date : schedule.StartDate);
         }
@@ -41,6 +42,7 @@ namespace Dziennik.View
             get { return m_isAddingMode; }
         }
         private DateTime m_minValidFrom;
+        private DateTime m_maxValidFrom;
 
         private WeekScheduleViewModel m_schedule;
         public WeekScheduleViewModel Schedule
@@ -107,13 +109,10 @@ namespace Dziennik.View
         {
             m_validFromValid = false;
 
-            if (m_isAddingMode)
+            if (m_validFrom.Date <= m_minValidFrom.Date || m_validFrom.Date >= m_maxValidFrom)
             {
-                if (m_validFrom.Date <= m_minValidFrom.Date)
-                {
-                    m_okCommand.RaiseCanExecuteChanged();
-                    return GlobalConfig.GetStringResource("lang_ScheduleDateTooLow");
-                }
+                m_okCommand.RaiseCanExecuteChanged();
+                return GlobalConfig.GetStringResource("lang_InvalidDate");
             }
 
             m_validFromValid = true;

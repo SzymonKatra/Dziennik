@@ -14,7 +14,7 @@ namespace Dziennik.View
 {
     public sealed class AddGroupViewModel : ObservableObject, IDataErrorInfo
     {
-        public AddGroupViewModel(ObservableCollection<GlobalStudentViewModel> globalStudentCollection)
+        public AddGroupViewModel(ObservableCollection<GlobalStudentViewModel> globalStudentCollection, SchoolClassViewModel tempOwner)
         {
             m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
@@ -29,6 +29,8 @@ namespace Dziennik.View
                 m_selectedStudents.Add(gStudent.Number);
             }
             m_selectedStudentsInput = SelectionParser.Create(m_selectedStudents);
+
+            m_result.OwnerClass = tempOwner;
         }
 
         private SchoolGroupViewModel m_result = new SchoolGroupViewModel();
@@ -160,7 +162,7 @@ namespace Dziennik.View
         }
         private void ShowSchedulesList(object param)
         {
-            SchedulesListViewModel dialogViewModel = new SchedulesListViewModel(m_result.Schedules);
+            SchedulesListViewModel dialogViewModel = new SchedulesListViewModel(m_result.Schedules, m_result.OwnerClass.Calendar);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
 

@@ -221,7 +221,7 @@ namespace Dziennik.View
         }
         private void ShowSchedulesList(object param)
         {
-            SchedulesListViewModel dialogViewModel = new SchedulesListViewModel(m_schoolGroup.Schedules);
+            SchedulesListViewModel dialogViewModel = new SchedulesListViewModel(m_schoolGroup.Schedules, m_schoolGroup.OwnerClass.Calendar);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
 

@@ -489,6 +489,6 @@ Ostatnia archiwizacja odbyła się: {0}</s:String>
     <s:String x:Key="lang_SuccessfullyUnlocked">Pomyślnie odblokowano</s:String>
     <s:String x:Key="lang_AutoupdaterNotFound" xml:space="preserve">Nie znaleziono modułu aktualizacji
 Spróbuj ponownie zainstalować Dziennik, aby rozwiązać problem.</s:String>
-    <s:String x:Key="lang_ScheduleDateTooLow">Nieprawidłowa data</s:String>
+    <s:String x:Key="lang_InvalidDate">Nieprawidłowa data</s:String>
     <s:String x:Key="lang_OverdueSubjectsFormat">Masz {0} zaległych tematów do zrealizowania</s:String>
 </ResourceDictionary>

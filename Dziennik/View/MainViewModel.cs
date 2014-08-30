@@ -245,6 +245,8 @@ namespace Dziennik.View
             GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Dialogs.GetActiveViewModel(this), dialogViewModel);
             if (dialogViewModel.Result == TypePasswordViewModel.TypePasswordResult.CloseApplication) GlobalConfig.Dialogs.GetWindow(this).Close();
             m_passwordAsking = false;
+
+            SortOpenedClasses();
         }
         private void Notifier_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -334,6 +336,7 @@ namespace Dziennik.View
             if (m_databasesDirectoryChanged)
             {
                 Reload();
+                SortOpenedClasses();
                 if (!m_blockSaving) Options(null);
             }
             RaisePropertyChanged("TabWidth");
@@ -696,6 +699,91 @@ namespace Dziennik.View
             }
 
             foreach (var rem in toRemove) GlobalConfig.GlobalDatabase.ViewModel.Notices.Remove(rem);
+        }
+
+        private class SortClassPriority
+        {
+            public SchoolClassControlViewModel SchoolClass { get; set; }
+            public SchoolGroupViewModel Group { get; set; }
+            public int Priority { get; set; }
+        }
+        private void SortOpenedClasses()
+        {
+            if (!GlobalConfig.GlobalDatabase.ViewModel.Hours.IsEnabled) return;
+
+            DateTime now = DateTime.Now;
+            DateTime nowDate = now.Date;
+            //List<LessonHourViewModel> hoursNow = new List<LessonHourViewModel>();
+            int hourNumberNow = -1;
+            foreach (var item in GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours)
+            {
+                LessonHourViewModel h = new LessonHourViewModel();
+                h.Number = item.Number;
+                h.Start = nowDate + item.Start.TimeOfDay;
+                h.End = nowDate + item.End.TimeOfDay;
+
+                if (now >= h.Start && now <= h.End)
+                {
+                    hourNumberNow = h.Number;
+                    break;
+                }
+            }
+
+            if (hourNumberNow < 0) return;
+
+            List<SortClassPriority> priorities = new List<SortClassPriority>();
+            foreach (var openedClass in m_openedSchoolClasses) priorities.Add((new SortClassPriority() { SchoolClass = openedClass, Priority = int.MaxValue }));
+            foreach (var item in priorities)
+            {
+                foreach (var grp in item.SchoolClass.Database.ViewModel.Groups)
+                {
+                    DayScheduleViewModel daySched = GetDaySchedule(grp.CurrentSchedule, now);
+                    int closestHour = GetClosestHour(daySched, hourNumberNow);
+                    if (closestHour > 0 && item.Priority < closestHour)
+                    {
+                        item.Priority = closestHour;
+                        item.Group = grp;
+                    }
+                }
+            }
+
+            priorities.Sort();
+
+            int currentIndex = 0;
+            foreach (var item in priorities)
+            {
+                int beforeIndex = m_openedSchoolClasses.IndexOf(item.SchoolClass);
+                m_openedSchoolClasses.Swap(currentIndex, beforeIndex);
+                currentIndex++;
+
+                if (item.Group != null) item.SchoolClass.SelectedGroup = item.Group;
+            }
+        }
+        private DayScheduleViewModel GetDaySchedule(WeekScheduleViewModel week, DateTime now)
+        {
+            switch (now.DayOfWeek)
+            {
+                case DayOfWeek.Monday: return week.Monday;
+                case DayOfWeek.Tuesday: return week.Tuesday;
+                case DayOfWeek.Wednesday: return week.Wednesday;
+                case DayOfWeek.Thursday: return week.Thursday;
+                case DayOfWeek.Friday: return week.Friday;
+            }
+            return null;
+        }
+        private int GetClosestHour(DayScheduleViewModel day, int nowHour)
+        {
+            int closest = -1;
+            int maxHour = int.MaxValue;
+            foreach (var hour in day.HoursSchedule)
+            {
+                if (hour.Hour >= nowHour && hour.Hour <= maxHour)
+                {
+                    closest = hour.Hour;
+                    maxHour = closest;
+                }
+            }
+            return closest;
         }
 
         public void SearchAndSelectClass(object comboBoxCollection)

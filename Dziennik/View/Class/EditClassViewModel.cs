@@ -177,7 +177,7 @@ namespace Dziennik.View
                 return;
             }
 
-            AddGroupViewModel dialogViewModel = new AddGroupViewModel(m_schoolClass.Students);
+            AddGroupViewModel dialogViewModel = new AddGroupViewModel(m_schoolClass.Students, m_schoolClass);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result != null)
             {

@@ -37,5 +37,12 @@ namespace Dziennik
             collection.Clear();
             foreach (T item in newItems) collection.Add(item);
         }
+
+        public static void Swap<T>(this ObservableCollection<T> collection, int x, int y)
+        {
+            T temp = collection[x];
+            collection[x] = collection[y];
+            collection[y] = temp;
+        }
     }
 }
