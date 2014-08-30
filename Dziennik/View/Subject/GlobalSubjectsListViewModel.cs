@@ -18,6 +18,7 @@ namespace Dziennik.View
             m_addSubjectCommand = new RelayCommand(AddSubject);
             m_autoAddSubjectsClipboardCommand = new RelayCommand(AutoAddSubjectsClipboard);
             m_editSubjectCommand = new RelayCommand(EditSubject);
+            m_addFromAnotherGroupCommand = new RelayCommand(AddFromAnotherGroup);
 
             m_subjects = subjects;
         }
@@ -36,6 +37,11 @@ namespace Dziennik.View
         public ICommand EditSubjectCommand
         {
             get { return m_editSubjectCommand; }
+        }
+        private RelayCommand m_addFromAnotherGroupCommand;
+        public ICommand AddFromAnotherGroupCommand
+        {
+            get { return m_addFromAnotherGroupCommand; }
         }
 
         private ObservableCollection<GlobalSubjectViewModel> m_subjects;
@@ -115,6 +121,28 @@ namespace Dziennik.View
             {
                 m_selectedSubject.PopCopy(WorkingCopyResult.Cancel);
             }
+        }
+        private void AddFromAnotherGroup(object param)
+        {
+            SelectGroupViewModel dialogViewModel = new SelectGroupViewModel(GlobalConfig.Main.OpenedSchoolClasses);
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
+            if (dialogViewModel.Result == SelectGroupViewModel.SelectGroupResult.Cancel || dialogViewModel.SelectedGroup == null) return;
+
+            if (GlobalConfig.MessageBox(this, GlobalConfig.GetStringResource("lang_DoYouWantToContinue"), MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
+
+            int currentNumber = GetNextSubjectNumber(m_subjects);
+            int added = 0;
+            foreach (var item in dialogViewModel.SelectedGroup.GlobalSubjects)
+            {
+                GlobalSubjectViewModel newSubject = new GlobalSubjectViewModel();
+                newSubject.Number = currentNumber;
+                newSubject.Name = item.Name;
+                currentNumber++;
+                m_subjects.Add(newSubject);
+                added++;
+            }
+
+            GlobalConfig.MessageBox(this, string.Format(GlobalConfig.GetStringResource("lang_AddedSubjectsFormat"), added), MessageBoxSuperPredefinedButtons.OK);
         }
 
         public static int GetNextSubjectNumber(IEnumerable<GlobalSubjectViewModel> subjects)

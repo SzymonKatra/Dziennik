@@ -3,7 +3,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:my="clr-namespace:Dziennik.Controls"
-        Title="{DynamicResource lang_GlobalSubjectsTitle}" Height="300" Width="300"
+        Title="{DynamicResource lang_GlobalSubjectsTitle}" Height="300" Width="400"
         WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
@@ -14,6 +14,7 @@
         <WrapPanel Grid.Row="0" Orientation="Horizontal">
             <Button Content="{DynamicResource lang_AddSubject}" Style="{StaticResource wrapPanelControlStyle}" Command="{Binding AddSubjectCommand}"/>
             <Button Content="{DynamicResource lang_AutoAddSubjectsClipboard}" Style="{StaticResource wrapPanelControlStyle}" Command="{Binding AutoAddSubjectsClipboardCommand}"/>
+            <Button Content="{DynamicResource lang_AddFromAnotherGroup}" Style="{StaticResource wrapPanelControlStyle}" Command="{Binding AddFromAnotherGroupCommand}"/>
         </WrapPanel>
 
         <DataGrid Grid.Row="1"

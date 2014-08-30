@@ -251,6 +251,7 @@ namespace Dziennik.View
         private void RealizeSubject(object e)
         {
             RealizeSubjectViewModel dialogViewModel = new RealizeSubjectViewModel(null, m_selectedGroup.Students, GetAvailableSubjects(m_selectedGroup), m_selectedGroup.OwnerClass.Calendar, true);
+            if (e is DateTime) dialogViewModel.RealizeDate = (DateTime)e;
             GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Main, dialogViewModel);
             if (dialogViewModel.Result == RealizeSubjectViewModel.RealizeSubjectResult.Ok)
             {
@@ -285,6 +286,10 @@ namespace Dziennik.View
         {
             OverdueSubjectsListViewModel dialogViewModel = new OverdueSubjectsListViewModel(m_selectedGroup.OverdueSubjects);
             GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Main, dialogViewModel);
+            if (dialogViewModel.Result == OverdueSubjectsListViewModel.OverdueSubjectsListResult.RealizeSubject)
+            {
+                m_realizeSubjectCommand.Execute(dialogViewModel.SelectedSubject);
+            }
         }
         private IEnumerable<GlobalSubjectViewModel> GetAvailableSubjects(SchoolGroupViewModel group)
         {

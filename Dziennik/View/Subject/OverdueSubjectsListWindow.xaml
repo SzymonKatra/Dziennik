@@ -1,17 +1,25 @@
 ﻿<Window x:Class="Dziennik.View.OverdueSubjectsListWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
+        xmlns:c="clr-namespace:Dziennik.CommandUtils"
         xmlns:local ="clr-namespace:Dziennik"
         Title="{DynamicResource lang_OverdueSubjectsTitle}" Height="300" Width="300"
         WindowStartupLocation="CenterOwner">
     <Grid>
         <DataGrid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2"
                   ItemsSource="{Binding OverdueSubjects}"
+                  SelectedItem="{Binding SelectedSubject}"
                   CanUserAddRows="False"
                   CanUserSortColumns="False"
                   SelectionMode="Single"
                   AutoGenerateColumns="False"
                   IsReadOnly="True">
+            <DataGrid.Resources>
+                <Style TargetType="DataGridRow">
+                    <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>
+                </Style>
+            </DataGrid.Resources>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="{DynamicResource lang_Date}" Binding="{Binding StringFormat={x:Static local:GlobalConfig.DateFormat}}"/>
             </DataGrid.Columns>

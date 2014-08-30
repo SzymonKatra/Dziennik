@@ -26,5 +26,10 @@ namespace Dziennik.View
 
             GlobalConfig.Dialogs.Register(this, viewModel);
         }
+
+        private void Row_DoubleClick(object sender, RoutedEventArgs e)
+        {
+            ((OverdueSubjectsListViewModel)this.DataContext).RealizeSelectedSubjectCommand.Execute(null);
+        }
     }
 }

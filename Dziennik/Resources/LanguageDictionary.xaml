@@ -130,6 +130,7 @@
 
     <s:String x:Key="lang_GlobalStudentsTitle">Lista uczniowiów klasy</s:String>
     <s:String x:Key="lang_AutoAddStudentClipboard">Dodaj automatycznie ze schowka</s:String>
+    <s:String x:Key="lang_AddFromAnotherGroup">Kopiuj z innej grupy</s:String>
 
     <s:String x:Key="lang_SelectStudentsTitle">Wybierz uczniów</s:String>
     <s:String x:Key="lang_Selection">Wybór</s:String>
@@ -153,7 +154,8 @@
     <s:String x:Key="lang_LateShort">sp</s:String>
     <s:String x:Key="lang_Justify">Usprawiedliw</s:String>
     <s:String x:Key="lang_CancelJustify">Odwołaj usprawiedliwienie</s:String>
-    <s:String x:Key="lang_StudentsPresentFormat">{0}/{1} &#x09; Obecnych: {0} ({1} spóźnionych)</s:String>
+    <s:String x:Key="lang_StudentsPresentFormalFormat">{0}/{1}</s:String>
+    <s:String x:Key="lang_StudentsPresentFormat"> Obecnych: {0} ({1} spóźnionych)</s:String>
     <s:String x:Key="lang_StudentsAbsentFormat">Nieobecnych: {0}</s:String>
     <s:String x:Key="lang_StudentsSumFormat">Razem: {0}</s:String>
 
@@ -256,6 +258,10 @@
 
     <s:String x:Key="lang_OverdueSubjectsTitle">Zaległe tematy</s:String>
 
+    <s:String x:Key="lang_SelectGroupTitle">Wybór grupy</s:String>
+    <s:String x:Key="lang_SelectWindowSelectClass">Wybierz klasę</s:String>
+    <s:String x:Key="lang_SelectWindowSelectGroup">Wybierz grupę</s:String>
+    
     <s:String x:Key="lang_TypePasswordTitle">Podaj hasło</s:String>
     <s:String x:Key="lang_TypePasswordToUnlock">Podaj hasło aby odblokować</s:String>
     <s:String x:Key="lang_CloseApplication">Zamknij Dziennik</s:String>

@@ -1,8 +1,23 @@
 ﻿<Window x:Class="Dziennik.View.SelectGroupWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="SelectGroupWindow" Height="300" Width="300">
+        xmlns:my="clr-namespace:Dziennik.Controls"
+        Title="{DynamicResource lang_SelectGroupTitle}" Height="200" Width="300"
+        WindowStartupLocation="CenterOwner">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
         
+        <TextBlock Grid.Row="0" Style="{StaticResource inputControlStyle}" Text="{DynamicResource lang_SelectWindowSelectClass}"/>
+        <ComboBox x:Name="classCombo" Grid.Row="1" Style="{StaticResource inputControlStyle}" ItemsSource="{Binding SchoolClasses}" DisplayMemberPath="Name"/>
+        <TextBlock Grid.Row="2" Style="{StaticResource inputControlStyle}" Text="{DynamicResource lang_SelectWindowSelectGroup}"/>
+        <ComboBox x:Name="groupCombo" Grid.Row="3" Style="{StaticResource inputControlStyle}" ItemsSource="{Binding SelectedItem.Groups, ElementName=classCombo}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedGroup}"/>
+        <my:OkCancelControl Grid.Row="5" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>
 </Window>

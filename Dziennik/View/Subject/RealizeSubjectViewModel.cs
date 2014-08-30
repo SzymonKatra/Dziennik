@@ -134,6 +134,7 @@ namespace Dziennik.View
             {
                 m_realizedSubject = new RealizedSubjectViewModel();
                 m_realizeDate = DateTime.Now;
+                m_selectedSubject = (m_availableSubjects.Count > 0 ? m_availableSubjects[0] : null);
             }
             foreach (StudentInGroupViewModel student in students)
             {
@@ -243,6 +244,16 @@ namespace Dziennik.View
             get { return m_chooseSubjectCommand; }
         }
 
+        public string StudentsPresentFormalDisplayed
+        {
+            get
+            {
+                int present = m_pairs.Count(x => x.WasPresent && !x.IsRemoved);
+                int lates = m_pairs.Count(x => x.WasLate && !x.IsRemoved);
+
+                return string.Format(GlobalConfig.GetStringResource("lang_StudentsPresentFormalFormat"), present + lates, lates);
+            }
+        }
         public string StudentsPresentDisplayed
         {
             get

@@ -96,6 +96,8 @@
                             <Setter Property="FontWeight" Value="Bold"/>
                         </Style>
                     </WrapPanel.Resources>
+                    <TextBlock Text="{Binding StudentsPresentFormalDisplayed}" Foreground="Green"/>
+                    <TextBlock MinWidth="20"/>
                     <TextBlock Text="{Binding StudentsPresentDisplayed}" Foreground="Green"/>
                     <TextBlock Text="{Binding StudentsAbsentDisplayed}" Foreground="Red"/>
                     <TextBlock Text="{Binding StudentsSumDisplayed}" Foreground="Black"/>
