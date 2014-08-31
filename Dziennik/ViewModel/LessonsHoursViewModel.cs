@@ -34,7 +34,6 @@ namespace Dziennik.ViewModel
             get { return Model.IsEnabled; }
             set { Model.IsEnabled = value; RaisePropertyChanged("IsEnabled"); }
         }
-
         protected override void OnPushCopy()
         {
             ObjectsPack pack = new ObjectsPack();

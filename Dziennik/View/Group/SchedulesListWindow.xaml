@@ -10,6 +10,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         
         <WrapPanel Grid.Row="0" Orientation="Horizontal">
@@ -34,5 +35,7 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+        
+        <Button Grid.Row="2" Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_Close}" Command="{Binding CloseCommand}"/>
     </Grid>
 </Window>

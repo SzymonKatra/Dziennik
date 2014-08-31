@@ -15,15 +15,15 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-        <CheckBox Grid.Row="0" IsChecked="{Binding Hours.IsEnabled,Mode=TwoWay}" Style="{StaticResource inputControlStyle}" Content="{DynamicResource lang_LessonsHoursEnabled}"/>
-        
+        <CheckBox Grid.Row="0" IsChecked="{Binding IsEnabled,Mode=TwoWay}" Style="{StaticResource inputControlStyle}" Content="{DynamicResource lang_LessonsHoursEnabled}"/>
+
         <WrapPanel Grid.Row="1" Orientation="Horizontal">
-            <Button Style="{StaticResource wrapPanelControlStyle}" IsEnabled="{Binding Hours.IsEnabled}" Content="{DynamicResource lang_AddNextHour}" Command="{Binding AddNextHourCommand}"/>
+            <Button Style="{StaticResource wrapPanelControlStyle}" Content="{DynamicResource lang_AddNextHour}" Command="{Binding AddNextHourCommand}"/>
         </WrapPanel>
 
         <DataGrid Grid.Row="2"
-                  IsEnabled="{Binding Hours.IsEnabled}"
-                  ItemsSource="{Binding Hours.Hours}"
+                  IsEnabled="{Binding IsEnabled}"
+                  ItemsSource="{Binding Hours}"
                   CanUserAddRows="False"
                   CanUserSortColumns="False"
                   SelectionMode="Single"
@@ -34,7 +34,7 @@
                 <DataGridTemplateColumn Header="{DynamicResource lang_LessonHourBeginning}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <xctk:DateTimeUpDown Value="{Binding Start, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Format="Custom"  FormatString="{x:Static local:GlobalConfig.TimeFormat}"/>
+                            <xctk:DateTimeUpDown Value="{Binding Start, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplate}" Format="Custom"  FormatString="{x:Static local:GlobalConfig.TimeFormat}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

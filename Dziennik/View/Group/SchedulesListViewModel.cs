@@ -15,6 +15,7 @@ namespace Dziennik.View
         {
             m_addScheduleCommand = new RelayCommand(AddSchedule);
             m_editScheduleCommand = new RelayCommand<WeekScheduleViewModel>(EditSchedule);
+            m_closeCommand = new RelayCommand(Close);
 
             m_schedules = schedules;
             m_calendar = calendar;
@@ -38,12 +39,18 @@ namespace Dziennik.View
         {
             get { return m_editScheduleCommand; }
         }
+        private RelayCommand m_closeCommand;
+        public ICommand CloseCommand
+        {
+            get { return m_closeCommand; }
+        }
 
         private void AddSchedule(object param)
         {
             WeekScheduleViewModel schedule = new WeekScheduleViewModel();
-            if (m_schedules.Count <= 0) schedule.StartDate = m_calendar.YearBeginning;
-            EditScheduleViewModel dialogViewModel = new EditScheduleViewModel(schedule, GetMinValidFrom(schedule), GetMaxValidFrom(schedule), true);
+            DateTime? validFromOverride = null;
+            if (m_schedules.Count <= 0) validFromOverride = m_calendar.YearBeginning;
+            EditScheduleViewModel dialogViewModel = new EditScheduleViewModel(schedule, GetMinValidFrom(schedule), GetMaxValidFrom(schedule), true, validFromOverride);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditScheduleViewModel.EditScheduleResult.Ok)
             {
@@ -64,30 +71,73 @@ namespace Dziennik.View
                 param.PopCopy(WorkingCopyResult.Ok);
             }
         }
+        private void Close(object param)
+        {
+            GlobalConfig.Dialogs.Close(this);
+        }
 
         private DateTime GetMinValidFrom(WeekScheduleViewModel schedule)
         {
-            int index = (schedule == null ? -1 : m_schedules.IndexOf(schedule));
-            if (index > 0)
+            if (schedule == null)
             {
-                return m_schedules[index - 1].StartDate;
+                return (m_schedules.Count > 0 ? m_schedules[m_schedules.Count - 1].StartDate : m_calendar.YearBeginning.AddDays(-1.0));
             }
             else
             {
-                return m_calendar.YearBeginning.AddDays(-1.0);
+                int index = m_schedules.IndexOf(schedule);
+                if (index > 0)
+                {
+                    return m_schedules[index - 1].StartDate;
+                }
+                else
+                {
+                    return m_calendar.YearBeginning.AddDays(-1.0);
+                }
             }
+
+            //int index = -1;
+            //if (m_schedules.Count > 0)
+            //{
+            //    index = m_schedules.Count;
+            //}
+            //else
+            //{
+            //    index = (schedule == null ? -1 : m_schedules.IndexOf(schedule));
+            //}
+            //if (index > 0)
+            //{
+            //    return m_schedules[index - 1].StartDate;
+            //}
+            //else
+            //{
+            //    return m_calendar.YearBeginning.AddDays(-1.0);
+            //}
         }
         private DateTime GetMaxValidFrom(WeekScheduleViewModel schedule)
         {
-            int index = (schedule == null ? -1 : m_schedules.IndexOf(schedule));
-            if (index < m_schedules.Count - 1)
-            {
-                return m_schedules[index + 1].StartDate;
-            }
-            else
+            if (schedule == null)
             {
                 return m_calendar.YearEnding.AddDays(1.0);
             }
+            else
+            {
+                int index = m_schedules.IndexOf(schedule);
+                if (index < m_schedules.Count - 1)
+                {
+                    return m_schedules[index + 1].StartDate;
+                }
+                else return m_calendar.YearEnding.AddDays(1.0);
+            }
+
+            //int index = (schedule == null ? -1 : m_schedules.IndexOf(schedule));
+            //if (index >= 0 && index < m_schedules.Count - 1)
+            //{
+            //    return m_schedules[index + 1].StartDate;
+            //}
+            //else
+            //{
+            //    return m_calendar.YearEnding.AddDays(1.0);
+            //}
         }
     }
 }

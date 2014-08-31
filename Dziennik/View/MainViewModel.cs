@@ -751,19 +751,40 @@ namespace Dziennik.View
             int hourNumberNow = -1;
             foreach (var item in GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours)
             {
+                int nextHourIndex = GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.IndexOf(item) + 1;
+
                 LessonHourViewModel h = new LessonHourViewModel();
                 h.Number = item.Number;
                 h.Start = nowDate + item.Start.TimeOfDay;
                 h.End = nowDate + item.End.TimeOfDay;
+
+                LessonHourViewModel nh = new LessonHourViewModel();
+                if (nextHourIndex >= GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count)
+                {
+                    nh.Number = h.Number;
+                    nh.Start = nh.End = h.End;
+                }
+                else
+                {
+                    LessonHourViewModel nextItem = GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours[nextHourIndex];
+                    nh.Number = nextItem.Number;
+                    nh.Start = nowDate + nextItem.Start.TimeOfDay;
+                    nh.End = nowDate + nextItem.End.TimeOfDay;
+                }
 
                 if (now >= h.Start && now <= h.End)
                 {
                     hourNumberNow = h.Number;
                     break;
                 }
+                else if (now >= h.End && now <= nh.Start)
+                {
+                    hourNumberNow = h.Number + 1;
+                    break;
+                }
             }
 
-            if (hourNumberNow < 0) return;
+            if (hourNumberNow < 0) hourNumberNow = GlobalConfig.MaxLessonHour + 1;
 
             List<SortClassPriority> priorities = new List<SortClassPriority>();
             foreach (var openedClass in m_sortedOpenedSchoolClasses) priorities.Add((new SortClassPriority() { SchoolClass = openedClass, Priority = int.MaxValue }));
@@ -771,9 +792,9 @@ namespace Dziennik.View
             {
                 foreach (var grp in item.SchoolClass.Database.ViewModel.Groups)
                 {
-                    DayOfWeek nowDay = now.DayOfWeek;
+                    DayOfWeek nowDay = GetClosestWorkingDay(now.DayOfWeek);
                     DayOfWeek currentDay = nowDay;
-                    int currentHourNumberNow = hourNumberNow;
+                    int currentHourNumberNow = (IsSaturdayOrSunday(now.DayOfWeek) ? 1 : hourNumberNow);
                     int priorityMultiplier = 0;
                     bool breakLoop = false;
                     do
@@ -781,7 +802,7 @@ namespace Dziennik.View
                         if (currentDay == nowDay && priorityMultiplier > 0) breakLoop = true;
                         DayScheduleViewModel daySched = GetDaySchedule(grp.CurrentSchedule, currentDay);
                         int closestHour = GetClosestHour(daySched, currentHourNumberNow);
-                        if (closestHour > 0) closestHour += priorityMultiplier * GlobalConfig.MaxLessonHour;
+                        if (closestHour > 0) closestHour += priorityMultiplier * (GlobalConfig.MaxLessonHour + 1);
                         if (closestHour > 0 && closestHour < item.Priority)// item.Priority < closestHour)
                         {
                             item.Priority = closestHour;
@@ -820,6 +841,8 @@ namespace Dziennik.View
         {
             switch (dayOfWeek)
             {
+                case DayOfWeek.Saturday:
+                case DayOfWeek.Sunday:
                 case DayOfWeek.Monday: return week.Monday;
                 case DayOfWeek.Tuesday: return week.Tuesday;
                 case DayOfWeek.Wednesday: return week.Wednesday;
@@ -830,6 +853,8 @@ namespace Dziennik.View
         }
         private int GetClosestHour(DayScheduleViewModel day, int nowHour)
         {
+            if (day == null) return -1;
+
             int closest = -1;
             int maxHour = int.MaxValue;
             foreach (var hour in day.HoursSchedule)
@@ -850,11 +875,23 @@ namespace Dziennik.View
                 case DayOfWeek.Tuesday: return DayOfWeek.Wednesday;
                 case DayOfWeek.Wednesday: return DayOfWeek.Thursday;
                 case DayOfWeek.Thursday: return DayOfWeek.Friday;
+                case DayOfWeek.Saturday:
+                case DayOfWeek.Sunday:
                 case DayOfWeek.Friday: return DayOfWeek.Monday;
             }
 
             return dayOfWeek;
         }
+        private DayOfWeek GetClosestWorkingDay(DayOfWeek dayOfWeek)
+        {
+            if (IsSaturdayOrSunday(dayOfWeek)) return DayOfWeek.Monday;
+            return dayOfWeek;
+        }
+        private bool IsSaturdayOrSunday(DayOfWeek dayOfWeek)
+        {
+            return (dayOfWeek == DayOfWeek.Saturday || dayOfWeek == DayOfWeek.Sunday);
+        }
+
         public void SearchAndSelectClass(object comboBoxCollection)
         {
             foreach (var openedClass in m_openedSchoolClasses)

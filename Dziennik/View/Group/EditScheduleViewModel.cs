@@ -18,7 +18,7 @@ namespace Dziennik.View
             Cancel,
         }
 
-        public EditScheduleViewModel(WeekScheduleViewModel schedule, DateTime minValidFrom, DateTime maxValidFrom, bool isAddingMode = false)
+        public EditScheduleViewModel(WeekScheduleViewModel schedule, DateTime minValidFrom, DateTime maxValidFrom, bool isAddingMode = false, DateTime? validFromOverride = null)
         {
             m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
@@ -28,7 +28,11 @@ namespace Dziennik.View
             m_minValidFrom = minValidFrom;
             m_maxValidFrom = maxValidFrom;
 
-            m_validFrom = (isAddingMode ? DateTime.Now.Date : schedule.StartDate);
+            if (validFromOverride == null)
+            {
+                m_validFrom = (isAddingMode ? DateTime.Now.Date : schedule.StartDate);
+            }
+            else m_validFrom = validFromOverride.Value;
         }
 
         private EditScheduleResult m_result = EditScheduleResult.Cancel;
@@ -109,7 +113,7 @@ namespace Dziennik.View
         {
             m_validFromValid = false;
 
-            if (m_validFrom.Date <= m_minValidFrom.Date || m_validFrom.Date >= m_maxValidFrom)
+            if (m_validFrom.Date <= m_minValidFrom.Date || m_validFrom.Date >= m_maxValidFrom.Date)
             {
                 m_okCommand.RaiseCanExecuteChanged();
                 return GlobalConfig.GetStringResource("lang_InvalidDate");

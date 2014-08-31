@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Dziennik.Model;
+using System.ComponentModel;
 
 namespace Dziennik.ViewModel
 {
@@ -25,14 +26,13 @@ namespace Dziennik.ViewModel
         public DateTime Start
         {
             get { return Model.Start; }
-            set { Model.Start = value; RaisePropertyChanged("Start"); }
+            set { Model.Start = value; RaisePropertyChanged("Start"); End = Start + new TimeSpan(0, 45, 0); }
         }
         public DateTime End
         {
             get { return Model.End; }
             set { Model.End = value; RaisePropertyChanged("End"); }
         }
-
         protected override void OnPushCopy()
         {
             ObjectsPack pack = new ObjectsPack();
