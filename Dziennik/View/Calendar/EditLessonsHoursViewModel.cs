@@ -38,14 +38,24 @@ namespace Dziennik.View
             public DateTime Start
             {
                 get { return m_start; }
-                set { m_start = value; RaisePropertyChanged("Start"); }
+                set { m_start = value; RaisePropertyChanged("Start"); End = Start + new TimeSpan(0, 45, 0); }
             }
 
             private DateTime m_end;
             public DateTime End
             {
                 get { return m_end; }
-                set { m_end = value; RaisePropertyChanged("End"); }
+                set
+                {
+                    m_end = value; RaisePropertyChanged("End");
+
+                    int index = m_owner.IndexOf(this);
+                    if(index < m_owner.Count - 1)
+                    {
+                        HourValidator next = m_owner[index + 1];
+                        next.RaiseStartChanged();
+                    }
+                }
             }
 
             private bool m_valid;
@@ -55,9 +65,14 @@ namespace Dziennik.View
                 private set { m_valid = value; RaisePropertyChanged("Valid"); }
             }
 
+            private void RaiseStartChanged()
+            {
+                RaisePropertyChanged("Start");
+            }
             public void Validate()
             {
                 ValidateStart();
+                ValidateEnd();
             }
 
             public string Error
@@ -72,6 +87,7 @@ namespace Dziennik.View
                     switch (columnName)
                     {
                         case "Start": return ValidateStart();
+                        case "End": return ValidateEnd();
                     }
 
                     return string.Empty;
@@ -89,6 +105,18 @@ namespace Dziennik.View
                         Valid = false;
                         return GlobalConfig.GetStringResource("lang_HourPreviousInvalid");
                     }
+                }
+
+                Valid = true;
+
+                return string.Empty;
+            }
+            private string ValidateEnd()
+            {
+                if(this.Start.TimeOfDay > this.End.TimeOfDay)
+                {
+                    Valid = false;
+                    return GlobalConfig.GetStringResource("lang_LessonHourStartEndMismatch");
                 }
 
                 Valid = true;

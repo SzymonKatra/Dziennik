@@ -19,8 +19,15 @@ using System.Diagnostics;
 
 namespace Dziennik.View
 {
-    public sealed class MainViewModel : ObservableObject
+    public sealed class MainViewModel : ObservableObject, IDisposable
     {
+        private class SortClassPriority
+        {
+            public SchoolClassControlViewModel SchoolClass { get; set; }
+            public SchoolGroupViewModel Group { get; set; }
+            public int Priority { get; set; }
+        }
+
         public MainViewModel()
         {
             m_saveCommand = new RelayCommand(Save, CanSave);
@@ -40,22 +47,7 @@ namespace Dziennik.View
             m_openedSchoolClasses.RaiseAddedForAll();
         }
 
-        
-
-        private void m_openedSchoolClasses_Added(object sender, NotifyCollectionChangedSimpleEventArgs<SchoolClassControlViewModel> e)
-        {
-            foreach (var item in e.Items)
-            {
-                m_sortedOpenedSchoolClasses.Add(item);
-            }
-        }
-        private void m_openedSchoolClasses_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<SchoolClassControlViewModel> e)
-        {
-            foreach (var item in e.Items)
-            {
-                m_sortedOpenedSchoolClasses.Remove(item);
-            }
-        }
+        private bool m_disposed = false;
 
         private ObservableCollectionNotifySimple<SchoolClassControlViewModel> m_openedSchoolClasses = new ObservableCollectionNotifySimple<SchoolClassControlViewModel>();
         public ObservableCollectionNotifySimple<SchoolClassControlViewModel> OpenedSchoolClasses
@@ -232,8 +224,10 @@ namespace Dziennik.View
 
             Reload(true);
 
-            CheckNotices();
+            if (GlobalConfig.Notifier.Password == null) SortOpenedClasses();
 
+            CheckNotices();
+            
             AskPasswordIfNeeded();
 
             if (DateTime.Now.Date > GlobalConfig.Notifier.LastUpdateCheck.Date)  m_checkUpdatesCommand.Execute(null);
@@ -253,11 +247,8 @@ namespace Dziennik.View
         
         private void AskPasswordIfNeeded()
         {
-            if (GlobalConfig.Notifier.Password == null)
-            {
-                SortOpenedClasses();
-                return;
-            }
+            if (GlobalConfig.Notifier.Password == null) return;
+
             if (m_passwordAsking) return;
             m_passwordAsking = true;
 
@@ -735,56 +726,12 @@ namespace Dziennik.View
             RaisePropertyChanged("TabWidth");
         }
 
-        private class SortClassPriority
-        {
-            public SchoolClassControlViewModel SchoolClass { get; set; }
-            public SchoolGroupViewModel Group { get; set; }
-            public int Priority { get; set; }
-        }
         private void SortOpenedClasses()
         {
             if (!GlobalConfig.GlobalDatabase.ViewModel.Hours.IsEnabled) return;
 
             DateTime now = DateTime.Now;
-            DateTime nowDate = now.Date;
-            //List<LessonHourViewModel> hoursNow = new List<LessonHourViewModel>();
-            int hourNumberNow = -1;
-            foreach (var item in GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours)
-            {
-                int nextHourIndex = GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.IndexOf(item) + 1;
-
-                LessonHourViewModel h = new LessonHourViewModel();
-                h.Number = item.Number;
-                h.Start = nowDate + item.Start.TimeOfDay;
-                h.End = nowDate + item.End.TimeOfDay;
-
-                LessonHourViewModel nh = new LessonHourViewModel();
-                if (nextHourIndex >= GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count)
-                {
-                    nh.Number = h.Number;
-                    nh.Start = nh.End = h.End;
-                }
-                else
-                {
-                    LessonHourViewModel nextItem = GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours[nextHourIndex];
-                    nh.Number = nextItem.Number;
-                    nh.Start = nowDate + nextItem.Start.TimeOfDay;
-                    nh.End = nowDate + nextItem.End.TimeOfDay;
-                }
-
-                if (now >= h.Start && now <= h.End)
-                {
-                    hourNumberNow = h.Number;
-                    break;
-                }
-                else if (now >= h.End && now <= nh.Start)
-                {
-                    hourNumberNow = h.Number + 1;
-                    break;
-                }
-            }
-
-            if (hourNumberNow < 0) hourNumberNow = GlobalConfig.MaxLessonHour + 1;
+            int hourNumberNow = GetCurrentHourNumber(now);
 
             List<SortClassPriority> priorities = new List<SortClassPriority>();
             foreach (var openedClass in m_sortedOpenedSchoolClasses) priorities.Add((new SortClassPriority() { SchoolClass = openedClass, Priority = int.MaxValue }));
@@ -825,17 +772,50 @@ namespace Dziennik.View
                 if (priorities[i].Group != null) priorities[i].SchoolClass.SelectedGroup = priorities[i].Group;
             }
 
-            //int currentIndex = 0;
-            //foreach (var item in priorities)
-            //{
-            //    int beforeIndex = m_sortedOpenedSchoolClasses.IndexOf(item.SchoolClass);
-            //    m_sortedOpenedSchoolClasses.Swap(currentIndex, beforeIndex);
-            //    currentIndex++;
-
-            //    if (item.Group != null) item.SchoolClass.SelectedGroup = item.Group;
-            //}
-
             if (m_sortedOpenedSchoolClasses.Count > 0) SelectedClass = m_sortedOpenedSchoolClasses[0];
+        }
+        private int GetCurrentHourNumber(DateTime now)
+        {
+            DateTime nowDate = now.Date;
+            int hourNumberNow = -1;
+            foreach (var item in GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours)
+            {
+                int nextHourIndex = GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.IndexOf(item) + 1;
+
+                LessonHourViewModel h = new LessonHourViewModel();
+                h.Number = item.Number;
+                h.Start = nowDate + item.Start.TimeOfDay;
+                h.End = nowDate + item.End.TimeOfDay;
+
+                LessonHourViewModel nh = new LessonHourViewModel();
+                if (nextHourIndex >= GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count)
+                {
+                    nh.Number = h.Number;
+                    nh.Start = nh.End = h.End;
+                }
+                else
+                {
+                    LessonHourViewModel nextItem = GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours[nextHourIndex];
+                    nh.Number = nextItem.Number;
+                    nh.Start = nowDate + nextItem.Start.TimeOfDay;
+                    nh.End = nowDate + nextItem.End.TimeOfDay;
+                }
+
+                if (now >= h.Start && now <= h.End)
+                {
+                    hourNumberNow = h.Number;
+                    break;
+                }
+                else if (now >= h.End && now <= nh.Start)
+                {
+                    hourNumberNow = h.Number + 1;
+                    break;
+                }
+            }
+
+            if (hourNumberNow < 0) hourNumberNow = GlobalConfig.MaxLessonHour + 1;
+
+            return hourNumberNow;
         }
         private DayScheduleViewModel GetDaySchedule(WeekScheduleViewModel week, DayOfWeek dayOfWeek)
         {
@@ -892,6 +872,21 @@ namespace Dziennik.View
             return (dayOfWeek == DayOfWeek.Saturday || dayOfWeek == DayOfWeek.Sunday);
         }
 
+        private void m_openedSchoolClasses_Added(object sender, NotifyCollectionChangedSimpleEventArgs<SchoolClassControlViewModel> e)
+        {
+            foreach (var item in e.Items)
+            {
+                m_sortedOpenedSchoolClasses.Add(item);
+            }
+        }
+        private void m_openedSchoolClasses_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<SchoolClassControlViewModel> e)
+        {
+            foreach (var item in e.Items)
+            {
+                m_sortedOpenedSchoolClasses.Remove(item);
+            }
+        }
+
         public void SearchAndSelectClass(object comboBoxCollection)
         {
             foreach (var openedClass in m_openedSchoolClasses)
@@ -902,6 +897,34 @@ namespace Dziennik.View
                     SelectedClass = openedClass;
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        private void Dispose(bool disposing)
+        {
+            if (!m_disposed)
+            {
+                if (disposing)
+                {
+                    //managed
+                    lock(m_activityTimerLock)
+                    {
+                        m_activityTimer.Dispose();
+                        m_activityTimer = null;
+                    }
+                }
+
+                //unmanaged
+                m_disposed = true;
+            }
+        }
+        ~MainViewModel()
+        {
+            Dispose(false);
         }
     }
 }

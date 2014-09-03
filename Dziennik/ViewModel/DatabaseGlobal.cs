@@ -33,8 +33,6 @@ namespace Dziennik.ViewModel
             using (FileStream stream = new FileStream(database.m_path, FileMode.OpenOrCreate))
             {
                 database.Load(stream);
-
-                stream.Close();
             }
 
             return database;
@@ -44,8 +42,6 @@ namespace Dziennik.ViewModel
             using (FileStream stream = new FileStream(m_path, FileMode.OpenOrCreate))
             {
                 base.Save(stream);
-
-                stream.Close();
             }
         }
     }

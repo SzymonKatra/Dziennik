@@ -20,6 +20,8 @@ namespace Dziennik.ViewModel
             SubscribeHoursSchedule();
         }
 
+        public Func<DayScheduleViewModel, DayOfWeek> GrabDayOfWeek;
+
         public int HoursCount
         {
             get { return Model.HoursSchedule.Count; }
@@ -62,7 +64,7 @@ namespace Dziennik.ViewModel
         private void SubscribeHoursSchedule()
         {
             m_hoursSchedule.CollectionChanged += m_hoursSchedule_CollectionChanged;
-        }
+        }       
         private void UnsubscribeHoursSchedule()
         {
             m_hoursSchedule.CollectionChanged -= m_hoursSchedule_CollectionChanged;
@@ -71,6 +73,11 @@ namespace Dziennik.ViewModel
         private void m_hoursSchedule_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             RaisePropertyChanged("HoursCount");
+        }
+
+        private DayOfWeek GrabDayOfWeekClean()
+        {
+            return this.GrabDayOfWeek(this);
         }
 
         protected override void OnPushCopy()

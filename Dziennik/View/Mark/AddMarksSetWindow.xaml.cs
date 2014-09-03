@@ -29,12 +29,15 @@ namespace Dziennik.View
             this.DataContext = viewModel;
 
             GlobalConfig.Dialogs.Register(this, viewModel);
+
+            dataGrid.CellEditEnding += (s, e) => { e.Cancel = true; };
         }
 
         private void dataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter || e.Key == Key.Tab)
             {
+                if (dataGrid.SelectedIndex < 0) return;
                 do
                 {
                     if (dataGrid.Items.Count - 1 > dataGrid.SelectedIndex)
@@ -44,6 +47,7 @@ namespace Dziennik.View
                         {
                             uiElement.MoveFocus(new TraversalRequest(FocusNavigationDirection.Down));
                         }
+                        dataGrid.SelectedIndex++;
                     }
                 }
                 while (!(dataGrid.ItemContainerGenerator.ContainerFromIndex(dataGrid.SelectedIndex) as DataGridRow).IsEnabled);

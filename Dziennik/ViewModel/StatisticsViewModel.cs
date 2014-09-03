@@ -30,8 +30,9 @@ namespace Dziennik.ViewModel
                 {
                     switch(m_month)
                     {
-                        case -1: return GlobalConfig.GetStringResource("lang_SemesterSeparatorName"); // -1 == school semester
-                        case -2: return GlobalConfig.GetStringResource("lang_YearEndingName");  // -2 == school year
+                        case -1: return GlobalConfig.GetStringResource("lang_FirstSemesterNameSmall"); // -1 == first semester
+                        case -2: return GlobalConfig.GetStringResource("lang_SecondSemesterNameSmall");  // -2 == second semester
+                        case -3: return GlobalConfig.GetStringResource("lang_YearEndingNameSmall"); // -3 == school year
                     }
                     return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(m_month);
                 }
@@ -133,6 +134,24 @@ namespace Dziennik.ViewModel
                     return avg.ToString(CultureInfo.InvariantCulture);
                 }
             }
+            public string RealizedSubjectsCountDisplayed
+            {
+                get
+                {
+                    int count = m_owner.m_group.RealizedSubjects.Count(x => CheckIsValidDate(x.RealizedDate));
+
+                    return count.ToString();
+                }
+            }
+            public string RealizedSubjectsCurriculumCountDisplayed
+            {
+                get
+                {
+                    int count = m_owner.m_group.RealizedSubjects.Count(x => CheckIsValidDate(x.RealizedDate) && !x.IsCustom);
+
+                    return count.ToString();
+                }
+            }
             public System.Windows.FontWeight NameFontWeight
             {
                 get
@@ -149,7 +168,7 @@ namespace Dziennik.ViewModel
                 {
                     if (mark.IsValueValid)
                     {
-                        if (CheckIsValidMonth(mark.AddDate.Month))
+                        if(CheckIsValidDate(mark.AddDate))
                         {
                             weightsSum += mark.Weight;
                             valuesSum += mark.Value * mark.Weight;
@@ -161,7 +180,7 @@ namespace Dziennik.ViewModel
             {
                 foreach (var item in presence)
                 {
-                    if (CheckIsValidMonth(item.RealizedSubject.RealizedDate.Month))
+                    if(CheckIsValidDate(item.RealizedSubject.RealizedDate))
                     {
                         totalStudentHours++;
                         if (item.WasPresent) presentStudentHours++;
@@ -169,11 +188,12 @@ namespace Dziennik.ViewModel
                 }
             }
 
-            private bool CheckIsValidMonth(int month)
+            private bool CheckIsValidDate(DateTime date)
             {
-                if (month == m_month) return true;
-                if (m_month == -1 && m_owner.m_firstSemesterMonths.Contains(month)) return true;
-                if (m_month == -2 && (m_owner.m_firstSemesterMonths.Contains(month) || m_owner.m_secondSemesterMonths.Contains(month))) return true;
+                if (date.Month == m_month) return true;
+                if (m_month == -1 && date >= m_owner.m_group.OwnerClass.Calendar.YearBeginning && date < m_owner.m_group.OwnerClass.Calendar.SemesterSeparator) return true;
+                if (m_month == -2 && date >= m_owner.m_group.OwnerClass.Calendar.SemesterSeparator && date <= m_owner.m_group.OwnerClass.Calendar.YearEnding) return true;
+                if (m_month == -3 && date >= m_owner.m_group.OwnerClass.Calendar.YearBeginning && date <= m_owner.m_group.OwnerClass.Calendar.YearEnding) return true;
                 return false;
             }
         }
@@ -183,13 +203,13 @@ namespace Dziennik.ViewModel
             m_group = group;
 
             m_collection = new ObservableCollection<StaticticsItem>();
-            m_firstSemesterMonths = new List<int>();
-            m_secondSemesterMonths = new List<int>();
+            //m_firstSemesterMonths = new List<int>();
+            //m_secondSemesterMonths = new List<int>();
         }
 
         private SchoolGroupViewModel m_group;
-        private List<int> m_firstSemesterMonths;
-        private List<int> m_secondSemesterMonths;
+        //private List<int> m_firstSemesterMonths;
+        //private List<int> m_secondSemesterMonths;
 
         private ObservableCollection<StaticticsItem> m_collection;
         public ObservableCollection<StaticticsItem> Collection
@@ -200,36 +220,36 @@ namespace Dziennik.ViewModel
         public void Refresh()
         {
             m_collection.Clear();
-            m_firstSemesterMonths.Clear();
-            m_secondSemesterMonths.Clear();
 
             CalendarViewModel calendar = m_group.OwnerClass.Calendar;
             if (calendar != null)
             {
-                int currentMonth = calendar.YearBeginning.Month;
-                while (currentMonth != calendar.SemesterSeparator.Month)
-                {
-                    m_collection.Add(new StaticticsItem(currentMonth,this));
-                    m_firstSemesterMonths.Add(currentMonth);
-                    currentMonth = (currentMonth >= 12 ? 1 : currentMonth + 1);
-                }
-                m_collection.Add(new StaticticsItem(calendar.SemesterSeparator.Month, this));
-                m_firstSemesterMonths.Add(calendar.SemesterSeparator.Month);
-                m_collection.Add(new StaticticsItem(-1, this));
-                currentMonth = calendar.SemesterSeparator.Month + 1;
-                while (currentMonth != calendar.YearEnding.Month)
-                {
-                    m_collection.Add(new StaticticsItem(currentMonth, this));
-                    m_secondSemesterMonths.Add(currentMonth);
-                    currentMonth = (currentMonth >= 12 ? 1 : currentMonth + 1);
-                }
-                if (m_collection.FirstOrDefault(x => x.Month == calendar.YearEnding.Month) == null)
+                AddMonths(calendar.YearBeginning.Month, GetNextMonth(calendar.SemesterSeparator.Month)); // adding month from YearBeginning(included) to SemesterSeparator(included)
+                
+                m_collection.Add(new StaticticsItem(-1, this)); // adding first semester
+
+                AddMonths(calendar.SemesterSeparator.Month + 1, calendar.YearEnding.Month); // adding months from SemesterSeparator(excluded, added in first step) to YearEnding(excluded, description below)
+                if (m_collection.FirstOrDefault(x => x.Month == calendar.YearEnding.Month) == null) // adding YearEnding month, is case where YearBeginning month and YearEnding month are the same, condition detect it and don't re-add existing month
                 {
                     m_collection.Add(new StaticticsItem(calendar.YearEnding.Month, this));
-                    m_secondSemesterMonths.Add(calendar.YearEnding.Month);
                 }
-                m_collection.Add(new StaticticsItem(-2, this));
+                
+                m_collection.Add(new StaticticsItem(-2, this)); // adding second semester
+                m_collection.Add(new StaticticsItem(-3, this)); // adding year ending
             }
+        }
+
+        private void AddMonths(int startMonthIncluded, int endMonthExcluded)
+        {
+            while(startMonthIncluded != endMonthExcluded)
+            {
+                m_collection.Add(new StaticticsItem(startMonthIncluded, this));
+                startMonthIncluded = GetNextMonth(startMonthIncluded);
+            }
+        }
+        private int GetNextMonth(int month)
+        {
+            return (month >= 12 ? 1 : month + 1);
         }
     }
 }

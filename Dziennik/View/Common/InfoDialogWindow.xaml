@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="{DynamicResource lang_InfoTitle}" Height="450" Width="650"
-        WindowStartupLocation="CenterOwner">
+        WindowStartupLocation="CenterOwner"
+        Closed="Window_Closed">
 
     <Window.Resources>
         <Style x:Key="selectableTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource inputControlStyle}">
@@ -30,7 +31,7 @@
             <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" FontSize="14" FontWeight="Bold" Text="{Binding VersionDisplay}"/>
         </Grid>
 
-        <RichTextBox Grid.Row="2" IsReadOnly="True" VerticalScrollBarVisibility="Auto" Document="{StaticResource infoDependenciesRichText}"/>
+        <RichTextBox x:Name="richTextBox" Grid.Row="2" IsReadOnly="True" VerticalScrollBarVisibility="Auto" Document="{StaticResource infoDependenciesRichText}"/>
         
         <Button Grid.Column="0" Grid.Row="3" Style="{StaticResource commonButtonStyle}" Command="{Binding CloseCommand}" Content="{DynamicResource lang_Close}"/>
     </Grid>

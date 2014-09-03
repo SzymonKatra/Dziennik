@@ -24,10 +24,10 @@
 
         <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Weight}"/>
         <my:NonEditableIntegerUpDown Grid.Column="1" Grid.Row="1" Style="{StaticResource inputControlStyle}"  HorizontalAlignment="Left" Width="50" Value="{Binding Weight}" Minimum="{x:Static local:GlobalConfig.DefaultWeightMinValue}" Maximum="{x:Static local:GlobalConfig.DefaultWeightMaxValue}"/>
-        
+
         <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_AddDate}"/>
         <DatePicker Grid.Column="1" Grid.Row="2" Style="{StaticResource validationTemplateTextBox}" SelectedDate="{Binding AddDateInput, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
-        
+
         <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_Description}"/>
         <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource inputControlStyle}" TextWrapping="Wrap" Text="{Binding Description,Mode=TwoWay}"/>
 
@@ -40,11 +40,15 @@
                   SelectionMode="Single"
                   AutoGenerateColumns="False"
                   PreviewKeyDown="dataGrid_PreviewKeyDown">
+            <DataGrid.RowValidationErrorTemplate>
+                <ControlTemplate>
+                </ControlTemplate>
+            </DataGrid.RowValidationErrorTemplate>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="{DynamicResource lang_NumberShort}" IsReadOnly="True" Binding="{Binding Student.Number}" ElementStyle="{StaticResource dataGridColumnStrikethrough}"/>
                 <DataGridTextColumn Header="{DynamicResource lang_SurnamePerson}" IsReadOnly="True" Binding="{Binding Student.GlobalStudent.Surname}" ElementStyle="{StaticResource dataGridColumnStrikethrough}"/>
                 <DataGridTextColumn Header="{DynamicResource lang_NamePerson}" IsReadOnly="True" Binding="{Binding Student.GlobalStudent.Name}" ElementStyle="{StaticResource dataGridColumnStrikethrough}"/>
-                <DataGridTextColumn Header="{DynamicResource lang_MarkOrWeight}" IsReadOnly="False" Binding="{Binding Input, Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_MarkOrWeight}" IsReadOnly="False" Binding="{Binding Input, Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource validationTemplate}"/>
             </DataGrid.Columns>
         </DataGrid>
 

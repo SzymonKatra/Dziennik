@@ -106,7 +106,7 @@ namespace Dziennik.View
                 GlobalConfig.Notifier.Password = PasswordEncryption.Encrypt(passwords.New);
             }
 
-            GlobalConfig.Notifier.BlockingMinutes = this.BlockingMinutes;
+            if(AlreadyHasPassword || m_wantChangePassword) GlobalConfig.Notifier.BlockingMinutes = this.BlockingMinutes;
 
             m_result = ChangePasswordResult.Ok;
             GlobalConfig.Dialogs.Close(this);

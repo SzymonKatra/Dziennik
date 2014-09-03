@@ -350,23 +350,31 @@ namespace Dziennik.View
                 return GlobalConfig.GetStringResource("lang_LengthMustBe1Or2");
             }
 
-            bool hasLetter = false;
-            for (int i = 0; i < input.Length; i++)
+            foreach (var c in input)
             {
-                if (!char.IsLetterOrDigit(input[i]))
+                if(!char.IsLetter(c))
                 {
-                    return GlobalConfig.GetStringResource("lang_InvalidCharacters");
-                }
-                if (char.IsLetter(input[i]))
-                {
-                    hasLetter = true;
+                    return GlobalConfig.GetStringResource("lang_OnlyLetters");
                 }
             }
 
-            if (!hasLetter)
-            {
-                return GlobalConfig.GetStringResource("lang_TypeAtLeastOneLetter");
-            }
+            //bool hasLetter = false;
+            //for (int i = 0; i < input.Length; i++)
+            //{
+            //    if (!char.IsLetterOrDigit(input[i]))
+            //    {
+            //        return GlobalConfig.GetStringResource("lang_InvalidCharacters");
+            //    }
+            //    if (char.IsLetter(input[i]))
+            //    {
+            //        hasLetter = true;
+            //    }
+            //}
+
+            //if (!hasLetter)
+            //{
+            //    return GlobalConfig.GetStringResource("lang_TypeAtLeastOneLetter");
+            //}
 
             return string.Empty;
         }

@@ -41,7 +41,7 @@
                 <DataGridTemplateColumn Header="{DynamicResource lang_LessonHourEnding}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <xctk:DateTimeUpDown Value="{Binding End, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Format="Custom" FormatString="{x:Static local:GlobalConfig.TimeFormat}"/>
+                            <xctk:DateTimeUpDown Value="{Binding End, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource validationTemplate}" Format="Custom" FormatString="{x:Static local:GlobalConfig.TimeFormat}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

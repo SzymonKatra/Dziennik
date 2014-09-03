@@ -26,5 +26,10 @@ namespace Dziennik.View
 
             GlobalConfig.Dialogs.Register(this, viewModel);
         }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            richTextBox.Document = new FlowDocument(); // set to new because bound flow document probably sits in cache and it isn't possible to open info window yet again
+        }
     }
 }

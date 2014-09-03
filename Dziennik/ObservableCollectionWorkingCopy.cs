@@ -38,7 +38,7 @@ namespace Dziennik
             get { return m_copyStack.Count; }
         }
 
-        private List<CollectionCopy> m_waitingList = new List<CollectionCopy>();
+        private Stack<CollectionCopy> m_waitingStack = new Stack<CollectionCopy>(); // contains all changes that were made in past. used when PopCopy Cancel is requested and undos all changes
         private Stack<CollectionCopy> m_copyStack = new Stack<CollectionCopy>();
         private List<CollectionChangedPair> m_currentChangelog;
 
@@ -101,19 +101,19 @@ namespace Dziennik
         public void PopCopy(WorkingCopyResult result)
         {
             CollectionCopy copy = m_copyStack.Pop();
-            m_waitingList.Add(copy);
+            m_waitingStack.Push(copy);
             foreach (var item in copy.PushedItems) item.PopCopy(result);
             if (result == WorkingCopyResult.Cancel)
             {
-                foreach (var oldCopy in m_waitingList)
+                while (m_waitingStack.Count > 0) // undo all changed that were made in past
                 {
+                    CollectionCopy oldCopy = m_waitingStack.Pop();
                     m_currentChangelog = oldCopy.Changelog;
                     Revert();
                 }
-                m_waitingList.Clear();
             }
             m_currentChangelog = (m_copyStack.Count >= 1 ? m_copyStack.Peek().Changelog : null);
-            if (m_currentChangelog == null) m_waitingList.Clear();
+            if (m_currentChangelog == null) m_waitingStack.Clear(); //m_waitingList.Clear();
         }
 
         private void Revert()

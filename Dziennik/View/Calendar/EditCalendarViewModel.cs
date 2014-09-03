@@ -165,8 +165,8 @@ namespace Dziennik.View
             }
             else if(dialogViewModel.Result == EditOffDayViewModel.EditOffDayResult.Cancel)
             {
-                SortOffDays();
                 m_selectedOffDay.PopCopy(WorkingCopyResult.Cancel);
+                SortOffDays();
             }
         }
 

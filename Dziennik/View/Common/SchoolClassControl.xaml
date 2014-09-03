@@ -209,6 +209,8 @@
                             <DataGridTextColumn Header="{DynamicResource lang_AverageAttendance}" Binding="{Binding AverageAttendanceDisplayed}"/>
                             <DataGridTextColumn Header="{DynamicResource lang_AverageMark}" Binding="{Binding AverageMarkDisplayed}"/>
                             <DataGridTextColumn Header="{DynamicResource lang_AverageEndingMark}" Binding="{Binding AverageEndingMarkDisplayed}"/>
+                            <DataGridTextColumn Header="{DynamicResource lang_RealizedSubjectsCount}" Binding="{Binding RealizedSubjectsCountDisplayed}"/>
+                            <DataGridTextColumn Header="{DynamicResource lang_RealizedSubjectsCurriculumCount}" Binding="{Binding RealizedSubjectsCurriculumCountDisplayed}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
