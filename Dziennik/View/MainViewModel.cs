@@ -34,13 +34,38 @@ namespace Dziennik.View
             m_showNoticesListCommand = new RelayCommand(ShowNoticesList);
             m_closeCommand = new RelayCommand<CancelEventArgs>(Close);
             m_checkUpdatesCommand = new RelayCommand<string>(CheckUpdates, CanCheckUpdate);
+
+            m_openedSchoolClasses.Added += m_openedSchoolClasses_Added;
+            m_openedSchoolClasses.Removed += m_openedSchoolClasses_Removed;
+            m_openedSchoolClasses.RaiseAddedForAll();
         }
 
-        private ObservableCollection<SchoolClassControlViewModel> m_openedSchoolClasses = new ObservableCollection<SchoolClassControlViewModel>();
-        public ObservableCollection<SchoolClassControlViewModel> OpenedSchoolClasses
+        
+
+        private void m_openedSchoolClasses_Added(object sender, NotifyCollectionChangedSimpleEventArgs<SchoolClassControlViewModel> e)
+        {
+            foreach (var item in e.Items)
+            {
+                m_sortedOpenedSchoolClasses.Add(item);
+            }
+        }
+        private void m_openedSchoolClasses_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<SchoolClassControlViewModel> e)
+        {
+            foreach (var item in e.Items)
+            {
+                m_sortedOpenedSchoolClasses.Remove(item);
+            }
+        }
+
+        private ObservableCollectionNotifySimple<SchoolClassControlViewModel> m_openedSchoolClasses = new ObservableCollectionNotifySimple<SchoolClassControlViewModel>();
+        public ObservableCollectionNotifySimple<SchoolClassControlViewModel> OpenedSchoolClasses
         {
             get { return m_openedSchoolClasses; }
-            set { m_openedSchoolClasses = value; RaisePropertyChanged("OpenedSchoolClasses"); }
+        }
+        private ObservableCollection<SchoolClassControlViewModel> m_sortedOpenedSchoolClasses = new ObservableCollection<SchoolClassControlViewModel>();
+        public ObservableCollection<SchoolClassControlViewModel> SortedOpenedSchoolClasses
+        {
+            get { return m_sortedOpenedSchoolClasses; }
         }
         private SchoolClassControlViewModel m_selectedClass;
         public SchoolClassControlViewModel SelectedClass
@@ -228,7 +253,11 @@ namespace Dziennik.View
         
         private void AskPasswordIfNeeded()
         {
-            if (GlobalConfig.Notifier.Password == null) return;
+            if (GlobalConfig.Notifier.Password == null)
+            {
+                SortOpenedClasses();
+                return;
+            }
             if (m_passwordAsking) return;
             m_passwordAsking = true;
 
@@ -701,6 +730,11 @@ namespace Dziennik.View
             foreach (var rem in toRemove) GlobalConfig.GlobalDatabase.ViewModel.Notices.Remove(rem);
         }
 
+        public void RaiseTabWidthChanged()
+        {
+            RaisePropertyChanged("TabWidth");
+        }
+
         private class SortClassPriority
         {
             public SchoolClassControlViewModel SchoolClass { get; set; }
@@ -732,36 +766,59 @@ namespace Dziennik.View
             if (hourNumberNow < 0) return;
 
             List<SortClassPriority> priorities = new List<SortClassPriority>();
-            foreach (var openedClass in m_openedSchoolClasses) priorities.Add((new SortClassPriority() { SchoolClass = openedClass, Priority = int.MaxValue }));
+            foreach (var openedClass in m_sortedOpenedSchoolClasses) priorities.Add((new SortClassPriority() { SchoolClass = openedClass, Priority = int.MaxValue }));
             foreach (var item in priorities)
             {
                 foreach (var grp in item.SchoolClass.Database.ViewModel.Groups)
                 {
-                    DayScheduleViewModel daySched = GetDaySchedule(grp.CurrentSchedule, now);
-                    int closestHour = GetClosestHour(daySched, hourNumberNow);
-                    if (closestHour > 0 && item.Priority < closestHour)
+                    DayOfWeek nowDay = now.DayOfWeek;
+                    DayOfWeek currentDay = nowDay;
+                    int currentHourNumberNow = hourNumberNow;
+                    int priorityMultiplier = 0;
+                    bool breakLoop = false;
+                    do
                     {
-                        item.Priority = closestHour;
-                        item.Group = grp;
-                    }
+                        if (currentDay == nowDay && priorityMultiplier > 0) breakLoop = true;
+                        DayScheduleViewModel daySched = GetDaySchedule(grp.CurrentSchedule, currentDay);
+                        int closestHour = GetClosestHour(daySched, currentHourNumberNow);
+                        if (closestHour > 0) closestHour += priorityMultiplier * GlobalConfig.MaxLessonHour;
+                        if (closestHour > 0 && closestHour < item.Priority)// item.Priority < closestHour)
+                        {
+                            item.Priority = closestHour;
+                            item.Group = grp;
+                        }
+
+                        currentHourNumberNow = 1;
+                        currentDay = GetNextWorkingDayOfWeek(currentDay);
+                        priorityMultiplier++;
+
+                    } while (!breakLoop);
                 }
             }
 
-            priorities.Sort();
+            priorities.Sort((x, y) => { return x.Priority.CompareTo(y.Priority); });
 
-            int currentIndex = 0;
-            foreach (var item in priorities)
+            for (int i = 0; i < priorities.Count; i++)
             {
-                int beforeIndex = m_openedSchoolClasses.IndexOf(item.SchoolClass);
-                m_openedSchoolClasses.Swap(currentIndex, beforeIndex);
-                currentIndex++;
-
-                if (item.Group != null) item.SchoolClass.SelectedGroup = item.Group;
+                m_sortedOpenedSchoolClasses[i] = priorities[i].SchoolClass;
+                if (priorities[i].Group != null) priorities[i].SchoolClass.SelectedGroup = priorities[i].Group;
             }
+
+            //int currentIndex = 0;
+            //foreach (var item in priorities)
+            //{
+            //    int beforeIndex = m_sortedOpenedSchoolClasses.IndexOf(item.SchoolClass);
+            //    m_sortedOpenedSchoolClasses.Swap(currentIndex, beforeIndex);
+            //    currentIndex++;
+
+            //    if (item.Group != null) item.SchoolClass.SelectedGroup = item.Group;
+            //}
+
+            if (m_sortedOpenedSchoolClasses.Count > 0) SelectedClass = m_sortedOpenedSchoolClasses[0];
         }
-        private DayScheduleViewModel GetDaySchedule(WeekScheduleViewModel week, DateTime now)
+        private DayScheduleViewModel GetDaySchedule(WeekScheduleViewModel week, DayOfWeek dayOfWeek)
         {
-            switch (now.DayOfWeek)
+            switch (dayOfWeek)
             {
                 case DayOfWeek.Monday: return week.Monday;
                 case DayOfWeek.Tuesday: return week.Tuesday;
@@ -785,7 +842,19 @@ namespace Dziennik.View
             }
             return closest;
         }
+        private DayOfWeek GetNextWorkingDayOfWeek(DayOfWeek dayOfWeek)
+        {
+            switch (dayOfWeek)
+            {
+                case DayOfWeek.Monday: return DayOfWeek.Tuesday;
+                case DayOfWeek.Tuesday: return DayOfWeek.Wednesday;
+                case DayOfWeek.Wednesday: return DayOfWeek.Thursday;
+                case DayOfWeek.Thursday: return DayOfWeek.Friday;
+                case DayOfWeek.Friday: return DayOfWeek.Monday;
+            }
 
+            return dayOfWeek;
+        }
         public void SearchAndSelectClass(object comboBoxCollection)
         {
             foreach (var openedClass in m_openedSchoolClasses)

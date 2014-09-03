@@ -109,6 +109,7 @@
     <Compile Include="Model\ValueWrapper.cs" />
     <Compile Include="ObjectsPacker.cs" />
     <Compile Include="IWorkingCopyAvailable.cs" />
+    <Compile Include="ObservableCollectionNotifySimple.cs" />
     <Compile Include="PasswordEncryption.cs" />
     <Compile Include="ViewModel\DayScheduleViewModel.cs" />
     <Compile Include="ViewModel\LessonHourViewModel.cs" />
@@ -214,7 +215,7 @@
     <Compile Include="Model\StudentInGroup.cs" />
     <Compile Include="Model\WeekSchedule.cs" />
     <Compile Include="NotifyCollectionChangedSimpleEventArgs.cs" />
-    <Compile Include="ObservableCollectionExtended.cs" />
+    <Compile Include="ObservableCollectionWorkingCopy.cs" />
     <Compile Include="ObservableCollectionExtensions.cs" />
     <Compile Include="SelectionRangeParser.cs" />
     <Compile Include="ViewModel\CalendarViewModel.cs" />

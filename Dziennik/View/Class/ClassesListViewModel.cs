@@ -58,6 +58,7 @@ namespace Dziennik.View
                 tab.Database.Path = dialogViewModel.Path;
                 m_openedClasses.Add(tab);
                 SelectedClass = tab;
+                GlobalConfig.Main.RaiseTabWidthChanged();
             }
             if (dialogViewModel.Result != EditClassViewModel.EditClassResult.Cancel) m_selectedClass.AutoSaveCommand.Execute(this);
         }

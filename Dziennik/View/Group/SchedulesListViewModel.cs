@@ -42,6 +42,7 @@ namespace Dziennik.View
         private void AddSchedule(object param)
         {
             WeekScheduleViewModel schedule = new WeekScheduleViewModel();
+            if (m_schedules.Count <= 0) schedule.StartDate = m_calendar.YearBeginning;
             EditScheduleViewModel dialogViewModel = new EditScheduleViewModel(schedule, GetMinValidFrom(schedule), GetMaxValidFrom(schedule), true);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditScheduleViewModel.EditScheduleResult.Ok)

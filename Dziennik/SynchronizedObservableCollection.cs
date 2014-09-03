@@ -31,7 +31,7 @@ namespace Dziennik
     /// <typeparam name="T">ViewModel type</typeparam>
     /// <typeparam name="M">Model type</typeparam>
     /// <typeparam name="MC">Model collection</typeparam>
-    public class SynchronizedObservableCollection<VM, M, MC> : ObservableCollectionExtended<VM>
+    public class SynchronizedObservableCollection<VM, M, MC> : ObservableCollectionWorkingCopy<VM>
                                                                where VM : IModelExposable<M>, IWorkingCopyAvailable
                                                                where MC : System.Collections.Generic.IList<M>
     {

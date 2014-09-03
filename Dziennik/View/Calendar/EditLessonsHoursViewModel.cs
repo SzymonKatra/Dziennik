@@ -21,7 +21,7 @@ namespace Dziennik.View
         {
             m_okCommand = new RelayCommand(Ok);
             m_cancelCommand = new RelayCommand(Cancel);
-            m_addNextHourCommand = new RelayCommand(AddNextHour);
+            m_addNextHourCommand = new RelayCommand(AddNextHour, CanAddNextHour);
 
             m_hours = hours;
         }
@@ -67,6 +67,11 @@ namespace Dziennik.View
         private void AddNextHour(object param)
         {
             m_hours.Hours.Add(new LessonHourViewModel() { Number = (m_hours.Hours.Count > 0 ? m_hours.Hours[m_hours.Hours.Count - 1].Number + 1 : 1) });
+            m_addNextHourCommand.RaiseCanExecuteChanged();
+        }
+        private bool CanAddNextHour(object param)
+        {
+            return m_hours.Hours.Count < GlobalConfig.MaxLessonHour;
         }
     }
 }

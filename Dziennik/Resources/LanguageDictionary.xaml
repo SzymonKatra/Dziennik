@@ -270,6 +270,7 @@
     <s:String x:Key="lang_Author">Autor</s:String>
     <s:String x:Key="lang_AuthorName">Szymon Katra</s:String>
     <s:String x:Key="lang_AuthorAll">Autor: Szymon Katra</s:String>
+    <s:String x:Key="lang_VersionFormat">Wersja: {0}</s:String>
     <FlowDocument x:Key="infoDependenciesRichText">
         <Paragraph>
             <Bold>Extended WPF Toolkit™ Community Edition</Bold>
@@ -497,4 +498,5 @@ Ostatnia archiwizacja odbyła się: {0}</s:String>
 Spróbuj ponownie zainstalować Dziennik, aby rozwiązać problem.</s:String>
     <s:String x:Key="lang_InvalidDate">Nieprawidłowa data</s:String>
     <s:String x:Key="lang_OverdueSubjectsFormat">Masz {0} zaległych tematów do zrealizowania</s:String>
+    <s:String x:Key="lang_FirstSelectCalendar">Najpierw wybierz kalendarz</s:String>
 </ResourceDictionary>

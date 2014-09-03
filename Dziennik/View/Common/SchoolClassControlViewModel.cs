@@ -28,7 +28,7 @@ namespace Dziennik.View
             m_saveCommand = new RelayCommand(Save);
             m_realizeSubjectCommand = new RelayCommand(RealizeSubject, CanRealizeSubject);
             m_editRealizedSubjectCommand = new RelayCommand(EditRealizedSubject);
-            m_showOverdueSubjectsCommand = new RelayCommand(ShowOverdueSubjects);
+            m_showOverdueSubjectsCommand = new RelayCommand(ShowOverdueSubjects, CanShowOverdueSubjects);
             m_putAllEndingMarksCommand = new RelayCommand<string>(PutAllEndingMarks);
             m_putNotAllEndingMarksCommand = new RelayCommand<string>(PutNotAllEndingMarks);
             m_cancelAllEndingMarksCommand = new RelayCommand<string>(CancelAllEndingMarks);
@@ -290,6 +290,10 @@ namespace Dziennik.View
             {
                 m_realizeSubjectCommand.Execute(dialogViewModel.SelectedSubject);
             }
+        }
+        private bool CanShowOverdueSubjects(object e)
+        {
+            return m_selectedGroup != null;
         }
         private IEnumerable<GlobalSubjectViewModel> GetAvailableSubjects(SchoolGroupViewModel group)
         {

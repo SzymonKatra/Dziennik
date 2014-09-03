@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Dziennik
 {
-    public class ObservableCollectionExtended<T> : ObservableCollection<T>, INotifyCollectionChangedSimple<T>, IWorkingCopyAvailable where T : IWorkingCopyAvailable
+    public class ObservableCollectionWorkingCopy<T> : ObservableCollectionNotifySimple<T>, IWorkingCopyAvailable where T : IWorkingCopyAvailable
     {
         private enum CollectionChangeType
         {
@@ -42,26 +42,6 @@ namespace Dziennik
         private Stack<CollectionCopy> m_copyStack = new Stack<CollectionCopy>();
         private List<CollectionChangedPair> m_currentChangelog;
 
-        public event EventHandler<NotifyCollectionChangedSimpleEventArgs<T>> Added;
-        public event EventHandler<NotifyCollectionChangedSimpleEventArgs<T>> Removed;
-
-        public void RaiseAddedForAll()
-        {
-            if (Added != null) // to save time
-            {
-                List<T> items = new List<T>(this);
-                OnAdded(new NotifyCollectionChangedSimpleEventArgs<T>(items, false));
-            }
-        }
-        public void RaiseRemovedForAll()
-        {
-            if (Removed != null) // to save time
-            {
-                List<T> items = new List<T>(this);
-                OnRemoved(new NotifyCollectionChangedSimpleEventArgs<T>(items, false));
-            }
-        }
-
         protected override void ClearItems()
         {
             if (m_currentChangelog != null)
@@ -69,8 +49,6 @@ namespace Dziennik
                 m_currentChangelog.Add(new CollectionChangedPair() { Change = CollectionChangeType.Cleared, ClearedList = new List<T>(this) });
             }
 
-            List<T> items = new List<T>(this);
-            OnRemoved(new NotifyCollectionChangedSimpleEventArgs<T>(items));
             base.ClearItems();
         }
         protected override void InsertItem(int index, T item)
@@ -80,9 +58,6 @@ namespace Dziennik
                 m_currentChangelog.Add(new CollectionChangedPair() { Change = CollectionChangeType.Added, NewIndex = index, NewValue = item });
             }
 
-            List<T> items = new List<T>();
-            items.Add(item);
-            OnAdded(new NotifyCollectionChangedSimpleEventArgs<T>(items));
             base.InsertItem(index, item);
         }
         protected override void RemoveItem(int index)
@@ -92,9 +67,6 @@ namespace Dziennik
                 m_currentChangelog.Add(new CollectionChangedPair() { Change = CollectionChangeType.Removed, OldIndex = index, OldValue = this[index] });
             }
 
-            List<T> items = new List<T>();
-            items.Add(this[index]);
-            OnRemoved(new NotifyCollectionChangedSimpleEventArgs<T>(items));
             base.RemoveItem(index);
         }
         protected override void SetItem(int index, T item)
@@ -104,12 +76,6 @@ namespace Dziennik
                 m_currentChangelog.Add(new CollectionChangedPair() { Change = CollectionChangeType.Changed, OldIndex = index, OldValue = this[index], NewIndex = index, NewValue = item });
             }
 
-            List<T> items = new List<T>();
-            items.Add(this[index]);
-            OnRemoved(new NotifyCollectionChangedSimpleEventArgs<T>(items));
-            items = new List<T>();
-            items.Add(item);
-            OnRemoved(new NotifyCollectionChangedSimpleEventArgs<T>(items));
             base.SetItem(index, item);
         }
         protected override void MoveItem(int oldIndex, int newIndex)
@@ -120,17 +86,6 @@ namespace Dziennik
             }
 
             base.MoveItem(oldIndex, newIndex);
-        }
-
-        protected virtual void OnAdded(NotifyCollectionChangedSimpleEventArgs<T> e)
-        {
-            EventHandler<NotifyCollectionChangedSimpleEventArgs<T>> handler = Added;
-            if (handler != null) handler(this, e);
-        }
-        protected virtual void OnRemoved(NotifyCollectionChangedSimpleEventArgs<T> e)
-        {
-            EventHandler<NotifyCollectionChangedSimpleEventArgs<T>> handler = Removed;
-            if (handler != null) handler(this, e);
         }
 
         public void PushCopy()

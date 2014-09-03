@@ -14,6 +14,14 @@ namespace Dziennik.View
             m_closeCommand = new RelayCommand(Close);
         }
 
+        public string VersionDisplay
+        {
+            get
+            {
+                return string.Format(GlobalConfig.GetStringResource("lang_VersionFormat"), GlobalConfig.CurrentVersion.ToString());
+            }
+        }
+
         private RelayCommand m_closeCommand;
         public ICommand CloseCommand
         {

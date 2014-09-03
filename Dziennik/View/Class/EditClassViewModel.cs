@@ -132,7 +132,7 @@ namespace Dziennik.View
             m_schoolClass.Name = m_nameInput;
             m_schoolClass.Calendar = m_selectedCalendar;
 
-            if(m_originalCalendar!= m_selectedCalendar)
+            if (m_originalCalendar != m_selectedCalendar)
             {
                 foreach (var group in m_schoolClass.Groups)
                 {
@@ -176,7 +176,13 @@ namespace Dziennik.View
                 GlobalConfig.MessageBox(this, GlobalConfig.GetStringResource("lang_FirstAddStudents"), MessageBoxSuperPredefinedButtons.OK);
                 return;
             }
+            if (m_selectedCalendar == null)
+            {
+                GlobalConfig.MessageBox(this, GlobalConfig.GetStringResource("lang_FirstSelectCalendar"), MessageBoxSuperPredefinedButtons.OK);
+                return;
+            }
 
+            m_schoolClass.Calendar = m_selectedCalendar;
             AddGroupViewModel dialogViewModel = new AddGroupViewModel(m_schoolClass.Students, m_schoolClass);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result != null)
@@ -187,6 +193,13 @@ namespace Dziennik.View
         }
         private void EditGroup(object param)
         {
+            if (m_selectedCalendar == null)
+            {
+                GlobalConfig.MessageBox(this, GlobalConfig.GetStringResource("lang_FirstSelectCalendar"), MessageBoxSuperPredefinedButtons.OK);
+                return;
+            }
+
+            m_schoolClass.Calendar = m_selectedCalendar;
             m_selectedGroup.PushCopy();
             EditGroupViewModel dialogViewModel = new EditGroupViewModel(m_selectedGroup, m_schoolClass.Students);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);

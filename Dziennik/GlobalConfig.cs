@@ -300,6 +300,7 @@ namespace Dziennik
         public static readonly Size ActionDialogProgressSize = new Size(400, 200);
         public static readonly int DefaultWeightMinValue = 0;
         public static readonly int DefaultWeightMaxValue = 9;
+        public static readonly int MaxLessonHour = 15;
         public static readonly Version CurrentVersion;
         public static readonly string UpdateInfoLink = "https://www.dropbox.com/s/z7phk39d6wyi9jn/update_info.xml?dl=1";
         public static readonly string AutoUpdaterPath = "DziennikAktualizacja.exe";

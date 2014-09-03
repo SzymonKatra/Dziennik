@@ -36,7 +36,7 @@
             <controls:ImageButton Style="{StaticResource wrapPanelMainControlStyle}" ImageSource="{StaticResource img_close}" Visibility="{Binding BlockSaving, Converter={StaticResource convertBoolToVisibility}}" Text="{DynamicResource lang_CloseArchivePreview}" Command="{Binding CloseArchivePreviewCommand}"/>
         </WrapPanel>
 
-        <TabControl Grid.Row="1" ItemsSource="{Binding OpenedSchoolClasses}" SelectedValue="{Binding SelectedClass, Mode=TwoWay}">
+        <TabControl Grid.Row="1" ItemsSource="{Binding SortedOpenedSchoolClasses}" SelectedValue="{Binding SelectedClass, Mode=TwoWay}">
             <TabControl.Template>
                 <ControlTemplate TargetType="TabControl">
                     <Grid>
