@@ -301,7 +301,12 @@ namespace Dziennik.View
 
         private void Ok(object e)
         {
-            if (m_alreadyRealized.FirstOrDefault(x => x.RealizedDate.Date == m_realizeDate.Date && m_realizeHour != null && x.RealizedHour == m_realizeHour.Number) != null)
+            if(!m_isAddingMode)
+            {
+                if (GlobalConfig.MessageBox(this, GlobalConfig.GetStringResource("lang_DoYouWantToContinue"), MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
+            }
+            if (IsRealizeDateHourChanged() &&
+                m_alreadyRealized.FirstOrDefault(x => x.RealizedDate.Date == m_realizeDate.Date && m_realizeHour != null && x.RealizedHour == m_realizeHour.Number) != null)
             {
                 if (GlobalConfig.MessageBox(this, string.Format(GlobalConfig.GetStringResource("lang_SubjectAlreadyRealizedFormat"), m_realizeDate.ToString(GlobalConfig.DateFormat), m_realizeHour.Number), MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
             }
@@ -374,6 +379,11 @@ namespace Dziennik.View
             RaisePropertyChanged("StudentsPresentDisplayed");
             RaisePropertyChanged("StudentsAbsentDisplayed");
             RaisePropertyChanged("StudentsSumDisplayed");
+        }
+
+        private bool IsRealizeDateHourChanged()
+        {
+            return (m_realizeHour == null ? 0 : m_realizeHour.Number) != m_realizedSubject.RealizedHour || m_realizeDate != m_realizedSubject.RealizedDate;
         }
 
         public string Error

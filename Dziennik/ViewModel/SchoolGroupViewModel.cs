@@ -187,24 +187,9 @@ namespace Dziennik.ViewModel
                         }
                         if (nextDay) continue;
 
-                        //IEnumerable<SelectedHourViewModel> hours = null;
-                        //int toRealize = 0;
-                        //switch (date.DayOfWeek)
-                        //{
-                        //    case DayOfWeek.Monday: toRealize += schedule.Monday.HoursCount; break;
-                        //    case DayOfWeek.Tuesday: toRealize += schedule.Tuesday.HoursCount; break;
-                        //    case DayOfWeek.Wednesday: toRealize += schedule.Wednesday.HoursCount; break;
-                        //    case DayOfWeek.Thursday: toRealize += schedule.Thursday.HoursCount; break;
-                        //    case DayOfWeek.Friday: toRealize += schedule.Friday.HoursCount; break;
-                        //}
                         DayScheduleViewModel day = null;
                         switch (date.DayOfWeek)
                         {
-                            //case DayOfWeek.Monday: result += schedule.Monday.HoursCount; break;
-                            //case DayOfWeek.Tuesday: result += schedule.Tuesday.HoursCount; break;
-                            //case DayOfWeek.Wednesday: result += schedule.Wednesday.HoursCount; break;
-                            //case DayOfWeek.Thursday: result += schedule.Thursday.HoursCount; break;
-                            //case DayOfWeek.Friday: result += schedule.Friday.HoursCount; break;
                             case DayOfWeek.Monday: day = schedule.Monday; break;
                             case DayOfWeek.Tuesday: day = schedule.Tuesday; break;
                             case DayOfWeek.Wednesday: day = schedule.Wednesday; break;
@@ -213,7 +198,6 @@ namespace Dziennik.ViewModel
                         }
                         if (day != null)
                         {
-                            //toRealize += day.HoursSchedule.Count(x => x.SelectedGroup == this);
                             List<SelectedHourViewModel> hours = new List<SelectedHourViewModel>(day.HoursSchedule.Where(x => x.SelectedGroup == this));
                             if (date == now.Date)
                             {
@@ -233,29 +217,6 @@ namespace Dziennik.ViewModel
                                 overdues.Add(new Overdue(date, h.Hour));
                             }
                         }
-                        //switch (date.DayOfWeek)
-                        //{
-                        //    case DayOfWeek.Monday: hours = schedule.Monday.HoursSchedule; break;
-                        //    case DayOfWeek.Tuesday: hours = schedule.Tuesday.HoursSchedule; break;
-                        //    case DayOfWeek.Wednesday: hours = schedule.Wednesday.HoursSchedule; break;
-                        //    case DayOfWeek.Thursday: hours = schedule.Thursday.HoursSchedule; break;
-                        //    case DayOfWeek.Friday: hours = schedule.Friday.HoursSchedule; break;
-                        //}
-
-                        //if (hours != null)
-                        //{
-                        //    foreach (var item in hours)
-                        //    {
-
-                        //    }
-                        //}
-
-                        //int realizedCount = this.RealizedSubjects.Count(x => x.RealizedDate.Date == date.Date);
-
-                        //for (int j = 0; j < toRealize - realizedCount; j++)
-                        //{
-                        //    overdues.Add(new Overdue(date, -1));
-                        //}
                     }
                 }
 
