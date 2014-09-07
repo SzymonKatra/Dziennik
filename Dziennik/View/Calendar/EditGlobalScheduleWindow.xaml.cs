@@ -14,13 +14,16 @@ using System.Windows.Shapes;
 namespace Dziennik.View
 {
     /// <summary>
-    /// Interaction logic for EditScheduleWindow.xaml
+    /// Interaction logic for EditGlobalScheduleWindow.xaml
     /// </summary>
-    public partial class EditScheduleWindow : Window
+    public partial class EditGlobalScheduleWindow : Window
     {
-        public EditScheduleWindow(EditScheduleViewModel viewModel)
+        public EditGlobalScheduleWindow(EditGlobalScheduleViewModel viewModel)
         {
             InitializeComponent();
+
+            this.Width = SystemParameters.PrimaryScreenWidth * 0.7;
+            this.Height = SystemParameters.PrimaryScreenHeight * 0.7;
 
             this.DataContext = viewModel;
 

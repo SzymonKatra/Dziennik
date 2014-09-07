@@ -13,6 +13,7 @@ namespace Dziennik.Model
         public List<Notice> Notices { get; set; }
         public DateTime LastArchivedDate { get; set; }
         public LessonsHours Hours { get; set; }
+        public List<WeekSchedule> Schedules { get; set; }
 
         public GlobalSchool()
         {
@@ -20,6 +21,7 @@ namespace Dziennik.Model
             MarksCategories = new List<MarksCategory>();
             Notices = new List<Notice>();
             Hours = new LessonsHours();
+            Schedules = new List<WeekSchedule>();
         }
     }
 }

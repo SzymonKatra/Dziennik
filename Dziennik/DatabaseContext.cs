@@ -343,6 +343,8 @@ namespace Dziennik
             foreach (CachedProperty property in properties)
             {
                 if (property.IgnoreFromSearchRelations) continue;
+
+                //System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
                 
                 object propVal = property.Info.GetValue(viewModel, null);
 
@@ -357,6 +359,8 @@ namespace Dziennik
                     }
                 }
                 else if (propVal is IModelExposable<ModelBase>) ReflectViewModel((IModelExposable<ModelBase>)propVal, availableRelationPairs);
+
+                //if (sw.ElapsedMilliseconds > 0) Console.WriteLine(sw.ElapsedMilliseconds + " " +viewModel.ToString() + " " + property.Info.Name);
             }
 
             //fourth remove collections from cache and add them to global relations list

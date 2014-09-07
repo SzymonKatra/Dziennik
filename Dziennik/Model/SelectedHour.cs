@@ -9,5 +9,6 @@ namespace Dziennik.Model
     public class SelectedHour : ModelBase
     {
         public int Hour { get; set; }
+        public string Room { get; set; }
     }
 }

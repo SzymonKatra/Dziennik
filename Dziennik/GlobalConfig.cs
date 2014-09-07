@@ -285,6 +285,7 @@ namespace Dziennik
             }
         }
 
+        #region Const
         public static readonly int DecimalRoundingPoints = 2;
         public static readonly string DateTimeFormat = "dd.MM.yyyy HH:mm";
         public static readonly string DateTimeWithSecondsFormat = "dd.MM.yyyy HH:mm:ss";
@@ -304,7 +305,11 @@ namespace Dziennik
         public static readonly Version CurrentVersion;
         public static readonly string UpdateInfoLink = "https://www.dropbox.com/s/z7phk39d6wyi9jn/update_info.xml?dl=1";
         public static readonly string AutoUpdaterPath = "DziennikAktualizacja.exe";
+        public static readonly string CurrentDatabaseSubdirectory = "Baza";
+        public static readonly string ArchiveDatabasesSubdirectory = "Archiwum";
+        #endregion
 
+        #region RegistryNames
         public static readonly string RegistryKeyName = @"Software\Dziennik_Katra";
         public static readonly string RegistryValueNameShowName = "ShowName";
         public static readonly string RegistryValueNameShowSurname = "ShowSurname";
@@ -328,9 +333,7 @@ namespace Dziennik
         public static readonly string RegistryValueNameDatabasesPassword = "Password";
         public static readonly string RegistryValueNameBlockingMinutes = "BlockingMinutes";
         public static readonly string RegistryValueNameLastUpdateCheck = "LastUpdateCheck";
-
-        public static readonly string CurrentDatabaseSubdirectory = "Baza";
-        public static readonly string ArchiveDatabasesSubdirectory = "Archiwum";
+        #endregion
 
         public static readonly DialogService Dialogs;
 
@@ -396,10 +399,10 @@ namespace Dziennik
             windowViewModelMappings.Add(typeof(ChangePasswordViewModel), vm => new ChangePasswordWindow((ChangePasswordViewModel)vm));
             windowViewModelMappings.Add(typeof(TypePasswordViewModel), vm => new TypePasswordWindow((TypePasswordViewModel)vm));
             windowViewModelMappings.Add(typeof(EditLessonsHoursViewModel), vm => new EditLessonsHoursWindow((EditLessonsHoursViewModel)vm));
-            windowViewModelMappings.Add(typeof(EditScheduleViewModel), vm => new EditScheduleWindow((EditScheduleViewModel)vm));
             windowViewModelMappings.Add(typeof(SchedulesListViewModel), vm => new SchedulesListWindow((SchedulesListViewModel)vm));
             windowViewModelMappings.Add(typeof(SelectGroupViewModel), vm => new SelectGroupWindow((SelectGroupViewModel)vm));
             windowViewModelMappings.Add(typeof(OverdueSubjectsListViewModel), vm => new OverdueSubjectsListWindow((OverdueSubjectsListViewModel)vm));
+            windowViewModelMappings.Add(typeof(EditGlobalScheduleViewModel), vm => new EditGlobalScheduleWindow((EditGlobalScheduleViewModel)vm));
 
             Dialogs = new DialogService(windowViewModelMappings);
         }
@@ -447,6 +450,50 @@ namespace Dziennik
                 if (m_notifier == null) m_notifier = new GlobalConfigNotifier();
                 return m_notifier;
             }
+        }
+
+        public static int GetCurrentHourNumber(DateTime now)
+        {
+            DateTime nowDate = now.Date;
+            int hourNumberNow = -1;
+            foreach (var item in GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours)
+            {
+                int nextHourIndex = GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.IndexOf(item) + 1;
+
+                LessonHourViewModel h = new LessonHourViewModel();
+                h.Number = item.Number;
+                h.Start = nowDate + item.Start.TimeOfDay;
+                h.End = nowDate + item.End.TimeOfDay;
+
+                LessonHourViewModel nh = new LessonHourViewModel();
+                if (nextHourIndex >= GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count)
+                {
+                    nh.Number = h.Number;
+                    nh.Start = nh.End = h.End;
+                }
+                else
+                {
+                    LessonHourViewModel nextItem = GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours[nextHourIndex];
+                    nh.Number = nextItem.Number;
+                    nh.Start = nowDate + nextItem.Start.TimeOfDay;
+                    nh.End = nowDate + nextItem.End.TimeOfDay;
+                }
+
+                if (now >= h.Start && now <= h.End)
+                {
+                    hourNumberNow = h.Number;
+                    break;
+                }
+                else if (now >= h.End && now <= nh.Start)
+                {
+                    hourNumberNow = h.Number + 1;
+                    break;
+                }
+            }
+
+            if (hourNumberNow < 0) hourNumberNow = GlobalConfig.MaxLessonHour + 1;
+
+            return hourNumberNow;
         }
     }
 }

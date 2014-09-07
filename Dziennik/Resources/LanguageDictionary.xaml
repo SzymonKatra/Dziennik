@@ -18,6 +18,7 @@
     <s:String x:Key="lang_Archive">Archiwum</s:String>
     <s:String x:Key="lang_CloseArchivePreview">Zamknij podgląd archium</s:String>
     <s:String x:Key="lang_ClassesList">Listy klas</s:String>
+    <s:String x:Key="lang_Schedules">Plany lekcji</s:String>
     <s:String x:Key="lang_MarksCategoriesList">Kategorie ocen</s:String>
     <s:String x:Key="lang_CalendarsList">Kalendarze roku szkolengo</s:String>
     <s:String x:Key="lang_Notices">Powiadomienia</s:String>
@@ -268,7 +269,12 @@
     <s:String x:Key="lang_TypePasswordTitle">Podaj hasło</s:String>
     <s:String x:Key="lang_TypePasswordToUnlock">Podaj hasło aby odblokować</s:String>
     <s:String x:Key="lang_CloseApplication">Zamknij Dziennik</s:String>
-    
+
+    <s:String x:Key="lang_Clear">Czyść</s:String>
+    <s:String x:Key="lang_Room">Sala</s:String>
+
+    <s:String x:Key="lang_EditGlobalScheduleTitle">Edytuj plan lekcji</s:String>
+
     <s:String x:Key="lang_InfoTitle">Informacje</s:String>
     <s:String x:Key="lang_Author">Autor</s:String>
     <s:String x:Key="lang_AuthorName">Szymon Katra</s:String>
@@ -428,6 +434,24 @@
             </ListItem>
             <ListItem>
                 <Paragraph>https://www.iconfinder.com/icons/27832/archive_compress_zip_icon</Paragraph>
+            </ListItem>
+        </List>
+
+        <Paragraph>
+            <Bold>Ikona - Plany lekcji</Bold>
+        </Paragraph>
+        <List>
+            <ListItem>
+                <Paragraph>Autor: Oxygen Team</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>Licencja: Creative Commons (Attribution-NonCommercial-NoDerivs 2.5 Generic)</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>http://www.oxygen-icons.org/</Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>https://www.iconfinder.com/icons/8810/calendar_date_time_icon</Paragraph>
             </ListItem>
         </List>
     </FlowDocument>

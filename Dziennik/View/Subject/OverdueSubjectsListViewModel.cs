@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using Dziennik.CommandUtils;
+using Dziennik.ViewModel;
 
 namespace Dziennik.View
 {
@@ -15,7 +16,7 @@ namespace Dziennik.View
             RealizeSubject,
         }
 
-        public OverdueSubjectsListViewModel(IEnumerable<DateTime> overdueSubjects)
+        public OverdueSubjectsListViewModel(IEnumerable<SchoolGroupViewModel.Overdue> overdueSubjects)
         {
             m_realizeSelectedSubjectCommand = new RelayCommand(RealizeSelectedSubject);
 
@@ -28,8 +29,8 @@ namespace Dziennik.View
             get { return m_result; }
         }
 
-        private IEnumerable<DateTime> m_overdueSubjects;
-        public IEnumerable<DateTime> OverdueSubjects
+        private IEnumerable<SchoolGroupViewModel.Overdue> m_overdueSubjects;
+        public IEnumerable<SchoolGroupViewModel.Overdue> OverdueSubjects
         {
             get { return m_overdueSubjects; }
         }

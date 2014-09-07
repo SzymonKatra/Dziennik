@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="Dziennik.Controls.SelectGroupControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="60" d:DesignWidth="300">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="70"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height=".5*"/>
+            <RowDefinition Height=".5*"/>
+        </Grid.RowDefinitions>
+        
+        <ComboBox x:Name="comboClasses" Grid.Column="0" Grid.Row="0" Style="{StaticResource inputControlStyle}" ItemsSource="{Binding SchoolClasses}" SelectedItem="{Binding SelectedClass, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name"/>
+        <ComboBox x:Name="comboGroups" Grid.Column="0" Grid.Row="1" Style="{StaticResource inputControlStyle}" ItemsSource="{Binding SelectedClass.Groups}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedGroup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        
+        <Button x:Name="buttonCancel" Grid.Column="1" Grid.Row="0" Margin="5,5,5,5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Command="{Binding ClearCommand}">
+            <TextBlock Text="{DynamicResource lang_Clear}"/>
+        </Button>
+        <xctk:WatermarkTextBox x:Name="txtboxRoom" Grid.Column="1" Grid.Row="1" Margin="5,5,5,5" Text="{Binding Room, Mode=TwoWay}" Watermark="{DynamicResource lang_Room}"/>
+    </Grid>
+</UserControl>

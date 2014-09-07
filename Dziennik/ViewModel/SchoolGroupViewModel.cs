@@ -8,6 +8,18 @@ namespace Dziennik.ViewModel
 {
     public class SchoolGroupViewModel : ViewModelBase<SchoolGroupViewModel, SchoolGroup>
     {
+        public class Overdue
+        {
+            public DateTime Date { get; set; }
+            public int Hour { get; set; }
+
+            public Overdue(DateTime date, int hour)
+            {
+                this.Date = date;
+                this.Hour = hour;
+            }
+        }
+
         public SchoolGroupViewModel()
             : this(new SchoolGroup())
         {
@@ -18,12 +30,9 @@ namespace Dziennik.ViewModel
             m_students = new SynchronizedPerItemObservableCollection<StudentInGroupViewModel, StudentInGroup>(Model.Students, (m) => { return new StudentInGroupViewModel(m); });;
             m_globalSubjects = new SynchronizedObservableCollection<GlobalSubjectViewModel, GlobalSubject>(Model.Subjects, m => new GlobalSubjectViewModel(m));
             m_realizedSubjects = new SynchronizedObservableCollection<RealizedSubjectViewModel, RealizedSubject>(Model.RealizedSubjects, m => new RealizedSubjectViewModel(m));
-            m_schedules = new SynchronizedObservableCollection<WeekScheduleViewModel, WeekSchedule>(Model.Schedules, m => new WeekScheduleViewModel(m));
 
             SubscribeStudents();
             SubscribeRealizedSubjects();
-
-            RaiseCurrentScheduleChanged();
         }
 
         private SchoolClassViewModel m_ownerClass;
@@ -85,59 +94,6 @@ namespace Dziennik.ViewModel
             }
         }
 
-        private SynchronizedObservableCollection<WeekScheduleViewModel, WeekSchedule> m_schedules;
-        public SynchronizedObservableCollection<WeekScheduleViewModel, WeekSchedule> Schedules
-        {
-            get { return m_schedules; }
-            set
-            {
-                m_schedules = value;
-                Model.Schedules = value.ModelCollection;
-                RaisePropertyChanged("Schedules");
-            }
-        }
-
-        private WeekScheduleViewModel m_previousSchedule;
-        public WeekScheduleViewModel CurrentSchedule
-        {
-            get
-            {
-                DateTime dateNow = DateTime.Now.Date;
-                for (int i = m_schedules.Count - 1; i >= 0; i--)
-                {
-                    if (m_schedules[i].StartDate <= dateNow)
-                    {
-                        if (m_previousSchedule != m_schedules[i])
-                        {
-                            WeekScheduleViewModel temp = m_previousSchedule;
-                            m_previousSchedule = m_schedules[i];
-                            ScheduleChanged(temp, m_schedules[i]);
-                        }
-                        return m_schedules[i];
-                    }
-                }
-
-                return new WeekScheduleViewModel();
-            }
-        }
-
-        private void ScheduleChanged(WeekScheduleViewModel oldSchedule, WeekScheduleViewModel newSchedule)
-        {
-            if (oldSchedule != null) oldSchedule.HoursCountChanged -= CurrentSchedule_HoursCountChanged;
-            if (newSchedule != null) newSchedule.HoursCountChanged += CurrentSchedule_HoursCountChanged;
-            RaiseCurrentScheduleChanged();
-        }
-
-        private void CurrentSchedule_HoursCountChanged(object sender, EventArgs e)
-        {
-            RaiseRemainingHoursOfLessonsChanged();
-        }
-        public void RaiseCurrentScheduleChanged()
-        {
-            RaisePropertyChanged("CurrentSchedule");
-            RaiseRemainingHoursOfLessonsChanged();
-        }
-
         public string RealizedSubjectsDisplay
         {
             get
@@ -172,15 +128,23 @@ namespace Dziennik.ViewModel
                     }
                     if (nextDay) continue;
 
-                    WeekScheduleViewModel schedule = CurrentSchedule;
+                    WeekScheduleViewModel schedule = GlobalConfig.GlobalDatabase.ViewModel.CurrentSchedule;
+                    DayScheduleViewModel day = null;
                     switch(i.DayOfWeek)
                     {
-                        case DayOfWeek.Monday: result += schedule.Monday.HoursCount; break;
-                        case DayOfWeek.Tuesday: result += schedule.Tuesday.HoursCount; break;
-                        case DayOfWeek.Wednesday: result += schedule.Wednesday.HoursCount; break;
-                        case DayOfWeek.Thursday: result += schedule.Thursday.HoursCount; break;
-                        case DayOfWeek.Friday: result += schedule.Friday.HoursCount; break;
+                        //case DayOfWeek.Monday: result += schedule.Monday.HoursCount; break;
+                        //case DayOfWeek.Tuesday: result += schedule.Tuesday.HoursCount; break;
+                        //case DayOfWeek.Wednesday: result += schedule.Wednesday.HoursCount; break;
+                        //case DayOfWeek.Thursday: result += schedule.Thursday.HoursCount; break;
+                        //case DayOfWeek.Friday: result += schedule.Friday.HoursCount; break;
+                        case DayOfWeek.Monday: day = schedule.Monday; break;
+                        case DayOfWeek.Tuesday: day = schedule.Tuesday; break;
+                        case DayOfWeek.Wednesday: day = schedule.Wednesday; break;
+                        case DayOfWeek.Thursday: day = schedule.Thursday; break;
+                        case DayOfWeek.Friday: day = schedule.Friday; break;
                     }
+
+                    if (day != null) result += day.HoursSchedule.Count(x => x.SelectedGroup == this);
                 }
 
                 return result;
@@ -194,21 +158,22 @@ namespace Dziennik.ViewModel
             }
         }
 
-        public IEnumerable<DateTime> OverdueSubjects
+        [DatabaseIgnoreSearchRelations]
+        public IEnumerable<Overdue> OverdueSubjects
         {
             get
             {
-                List<DateTime> overdues = new List<DateTime>();
+                List<Overdue> overdues = new List<Overdue>();
 
                 if (OwnerClass == null || OwnerClass.Calendar == null) return overdues;
 
-                for (int i = 0; i < this.Schedules.Count; i++)
+                for (int i = 0; i < GlobalConfig.GlobalDatabase.ViewModel.Schedules.Count; i++)
                 {
-                    WeekScheduleViewModel schedule = this.Schedules[i];
-                    DateTime endDate = (i < this.Schedules.Count - 1 ? this.Schedules[i + 1].StartDate.AddDays(-1.0) : this.OwnerClass.Calendar.YearEnding);
+                    WeekScheduleViewModel schedule = GlobalConfig.GlobalDatabase.ViewModel.Schedules[i];
+                    DateTime endDate = (i < GlobalConfig.GlobalDatabase.ViewModel.Schedules.Count - 1 ? GlobalConfig.GlobalDatabase.ViewModel.Schedules[i + 1].StartDate.AddDays(-1.0) : this.OwnerClass.Calendar.YearEnding);
                     if (endDate > DateTime.Now.Date) endDate = DateTime.Now.Date;
 
-                    for (DateTime date = schedule.StartDate; date <= endDate; date = date.AddDays(1.0))
+                    for (DateTime date = schedule.StartDate.Date; date < endDate; date = date.AddDays(1.0))
                     {
                         bool nextDay = false;
                         foreach (var offDay in this.OwnerClass.Calendar.OffDays)
@@ -221,21 +186,54 @@ namespace Dziennik.ViewModel
                         }
                         if (nextDay) continue;
 
+                        //IEnumerable<SelectedHourViewModel> hours = null;
                         int toRealize = 0;
+                        //switch (date.DayOfWeek)
+                        //{
+                        //    case DayOfWeek.Monday: toRealize += schedule.Monday.HoursCount; break;
+                        //    case DayOfWeek.Tuesday: toRealize += schedule.Tuesday.HoursCount; break;
+                        //    case DayOfWeek.Wednesday: toRealize += schedule.Wednesday.HoursCount; break;
+                        //    case DayOfWeek.Thursday: toRealize += schedule.Thursday.HoursCount; break;
+                        //    case DayOfWeek.Friday: toRealize += schedule.Friday.HoursCount; break;
+                        //}
+                        DayScheduleViewModel day = null;
                         switch (date.DayOfWeek)
                         {
-                            case DayOfWeek.Monday: toRealize += schedule.Monday.HoursCount; break;
-                            case DayOfWeek.Tuesday: toRealize += schedule.Tuesday.HoursCount; break;
-                            case DayOfWeek.Wednesday: toRealize += schedule.Wednesday.HoursCount; break;
-                            case DayOfWeek.Thursday: toRealize += schedule.Thursday.HoursCount; break;
-                            case DayOfWeek.Friday: toRealize += schedule.Friday.HoursCount; break;
+                            //case DayOfWeek.Monday: result += schedule.Monday.HoursCount; break;
+                            //case DayOfWeek.Tuesday: result += schedule.Tuesday.HoursCount; break;
+                            //case DayOfWeek.Wednesday: result += schedule.Wednesday.HoursCount; break;
+                            //case DayOfWeek.Thursday: result += schedule.Thursday.HoursCount; break;
+                            //case DayOfWeek.Friday: result += schedule.Friday.HoursCount; break;
+                            case DayOfWeek.Monday: day = schedule.Monday; break;
+                            case DayOfWeek.Tuesday: day = schedule.Tuesday; break;
+                            case DayOfWeek.Wednesday: day = schedule.Wednesday; break;
+                            case DayOfWeek.Thursday: day = schedule.Thursday; break;
+                            case DayOfWeek.Friday: day = schedule.Friday; break;
                         }
+                        if (day != null) toRealize += day.HoursSchedule.Count(x => x.SelectedGroup == this);
+                        if(date == endDate) toRealize = Math.Min(toRealize, GlobalConfig.GetCurrentHourNumber(DateTime.Now));
+                        //switch (date.DayOfWeek)
+                        //{
+                        //    case DayOfWeek.Monday: hours = schedule.Monday.HoursSchedule; break;
+                        //    case DayOfWeek.Tuesday: hours = schedule.Tuesday.HoursSchedule; break;
+                        //    case DayOfWeek.Wednesday: hours = schedule.Wednesday.HoursSchedule; break;
+                        //    case DayOfWeek.Thursday: hours = schedule.Thursday.HoursSchedule; break;
+                        //    case DayOfWeek.Friday: hours = schedule.Friday.HoursSchedule; break;
+                        //}
+
+                        //if (hours != null)
+                        //{
+                        //    foreach (var item in hours)
+                        //    {
+
+                        //    }
+                        //}
 
                         int realizedCount = this.RealizedSubjects.Count(x => x.RealizedDate.Date == date.Date);
 
                         for (int j = 0; j < toRealize - realizedCount; j++)
                         {
-                            overdues.Add(date);
+                            overdues.Add(new Overdue(date, -1));
                         }
                     }
                 }
@@ -243,6 +241,7 @@ namespace Dziennik.ViewModel
                 return overdues;
             }
         }
+        [DatabaseIgnoreSearchRelations]
         public string OverdueSubjectsDisplay
         {
             get
@@ -331,7 +330,6 @@ namespace Dziennik.ViewModel
             this.Students.PushCopy();
             this.GlobalSubjects.PushCopy();
             this.RealizedSubjects.PushCopy();
-            this.Schedules.PushCopy();
         }
         protected override void OnPopCopy(WorkingCopyResult result)
         {
@@ -345,7 +343,6 @@ namespace Dziennik.ViewModel
             this.Students.PopCopy(result);
             this.GlobalSubjects.PopCopy(result);
             this.RealizedSubjects.PopCopy(result);
-            this.Schedules.PopCopy(result);
         }
     }
 }

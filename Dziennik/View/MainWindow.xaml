@@ -28,6 +28,7 @@
             <controls:ImageButton Style="{StaticResource wrapPanelMainControlStyle}" ImageSource="{StaticResource img_save}" Text="{DynamicResource lang_SaveChanges}" Command="{Binding SaveCommand}"/>
             <controls:ImageButton Style="{StaticResource wrapPanelMainControlStyle}" ImageSource="{StaticResource img_calendar}" Text="{DynamicResource lang_CalendarsList}" Command="{Binding ShowCalendarsListCommand}"/>
             <controls:ImageButton Style="{StaticResource wrapPanelMainControlStyle}" ImageSource="{StaticResource img_classes}" Text="{DynamicResource lang_ClassesList}" Command="{Binding ShowClassesListCommand}"/>
+            <controls:ImageButton Style="{StaticResource wrapPanelMainControlStyle}" ImageSource="{StaticResource img_schedules}" Text="{DynamicResource lang_Schedules}" Command="{Binding ShowSchedulesListCommand}"/>
             <controls:ImageButton Style="{StaticResource wrapPanelMainControlStyle}" ImageSource="{StaticResource img_marks_category}" Text="{DynamicResource lang_MarksCategoriesList}" Command="{Binding ShowMarksCategoriesListCommand}"/>
             <controls:ImageButton Style="{StaticResource wrapPanelMainControlStyle}" ImageSource="{StaticResource img_notice}" Text="{DynamicResource lang_Notices}" Command="{Binding ShowNoticesListCommand}"/>
             <controls:ImageButton Style="{StaticResource wrapPanelMainControlStyle}" ImageSource="{StaticResource img_archive}" Text="{DynamicResource lang_ArchiveAction}" Command="{Binding ArchiveDatabaseCommand}"/>

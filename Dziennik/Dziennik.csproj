@@ -98,10 +98,20 @@
     <Compile Include="Controls\ImageButton.xaml.cs">
       <DependentUpon>ImageButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\LessonHourDisplay.xaml.cs">
+      <DependentUpon>LessonHourDisplay.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ListHoursSchedule.xaml.cs">
       <DependentUpon>ListHoursSchedule.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\NegateBooleanConverter.cs" />
+    <Compile Include="Controls\SchoolDayControl.xaml.cs">
+      <DependentUpon>SchoolDayControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ScrollViewerWithHeader.cs" />
+    <Compile Include="Controls\SelectGroupControl.xaml.cs">
+      <DependentUpon>SelectGroupControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Model\DaySchedule.cs" />
     <Compile Include="Model\LessonHour.cs" />
     <Compile Include="Model\LessonsHours.cs" />
@@ -122,9 +132,9 @@
     <Compile Include="View\Calendar\EditLessonsHoursWindow.xaml.cs">
       <DependentUpon>EditLessonsHoursWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Group\EditScheduleViewModel.cs" />
-    <Compile Include="View\Group\EditScheduleWindow.xaml.cs">
-      <DependentUpon>EditScheduleWindow.xaml</DependentUpon>
+    <Compile Include="View\Calendar\EditGlobalScheduleViewModel.cs" />
+    <Compile Include="View\Calendar\EditGlobalScheduleWindow.xaml.cs">
+      <DependentUpon>EditGlobalScheduleWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Subject\OverdueSubjectsListWindow.xaml.cs">
       <DependentUpon>OverdueSubjectsListWindow.xaml</DependentUpon>
@@ -150,7 +160,7 @@
     <Compile Include="View\Password\TypePasswordWindow.xaml.cs">
       <DependentUpon>TypePasswordWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Group\SchedulesListWindow.xaml.cs">
+    <Compile Include="View\Calendar\SchedulesListWindow.xaml.cs">
       <DependentUpon>SchedulesListWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Group\SelectGroupViewModel.cs" />
@@ -367,6 +377,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\LessonHourDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ListHoursSchedule.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -380,6 +394,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\RemoveButtonControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SchoolDayControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SelectGroupControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -431,7 +453,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Group\EditScheduleWindow.xaml">
+    <Page Include="View\Calendar\EditGlobalScheduleWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -483,7 +505,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Group\SchedulesListWindow.xaml">
+    <Page Include="View\Calendar\SchedulesListWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -644,7 +666,10 @@
     <Resource Include="Resources\marks_category.png" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="View\Group\SchedulesListViewModel.cs" />
+    <Compile Include="View\Calendar\SchedulesListViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\schedules.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

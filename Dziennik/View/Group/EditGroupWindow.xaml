@@ -40,7 +40,6 @@
             <Button Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_EditSubjects}" Command="{Binding ShowGlobalSubjectsListCommand}"/>
         </Grid>
         
-        <Button Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_SchedulesList}" Command="{Binding ShowSchedulesListCommand}"/>
 
         <Grid Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>

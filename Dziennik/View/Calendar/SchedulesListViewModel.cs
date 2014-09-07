@@ -11,17 +11,30 @@ namespace Dziennik.View
 {
     public sealed class SchedulesListViewModel : ObservableObject
     {
-        public SchedulesListViewModel(ObservableCollection<WeekScheduleViewModel> schedules, CalendarViewModel calendar)
+        public SchedulesListViewModel(ObservableCollection<WeekScheduleViewModel> schedules, IEnumerable<CalendarViewModel> calendars, ObservableCollection<SchoolClassControlViewModel> classes, ICommand autoSaveCommand)
         {
             m_addScheduleCommand = new RelayCommand(AddSchedule);
             m_editScheduleCommand = new RelayCommand<WeekScheduleViewModel>(EditSchedule);
             m_closeCommand = new RelayCommand(Close);
 
             m_schedules = schedules;
-            m_calendar = calendar;
+            m_calendars = calendars;
+            m_classes = classes;
+            m_autoSaveCommand = autoSaveCommand;
+
+            foreach (var item in m_calendars)
+            {
+                if (item.YearBeginning < m_minDate) m_minDate = item.YearBeginning;
+                if (item.YearEnding > m_maxDate) m_maxDate = item.YearEnding;
+            }
         }
 
-        private CalendarViewModel m_calendar;
+        private ICommand m_autoSaveCommand;
+
+        private DateTime m_minDate = DateTime.MaxValue;
+        private DateTime m_maxDate = DateTime.MinValue;
+        private IEnumerable<CalendarViewModel> m_calendars;
+        private ObservableCollection<SchoolClassControlViewModel> m_classes;
 
         private ObservableCollection<WeekScheduleViewModel> m_schedules;
         public ObservableCollection<WeekScheduleViewModel> Schedules
@@ -48,39 +61,59 @@ namespace Dziennik.View
         private void AddSchedule(object param)
         {
             WeekScheduleViewModel schedule = new WeekScheduleViewModel();
+            schedule.Monday.PadHours(GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count);
+            schedule.Tuesday.PadHours(GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count);
+            schedule.Wednesday.PadHours(GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count);
+            schedule.Thursday.PadHours(GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count);
+            schedule.Friday.PadHours(GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count);
             DateTime? validFromOverride = null;
-            if (m_schedules.Count <= 0) validFromOverride = m_calendar.YearBeginning;
-            EditScheduleViewModel dialogViewModel = new EditScheduleViewModel(schedule, GetMinValidFrom(schedule), GetMaxValidFrom(schedule), true, validFromOverride);
+            if (m_schedules.Count <= 0) validFromOverride = m_minDate;
+            EditGlobalScheduleViewModel dialogViewModel = new EditGlobalScheduleViewModel(m_classes, schedule, GetMinValidFrom(schedule), GetMaxValidFrom(schedule), validFromOverride);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
-            if (dialogViewModel.Result == EditScheduleViewModel.EditScheduleResult.Ok)
+            if (dialogViewModel.Result == EditGlobalScheduleViewModel.EditGlobalScheduleResult.Ok)
             {
                 m_schedules.Add(schedule);
             }
+            if (dialogViewModel.Result != EditGlobalScheduleViewModel.EditGlobalScheduleResult.Cancel) CompleteEdit();
         }
         private void EditSchedule(WeekScheduleViewModel param)
         {
             param.PushCopy();
-            EditScheduleViewModel dialogViewModel = new EditScheduleViewModel(param, GetMinValidFrom(param), GetMaxValidFrom(param));
+            EditGlobalScheduleViewModel dialogViewModel = new EditGlobalScheduleViewModel(m_classes, param, GetMinValidFrom(param), GetMaxValidFrom(param), null);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
-            if(dialogViewModel.Result == EditScheduleViewModel.EditScheduleResult.Cancel)
+            if (dialogViewModel.Result == EditGlobalScheduleViewModel.EditGlobalScheduleResult.Cancel)
             {
                 param.PopCopy(WorkingCopyResult.Cancel);
             }
-            else if (dialogViewModel.Result == EditScheduleViewModel.EditScheduleResult.Ok)
+            else if (dialogViewModel.Result == EditGlobalScheduleViewModel.EditGlobalScheduleResult.Ok)
             {
                 param.PopCopy(WorkingCopyResult.Ok);
             }
+
+            if (dialogViewModel.Result != EditGlobalScheduleViewModel.EditGlobalScheduleResult.Cancel) CompleteEdit();
         }
         private void Close(object param)
         {
             GlobalConfig.Dialogs.Close(this);
         }
 
+        private void CompleteEdit()
+        {
+            m_autoSaveCommand.Execute(null);
+            foreach (var item in m_classes)
+            {
+                foreach (var grp in item.ViewModel.Groups)
+                {
+                    grp.RaiseRemainingHoursOfLessonsChanged();
+                }
+            }
+        }
+
         private DateTime GetMinValidFrom(WeekScheduleViewModel schedule)
         {
             if (schedule == null)
             {
-                return (m_schedules.Count > 0 ? m_schedules[m_schedules.Count - 1].StartDate : m_calendar.YearBeginning.AddDays(-1.0));
+                return (m_schedules.Count > 0 ? m_schedules[m_schedules.Count - 1].StartDate : m_minDate.AddDays(-1.0));
             }
             else
             {
@@ -91,7 +124,7 @@ namespace Dziennik.View
                 }
                 else
                 {
-                    return m_calendar.YearBeginning.AddDays(-1.0);
+                    return m_minDate.AddDays(-1.0);
                 }
             }
 
@@ -117,7 +150,7 @@ namespace Dziennik.View
         {
             if (schedule == null)
             {
-                return m_calendar.YearEnding.AddDays(1.0);
+                return m_maxDate.AddDays(1.0);
             }
             else
             {
@@ -126,7 +159,7 @@ namespace Dziennik.View
                 {
                     return m_schedules[index + 1].StartDate;
                 }
-                else return m_calendar.YearEnding.AddDays(1.0);
+                else return m_maxDate.AddDays(1.0);
             }
 
             //int index = (schedule == null ? -1 : m_schedules.IndexOf(schedule));

@@ -14,5 +14,6 @@
     <BitmapImage x:Key="img_close" UriSource="close.png"/>
     <BitmapImage x:Key="img_archive" UriSource="archive.png"/>
     <BitmapImage x:Key="img_marks_category" UriSource="marks_category.png"/>
+    <BitmapImage x:Key="img_schedules" UriSource="schedules.png"/>
 
 </ResourceDictionary>

@@ -42,8 +42,6 @@
             <Button Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_AllSubjects}" Command="{Binding ShowGlobalSubjectsListCommand}"/>
         </Grid>
 
-        <Button Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_SchedulesList}" Command="{Binding ShowSchedulesListCommand}"/>
-
         <my:OkCancelControl Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>
 </Window>
