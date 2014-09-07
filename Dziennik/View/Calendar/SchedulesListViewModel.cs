@@ -66,6 +66,7 @@ namespace Dziennik.View
             schedule.Wednesday.PadHours(GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count);
             schedule.Thursday.PadHours(GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count);
             schedule.Friday.PadHours(GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count);
+            schedule.StartDate = DateTime.Now.Date;
             DateTime? validFromOverride = null;
             if (m_schedules.Count <= 0) validFromOverride = m_minDate;
             EditGlobalScheduleViewModel dialogViewModel = new EditGlobalScheduleViewModel(m_classes, schedule, GetMinValidFrom(schedule), GetMaxValidFrom(schedule), validFromOverride);
@@ -79,7 +80,7 @@ namespace Dziennik.View
         private void EditSchedule(WeekScheduleViewModel param)
         {
             param.PushCopy();
-            EditGlobalScheduleViewModel dialogViewModel = new EditGlobalScheduleViewModel(m_classes, param, GetMinValidFrom(param), GetMaxValidFrom(param), null);
+            EditGlobalScheduleViewModel dialogViewModel = new EditGlobalScheduleViewModel(m_classes, param, GetMinValidFrom(param), GetMaxValidFrom(param), null, !(param == m_schedules[m_schedules.Count-1]));
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditGlobalScheduleViewModel.EditGlobalScheduleResult.Cancel)
             {
@@ -155,7 +156,7 @@ namespace Dziennik.View
             else
             {
                 int index = m_schedules.IndexOf(schedule);
-                if (index < m_schedules.Count - 1)
+                if (index < m_schedules.Count - 1 && index >= 0)
                 {
                     return m_schedules[index + 1].StartDate;
                 }

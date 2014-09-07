@@ -10,6 +10,7 @@ namespace Dziennik.Model
     {
         public ulong? GlobalSubjectId { get; set; }
 
+        public int RealizedHour { get; set; }
         public DateTime RealizedDate { get; set; }
         public string CustomSubject { get; set; }
     }

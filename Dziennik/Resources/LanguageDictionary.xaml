@@ -33,6 +33,7 @@
     
     <s:String x:Key="lang_RealizeSubject">Zrealizuj temat</s:String>
     <s:String x:Key="lang_RealizedDate">Data zrealizowania</s:String>
+    <s:String x:Key="lang_LessonHour">Godzina lekcyjna</s:String>
     <s:String x:Key="lang_Subject">Temat</s:String>
 
     <s:String x:Key="lang_AverageAttendance">Średnia frekwencja</s:String>
@@ -158,7 +159,7 @@
     <s:String x:Key="lang_LateShort">sp</s:String>
     <s:String x:Key="lang_Justify">Usprawiedliw</s:String>
     <s:String x:Key="lang_CancelJustify">Odwołaj usprawiedliwienie</s:String>
-    <s:String x:Key="lang_StudentsPresentFormalFormat">{0}/{1}</s:String>
+    <s:String x:Key="lang_StudentsPresentFormalFormat">{0}/{1}/{2}</s:String>
     <s:String x:Key="lang_StudentsPresentFormat"> Obecnych: {0} ({1} spóźnionych)</s:String>
     <s:String x:Key="lang_StudentsAbsentFormat">Nieobecnych: {0}</s:String>
     <s:String x:Key="lang_StudentsSumFormat">Razem: {0}</s:String>
@@ -529,4 +530,5 @@ Spróbuj ponownie zainstalować Dziennik, aby rozwiązać problem.</s:String>
     <s:String x:Key="lang_FirstSelectCalendar">Najpierw wybierz kalendarz</s:String>
     <s:String x:Key="lang_HourPreviousInvalid">Godzina rozpoczęcia tej godziny musi być późniejsza od zakończenia poprzedniej</s:String>
     <s:String x:Key="lang_LessonHourStartEndMismatch">Data zakończenia lekcji nie może być wcześniejsza od rozpoczęcia</s:String>
+    <s:String x:Key="lang_SubjectAlreadyRealizedFormat">Temat w dniu {0} na godzinie {1} został już zrealizowany. Czy chcesz dodać jeszcze jeden?</s:String>
 </ResourceDictionary>

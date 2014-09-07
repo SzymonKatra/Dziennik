@@ -22,6 +22,7 @@
             </DataGrid.Resources>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="{DynamicResource lang_Date}" Binding="{Binding Date, StringFormat={x:Static local:GlobalConfig.DateFormat}}"/>
+                <DataGridTextColumn Header="{DynamicResource lang_LessonHour}" Binding="{Binding Hour}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

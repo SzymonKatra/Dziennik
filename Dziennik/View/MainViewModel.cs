@@ -231,8 +231,6 @@ namespace Dziennik.View
 
             Reload(true);
 
-            if (GlobalConfig.Notifier.Password == null) SortOpenedClasses();
-
             CheckNotices();
             
             AskPasswordIfNeeded();
@@ -643,6 +641,7 @@ namespace Dziennik.View
                 }
             }
             m_openedSchoolClasses.Clear();
+            m_sortedOpenedSchoolClasses.Clear();
         }
         public void Reload(bool loadRegistry = false)
         {
@@ -705,6 +704,7 @@ namespace Dziennik.View
             m_databasesDirectoryChanged = false;
 
             RaisePropertyChanged("TabWidth");
+            if (GlobalConfig.Notifier.Password == null) SortOpenedClasses();
         }
         private void InitializeSelectedHours(DayScheduleViewModel day)
         {
@@ -802,7 +802,6 @@ namespace Dziennik.View
 
             //if (m_sortedOpenedSchoolClasses.Count > 0) SelectedClass = m_sortedOpenedSchoolClasses[0];
 
-            if (!GlobalConfig.GlobalDatabase.ViewModel.Hours.IsEnabled) return;
 
             DateTime now = DateTime.Now;
             int hourNumberNow = GlobalConfig.GetCurrentHourNumber(now);
@@ -846,7 +845,7 @@ namespace Dziennik.View
             
             bool breakLoop = false;
             bool firstElapsed = false;
-            int currentHourNumber = (IsSaturdayOrSunday(now.DayOfWeek) ? 1 : hourNumberNow);
+            int currentHourNumber = (IsSaturdayOrSunday(now.DayOfWeek) || hourNumberNow < 0 ? 1 : hourNumberNow);
             int selectedHourNumber = currentHourNumber;
             int priorityCounter = 0;
             while (!breakLoop)

@@ -16,6 +16,7 @@ namespace Dziennik.ViewModel
             : base(viewModel)
         {
             m_hoursSchedule = new SynchronizedObservableCollection<SelectedHourViewModel, SelectedHour>(Model.HoursSchedule, m => new SelectedHourViewModel(m));
+            TypeValidHoursFields();
 
             SubscribeHoursSchedule();
         }
@@ -51,6 +52,7 @@ namespace Dziennik.ViewModel
                 UnsubscribeHoursSchedule();
 
                 m_hoursSchedule = value;
+                TypeValidHoursFields();
 
                 SubscribeHoursSchedule();
 
@@ -73,6 +75,15 @@ namespace Dziennik.ViewModel
                 //{
                 //    this.HoursSchedule.RemoveAt(this.HoursSchedule.Count - 1);
                 //}
+            }
+
+            TypeValidHoursFields();
+        }
+        private void TypeValidHoursFields()
+        {
+            for (int i = 0; i < m_hoursSchedule.Count; i++)
+            {
+                m_hoursSchedule[i].Hour = i + 1;
             }
         }
 

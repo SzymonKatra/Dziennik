@@ -250,8 +250,13 @@ namespace Dziennik.View
         }
         private void RealizeSubject(object e)
         {
-            RealizeSubjectViewModel dialogViewModel = new RealizeSubjectViewModel(null, m_selectedGroup.Students, GetAvailableSubjects(m_selectedGroup), m_selectedGroup.OwnerClass.Calendar, true);
-            if (e is DateTime) dialogViewModel.RealizeDate = (DateTime)e;
+            RealizeSubjectViewModel dialogViewModel = new RealizeSubjectViewModel(null, m_selectedGroup.Students, GetAvailableSubjects(m_selectedGroup), m_selectedGroup.OwnerClass.Calendar, m_selectedGroup.RealizedSubjects,  true);
+            if (e is SchoolGroupViewModel.Overdue)
+            {
+                SchoolGroupViewModel.Overdue overdue = (SchoolGroupViewModel.Overdue)e;
+                dialogViewModel.RealizeDate = overdue.Date;
+                dialogViewModel.RealizeHour = GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.FirstOrDefault(x => x.Number == overdue.Hour);
+            }
             GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Main, dialogViewModel);
             if (dialogViewModel.Result == RealizeSubjectViewModel.RealizeSubjectResult.Ok)
             {
@@ -269,7 +274,7 @@ namespace Dziennik.View
         }
         private void EditRealizedSubject(object e)
         {
-            RealizeSubjectViewModel dialogViewModel = new RealizeSubjectViewModel(m_selectedSubject, m_selectedGroup.Students, GetAvailableSubjects(m_selectedGroup), m_selectedGroup.OwnerClass.Calendar);
+            RealizeSubjectViewModel dialogViewModel = new RealizeSubjectViewModel(m_selectedSubject, m_selectedGroup.Students, GetAvailableSubjects(m_selectedGroup), m_selectedGroup.OwnerClass.Calendar, m_selectedGroup.RealizedSubjects);
             GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Main, dialogViewModel);
             if (dialogViewModel.Result == RealizeSubjectViewModel.RealizeSubjectResult.RemoveSubject)
             {
@@ -396,7 +401,27 @@ namespace Dziennik.View
         }
         private void SortSelectedGroupRealizedSubjects()
         {
-            m_selectedGroup.RealizedSubjects.Sort((x, y) => { return x.RealizedDate.CompareTo(y.RealizedDate); });
+            m_selectedGroup.RealizedSubjects.Sort((x, y) =>
+            {
+                int dateCompare = x.RealizedDate.Date.CompareTo(y.RealizedDate.Date);
+                if (dateCompare == 0)
+                {
+                    int hourCompare = x.RealizedHour.CompareTo(y.RealizedHour);
+                    if (hourCompare == 0)
+                    {
+                        if (x.IsCustom || y.IsCustom)
+                        {
+                            return x.RealizedDate.TimeOfDay.CompareTo(y.RealizedDate.TimeOfDay);
+                        }
+                        else
+                        {
+                            return x.GlobalSubject.Number.CompareTo(y.GlobalSubject.Number);
+                        }
+                    }
+                    else return hourCompare;
+                }
+                else return dateCompare;
+            });
         }
 
         private bool MessageBoxContinue()

@@ -452,9 +452,18 @@ namespace Dziennik
             }
         }
 
+        /// <summary>
+        /// -2 if day ended
+        /// -1 if day not started
+        /// </summary>
+        /// <param name="now"></param>
+        /// <returns></returns>
         public static int GetCurrentHourNumber(DateTime now)
         {
             DateTime nowDate = now.Date;
+
+            if (GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours[GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count - 1].End.TimeOfDay < nowDate.TimeOfDay) return -2;
+
             int hourNumberNow = -1;
             foreach (var item in GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours)
             {
@@ -490,8 +499,6 @@ namespace Dziennik
                     break;
                 }
             }
-
-            if (hourNumberNow < 0) hourNumberNow = GlobalConfig.MaxLessonHour + 1;
 
             return hourNumberNow;
         }

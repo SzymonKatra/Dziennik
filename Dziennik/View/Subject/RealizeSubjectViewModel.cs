@@ -110,7 +110,7 @@ namespace Dziennik.View
             }
         }
 
-        public RealizeSubjectViewModel(RealizedSubjectViewModel realizedSubject, IEnumerable<StudentInGroupViewModel> students, IEnumerable<GlobalSubjectViewModel> availableSubjects, CalendarViewModel calendar, bool isAddingMode = false)
+        public RealizeSubjectViewModel(RealizedSubjectViewModel realizedSubject, IEnumerable<StudentInGroupViewModel> students, IEnumerable<GlobalSubjectViewModel> availableSubjects, CalendarViewModel calendar, IEnumerable<RealizedSubjectViewModel> alreadyRealized, bool isAddingMode = false)
         {
             m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
@@ -122,6 +122,7 @@ namespace Dziennik.View
             m_students = students;
             m_availableSubjects = new ObservableCollection<GlobalSubjectViewModel>(availableSubjects);
             m_calendar = calendar;
+            m_alreadyRealized = alreadyRealized;
 
             if (!m_isAddingMode)
             {
@@ -129,11 +130,17 @@ namespace Dziennik.View
                 m_outsideSubject = m_realizedSubject.CustomSubject;
                 m_isOutsideCurriculum = m_realizedSubject.IsCustom;
                 m_realizeDate = m_realizedSubject.RealizedDate;
+                m_realizeHour = GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.FirstOrDefault(x => x.Number == m_realizedSubject.RealizedHour);
             }
             else
             {
                 m_realizedSubject = new RealizedSubjectViewModel();
                 m_realizeDate = DateTime.Now;
+                m_realizeHour = (GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count > 0 ? GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours[0] : null);
+                int currentHour = GlobalConfig.GetCurrentHourNumber(m_realizeDate);
+                LessonHourViewModel findResult = GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.FirstOrDefault(x => x.Number == currentHour);
+                if (findResult != null) m_realizeHour = findResult;
+
                 m_selectedSubject = (m_availableSubjects.Count > 0 ? m_availableSubjects[0] : null);
             }
             foreach (StudentInGroupViewModel student in students)
@@ -170,6 +177,7 @@ namespace Dziennik.View
             set { m_isAddingMode = value; RaisePropertyChanged("IsAddingMode"); m_removeSubjectCommand.RaiseCanExecuteChanged(); }
         }
 
+        private IEnumerable<RealizedSubjectViewModel> m_alreadyRealized;
         private CalendarViewModel m_calendar;
 
         private RealizedSubjectViewModel m_realizedSubject;
@@ -206,6 +214,13 @@ namespace Dziennik.View
         {
             get { return m_outsideSubject; }
             set { m_outsideSubject = value; RaisePropertyChanged("OutsideCurriculum"); }
+        }
+
+        private LessonHourViewModel m_realizeHour;
+        public LessonHourViewModel RealizeHour
+        {
+            get { return m_realizeHour; }
+            set { m_realizeHour = value; RaisePropertyChanged("RealizeHour"); }
         }
 
         private bool m_realizeDateValid = false;
@@ -250,8 +265,9 @@ namespace Dziennik.View
             {
                 int present = m_pairs.Count(x => x.WasPresent && !x.IsRemoved);
                 int lates = m_pairs.Count(x => x.WasLate && !x.IsRemoved);
+                int absents = m_pairs.Count(x => x.WasAbsent && !x.IsRemoved);
 
-                return string.Format(GlobalConfig.GetStringResource("lang_StudentsPresentFormalFormat"), present + lates, lates);
+                return string.Format(GlobalConfig.GetStringResource("lang_StudentsPresentFormalFormat"), present + lates, absents, lates);
             }
         }
         public string StudentsPresentDisplayed
@@ -285,7 +301,12 @@ namespace Dziennik.View
 
         private void Ok(object e)
         {
-            if(m_isOutsideCurriculum)
+            if (m_alreadyRealized.FirstOrDefault(x => x.RealizedDate.Date == m_realizeDate.Date && m_realizeHour != null && x.RealizedHour == m_realizeHour.Number) != null)
+            {
+                if (GlobalConfig.MessageBox(this, string.Format(GlobalConfig.GetStringResource("lang_SubjectAlreadyRealizedFormat"), m_realizeDate.ToString(GlobalConfig.DateFormat), m_realizeHour.Number), MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
+            }
+
+            if (m_isOutsideCurriculum)
             {
                 m_realizedSubject.CustomSubject = m_outsideSubject;
             }
@@ -293,6 +314,7 @@ namespace Dziennik.View
             {
                 m_realizedSubject.GlobalSubject = m_selectedSubject;
             }
+            m_realizedSubject.RealizedHour = (m_realizeHour == null ? 0 : m_realizeHour.Number);
             m_realizedSubject.RealizedDate = m_realizeDate;
             foreach (var pair in m_pairs)
             {
@@ -348,6 +370,7 @@ namespace Dziennik.View
         }
         private void pair_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            RaisePropertyChanged("StudentsPresentFormalDisplayed");
             RaisePropertyChanged("StudentsPresentDisplayed");
             RaisePropertyChanged("StudentsAbsentDisplayed");
             RaisePropertyChanged("StudentsSumDisplayed");

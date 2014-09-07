@@ -170,10 +170,11 @@ namespace Dziennik.ViewModel
                 for (int i = 0; i < GlobalConfig.GlobalDatabase.ViewModel.Schedules.Count; i++)
                 {
                     WeekScheduleViewModel schedule = GlobalConfig.GlobalDatabase.ViewModel.Schedules[i];
+                    DateTime now = DateTime.Now;
                     DateTime endDate = (i < GlobalConfig.GlobalDatabase.ViewModel.Schedules.Count - 1 ? GlobalConfig.GlobalDatabase.ViewModel.Schedules[i + 1].StartDate.AddDays(-1.0) : this.OwnerClass.Calendar.YearEnding);
-                    if (endDate > DateTime.Now.Date) endDate = DateTime.Now.Date;
+                    if (endDate > now) endDate= now.Date;
 
-                    for (DateTime date = schedule.StartDate.Date; date < endDate; date = date.AddDays(1.0))
+                    for (DateTime date = schedule.StartDate.Date; date <= endDate; date = date.AddDays(1.0))
                     {
                         bool nextDay = false;
                         foreach (var offDay in this.OwnerClass.Calendar.OffDays)
@@ -187,7 +188,7 @@ namespace Dziennik.ViewModel
                         if (nextDay) continue;
 
                         //IEnumerable<SelectedHourViewModel> hours = null;
-                        int toRealize = 0;
+                        //int toRealize = 0;
                         //switch (date.DayOfWeek)
                         //{
                         //    case DayOfWeek.Monday: toRealize += schedule.Monday.HoursCount; break;
@@ -210,8 +211,28 @@ namespace Dziennik.ViewModel
                             case DayOfWeek.Thursday: day = schedule.Thursday; break;
                             case DayOfWeek.Friday: day = schedule.Friday; break;
                         }
-                        if (day != null) toRealize += day.HoursSchedule.Count(x => x.SelectedGroup == this);
-                        if(date == endDate) toRealize = Math.Min(toRealize, GlobalConfig.GetCurrentHourNumber(DateTime.Now));
+                        if (day != null)
+                        {
+                            //toRealize += day.HoursSchedule.Count(x => x.SelectedGroup == this);
+                            List<SelectedHourViewModel> hours = new List<SelectedHourViewModel>(day.HoursSchedule.Where(x => x.SelectedGroup == this));
+                            if (date == now.Date)
+                            {
+                                int currentHour = GlobalConfig.GetCurrentHourNumber(now);
+                                if (currentHour == -1) hours.Clear();
+                                if (currentHour > 0) hours.RemoveAll(x => currentHour < x.Hour);
+                            }
+                            IEnumerable<RealizedSubjectViewModel> currentDateRealized = this.RealizedSubjects.Where(x => x.RealizedDate.Date == date.Date);
+                            foreach (var item in currentDateRealized)
+                            {
+                                SelectedHourViewModel found = hours.FirstOrDefault(x=> x.Hour == item.RealizedHour);
+                                if (found != null) hours.Remove(found);
+                            }
+
+                            foreach (var h in hours)
+                            {
+                                overdues.Add(new Overdue(date, h.Hour));
+                            }
+                        }
                         //switch (date.DayOfWeek)
                         //{
                         //    case DayOfWeek.Monday: hours = schedule.Monday.HoursSchedule; break;
@@ -229,12 +250,12 @@ namespace Dziennik.ViewModel
                         //    }
                         //}
 
-                        int realizedCount = this.RealizedSubjects.Count(x => x.RealizedDate.Date == date.Date);
+                        //int realizedCount = this.RealizedSubjects.Count(x => x.RealizedDate.Date == date.Date);
 
-                        for (int j = 0; j < toRealize - realizedCount; j++)
-                        {
-                            overdues.Add(new Overdue(date, -1));
-                        }
+                        //for (int j = 0; j < toRealize - realizedCount; j++)
+                        //{
+                        //    overdues.Add(new Overdue(date, -1));
+                        //}
                     }
                 }
 

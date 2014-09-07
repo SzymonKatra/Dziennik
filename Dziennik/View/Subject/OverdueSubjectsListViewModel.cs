@@ -41,8 +41,8 @@ namespace Dziennik.View
             get { return m_realizeSelectedSubjectCommand; }
         }
 
-        private DateTime m_selectedSubject;
-        public DateTime SelectedSubject
+        private SchoolGroupViewModel.Overdue m_selectedSubject;
+        public SchoolGroupViewModel.Overdue SelectedSubject
         {
             get { return m_selectedSubject; }
             set { m_selectedSubject = value; RaisePropertyChanged("SelectedSubject"); }

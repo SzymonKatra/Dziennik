@@ -134,7 +134,6 @@ namespace Dziennik.View
             m_databaseHours = hours;
             m_hours = new ObservableCollection<HourValidator>();
 
-            IsEnabled = m_databaseHours.IsEnabled;
             foreach (var item in hours.Hours)
             {
                 HourValidator validator = new HourValidator(m_hours);
@@ -169,13 +168,6 @@ namespace Dziennik.View
             get { return m_result; }
         }
 
-        private bool m_isEnabled;
-        public bool IsEnabled
-        {
-            get { return m_isEnabled; }
-            set { m_isEnabled = value; RaisePropertyChanged("IsEnabled"); m_okCommand.RaiseCanExecuteChanged(); }
-        }
-
         private LessonsHoursViewModel m_databaseHours;
         public LessonsHoursViewModel DatabaseHours
         {
@@ -190,7 +182,6 @@ namespace Dziennik.View
 
         private void Ok(object param)
         {
-            m_databaseHours.IsEnabled = m_isEnabled;
 
             foreach (var item in m_hours)
             {
@@ -210,7 +201,6 @@ namespace Dziennik.View
         }
         private bool CanOk(object param)
         {
-            if (!m_databaseHours.IsEnabled) return true;
             foreach (var item in m_hours)
             {
                 if (!item.Valid) return false;
@@ -231,7 +221,7 @@ namespace Dziennik.View
         }
         private bool CanAddNextHour(object param)
         {
-            return m_hours.Count < GlobalConfig.MaxLessonHour && m_databaseHours.IsEnabled;
+            return m_hours.Count < GlobalConfig.MaxLessonHour;
         }
 
         private void validator_PropertyChanged(object sender, PropertyChangedEventArgs e)

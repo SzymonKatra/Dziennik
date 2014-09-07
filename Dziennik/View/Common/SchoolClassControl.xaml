@@ -40,6 +40,7 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="{DynamicResource lang_NumberShort}" Binding="{Binding GlobalSubject.Number}"/>
                             <DataGridTextColumn Header="{DynamicResource lang_RealizedDate}" Binding="{Binding RealizedDate, StringFormat={x:Static local:GlobalConfig.DateFormat}}"/>
+                            <DataGridTextColumn Header="{DynamicResource lang_LessonHour}" Binding="{Binding RealizedHour}"/>
                             <DataGridTextColumn Header="{DynamicResource lang_Subject}" Binding="{Binding Name}"/>
                             <DataGridTemplateColumn Header="{DynamicResource lang_Edit}">
                                 <DataGridTemplateColumn.CellTemplate>

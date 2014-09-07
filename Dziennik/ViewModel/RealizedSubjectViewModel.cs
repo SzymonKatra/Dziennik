@@ -17,6 +17,11 @@ namespace Dziennik.ViewModel
         {
         }
 
+        public int RealizedHour
+        {
+            get { return Model.RealizedHour; }
+            set { Model.RealizedHour = value; RaisePropertyChanged("RealizedHour"); }
+        }
         public DateTime RealizedDate
         {
             get { return Model.RealizedDate; }

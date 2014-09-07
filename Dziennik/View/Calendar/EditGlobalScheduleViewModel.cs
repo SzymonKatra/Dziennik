@@ -42,7 +42,7 @@ namespace Dziennik.View
             }
         }
 
-        public EditGlobalScheduleViewModel(ObservableCollection<SchoolClassControlViewModel> classes, WeekScheduleViewModel schedule, DateTime minDate, DateTime maxDate, DateTime? validFromOverride)
+        public EditGlobalScheduleViewModel(ObservableCollection<SchoolClassControlViewModel> classes, WeekScheduleViewModel schedule, DateTime minDate, DateTime maxDate, DateTime? validFromOverride, bool isReadOnly = false)
         {
             m_okCommand = new RelayCommand(Ok, CanOk);
             m_cancelCommand = new RelayCommand(Cancel);
@@ -53,6 +53,7 @@ namespace Dziennik.View
             m_minDate = minDate;
             m_maxDate = maxDate;
             m_validFrom = (validFromOverride == null ? schedule.StartDate : (DateTime)validFromOverride);
+            m_isReadOnly = isReadOnly;
 
             m_days = new ObservableCollection<SchoolDayItem>();
             m_days.Add(InitializeDay(DayOfWeek.Monday, m_schedule.Monday));
@@ -79,6 +80,7 @@ namespace Dziennik.View
             return result;
         }
 
+        private bool m_isReadOnly;
         private WeekScheduleViewModel m_schedule;
 
         private EditGlobalScheduleResult m_result = EditGlobalScheduleResult.Cancel;
@@ -124,6 +126,8 @@ namespace Dziennik.View
 
         private void Ok(object param)
         {
+            if (GlobalConfig.MessageBox(this, GlobalConfig.GetStringResource("lang_DoYouWantToContinue"), Controls.MessageBoxSuperPredefinedButtons.YesNo) != Controls.MessageBoxSuperButton.Yes) return;
+
             m_schedule.StartDate = m_validFrom;
 
             m_result = EditGlobalScheduleResult.Ok;
@@ -131,7 +135,7 @@ namespace Dziennik.View
         }
         private bool CanOk(object param)
         {
-            return m_validFromValid;
+            return m_validFromValid && !m_isReadOnly;
         }
         private void Cancel(object param)
         {
