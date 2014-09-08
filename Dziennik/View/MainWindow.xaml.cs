@@ -18,6 +18,7 @@ using System.Threading;
 using System.Globalization;
 using System.IO;
 using System.Security;
+using System.Diagnostics;
 
 namespace Dziennik.View
 {
@@ -47,6 +48,40 @@ namespace Dziennik.View
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
+            if (GlobalConfig.Notifier.GetWasCrashed())
+            {
+                GlobalConfig.Notifier.ResetWasCrashed();
+
+                List<MessageBoxSuperButton> mboxButtons = new List<MessageBoxSuperButton>();
+                mboxButtons.Add(MessageBoxSuperButton.Ignore);
+                mboxButtons.Add(MessageBoxSuperButton.Retry);
+                Dictionary<MessageBoxSuperButton, string> mboxStrings = new Dictionary<MessageBoxSuperButton,string>();
+                mboxStrings.Add(MessageBoxSuperButton.Ignore, GlobalConfig.GetStringResource("lang_IgnoreError"));
+                mboxStrings.Add(MessageBoxSuperButton.Retry, GlobalConfig.GetStringResource("lang_ForceUpdate"));
+
+                MessageBoxSuper mboxDialog = new MessageBoxSuper(GlobalConfig.GetStringResource("lang_WasCrashedMessage"), GlobalConfig.GetStringResource("lang_AppName"), mboxButtons, mboxStrings);
+                mboxDialog.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+                mboxDialog.ShowDialog();
+
+                if (mboxDialog.Result == MessageBoxSuperButton.Retry)
+                {
+                    if (!File.Exists(GlobalConfig.AutoUpdaterPath))
+                    {
+                        MessageBox.Show(GlobalConfig.GetStringResource("lang_AutoupdaterNotFound"));
+                    }
+                    else
+                    {
+                        Process p = new Process();
+                        p.StartInfo.FileName = GlobalConfig.AutoUpdaterPath;
+                        p.StartInfo.Arguments = GlobalConfig.CurrentVersion.ToString() + " " + GlobalConfig.UpdateInfoLink;
+                        p.Start();
+                    }
+
+                    Application.Current.Shutdown();
+                    return;
+                }               
+            }
+
             InitializeComponent();
 
             MainViewModel viewModel = new MainViewModel();
@@ -69,6 +104,7 @@ namespace Dziennik.View
         {
             try
             {
+                GlobalConfig.Notifier.SetWasCrashed();
                 using (StreamWriter writer = new StreamWriter(GlobalConfig.ErrorLogFileName, true))
                 {
                     writer.WriteLine("====================");
@@ -79,6 +115,8 @@ namespace Dziennik.View
                     writer.WriteLine();
                     writer.WriteLine(e.ExceptionObject.ToString());
                 }
+
+                MessageBox.Show("Wystąpił nieznany błąd", "Dziennik ZSE", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch { }
         }

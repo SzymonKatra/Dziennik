@@ -62,6 +62,7 @@ namespace Dziennik.Controls
             }
         }
 
+        
          public MessageBoxSuper(string text, string caption, List<MessageBoxSuperButton> buttons)
             : this(text, caption, buttons, DefaultButtonsContents)
         {
@@ -123,6 +124,10 @@ namespace Dziennik.Controls
         }
 
         private MessageBoxSuperButton m_result;
+        public MessageBoxSuperButton Result
+        {
+            get { return m_result; }
+        }
 
         private RelayCommand<MessageBoxSuperButton> m_clickCommand;
         public ICommand ClickCommand

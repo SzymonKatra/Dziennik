@@ -561,7 +561,7 @@ namespace Dziennik.View
         }
         private void Close(CancelEventArgs param)
         {
-            string lastArchivedDateStr = (GlobalConfig.GlobalDatabase.ViewModel.LastArchivedDate.Ticks == 0 ? GlobalConfig.GetStringResource("lang_Never") : GlobalConfig.GlobalDatabase.ViewModel.LastArchivedDate.ToString(GlobalConfig.DateTimeFormat));
+            string lastArchivedDateStr = (GlobalConfig.GlobalDatabase.ViewModel.LastArchivedDate.Year <= 1? GlobalConfig.GetStringResource("lang_Never") : GlobalConfig.GlobalDatabase.ViewModel.LastArchivedDate.ToString(GlobalConfig.DateTimeFormat));
             switch (GlobalConfig.MessageBox(this, string.Format(GlobalConfig.GetStringResource("lang_DoYouWantToArchiveFormat"), lastArchivedDateStr), MessageBoxSuperPredefinedButtons.YesNoCancel))
             {
                 case MessageBoxSuperButton.Yes:
@@ -756,86 +756,8 @@ namespace Dziennik.View
 
         private void SortOpenedClasses()
         {
-            //if (!GlobalConfig.GlobalDatabase.ViewModel.Hours.IsEnabled) return;
-
-            //DateTime now = DateTime.Now;
-            //int hourNumberNow = GlobalConfig.GetCurrentHourNumber(now);
-
-            //List<SortClassPriority> priorities = new List<SortClassPriority>();
-            //foreach (var openedClass in m_sortedOpenedSchoolClasses) priorities.Add((new SortClassPriority() { SchoolClass = openedClass, Priority = int.MaxValue }));
-            //foreach (var item in priorities)
-            //{
-            //    foreach (var grp in item.SchoolClass.Database.ViewModel.Groups)
-            //    {
-            //        DayOfWeek nowDay = GetClosestWorkingDay(now.DayOfWeek);
-            //        DayOfWeek currentDay = nowDay;
-            //        int currentHourNumberNow = (IsSaturdayOrSunday(now.DayOfWeek) ? 1 : hourNumberNow);
-            //        int priorityMultiplier = 0;
-            //        bool breakLoop = false;
-            //        do
-            //        {
-            //            if (currentDay == nowDay && priorityMultiplier > 0) breakLoop = true;
-            //            DayScheduleViewModel daySched = GetDaySchedule(grp.CurrentSchedule, currentDay);
-            //            int closestHour = GetClosestHour(daySched, currentHourNumberNow);
-            //            if (closestHour > 0) closestHour += priorityMultiplier * (GlobalConfig.MaxLessonHour + 1);
-            //            if (closestHour > 0 && closestHour < item.Priority)// item.Priority < closestHour)
-            //            {
-            //                item.Priority = closestHour;
-            //                item.Group = grp;
-            //            }
-
-            //            currentHourNumberNow = 1;
-            //            currentDay = GetNextWorkingDayOfWeek(currentDay);
-            //            priorityMultiplier++;
-
-            //        } while (!breakLoop);
-            //    }
-            //}
-
-            //priorities.Sort((x, y) => { return x.Priority.CompareTo(y.Priority); });
-
-            //for (int i = 0; i < priorities.Count; i++)
-            //{
-            //    m_sortedOpenedSchoolClasses[i] = priorities[i].SchoolClass;
-            //    if (priorities[i].Group != null) priorities[i].SchoolClass.SelectedGroup = priorities[i].Group;
-            //}
-
-            //if (m_sortedOpenedSchoolClasses.Count > 0) SelectedClass = m_sortedOpenedSchoolClasses[0];
-
-
             DateTime now = DateTime.Now;
             int hourNumberNow = GlobalConfig.GetCurrentHourNumber(now);
-
-            //List<SortClassPriority> priorities = new List<SortClassPriority>();
-            //foreach (var openedClass in m_sortedOpenedSchoolClasses) priorities.Add((new SortClassPriority() { SchoolClass = openedClass, Priority = int.MaxValue }));
-            //foreach (var item in priorities)
-            //{
-            //    foreach (var grp in item.SchoolClass.Database.ViewModel.Groups)
-            //    {
-            //        DayOfWeek nowDay = GetClosestWorkingDay(now.DayOfWeek);
-            //        DayOfWeek currentDay = nowDay;
-            //        int currentHourNumberNow = (IsSaturdayOrSunday(now.DayOfWeek) ? 1 : hourNumberNow);
-            //        int priorityMultiplier = 0;
-            //        bool breakLoop = false;
-            //        do
-            //        {
-            //            if (currentDay == nowDay && priorityMultiplier > 0) breakLoop = true;
-            //            DayScheduleViewModel daySched = GetDaySchedule(grp.CurrentSchedule, currentDay);
-            //            int closestHour = GetClosestHour(daySched, currentHourNumberNow);
-            //            if (closestHour > 0) closestHour += priorityMultiplier * (GlobalConfig.MaxLessonHour + 1);
-            //            if (closestHour > 0 && closestHour < item.Priority)// item.Priority < closestHour)
-            //            {
-            //                item.Priority = closestHour;
-            //                item.Group = grp;
-            //            }
-
-            //            currentHourNumberNow = 1;
-            //            currentDay = GetNextWorkingDayOfWeek(currentDay);
-            //            priorityMultiplier++;
-
-            //        } while (!breakLoop);
-            //    }
-            //}
 
             List<SortClassPriority> priorities = new List<SortClassPriority>();
             foreach (var openedClass in m_sortedOpenedSchoolClasses) priorities.Add((new SortClassPriority() { SchoolClass = openedClass, Priority = int.MaxValue }));
@@ -900,22 +822,7 @@ namespace Dziennik.View
             }
             return null;
         }
-        private int GetClosestHour(DayScheduleViewModel day, int nowHour)
-        {
-            if (day == null) return -1;
-
-            int closest = -1;
-            int maxHour = int.MaxValue;
-            foreach (var hour in day.HoursSchedule)
-            {
-                if (hour.Hour >= nowHour && hour.Hour <= maxHour)
-                {
-                    closest = hour.Hour;
-                    maxHour = closest;
-                }
-            }
-            return closest;
-        }
+        
         private DayOfWeek GetNextWorkingDayOfWeek(DayOfWeek dayOfWeek)
         {
             switch (dayOfWeek)

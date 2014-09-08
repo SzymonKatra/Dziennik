@@ -403,19 +403,19 @@ namespace Dziennik.View
         {
             m_selectedGroup.RealizedSubjects.Sort((x, y) =>
             {
-                int dateCompare = x.RealizedDate.Date.CompareTo(y.RealizedDate.Date);
+                int dateCompare = y.RealizedDate.Date.CompareTo(x.RealizedDate.Date);
                 if (dateCompare == 0)
                 {
-                    int hourCompare = x.RealizedHour.CompareTo(y.RealizedHour);
+                    int hourCompare = y.RealizedHour.CompareTo(x.RealizedHour);
                     if (hourCompare == 0)
                     {
                         if (x.IsCustom || y.IsCustom)
                         {
-                            return x.RealizedDate.TimeOfDay.CompareTo(y.RealizedDate.TimeOfDay);
+                            return y.RealizedDate.TimeOfDay.CompareTo(x.RealizedDate.TimeOfDay);
                         }
                         else
                         {
-                            return x.GlobalSubject.Number.CompareTo(y.GlobalSubject.Number);
+                            return y.GlobalSubject.Number.CompareTo(x.GlobalSubject.Number);
                         }
                     }
                     else return hourCompare;

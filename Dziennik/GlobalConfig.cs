@@ -283,6 +283,29 @@ namespace Dziennik
                 //key.SetValue(GlobalConfig.RegistryValueNameLastOpened, builder.ToString());
                 key.Close();
             }
+
+            public void SetWasCrashed()
+            {
+                RegistryKey key = Registry.CurrentUser.CreateSubKey(GlobalConfig.RegistryKeyName);
+                key.SetValue(GlobalConfig.RegistryValueNameWasCrashed, true);
+                key.Close();
+            }
+            public void ResetWasCrashed()
+            {
+                RegistryKey key = Registry.CurrentUser.CreateSubKey(GlobalConfig.RegistryKeyName);
+                key.SetValue(GlobalConfig.RegistryValueNameWasCrashed, false);
+                key.Close();
+            }
+            public bool GetWasCrashed()
+            {
+                RegistryKey key = Registry.CurrentUser.CreateSubKey(GlobalConfig.RegistryKeyName);
+                object crashedReg = key.GetValue(GlobalConfig.RegistryValueNameWasCrashed);
+
+                bool crashed = false;
+                if (crashedReg != null) crashed = Ext.BoolParseOrDefault(crashedReg.ToString(), crashed);
+
+                return crashed;
+            }
         }
 
         #region Const
@@ -333,6 +356,7 @@ namespace Dziennik
         public static readonly string RegistryValueNameDatabasesPassword = "Password";
         public static readonly string RegistryValueNameBlockingMinutes = "BlockingMinutes";
         public static readonly string RegistryValueNameLastUpdateCheck = "LastUpdateCheck";
+        public static readonly string RegistryValueNameWasCrashed = "WasCrashed";
         #endregion
 
         public static readonly DialogService Dialogs;
@@ -462,7 +486,8 @@ namespace Dziennik
         {
             DateTime nowDate = now.Date;
 
-            if (GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours[GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count - 1].End.TimeOfDay < nowDate.TimeOfDay) return -2;
+            if (GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count <= 0 ||
+                GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours[GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count - 1].End.TimeOfDay < now.TimeOfDay) return -2;
 
             int hourNumberNow = -1;
             foreach (var item in GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours)
@@ -495,7 +520,7 @@ namespace Dziennik
                 }
                 else if (now >= h.End && now <= nh.Start)
                 {
-                    hourNumberNow = h.Number + 1;
+                    hourNumberNow = h.Number;
                     break;
                 }
             }

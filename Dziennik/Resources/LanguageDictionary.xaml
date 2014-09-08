@@ -10,6 +10,8 @@
     <s:String x:Key="lang_Error">Błąd</s:String>
     <s:String x:Key="lang_ErrorFormat">Błąd {0}</s:String>
     <s:String x:Key="lang_NoName">bez nazwy</s:String>
+    <s:String x:Key="lang_IgnoreError">Ignoruj i uruchom Dziennik</s:String>
+    <s:String x:Key="lang_ForceUpdate">Wymuś aktualizację</s:String>
     
     <s:String x:Key="lang_SaveChanges">Zapisz zmiany</s:String>
     <s:String x:Key="lang_Options">Opcje</s:String>
@@ -531,4 +533,6 @@ Spróbuj ponownie zainstalować Dziennik, aby rozwiązać problem.</s:String>
     <s:String x:Key="lang_HourPreviousInvalid">Godzina rozpoczęcia tej godziny musi być późniejsza od zakończenia poprzedniej</s:String>
     <s:String x:Key="lang_LessonHourStartEndMismatch">Data zakończenia lekcji nie może być wcześniejsza od rozpoczęcia</s:String>
     <s:String x:Key="lang_SubjectAlreadyRealizedFormat">Temat w dniu {0} na godzinie {1} został już zrealizowany. Czy chcesz dodać jeszcze jeden?</s:String>
+    <s:String x:Key="lang_WasCrashedMessage" xml:space="preserve">Podczas ostatniej sesji Dziennika wystąpił nieznany błąd.
+        Co chcesz zrobić?</s:String>
 </ResourceDictionary>

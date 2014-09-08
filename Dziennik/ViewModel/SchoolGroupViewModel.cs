@@ -111,7 +111,8 @@ namespace Dziennik.ViewModel
             {
                 if (OwnerClass == null || OwnerClass.Calendar == null) return 0;
 
-                DateTime today = DateTime.Now.Date;
+                DateTime now = DateTime.Now;
+                DateTime today = now.Date;
                 if (today < OwnerClass.Calendar.YearBeginning) today = OwnerClass.Calendar.YearBeginning;
                 int result = 0;
 
@@ -132,11 +133,6 @@ namespace Dziennik.ViewModel
                     DayScheduleViewModel day = null;
                     switch(i.DayOfWeek)
                     {
-                        //case DayOfWeek.Monday: result += schedule.Monday.HoursCount; break;
-                        //case DayOfWeek.Tuesday: result += schedule.Tuesday.HoursCount; break;
-                        //case DayOfWeek.Wednesday: result += schedule.Wednesday.HoursCount; break;
-                        //case DayOfWeek.Thursday: result += schedule.Thursday.HoursCount; break;
-                        //case DayOfWeek.Friday: result += schedule.Friday.HoursCount; break;
                         case DayOfWeek.Monday: day = schedule.Monday; break;
                         case DayOfWeek.Tuesday: day = schedule.Tuesday; break;
                         case DayOfWeek.Wednesday: day = schedule.Wednesday; break;
@@ -144,7 +140,18 @@ namespace Dziennik.ViewModel
                         case DayOfWeek.Friday: day = schedule.Friday; break;
                     }
 
-                    if (day != null) result += day.HoursSchedule.Count(x => x.SelectedGroup == this);
+                    if (day != null)
+                    {
+                        int currentHour = GlobalConfig.GetCurrentHourNumber(now);
+                        if (i == today)
+                        {
+                            if (currentHour != -2) result += day.HoursSchedule.Count(x => x.SelectedGroup == this && (x.Hour > currentHour));
+                        }
+                        else
+                        {
+                            result += day.HoursSchedule.Count(x => x.SelectedGroup == this);
+                        }
+                    }
                 }
 
                 return result;
