@@ -33,7 +33,7 @@ namespace Dziennik.View
             m_putNotAllEndingMarksCommand = new RelayCommand<string>(PutNotAllEndingMarks);
             m_cancelAllEndingMarksCommand = new RelayCommand<string>(CancelAllEndingMarks);
             m_addMarksSetCommand = new RelayCommand<string>(AddMarksSet);
-            m_refreshStatisticsCommand = new RelayCommand(RefreshStatistics);
+            m_refreshStatisticsCommand = new RelayCommand(RefreshStatistics, CanRefreshStatictics);
 
             m_database = database;
         }
@@ -398,6 +398,10 @@ namespace Dziennik.View
         private void RefreshStatistics(object e)
         {
             m_selectedGroup.Statistics.Refresh();
+        }
+        private bool CanRefreshStatictics(object param)
+        {
+            return m_selectedGroup != null;
         }
         private void SortSelectedGroupRealizedSubjects()
         {

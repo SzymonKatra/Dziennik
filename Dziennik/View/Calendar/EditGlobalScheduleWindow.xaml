@@ -54,13 +54,13 @@
                     <ItemsControl Grid.Column="0" ItemsSource="{Binding ViewModel.Hours.Hours, Source={x:Static local:GlobalConfig.GlobalDatabase}}" AlternationCount="2">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <UniformGrid Columns="1"/>
+                                <StackPanel Orientation="Vertical"/>
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Border x:Name="border" BorderBrush="Black" BorderThickness="1">
-                                    <my:LessonHourDisplay Height="60" Hour="{Binding}"/>
+                                    <my:LessonHourDisplay Height="70" Hour="{Binding}"/>
                                 </Border>
                                 <DataTemplate.Triggers>
                                     <Trigger Property="ItemsControl.AlternationIndex" Value="0">

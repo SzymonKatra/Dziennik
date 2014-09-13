@@ -17,6 +17,14 @@ namespace Dziennik.ViewModel
         {
         }
 
+        private SchoolGroupViewModel m_ownerGroup;
+        [DatabaseIgnoreSearchRelations]
+        public SchoolGroupViewModel OwnerGroup
+        {
+            get { return m_ownerGroup; }
+            set { m_ownerGroup = value; }
+        }
+
         public int RealizedHour
         {
             get { return Model.RealizedHour; }
@@ -49,6 +57,29 @@ namespace Dziennik.ViewModel
             get
             {
                 return (IsCustom ? CustomSubject : (m_globalSubject == null ? "ERROR" : m_globalSubject.Name));
+            }
+        }
+        public string AbsentsDisplay
+        {
+            get
+            {
+                string result = string.Empty;
+                if (m_ownerGroup == null) return result;
+
+                foreach (var student in m_ownerGroup.Students)
+                {
+                    foreach (var presence in student.Presence)
+                    {
+                        if (presence.RealizedSubject == this && !presence.WasPresent)
+                        {
+                            result += student.Number + ", ";
+                        }
+                    }
+                }
+
+                if (result.Length > 0) result = result.Remove(result.Length - 2);
+
+                return result;
             }
         }
 

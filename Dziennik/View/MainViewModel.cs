@@ -92,6 +92,27 @@ namespace Dziennik.View
         private object m_activityTimerLock = new object();
         private bool m_passwordAsking = false;
 
+        private Timer m_idleTimer;
+        private object m_idleTimerLock = new object();
+        private TimeSpan m_currentRemaining;
+        private object m_currentRemainingLock = new object();
+        public TimeSpan CurrentRemaining
+        {
+            get
+            {
+                TimeSpan temp;
+                lock (m_currentRemainingLock) temp = m_currentRemaining;
+                return temp;
+            }
+            set
+            {
+                lock (m_currentRemainingLock) m_currentRemaining = value;
+                RaisePropertyChanged("CurrentRemaining");
+            }
+        }
+        private List<LessonHourViewModel> m_hoursCopy;
+        private object m_hoursCopyLock = new object();
+
         private RelayCommand m_saveCommand;
         public ICommand SaveCommand
         {
@@ -236,9 +257,73 @@ namespace Dziennik.View
             AskPasswordIfNeeded();
 
             if (DateTime.Now.Date > GlobalConfig.Notifier.LastUpdateCheck.Date)  m_checkUpdatesCommand.Execute(null);
+
+            CopyHours(true);
+            lock (m_idleTimerLock)
+            {
+                m_idleTimer = new Timer(500);
+                m_idleTimer.Elapsed += m_idleTimer_Elapsed;
+                m_idleTimer.Start();
+            }
             
             //string[] args = Environment.GetCommandLineArgs();
             //if (args.Length >= 2) m_openFromPathCommand.Execute(args[1]);
+        }
+        private void CopyHours(bool createNewCollection=false)
+        {
+            lock (m_hoursCopyLock)
+            {
+                if (createNewCollection) m_hoursCopy = new List<LessonHourViewModel>(); else m_hoursCopy.Clear();
+                foreach (var item in GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours)
+                {
+                    LessonHourViewModel hr = new LessonHourViewModel();
+                    hr.Number = item.Number;
+                    hr.Start = item.Start;
+                    hr.End = item.End;
+                    m_hoursCopy.Add(hr);
+                }
+            }
+        }
+
+        private void m_idleTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            DateTime now = DateTime.Now;
+            TimeSpan currentRemaining = CurrentRemaining;
+
+            int currentNumber = GlobalConfig.GetCurrentHourNumber(now);
+            if (currentNumber < 0 && currentRemaining.Ticks != 0)
+            {
+                CurrentRemaining = new TimeSpan(0);
+                return;
+            }
+
+            DateTime start = new DateTime(0);
+            DateTime end = new DateTime(0);
+            lock (m_hoursCopyLock)
+            {
+                LessonHourViewModel hr = m_hoursCopy.FirstOrDefault(x => x.Number == currentNumber);
+                if (hr != null)
+                {
+                    start = hr.Start;
+                    end = hr.End;
+                }
+            }
+
+            if (start.TimeOfDay <= now.TimeOfDay && now.TimeOfDay <= end.TimeOfDay)
+            {
+                TimeSpan remaining = end.TimeOfDay - now.TimeOfDay;
+                if (currentRemaining.Seconds != remaining.Seconds || currentRemaining.Minutes != remaining.Minutes || currentRemaining.Hours != remaining.Hours)
+                {
+                    CurrentRemaining = remaining;
+                }
+            }
+            else
+            {
+                if (currentRemaining.Ticks != 0)
+                {
+                    currentRemaining = new TimeSpan(0);
+                }
+            }
         }
 
         private void View_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -762,13 +847,18 @@ namespace Dziennik.View
             List<SortClassPriority> priorities = new List<SortClassPriority>();
             foreach (var openedClass in m_sortedOpenedSchoolClasses) priorities.Add((new SortClassPriority() { SchoolClass = openedClass, Priority = int.MaxValue }));
             WeekScheduleViewModel schedule = GlobalConfig.GlobalDatabase.ViewModel.CurrentSchedule;
-            DayOfWeek nowDay = GetClosestWorkingDay(now.DayOfWeek);
-            DayOfWeek currentDay = nowDay;
+            
+            
             
             bool breakLoop = false;
             bool firstElapsed = false;
             int currentHourNumber = (IsSaturdayOrSunday(now.DayOfWeek) || hourNumberNow < 0 ? 1 : hourNumberNow);
             int selectedHourNumber = currentHourNumber;
+
+            DayOfWeek nowDay = GetClosestWorkingDay(now.DayOfWeek);
+            if (hourNumberNow == -2 && !IsSaturdayOrSunday(now.DayOfWeek)) nowDay = GetNextWorkingDayOfWeek(nowDay);
+            DayOfWeek currentDay = nowDay;
+
             int priorityCounter = 0;
             while (!breakLoop)
             {

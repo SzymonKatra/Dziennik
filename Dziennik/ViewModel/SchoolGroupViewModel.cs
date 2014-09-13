@@ -81,6 +81,7 @@ namespace Dziennik.ViewModel
         }
         private SynchronizedObservableCollection<RealizedSubjectViewModel, RealizedSubject> m_realizedSubjects;
         [DatabaseRelationCollection("GroupRealizedSubjects")]
+        [DatabaseInversePropertyOwner("OwnerGroup", "xxx")]
         public SynchronizedObservableCollection<RealizedSubjectViewModel, RealizedSubject> RealizedSubjects
         {
             get { return m_realizedSubjects; }
@@ -238,6 +239,14 @@ namespace Dziennik.ViewModel
                 return string.Format(GlobalConfig.GetStringResource("lang_OverdueSubjectsFormat"), OverdueSubjects.Count());
             }
         }
+        [DatabaseIgnoreSearchRelations]
+        public bool HasOverdueSubjects
+        {
+            get
+            {
+                return (OverdueSubjects.Count() > 0);
+            }
+        }
 
         private StatisticsViewModel m_statistics;
         public StatisticsViewModel Statistics
@@ -266,22 +275,43 @@ namespace Dziennik.ViewModel
             RaisePropertyChanged("RemainingHoursOfLessonsDisplay");
             RaisePropertyChanged("OverdueSubjects");
             RaisePropertyChanged("OverdueSubjectsDisplay");
+            RaisePropertyChanged("HasOverdueSubjects");
         }
 
         private void SubscribeRealizedSubjects()
         {
             m_realizedSubjects.CollectionChanged += m_realizedSubjects_CollectionChanged;
+            m_realizedSubjects.Added += m_realizedSubjects_Added;
+            m_realizedSubjects.Removed += m_realizedSubjects_Removed;
         }
         private void UnsubscribeRealizedSubjects()
         {
             m_realizedSubjects.CollectionChanged -= m_realizedSubjects_CollectionChanged;
+            m_realizedSubjects.Added -= m_realizedSubjects_Added;
+            m_realizedSubjects.Removed -= m_realizedSubjects_Removed;
         }
+
+        private void m_realizedSubjects_Added(object sender, NotifyCollectionChangedSimpleEventArgs<RealizedSubjectViewModel> e)
+        {
+            foreach (var item in e.Items)
+            {
+                item.OwnerGroup = this;
+            }
+        }
+        private void m_realizedSubjects_Removed(object sender, NotifyCollectionChangedSimpleEventArgs<RealizedSubjectViewModel> e)
+        {
+            foreach (var item in e.Items)
+            {
+                item.OwnerGroup = null;
+            }
+        } 
         
         private void m_realizedSubjects_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             RaisePropertyChanged("RealizedSubjectsDisplay");
             RaisePropertyChanged("OverdueSubjects");
             RaisePropertyChanged("OverdueSubjectsDisplay");
+            RaisePropertyChanged("HasOverdueSubjects");
         }
 
         private void SubscribeStudents()

@@ -104,19 +104,31 @@ namespace Dziennik.View
         {
             try
             {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("====================");
+                sb.AppendLine(DateTime.Now.ToString(GlobalConfig.DateTimeFormat));
+                sb.AppendLine("====================");
+                sb.AppendLine();
+                sb.AppendLine("Is terminating: " + e.IsTerminating);
+                sb.AppendLine();
+                sb.AppendLine(e.ExceptionObject.ToString());
+                string error = sb.ToString();
+
                 GlobalConfig.Notifier.SetWasCrashed();
                 using (StreamWriter writer = new StreamWriter(GlobalConfig.ErrorLogFileName, true))
                 {
-                    writer.WriteLine("====================");
-                    writer.WriteLine(DateTime.Now.ToString(GlobalConfig.DateTimeFormat));
-                    writer.WriteLine("====================");
-                    writer.WriteLine();
-                    writer.WriteLine("Is terminating: " + e.IsTerminating);
-                    writer.WriteLine();
-                    writer.WriteLine(e.ExceptionObject.ToString());
+                    writer.Write(error);
                 }
 
-                MessageBox.Show("Wystąpił nieznany błąd", "Dziennik ZSE", MessageBoxButton.OK, MessageBoxImage.Error);
+                sb.Clear();
+                sb.AppendLine("Wystąpił nieznany błąd");
+                if (e.IsTerminating) sb.AppendLine("Dziennik zostanie zamknięty");
+                sb.AppendLine();
+                sb.AppendLine("Czy chcesz rozwinąć szczegóły techniczne? (zostały zapisane w " + GlobalConfig.ErrorLogFileName + ")");
+                if (MessageBox.Show(sb.ToString(), "Dziennik ZSE", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes)
+                {
+                    MessageBox.Show("Szczegóły techniczne: " + Environment.NewLine + error, "Dziennik ZSE", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             catch { }
         }

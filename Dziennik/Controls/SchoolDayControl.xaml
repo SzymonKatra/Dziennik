@@ -15,7 +15,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Border x:Name="border" BorderBrush="Black" BorderThickness="1">
-                        <my:SelectGroupControl Margin="5" SchoolClasses="{Binding SchoolClasses, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" SelectedGroup="{Binding SelectedGroup, Mode=TwoWay}" Room="{Binding Room, Mode=TwoWay}"/>
+                        <my:SelectGroupControl Margin="5" Height="60" SchoolClasses="{Binding SchoolClasses, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" SelectedGroup="{Binding SelectedGroup, Mode=TwoWay}" Room="{Binding Room, Mode=TwoWay}"/>
                     </Border>
                     <DataTemplate.Triggers>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="0">

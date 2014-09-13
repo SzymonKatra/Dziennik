@@ -106,7 +106,7 @@
         <Setter Property="TextWrapping" Value="Wrap"/>
     </Style>
 
-    <Style x:Key="commonButtonStyle" TargetType="{x:Type Button}">
+    <Style x:Key="commonButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="Margin" Value="10,5,10,5"/>
     </Style>
 
@@ -128,6 +128,7 @@
     <my:NullableBrushToBrushConverter x:Key="convertNullableBrushToBrush"/>
     <my:NegateBooleanConverter x:Key="convertBooleanNegate"/>
     <my:AbsentTypeToBrushConverter x:Key="convertAbsentToBrush"/>
+    <my:BooleanTrueToRedBrushConverter x:Key="convertBoolTrueToRedBrush"/>
 
     <s:String x:Key="attendanceConverterParameter">0.5-1-True</s:String>
     <s:String x:Key="averageMarkConverterParameter">1.6-6-False</s:String>
