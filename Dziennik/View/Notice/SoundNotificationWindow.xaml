@@ -1,0 +1,19 @@
+﻿<Window x:Class="Dziennik.View.SoundNotificationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:my="clr-namespace:Dziennik.Controls"
+        Title="{DynamicResource lang_SoundNotificationTitle}" Height="300" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        
+        <CheckBox Grid.Row="0" Style="{StaticResource inputControlStyle}" Content="{DynamicResource lang_EnableEndLessonNotify}"/>
+    </Grid>
+</Window>

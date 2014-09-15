@@ -27,6 +27,12 @@ namespace Dziennik.View
             public SchoolGroupViewModel Group { get; set; }
             public int Priority { get; set; }
         }
+        public enum CurrentRemainingType
+        {
+            Lesson,
+            Break,
+            NoLessons,
+        }
 
         public MainViewModel()
         {
@@ -94,7 +100,8 @@ namespace Dziennik.View
 
         private Timer m_idleTimer;
         private object m_idleTimerLock = new object();
-        private TimeSpan m_currentRemaining;
+
+        private TimeSpan m_currentRemaining = TimeSpan.MinValue;
         private object m_currentRemainingLock = new object();
         public TimeSpan CurrentRemaining
         {
@@ -108,8 +115,66 @@ namespace Dziennik.View
             {
                 lock (m_currentRemainingLock) m_currentRemaining = value;
                 RaisePropertyChanged("CurrentRemaining");
+                RaisePropertyChanged("CurrentRemainingDisplayed");
             }
         }
+
+        private int m_currentLesson = 1;
+        private object m_currentLessonLock = new object();
+        public int CurrentLesson
+        {
+            get
+            {
+                int temp;
+                lock (m_currentLessonLock) temp = m_currentLesson;
+                return temp;
+            }
+            set
+            {
+                lock (m_currentLessonLock) m_currentLesson = value;
+                RaisePropertyChanged("CurrentLesson");
+                RaisePropertyChanged("CurrentRemainingDisplayed");
+            }
+        }
+
+        private CurrentRemainingType m_currentType = CurrentRemainingType.NoLessons;
+        private object m_currentTypeLock = new object();
+        public CurrentRemainingType CurrentType
+        {
+            get
+            {
+                CurrentRemainingType temp;
+                lock (m_currentTypeLock) temp = m_currentType;
+                return temp;
+            }
+            set
+            {
+                lock (m_currentTypeLock) m_currentType = value;
+                RaisePropertyChanged("CurrentType");
+                RaisePropertyChanged("CurrentRemainingDisplayed");
+            }
+        }
+
+        public string CurrentRemainingDisplayed
+        {
+            get
+            {
+                CurrentRemainingType type = this.CurrentType;
+                switch(type)
+                {
+                    case CurrentRemainingType.Lesson:
+                        return string.Format(GlobalConfig.GetStringResource("lang_CurrentLesson"), CurrentLesson.ToString()) + '\t' + string.Format(GlobalConfig.GetStringResource("lang_LessonRemaining"), CurrentRemaining.ToString(GlobalConfig.TimeSpanHMSFormat));
+
+                    case CurrentRemainingType.Break:
+                        return string.Format(GlobalConfig.GetStringResource("lang_CurrentLesson"), CurrentLesson.ToString()) + '\t' + string.Format(GlobalConfig.GetStringResource("lang_BreakRemaining"), CurrentRemaining.ToString(GlobalConfig.TimeSpanHMSFormat));
+
+                    case CurrentRemainingType.NoLessons:
+                    default:
+                        return GlobalConfig.GetStringResource("lang_NoCurrentLessons");
+                }
+            }
+        }
+
         private List<LessonHourViewModel> m_hoursCopy;
         private object m_hoursCopyLock = new object();
 
@@ -291,14 +356,17 @@ namespace Dziennik.View
             TimeSpan currentRemaining = CurrentRemaining;
 
             int currentNumber = GlobalConfig.GetCurrentHourNumber(now);
+            CurrentLesson = currentNumber;
             if (currentNumber < 0 && currentRemaining.Ticks != 0)
             {
                 CurrentRemaining = new TimeSpan(0);
+                CurrentType = CurrentRemainingType.NoLessons;
                 return;
             }
 
             DateTime start = new DateTime(0);
             DateTime end = new DateTime(0);
+            DateTime nextStart = new DateTime(0);
             lock (m_hoursCopyLock)
             {
                 LessonHourViewModel hr = m_hoursCopy.FirstOrDefault(x => x.Number == currentNumber);
@@ -306,6 +374,12 @@ namespace Dziennik.View
                 {
                     start = hr.Start;
                     end = hr.End;
+
+                    int index = m_hoursCopy.IndexOf(hr);
+                    if (index + 1 < m_hoursCopy.Count - 1)
+                    {
+                        nextStart = m_hoursCopy[index + 1].Start;
+                    }
                 }
             }
 
@@ -315,13 +389,24 @@ namespace Dziennik.View
                 if (currentRemaining.Seconds != remaining.Seconds || currentRemaining.Minutes != remaining.Minutes || currentRemaining.Hours != remaining.Hours)
                 {
                     CurrentRemaining = remaining;
+                    CurrentType = CurrentRemainingType.Lesson;
+                }
+            }
+            else if (nextStart.Ticks != 0)
+            {
+                TimeSpan remaining = nextStart.TimeOfDay - now.TimeOfDay;
+                if (currentRemaining.Seconds != remaining.Seconds || currentRemaining.Minutes != remaining.Minutes || currentRemaining.Hours != remaining.Hours)
+                {
+                    CurrentRemaining = remaining;
+                    CurrentType = CurrentRemainingType.Break;
                 }
             }
             else
             {
                 if (currentRemaining.Ticks != 0)
                 {
-                    currentRemaining = new TimeSpan(0);
+                    CurrentRemaining = new TimeSpan(0);
+                    CurrentType = CurrentRemainingType.NoLessons;
                 }
             }
         }
@@ -449,6 +534,7 @@ namespace Dziennik.View
                 SortOpenedClasses();
                 if (!m_blockSaving) Options(null);
             }
+            CopyHours();
             RaisePropertyChanged("TabWidth");
         }
         private void Info(object e)

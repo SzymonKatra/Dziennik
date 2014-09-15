@@ -184,6 +184,34 @@ namespace Dziennik
                 set { m_lastUpdateCheck = value; RaisePropertyChanged("LastUpdateCheck"); }
             }
 
+            private int m_endLessonNotifyMinutes = 0;
+            public int EndLessonNotifyMinutes
+            {
+                get { return m_endLessonNotifyMinutes; }
+                set { m_endLessonNotifyMinutes = value; RaisePropertyChanged("EndLessonNotifyMinutes"); }
+            }
+
+            private string m_endLessonNotifyPath = string.Empty;
+            public string EndLessonNotifyPath
+            {
+                get { return m_endLessonNotifyPath; }
+                set { m_endLessonNotifyPath = value; RaisePropertyChanged("EndLessonNotifyPath"); }
+            }
+
+            private bool m_endBreakNotify = false;
+            public bool EndBreakNotify
+            {
+                get { return m_endBreakNotify; }
+                set { m_endBreakNotify = value; RaisePropertyChanged("EndBreakNotify"); }
+            }
+
+            private string m_endBreakNotifyPath = string.Empty;
+            public string EndBreakNotifyPath
+            {
+                get { return m_endBreakNotifyPath; }
+                set { m_endBreakNotifyPath = value; RaisePropertyChanged("EndBreakNotifyPath"); }
+            }
+
             public void LoadRegistry()
             {
                 RegistryKey key = Registry.CurrentUser.CreateSubKey(GlobalConfig.RegistryKeyName);
@@ -209,6 +237,10 @@ namespace Dziennik
                 object passwordReg = key.GetValue(GlobalConfig.RegistryValueNameDatabasesPassword);
                 object blockingMinutesReg = key.GetValue(GlobalConfig.RegistryValueNameBlockingMinutes);
                 object lastUpdateCheckReg = key.GetValue(GlobalConfig.RegistryValueNameLastUpdateCheck);
+                object endLessonNotifyMinutesReg = key.GetValue(GlobalConfig.RegistryValueNameEndLessonNotifyMinutes);
+                object endLessonNotifyPathReg = key.GetValue(GlobalConfig.RegistryValueNameEndLessonNotifyPath);
+                object endBreakNotifyReg = key.GetValue(GlobalConfig.RegistryValueNameEndBreakNotify);
+                object endBreakNotifyPathReg = key.GetValue(GlobalConfig.RegistryValueNameEndBreakNotifyPath);
 
                 key.Close();
 
@@ -234,6 +266,10 @@ namespace Dziennik
                 if (passwordReg != null) Password = (byte[])passwordReg;
                 if (blockingMinutesReg != null) BlockingMinutes = Ext.IntParseOrDefault(blockingMinutesReg.ToString(), m_blockingMinutes);
                 if (lastUpdateCheckReg != null) LastUpdateCheck = DateTime.FromBinary(Ext.LongParseOrDefault(lastUpdateCheckReg.ToString(), m_lastUpdateCheck.ToBinary()));
+                if (endLessonNotifyMinutesReg != null) EndLessonNotifyMinutes = Ext.IntParseOrDefault(endLessonNotifyMinutesReg.ToString(), m_endLessonNotifyMinutes);
+                if (endLessonNotifyPathReg != null) EndLessonNotifyPath = endLessonNotifyPathReg.ToString();
+                if (endBreakNotifyReg != null) EndBreakNotify = Ext.BoolParseOrDefault(endBreakNotifyReg.ToString(), m_endBreakNotify);
+                if (endBreakNotifyPathReg != null) EndBreakNotifyPath = endBreakNotifyPathReg.ToString();
                 //if (lastOpenedReg != null)
                 //{
                 //    string lastOpened = lastOpenedReg.ToString();
@@ -262,7 +298,32 @@ namespace Dziennik
                 key.SetValue(GlobalConfig.RegistryValueNameShowYearEndingMark, m_showYearEndingMark);
                 key.SetValue(GlobalConfig.RegistryValueNameAutoSave, m_autoSave);
                 key.SetValue(GlobalConfig.RegistryValueNameShowWeights, m_showWeights);
-                key.SetValue(GlobalConfig.RegistryValueNameDatabasesDirectory, m_databasesDirectory);
+                if (m_databasesDirectory != null)
+                {
+                    key.SetValue(GlobalConfig.RegistryValueNameDatabasesDirectory, m_databasesDirectory);
+                }
+                else
+                {
+                    key.DeleteValue(GlobalConfig.RegistryValueNameDatabasesDirectory);
+                }
+                key.SetValue(GlobalConfig.RegistryValueNameEndLessonNotifyMinutes, m_endLessonNotifyMinutes);
+                if (m_endLessonNotifyPath != null)
+                {
+                    key.SetValue(GlobalConfig.RegistryValueNameEndLessonNotifyPath, m_endLessonNotifyPath);
+                }
+                else
+                {
+                    key.DeleteValue(GlobalConfig.RegistryValueNameEndLessonNotifyPath);
+                }
+                key.SetValue(GlobalConfig.RegistryValueNameEndBreakNotify, m_endBreakNotify);
+                if (m_endBreakNotifyPath != null)
+                {
+                    key.SetValue(GlobalConfig.RegistryValueNameEndBreakNotifyPath, m_endBreakNotifyPath);
+                }
+                else
+                {
+                    key.DeleteValue(GlobalConfig.RegistryValueNameEndBreakNotifyPath);
+                }
                 if (m_password != null)
                 {
                     key.SetValue(GlobalConfig.RegistryValueNameDatabasesPassword, m_password);
@@ -314,6 +375,8 @@ namespace Dziennik
         public static readonly string DateTimeWithSecondsFormat = "dd.MM.yyyy HH:mm:ss";
         public static readonly string DateFormat = "dd.MM.yyyy";
         public static readonly string TimeFormat = "HH:mm";
+        public static readonly string TimeWithSecondsFormat = "HH:mm:ss";
+        public static readonly string TimeSpanHMSFormat = @"hh\:mm\:ss";
         public static readonly string FileDateTimeFormat = "ddMMyyy_HHmmss";
         public static readonly string SchoolClassDatabaseFileExtension = ".dzs";
         public static readonly string SchoolOptionsDatabaseFileExtension = ".dzo";
@@ -356,6 +419,10 @@ namespace Dziennik
         public static readonly string RegistryValueNameDatabasesPassword = "Password";
         public static readonly string RegistryValueNameBlockingMinutes = "BlockingMinutes";
         public static readonly string RegistryValueNameLastUpdateCheck = "LastUpdateCheck";
+        public static readonly string RegistryValueNameEndLessonNotifyMinutes = "EndLessonNotifyMinutes";
+        public static readonly string RegistryValueNameEndLessonNotifyPath = "EndLessonNotifyPath";
+        public static readonly string RegistryValueNameEndBreakNotify = "EndBreakNotify";
+        public static readonly string RegistryValueNameEndBreakNotifyPath = "EndBreakNotifyPath";
         public static readonly string RegistryValueNameWasCrashed = "WasCrashed";
         #endregion
 
@@ -427,6 +494,7 @@ namespace Dziennik
             windowViewModelMappings.Add(typeof(SelectGroupViewModel), vm => new SelectGroupWindow((SelectGroupViewModel)vm));
             windowViewModelMappings.Add(typeof(OverdueSubjectsListViewModel), vm => new OverdueSubjectsListWindow((OverdueSubjectsListViewModel)vm));
             windowViewModelMappings.Add(typeof(EditGlobalScheduleViewModel), vm => new EditGlobalScheduleWindow((EditGlobalScheduleViewModel)vm));
+            windowViewModelMappings.Add(typeof(SoundNotificationViewModel), vm => new SoundNotificationWindow((SoundNotificationViewModel)vm));
 
             Dialogs = new DialogService(windowViewModelMappings);
         }

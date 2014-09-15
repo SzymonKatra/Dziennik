@@ -46,7 +46,11 @@ namespace Dziennik.View
             {
                 GlobalConfig.GlobalDatabase.ViewModel.Notices.Add(notice);
             }
-            if (dialogViewModel.Result != EditNoticeViewModel.EditNoticeResult.Cancel) GlobalConfig.GlobalDatabaseAutoSaveCommand.Execute(null);
+            if (dialogViewModel.Result != EditNoticeViewModel.EditNoticeResult.Cancel)
+            {
+                GlobalConfig.GlobalDatabaseAutoSaveCommand.Execute(null);
+                SortNotices();
+            }
         }
         private void EditNotice(object e)
         {
@@ -67,7 +71,16 @@ namespace Dziennik.View
             {
                 m_selectedNotice.PopCopy(WorkingCopyResult.Cancel);
             }
-            if (dialogViewModel.Result != EditNoticeViewModel.EditNoticeResult.Cancel) GlobalConfig.GlobalDatabaseAutoSaveCommand.Execute(null);
+            if (dialogViewModel.Result != EditNoticeViewModel.EditNoticeResult.Cancel)
+            {
+                GlobalConfig.GlobalDatabaseAutoSaveCommand.Execute(null);
+                SortNotices();
+            }
+        }
+
+        private void SortNotices()
+        {
+            GlobalConfig.GlobalDatabase.ViewModel.Notices.Sort((x, y) => { return x.Date.CompareTo(y.Date); });
         }
     }
 }

@@ -269,6 +269,9 @@
     <s:String x:Key="lang_SelectGroupTitle">Wybór grupy</s:String>
     <s:String x:Key="lang_SelectWindowSelectClass">Wybierz klasę</s:String>
     <s:String x:Key="lang_SelectWindowSelectGroup">Wybierz grupę</s:String>
+
+    <s:String x:Key="lang_SoundNotificationTitle">Ustawienia powiadomień dźwiękowych</s:String>
+    <s:String x:Key="lang_EnableEndLessonNotify">Włącz powiadomienia pod koniec lekcji</s:String>
     
     <s:String x:Key="lang_TypePasswordTitle">Podaj hasło</s:String>
     <s:String x:Key="lang_TypePasswordToUnlock">Podaj hasło aby odblokować</s:String>
@@ -465,6 +468,10 @@ Czy chcesz zaktualizować program po jego zamknięciu?</s:String>
     <s:String x:Key="lang_ErrorOccurredWhileCheckingUpdates">Wystąpił błąd podczas sprawdzania aktualizacji.
 Sprawdź swoje połączenie internetowe</s:String>
     
+    <s:String x:Key="lang_LessonRemaining">Do końca lekcji pozostało: {0}</s:String>
+    <s:String x:Key="lang_BreakRemaining">Do końca przerwy pozostało: {0}</s:String>
+    <s:String x:Key="lang_CurrentLesson">Aktualna lekcja: {0}</s:String>
+    <s:String x:Key="lang_NoCurrentLessons">Aktualnie brak lekcji</s:String>
     <s:String x:Key="lang_TypeValidCategoryName">Wprowadź poprawną nazwę kategorii</s:String>
     <s:String x:Key="lang_TypeValidClassName">Wprowadź poprawną nazwę klasy</s:String>
     <s:String x:Key="lang_DoYouWantRemoveClass">Czy napewno chcesz usunąć klasę?</s:String>

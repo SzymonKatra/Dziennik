@@ -137,6 +137,10 @@
     <Compile Include="View\Calendar\EditGlobalScheduleWindow.xaml.cs">
       <DependentUpon>EditGlobalScheduleWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Notice\SoundNotificationViewModel.cs" />
+    <Compile Include="View\Notice\SoundNotificationWindow.xaml.cs">
+      <DependentUpon>SoundNotificationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Subject\OverdueSubjectsListWindow.xaml.cs">
       <DependentUpon>OverdueSubjectsListWindow.xaml</DependentUpon>
     </Compile>
@@ -455,6 +459,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Calendar\EditGlobalScheduleWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Notice\SoundNotificationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

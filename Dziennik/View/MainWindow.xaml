@@ -37,8 +37,8 @@
                 <controls:ImageButton Style="{StaticResource wrapPanelMainControlStyle}" ImageSource="{StaticResource img_info}" Text="{DynamicResource lang_Info}" Command="{Binding InfoCommand}"/>
                 <controls:ImageButton Style="{StaticResource wrapPanelMainControlStyle}" ImageSource="{StaticResource img_close}" Visibility="{Binding BlockSaving, Converter={StaticResource convertBoolToVisibility}}" Text="{DynamicResource lang_CloseArchivePreview}" Command="{Binding CloseArchivePreviewCommand}"/>
             </WrapPanel>
-            
-            <TextBox DockPanel.Dock="Right" Text="{Binding CurrentRemaining}"/>
+
+            <TextBlock DockPanel.Dock="Right" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,15,0" FontSize="16" FontWeight="Bold" Text="{Binding CurrentRemainingDisplayed}"/>
         </DockPanel>
 
         <TabControl Grid.Row="1" ItemsSource="{Binding SortedOpenedSchoolClasses}" SelectedValue="{Binding SelectedClass, Mode=TwoWay}">
