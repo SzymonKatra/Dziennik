@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:my="clr-namespace:Dziennik.Controls"
-        Title="{DynamicResource lang_SoundNotificationTitle}" Height="300" Width="300">
+        Title="{DynamicResource lang_SoundNotificationTitle}" Height="300" Width="330"
+        WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -14,6 +15,43 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         
-        <CheckBox Grid.Row="0" Style="{StaticResource inputControlStyle}" Content="{DynamicResource lang_EnableEndLessonNotify}"/>
+        <CheckBox Grid.Row="0" Style="{StaticResource inputControlStyle}" Content="{DynamicResource lang_EnableEndLessonNotify}" IsChecked="{Binding EndLessonNotify,Mode=TwoWay}"/>
+        
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="140"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Grid.Column="1" IsEnabled="{Binding EndLessonNotify}" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_NotifyEndLesson1}"/>
+            <my:NonEditableIntegerUpDown Grid.Column="2" IsEnabled="{Binding EndLessonNotify}" Style="{StaticResource inputControlStyle}" Value="{Binding EndLessonNotifyMinutes, Mode=TwoWay}" Minimum="0" Maximum="30"/>
+            <TextBlock Grid.Column="3" IsEnabled="{Binding EndLessonNotify}" Style="{StaticResource textBlockTitleStyle}" Text="{DynamicResource lang_NotifyEndLesson2}"/>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="30"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox Grid.Column="1" IsEnabled="{Binding EndLessonNotify}" IsReadOnly="True" Style="{StaticResource inputControlStyle}" Text="{Binding EndLessonNotifyPath}"/>
+            <Button Grid.Column="2" IsEnabled="{Binding EndLessonNotify}" Margin="5,5,5,5" Style="{StaticResource inputControlStyle}" Content="..." Command="{Binding SelectEndLessonNotifyPathCommand}"/>
+        </Grid>
+
+        <CheckBox Grid.Row="3" Style="{StaticResource inputControlStyle}" Content="{DynamicResource lang_EnableEndBreakNotify}" IsChecked="{Binding EndBreakNotify,Mode=TwoWay}"/>
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="30"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox Grid.Column="1" IsEnabled="{Binding EndBreakNotify}" IsReadOnly="True" Style="{StaticResource inputControlStyle}" Text="{Binding EndBreakNotifyPath}"/>
+            <Button Grid.Column="2" IsEnabled="{Binding EndBreakNotify}" Margin="5,5,5,5" Style="{StaticResource inputControlStyle}" Content="..." Command="{Binding SelectEndBreakNotifyPathCommand}"/>
+        </Grid>
+        
+        <my:OkCancelControl Grid.Row="6" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>
 </Window>

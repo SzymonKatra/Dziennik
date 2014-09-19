@@ -15,6 +15,7 @@ namespace Dziennik.View
             m_closeCommand = new RelayCommand(Close);
             m_showArchivesListCommand = new RelayCommand(ShowArchivesList, CanShowArchivesList);
             m_changePasswordCommand = new RelayCommand(ChangePassword, CanChangePassword);
+            m_editSoundNotificationsCommand = new RelayCommand(EditSoundNotifications);
 
             m_openedSchoolClasses = openedSchoolClasses;
         }
@@ -29,6 +30,12 @@ namespace Dziennik.View
         public ICommand ShowArchivesListCommand
         {
             get { return m_showArchivesListCommand; }
+        }
+
+        private RelayCommand m_editSoundNotificationsCommand;
+        public ICommand EditSoundNotificationsCommand
+        {
+            get { return m_editSoundNotificationsCommand; }
         }
 
         private RelayCommand m_changePasswordCommand;
@@ -109,6 +116,11 @@ namespace Dziennik.View
         private bool CanChangePassword(object param)
         {
             return !GlobalConfig.Main.BlockSaving;
+        }
+        private void EditSoundNotifications(object param)
+        {
+            SoundNotificationViewModel dialogViewModel = new SoundNotificationViewModel();
+            GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
     }
 }

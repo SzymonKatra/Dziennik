@@ -80,7 +80,7 @@ namespace Dziennik.View
         private void EditSchedule(WeekScheduleViewModel param)
         {
             param.PushCopy();
-            EditGlobalScheduleViewModel dialogViewModel = new EditGlobalScheduleViewModel(m_classes, param, GetMinValidFrom(param), GetMaxValidFrom(param), null, !(param == m_schedules[m_schedules.Count-1]));
+            EditGlobalScheduleViewModel dialogViewModel = new EditGlobalScheduleViewModel(m_classes, param, GetMinValidFrom(param), GetMaxValidFrom(param), null);//, !(param == m_schedules[m_schedules.Count-1]));
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditGlobalScheduleViewModel.EditGlobalScheduleResult.Cancel)
             {

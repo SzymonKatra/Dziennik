@@ -102,7 +102,7 @@ namespace Dziennik.ViewModel
                 int realizedFromCurriculum = m_realizedSubjects.Count(x => !x.IsCustom);
                 int realizedOutsideCurriculum = m_realizedSubjects.Count(x => x.IsCustom);
 
-                return string.Format(GlobalConfig.GetStringResource("lang_RealizedSubjectsCountFormat"), realizedFromCurriculum, m_globalSubjects.Count, realizedOutsideCurriculum);
+                return string.Format(GlobalConfig.GetStringResource("lang_RealizedSubjectsCountFormat"), realizedFromCurriculum, m_globalSubjects.Count, realizedOutsideCurriculum, m_globalSubjects.Count - realizedFromCurriculum);
             }
         }
 

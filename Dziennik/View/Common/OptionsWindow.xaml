@@ -43,7 +43,8 @@
 
             <my:DirectorySelector x:Name="dirSelect" Grid.Column="1" Grid.Row="0"  IsEnabled="{Binding BlockSaving, Source={x:Static local:GlobalConfig.Main}, Converter={StaticResource convertBooleanNegate}}" Style="{StaticResource inputControlStyle}" SelectedPath="{Binding DatabasesDirectory, Mode=TwoWay}" IsTextBoxReadOnly="True"/>
             
-            <Button Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_ArchivesList}" Command="{Binding ShowArchivesListCommand}"/>
+            <Button Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_ArchivesList}" Command="{Binding ShowArchivesListCommand}"/>
+            <Button Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_EditSoundNotifications}" Command="{Binding EditSoundNotificationsCommand}"/>
             <Button Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_ChangeBlockingOptions}" Command="{Binding ChangePasswordCommand}"/>
             <Button Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Style="{StaticResource commonButtonStyle}" Content="{DynamicResource lang_CheckUpdates}" Command="{Binding CheckUpdatesCommand, Source={x:Static local:GlobalConfig.Main}}" CommandParameter="True"/>
         </Grid>

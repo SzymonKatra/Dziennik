@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Input;
 using Dziennik.CommandUtils;
 using Microsoft.Win32;
+using System.IO;
 
 namespace Dziennik.View
 {
@@ -14,6 +15,8 @@ namespace Dziennik.View
         {
             m_okCommand = new RelayCommand(Ok);
             m_cancelCommand = new RelayCommand(Cancel);
+            m_selectEndLessonNotifyPathCommand = new RelayCommand(SelectEndLessonNotifyPath);
+            m_selectEndBreakNotifyPathCommand = new RelayCommand(SelectEndBreakNotifyPath);
 
             m_endLessonNotifyMinutes = GlobalConfig.Notifier.EndLessonNotifyMinutes;
             m_endLessonNotify = (m_endLessonNotifyMinutes > 0);
@@ -32,6 +35,18 @@ namespace Dziennik.View
         public ICommand CancelCommand
         {
             get { return m_cancelCommand; }
+        }
+
+        private RelayCommand m_selectEndLessonNotifyPathCommand;
+        public ICommand SelectEndLessonNotifyPathCommand
+        {
+            get { return m_selectEndLessonNotifyPathCommand; }
+        }
+
+        private RelayCommand m_selectEndBreakNotifyPathCommand;
+        public ICommand SelectEndBreakNotifyPathCommand
+        {
+            get { return m_selectEndBreakNotifyPathCommand; }
         }
 
         private bool m_endLessonNotify;
@@ -71,7 +86,7 @@ namespace Dziennik.View
 
         private void Ok(object param)
         {
-            GlobalConfig.Notifier.EndLessonNotifyMinutes = (m_endLessonNotify ? m_endLessonNotifyMinutes : 0);
+            GlobalConfig.Notifier.EndLessonNotifyMinutes = (m_endLessonNotify ? m_endLessonNotifyMinutes : -1);
             GlobalConfig.Notifier.EndLessonNotifyPath = m_endLessonNotifyPath;
             GlobalConfig.Notifier.EndBreakNotify = m_endBreakNotify;
             GlobalConfig.Notifier.EndBreakNotifyPath = m_endBreakNotifyPath;
@@ -81,6 +96,36 @@ namespace Dziennik.View
         private void Cancel(object param)
         {
             GlobalConfig.Dialogs.Close(this);
+        }
+        private void SelectEndLessonNotifyPath(object param)
+        {
+            string result = OpenAudio();
+            if(!string.IsNullOrWhiteSpace(result))
+            {
+                EndLessonNotifyPath = result;
+            }
+        }
+        private void SelectEndBreakNotifyPath(object param)
+        {
+            string result = OpenAudio();
+            if (!string.IsNullOrWhiteSpace(result))
+            {
+                EndBreakNotifyPath = result;
+            }
+        }
+
+        private string OpenAudio()
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Multiselect = false;
+            ofd.Filter = "Pliki audio|*.wav";
+            ofd.ShowDialog();
+
+            if(File.Exists(ofd.FileName))
+            {
+                return ofd.FileName;
+            }
+            else return string.Empty;
         }
     }
 }

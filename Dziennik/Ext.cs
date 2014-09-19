@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.Media;
 
 namespace Dziennik
 {
@@ -61,6 +62,43 @@ namespace Dziennik
             DirectoryInfo info = new DirectoryInfo(path);
             foreach (var file in info.GetFiles()) file.Delete();
             foreach (var sub in info.GetDirectories()) sub.Delete(true);
+        }
+
+        public static void LoadSoundToStream(string path, ref Stream targetStream, ref SoundPlayer targetSound)
+        {
+            if (targetStream != null)
+            {
+                targetStream.Dispose();
+                targetStream = null;
+            }
+            if (targetSound != null)
+            {
+                targetSound.Dispose();
+                targetSound = null;
+            }
+            if (File.Exists(path))
+            {
+                targetStream = new MemoryStream();
+                using (FileStream fileStream = new FileStream(path, FileMode.Open))
+                {
+                    byte[] buffer = new byte[4096];
+                    int readBytes = -1;
+                    while ((readBytes = fileStream.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        targetStream.Write(buffer, 0, readBytes);
+                    }
+                }
+
+                targetSound = new SoundPlayer(targetStream);
+            }
+        }
+        public static void PlaySound(SoundPlayer player)
+        {
+            Stream stream = player.Stream; // workaround over Wave file corrupted
+            stream.Position = 0;
+            player.Stream = null;
+            player.Stream = stream;
+            player.Play();
         }
 
         //thanks to: SwDevMan81

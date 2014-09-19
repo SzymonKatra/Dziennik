@@ -15,6 +15,7 @@ using fastJSON;
 using DziennikAktualizacja;
 using System.Reflection;
 using System.Diagnostics;
+using System.Media;
 
 namespace Dziennik
 {
@@ -184,7 +185,7 @@ namespace Dziennik
                 set { m_lastUpdateCheck = value; RaisePropertyChanged("LastUpdateCheck"); }
             }
 
-            private int m_endLessonNotifyMinutes = 0;
+            private int m_endLessonNotifyMinutes = -1;
             public int EndLessonNotifyMinutes
             {
                 get { return m_endLessonNotifyMinutes; }
@@ -195,8 +196,13 @@ namespace Dziennik
             public string EndLessonNotifyPath
             {
                 get { return m_endLessonNotifyPath; }
-                set { m_endLessonNotifyPath = value; RaisePropertyChanged("EndLessonNotifyPath"); }
+                set
+                {
+                    m_endLessonNotifyPath = value; RaisePropertyChanged("EndLessonNotifyPath");
+                    Ext.LoadSoundToStream(m_endLessonNotifyPath, ref GlobalConfig.m_endLessonSoundStream, ref GlobalConfig.m_endLessonSound);
+                }
             }
+
 
             private bool m_endBreakNotify = false;
             public bool EndBreakNotify
@@ -209,7 +215,11 @@ namespace Dziennik
             public string EndBreakNotifyPath
             {
                 get { return m_endBreakNotifyPath; }
-                set { m_endBreakNotifyPath = value; RaisePropertyChanged("EndBreakNotifyPath"); }
+                set
+                {
+                    m_endBreakNotifyPath = value; RaisePropertyChanged("EndBreakNotifyPath");
+                    Ext.LoadSoundToStream(m_endBreakNotifyPath, ref GlobalConfig.m_endBreakSoundStream, ref GlobalConfig.m_endBreakSound);
+                }
             }
 
             public void LoadRegistry()
@@ -304,7 +314,7 @@ namespace Dziennik
                 }
                 else
                 {
-                    key.DeleteValue(GlobalConfig.RegistryValueNameDatabasesDirectory);
+                    key.DeleteValue(GlobalConfig.RegistryValueNameDatabasesDirectory, false);
                 }
                 key.SetValue(GlobalConfig.RegistryValueNameEndLessonNotifyMinutes, m_endLessonNotifyMinutes);
                 if (m_endLessonNotifyPath != null)
@@ -313,7 +323,7 @@ namespace Dziennik
                 }
                 else
                 {
-                    key.DeleteValue(GlobalConfig.RegistryValueNameEndLessonNotifyPath);
+                    key.DeleteValue(GlobalConfig.RegistryValueNameEndLessonNotifyPath, false);
                 }
                 key.SetValue(GlobalConfig.RegistryValueNameEndBreakNotify, m_endBreakNotify);
                 if (m_endBreakNotifyPath != null)
@@ -322,7 +332,7 @@ namespace Dziennik
                 }
                 else
                 {
-                    key.DeleteValue(GlobalConfig.RegistryValueNameEndBreakNotifyPath);
+                    key.DeleteValue(GlobalConfig.RegistryValueNameEndBreakNotifyPath, false);
                 }
                 if (m_password != null)
                 {
@@ -425,6 +435,22 @@ namespace Dziennik
         public static readonly string RegistryValueNameEndBreakNotifyPath = "EndBreakNotifyPath";
         public static readonly string RegistryValueNameWasCrashed = "WasCrashed";
         #endregion
+
+        private static Stream m_endLessonSoundStream;
+        private static SoundPlayer m_endLessonSound;
+        public static SoundPlayer EndLessonSound
+        {
+            get { return GlobalConfig.m_endLessonSound; }
+            set { GlobalConfig.m_endLessonSound = value; }
+        }
+
+        private static Stream m_endBreakSoundStream;
+        private static SoundPlayer m_endBreakSound;
+        public static SoundPlayer EndBreakSound
+        {
+            get { return GlobalConfig.m_endBreakSound; }
+            set { GlobalConfig.m_endBreakSound = value; }
+        }
 
         public static readonly DialogService Dialogs;
 

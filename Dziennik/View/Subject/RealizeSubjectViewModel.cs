@@ -156,7 +156,8 @@ namespace Dziennik.View
                 }
                 else
                 {
-                    pair.Presence = student.Presence.First(x => x.RealizedSubject == m_realizedSubject);
+                    pair.Presence = student.Presence.FirstOrDefault(x => x.RealizedSubject == m_realizedSubject);
+                    if (pair.Presence == null) continue;
                     //pair.WasPresentCache = pair.Presence.WasPresent;
                     pair.PresenceCache = pair.Presence.Presence;
                 }

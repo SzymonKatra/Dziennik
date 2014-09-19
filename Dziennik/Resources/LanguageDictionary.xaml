@@ -78,6 +78,7 @@
     <s:String x:Key="lang_ClassCalendar">Wybierz kalendarz roku szkolnego</s:String>
     <s:String x:Key="lang_NoticesList">Lista powiadomień</s:String>
     <s:String x:Key="lang_ArchivesList">Lista archiwów</s:String>
+    <s:String x:Key="lang_EditSoundNotifications">Edytuj powiadomienia dźwiękowe</s:String>
     <s:String x:Key="lang_ChangeBlockingOptions">Zmień ustawienia blokowania</s:String>
     <s:String x:Key="lang_NoUpdatesFound">Posiadasz aktualną wersję Dziennika</s:String>
     <s:String x:Key="lang_CheckUpdates">Sprawdź aktualizacje</s:String>
@@ -171,7 +172,7 @@
 
     <s:String x:Key="lang_JustifiedDisplayFormat">{0} / {1} / {2}</s:String>
     <s:String x:Key="lang_AttendanceDisplayFormat">{0} / {1} ({2}%)</s:String>
-    <s:String x:Key="lang_RealizedSubjectsCountFormat">Liczba zrealizowanych tematów: {0}/{1} (+{2} dodatkowych)</s:String>
+    <s:String x:Key="lang_RealizedSubjectsCountFormat">Liczba zrealizowanych tematów: {0}/{1} (+{2} dodatkowych) DO ZREALIZOWANIA {3}</s:String>
     
     <s:String x:Key="lang_GlobalCalendarListTitle">Kalendarze</s:String>
     <s:String x:Key="lang_AddCalendar">Dodaj kalendarz roku szkolnego</s:String>
@@ -272,6 +273,9 @@
 
     <s:String x:Key="lang_SoundNotificationTitle">Ustawienia powiadomień dźwiękowych</s:String>
     <s:String x:Key="lang_EnableEndLessonNotify">Włącz powiadomienia pod koniec lekcji</s:String>
+    <s:String x:Key="lang_EnableEndBreakNotify">Włącz powiadomienia o końcu przerwy</s:String>
+    <s:String x:Key="lang_NotifyEndLesson1">Powiadom</s:String>
+    <s:String x:Key="lang_NotifyEndLesson2">min przed końcem lekcji</s:String>
     
     <s:String x:Key="lang_TypePasswordTitle">Podaj hasło</s:String>
     <s:String x:Key="lang_TypePasswordToUnlock">Podaj hasło aby odblokować</s:String>
