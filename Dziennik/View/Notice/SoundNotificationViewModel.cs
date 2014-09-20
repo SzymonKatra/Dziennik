@@ -18,11 +18,12 @@ namespace Dziennik.View
             m_selectEndLessonNotifyPathCommand = new RelayCommand(SelectEndLessonNotifyPath);
             m_selectEndBreakNotifyPathCommand = new RelayCommand(SelectEndBreakNotifyPath);
 
-            m_endLessonNotifyMinutes = GlobalConfig.Notifier.EndLessonNotifyMinutes;
-            m_endLessonNotify = (m_endLessonNotifyMinutes > 0);
+            m_endLessonNotifySeconds = GlobalConfig.Notifier.EndLessonNotifySeconds;
+            m_endLessonNotify = (m_endLessonNotifySeconds >= 0);
             m_endLessonNotifyPath = GlobalConfig.Notifier.EndLessonNotifyPath;
-            m_endBreakNotify = GlobalConfig.Notifier.EndBreakNotify;
-            m_endLessonNotifyPath = GlobalConfig.Notifier.EndBreakNotifyPath;
+            m_endBreakNotifySeconds = GlobalConfig.Notifier.EndBreakNotifySeconds;
+            m_endBreakNotify = (m_endBreakNotifySeconds >= 0);
+            m_endBreakNotifyPath = GlobalConfig.Notifier.EndBreakNotifyPath;
         }
 
         private RelayCommand m_okCommand;
@@ -53,14 +54,14 @@ namespace Dziennik.View
         public bool EndLessonNotify
         {
             get { return m_endLessonNotify; }
-            set { m_endLessonNotify = value; RaisePropertyChanged("EndLessonNotify"); }
+            set { m_endLessonNotify = value; RaisePropertyChanged("EndLessonNotify"); EndLessonNotifySeconds = 0; }
         }
 
-        private int m_endLessonNotifyMinutes;
-        public int EndLessonNotifyMinutes
+        private int m_endLessonNotifySeconds;
+        public int EndLessonNotifySeconds
         {
-            get { return m_endLessonNotifyMinutes; }
-            set { m_endLessonNotifyMinutes = value; RaisePropertyChanged("EndLessonNotifyMinutes"); }
+            get { return m_endLessonNotifySeconds; }
+            set { m_endLessonNotifySeconds = value; RaisePropertyChanged("EndLessonNotifySeconds"); }
         }
 
         private string m_endLessonNotifyPath;
@@ -77,6 +78,13 @@ namespace Dziennik.View
             set { m_endBreakNotify = value; RaisePropertyChanged("EndBreakNotify"); }
         }
 
+        private int m_endBreakNotifySeconds;
+        public int EndBreakNotifySeconds
+        {
+            get { return m_endBreakNotifySeconds; }
+            set { m_endBreakNotifySeconds = value; RaisePropertyChanged("EndBreakNotifySeconds"); }
+        }
+
         private string m_endBreakNotifyPath;
         public string EndBreakNotifyPath
         {
@@ -86,9 +94,9 @@ namespace Dziennik.View
 
         private void Ok(object param)
         {
-            GlobalConfig.Notifier.EndLessonNotifyMinutes = (m_endLessonNotify ? m_endLessonNotifyMinutes : -1);
+            GlobalConfig.Notifier.EndLessonNotifySeconds = (m_endLessonNotify ? m_endLessonNotifySeconds : -1);
             GlobalConfig.Notifier.EndLessonNotifyPath = m_endLessonNotifyPath;
-            GlobalConfig.Notifier.EndBreakNotify = m_endBreakNotify;
+            GlobalConfig.Notifier.EndBreakNotifySeconds = (m_endBreakNotify ? m_endBreakNotifySeconds : -1);
             GlobalConfig.Notifier.EndBreakNotifyPath = m_endBreakNotifyPath;
 
             GlobalConfig.Dialogs.Close(this);

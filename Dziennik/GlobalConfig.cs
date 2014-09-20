@@ -185,11 +185,11 @@ namespace Dziennik
                 set { m_lastUpdateCheck = value; RaisePropertyChanged("LastUpdateCheck"); }
             }
 
-            private int m_endLessonNotifyMinutes = -1;
-            public int EndLessonNotifyMinutes
+            private int m_endLessonNotifySeconds = -1;
+            public int EndLessonNotifySeconds
             {
-                get { return m_endLessonNotifyMinutes; }
-                set { m_endLessonNotifyMinutes = value; RaisePropertyChanged("EndLessonNotifyMinutes"); }
+                get { return m_endLessonNotifySeconds; }
+                set { m_endLessonNotifySeconds = value; RaisePropertyChanged("EndLessonNotifySeconds"); }
             }
 
             private string m_endLessonNotifyPath = string.Empty;
@@ -203,12 +203,11 @@ namespace Dziennik
                 }
             }
 
-
-            private bool m_endBreakNotify = false;
-            public bool EndBreakNotify
+            private int m_endBreakNotifySeconds = -1;
+            public int EndBreakNotifySeconds
             {
-                get { return m_endBreakNotify; }
-                set { m_endBreakNotify = value; RaisePropertyChanged("EndBreakNotify"); }
+                get { return m_endBreakNotifySeconds; }
+                set { m_endBreakNotifySeconds = value; RaisePropertyChanged("EndBreakNotifySeconds"); }
             }
 
             private string m_endBreakNotifyPath = string.Empty;
@@ -247,9 +246,9 @@ namespace Dziennik
                 object passwordReg = key.GetValue(GlobalConfig.RegistryValueNameDatabasesPassword);
                 object blockingMinutesReg = key.GetValue(GlobalConfig.RegistryValueNameBlockingMinutes);
                 object lastUpdateCheckReg = key.GetValue(GlobalConfig.RegistryValueNameLastUpdateCheck);
-                object endLessonNotifyMinutesReg = key.GetValue(GlobalConfig.RegistryValueNameEndLessonNotifyMinutes);
+                object endLessonNotifySecondsReg = key.GetValue(GlobalConfig.RegistryValueNameEndLessonNotifySeconds);
                 object endLessonNotifyPathReg = key.GetValue(GlobalConfig.RegistryValueNameEndLessonNotifyPath);
-                object endBreakNotifyReg = key.GetValue(GlobalConfig.RegistryValueNameEndBreakNotify);
+                object endBreakNotifySecondsReg = key.GetValue(GlobalConfig.RegistryValueNameEndBreakNotifySeconds);
                 object endBreakNotifyPathReg = key.GetValue(GlobalConfig.RegistryValueNameEndBreakNotifyPath);
 
                 key.Close();
@@ -276,9 +275,9 @@ namespace Dziennik
                 if (passwordReg != null) Password = (byte[])passwordReg;
                 if (blockingMinutesReg != null) BlockingMinutes = Ext.IntParseOrDefault(blockingMinutesReg.ToString(), m_blockingMinutes);
                 if (lastUpdateCheckReg != null) LastUpdateCheck = DateTime.FromBinary(Ext.LongParseOrDefault(lastUpdateCheckReg.ToString(), m_lastUpdateCheck.ToBinary()));
-                if (endLessonNotifyMinutesReg != null) EndLessonNotifyMinutes = Ext.IntParseOrDefault(endLessonNotifyMinutesReg.ToString(), m_endLessonNotifyMinutes);
+                if (endLessonNotifySecondsReg != null) EndLessonNotifySeconds = Ext.IntParseOrDefault(endLessonNotifySecondsReg.ToString(), m_endLessonNotifySeconds);
                 if (endLessonNotifyPathReg != null) EndLessonNotifyPath = endLessonNotifyPathReg.ToString();
-                if (endBreakNotifyReg != null) EndBreakNotify = Ext.BoolParseOrDefault(endBreakNotifyReg.ToString(), m_endBreakNotify);
+                if (endBreakNotifySecondsReg != null) EndBreakNotifySeconds = Ext.IntParseOrDefault(endBreakNotifySecondsReg.ToString(), m_endBreakNotifySeconds);
                 if (endBreakNotifyPathReg != null) EndBreakNotifyPath = endBreakNotifyPathReg.ToString();
                 //if (lastOpenedReg != null)
                 //{
@@ -316,7 +315,7 @@ namespace Dziennik
                 {
                     key.DeleteValue(GlobalConfig.RegistryValueNameDatabasesDirectory, false);
                 }
-                key.SetValue(GlobalConfig.RegistryValueNameEndLessonNotifyMinutes, m_endLessonNotifyMinutes);
+                key.SetValue(GlobalConfig.RegistryValueNameEndLessonNotifySeconds, m_endLessonNotifySeconds);
                 if (m_endLessonNotifyPath != null)
                 {
                     key.SetValue(GlobalConfig.RegistryValueNameEndLessonNotifyPath, m_endLessonNotifyPath);
@@ -325,7 +324,7 @@ namespace Dziennik
                 {
                     key.DeleteValue(GlobalConfig.RegistryValueNameEndLessonNotifyPath, false);
                 }
-                key.SetValue(GlobalConfig.RegistryValueNameEndBreakNotify, m_endBreakNotify);
+                key.SetValue(GlobalConfig.RegistryValueNameEndBreakNotifySeconds, m_endBreakNotifySeconds);
                 if (m_endBreakNotifyPath != null)
                 {
                     key.SetValue(GlobalConfig.RegistryValueNameEndBreakNotifyPath, m_endBreakNotifyPath);
@@ -429,9 +428,9 @@ namespace Dziennik
         public static readonly string RegistryValueNameDatabasesPassword = "Password";
         public static readonly string RegistryValueNameBlockingMinutes = "BlockingMinutes";
         public static readonly string RegistryValueNameLastUpdateCheck = "LastUpdateCheck";
-        public static readonly string RegistryValueNameEndLessonNotifyMinutes = "EndLessonNotifyMinutes";
+        public static readonly string RegistryValueNameEndLessonNotifySeconds = "EndLessonNotifySeconds";
         public static readonly string RegistryValueNameEndLessonNotifyPath = "EndLessonNotifyPath";
-        public static readonly string RegistryValueNameEndBreakNotify = "EndBreakNotify";
+        public static readonly string RegistryValueNameEndBreakNotifySeconds = "EndBreakNotifySeconds";
         public static readonly string RegistryValueNameEndBreakNotifyPath = "EndBreakNotifyPath";
         public static readonly string RegistryValueNameWasCrashed = "WasCrashed";
         #endregion

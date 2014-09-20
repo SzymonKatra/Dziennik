@@ -94,11 +94,15 @@ namespace Dziennik
         }
         public static void PlaySound(SoundPlayer player)
         {
-            Stream stream = player.Stream; // workaround over Wave file corrupted
-            stream.Position = 0;
-            player.Stream = null;
-            player.Stream = stream;
-            player.Play();
+            try
+            {
+                Stream stream = player.Stream; // workaround over The Wave header is corrupted exception.
+                stream.Position = 0;
+                player.Stream = null;
+                player.Stream = stream;
+                player.Play();
+            }
+            catch { }
         }
 
         //thanks to: SwDevMan81

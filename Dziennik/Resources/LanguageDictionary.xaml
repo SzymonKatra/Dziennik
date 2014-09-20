@@ -273,9 +273,10 @@
 
     <s:String x:Key="lang_SoundNotificationTitle">Ustawienia powiadomień dźwiękowych</s:String>
     <s:String x:Key="lang_EnableEndLessonNotify">Włącz powiadomienia pod koniec lekcji</s:String>
-    <s:String x:Key="lang_EnableEndBreakNotify">Włącz powiadomienia o końcu przerwy</s:String>
-    <s:String x:Key="lang_NotifyEndLesson1">Powiadom</s:String>
-    <s:String x:Key="lang_NotifyEndLesson2">min przed końcem lekcji</s:String>
+    <s:String x:Key="lang_EnableEndBreakNotify">Włącz powiadomienia pod koniec przerwy</s:String>
+    <s:String x:Key="lang_NotifyEnd">Powiadom</s:String>
+    <s:String x:Key="lang_NotifyEndLesson">sek przed końcem lekcji</s:String>
+    <s:String x:Key="lang_NotifyEndBreak">sek przed końcem przerwy</s:String>
     
     <s:String x:Key="lang_TypePasswordTitle">Podaj hasło</s:String>
     <s:String x:Key="lang_TypePasswordToUnlock">Podaj hasło aby odblokować</s:String>

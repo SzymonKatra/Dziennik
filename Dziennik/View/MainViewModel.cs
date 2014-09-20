@@ -390,8 +390,7 @@ namespace Dziennik.View
                 {
                     CurrentRemaining = remaining;
                     CurrentType = CurrentRemainingType.Lesson;
-
-                    if (remaining.Minutes == GlobalConfig.Notifier.EndLessonNotifyMinutes && remaining.Seconds == 0 && remaining.Hours == 0 && GlobalConfig.EndLessonSound != null)
+                    if ((int)Math.Round(remaining.TotalSeconds, MidpointRounding.AwayFromZero) == GlobalConfig.Notifier.EndLessonNotifySeconds && GlobalConfig.EndLessonSound != null)
                     {
                         Ext.PlaySound(GlobalConfig.EndLessonSound);
                     }
@@ -405,7 +404,7 @@ namespace Dziennik.View
                     CurrentRemaining = remaining;
                     CurrentType = CurrentRemainingType.Break;
 
-                    if (GlobalConfig.Notifier.EndBreakNotify && GlobalConfig.EndBreakSound != null && remaining.Minutes == 0 && remaining.Seconds == 0 && remaining.Hours == 0)
+                    if ((int)Math.Round(remaining.TotalSeconds, MidpointRounding.AwayFromZero) == GlobalConfig.Notifier.EndBreakNotifySeconds && GlobalConfig.EndBreakSound != null)
                     {
                         Ext.PlaySound(GlobalConfig.EndBreakSound);
                     }
