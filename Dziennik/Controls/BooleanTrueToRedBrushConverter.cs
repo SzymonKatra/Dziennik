@@ -14,7 +14,7 @@ namespace Dziennik.Controls
         {
             if(value is bool)
             {
-                if(((bool)value)) return Brushes.Red;
+                if (((bool)value)) return new SolidColorBrush(Color.FromRgb(255,92,92));
             }
 
             return Brushes.Black;

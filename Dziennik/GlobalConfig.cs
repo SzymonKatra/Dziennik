@@ -577,15 +577,26 @@ namespace Dziennik
         /// <returns></returns>
         public static int GetCurrentHourNumber(DateTime now)
         {
+            bool isBreak;
+            return GetCurrentHourNumber(now, GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours, out isBreak);
+        }
+        /// <summary>
+        /// -2 if day ended
+        /// -1 if day not started
+        /// </summary>
+        /// <param name="now"></param>
+        /// <returns></returns>
+        public static int GetCurrentHourNumber(DateTime now, IList<LessonHourViewModel> hours, out bool isBreak)
+        {
             DateTime nowDate = now.Date;
+            isBreak = false;
 
-            if (GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count <= 0 ||
-                GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours[GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count - 1].End.TimeOfDay < now.TimeOfDay) return -2;
+            if (hours.Count <= 0 || hours[hours.Count - 1].End.TimeOfDay < now.TimeOfDay) return -2;
 
             int hourNumberNow = -1;
-            foreach (var item in GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours)
+            foreach (var item in hours)
             {
-                int nextHourIndex = GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.IndexOf(item) + 1;
+                int nextHourIndex = hours.IndexOf(item) + 1;
 
                 LessonHourViewModel h = new LessonHourViewModel();
                 h.Number = item.Number;
@@ -593,14 +604,14 @@ namespace Dziennik
                 h.End = nowDate + item.End.TimeOfDay;
 
                 LessonHourViewModel nh = new LessonHourViewModel();
-                if (nextHourIndex >= GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count)
+                if (nextHourIndex >= hours.Count)
                 {
                     nh.Number = h.Number;
                     nh.Start = nh.End = h.End;
                 }
                 else
                 {
-                    LessonHourViewModel nextItem = GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours[nextHourIndex];
+                    LessonHourViewModel nextItem = hours[nextHourIndex];
                     nh.Number = nextItem.Number;
                     nh.Start = nowDate + nextItem.Start.TimeOfDay;
                     nh.End = nowDate + nextItem.End.TimeOfDay;
@@ -614,11 +625,56 @@ namespace Dziennik
                 else if (now >= h.End && now <= nh.Start)
                 {
                     hourNumberNow = h.Number;
+                    isBreak = true;
                     break;
                 }
             }
 
             return hourNumberNow;
+            //DateTime nowDate = now.Date;
+            //isBreak = false;
+
+            //if (GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count <= 0 ||
+            //    GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours[GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count - 1].End.TimeOfDay < now.TimeOfDay) return -2;
+
+            //int hourNumberNow = -1;
+            //foreach (var item in GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours)
+            //{
+            //    int nextHourIndex = GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.IndexOf(item) + 1;
+
+            //    LessonHourViewModel h = new LessonHourViewModel();
+            //    h.Number = item.Number;
+            //    h.Start = nowDate + item.Start.TimeOfDay;
+            //    h.End = nowDate + item.End.TimeOfDay;
+
+            //    LessonHourViewModel nh = new LessonHourViewModel();
+            //    if (nextHourIndex >= GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours.Count)
+            //    {
+            //        nh.Number = h.Number;
+            //        nh.Start = nh.End = h.End;
+            //    }
+            //    else
+            //    {
+            //        LessonHourViewModel nextItem = GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours[nextHourIndex];
+            //        nh.Number = nextItem.Number;
+            //        nh.Start = nowDate + nextItem.Start.TimeOfDay;
+            //        nh.End = nowDate + nextItem.End.TimeOfDay;
+            //    }
+
+            //    if (now >= h.Start && now <= h.End)
+            //    {
+            //        hourNumberNow = h.Number;
+            //        break;
+            //    }
+            //    else if (now >= h.End && now <= nh.Start)
+            //    {
+            //        hourNumberNow = h.Number;
+            //        isBreak = true;
+            //        break;
+            //    }
+            //}
+
+            //return hourNumberNow;
         }
     }
 }

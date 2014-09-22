@@ -26,7 +26,18 @@
                         <Button Content="{DynamicResource lang_RealizeSubject}" Style="{StaticResource wrapPanelControlStyle}" Command="{Binding RealizeSubjectCommand}"/>
                         <TextBlock Text="{Binding SelectedGroup.RealizedSubjectsDisplay}" Style="{StaticResource wrapPanelControlStyle}" Foreground="Green"/>
                         <TextBlock Text="{Binding SelectedGroup.RemainingHoursOfLessonsDisplay}" Style="{StaticResource wrapPanelControlStyle}" Foreground="Red"/>
-                        <Button Content="{Binding SelectedGroup.OverdueSubjectsDisplay}" Style="{StaticResource wrapPanelControlStyle}" Foreground="{Binding SelectedGroup.HasOverdueSubjects, Converter={StaticResource convertBoolTrueToRedBrush}}" Command="{Binding ShowOverdueSubjectsCommand}"/>
+                        <Button Content="{Binding SelectedGroup.OverdueSubjectsDisplay}" Command="{Binding ShowOverdueSubjectsCommand}">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource wrapPanelMouseOverBackgroundButtonStyle}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedGroup.HasOverdueSubjects}" Value="True">
+                                            <Setter Property="Background" Value="#FF5C5C"/>
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
                     </WrapPanel>
 
                     <DataGrid Grid.Row="1"

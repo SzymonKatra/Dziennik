@@ -152,7 +152,7 @@ namespace Dziennik.View
                 {
                     pair.Presence = new RealizedSubjectPresenceViewModel() { RealizedSubject = m_realizedSubject };
                     //pair.Presence.WasPresent = pair.WasPresentCache = true;
-                    pair.Presence.Presence = pair.PresenceCache = Model.PresenceType.Present;
+                    pair.Presence.Presence = pair.PresenceCache = (student.IsRemoved ? Model.PresenceType.None : Model.PresenceType.Present);
                 }
                 else
                 {
@@ -264,9 +264,9 @@ namespace Dziennik.View
         {
             get
             {
-                int present = m_pairs.Count(x => x.WasPresent && !x.IsRemoved);
-                int lates = m_pairs.Count(x => x.WasLate && !x.IsRemoved);
-                int absents = m_pairs.Count(x => x.WasAbsent && !x.IsRemoved);
+                int present = m_pairs.Count(x => x.WasPresent);
+                int lates = m_pairs.Count(x => x.WasLate);
+                int absents = m_pairs.Count(x => x.WasAbsent);
 
                 return string.Format(GlobalConfig.GetStringResource("lang_StudentsPresentFormalFormat"), present + lates, absents, lates);
             }
@@ -275,8 +275,8 @@ namespace Dziennik.View
         {
             get
             {
-                int present = m_pairs.Count(x => x.WasPresent && !x.IsRemoved);
-                int lates = m_pairs.Count(x => x.WasLate && !x.IsRemoved);
+                int present = m_pairs.Count(x => x.WasPresent);
+                int lates = m_pairs.Count(x => x.WasLate);
 
                 return string.Format(GlobalConfig.GetStringResource("lang_StudentsPresentFormat"), present + lates, lates);
             }
@@ -285,7 +285,7 @@ namespace Dziennik.View
         {
             get
             {
-                int absents = m_pairs.Count(x => x.WasAbsent && !x.IsRemoved);
+                int absents = m_pairs.Count(x => x.WasAbsent);
 
                 return string.Format(GlobalConfig.GetStringResource("lang_StudentsAbsentFormat"), absents);
             }
@@ -294,7 +294,7 @@ namespace Dziennik.View
         {
             get
             {
-                int sum = m_pairs.Count(x => !x.IsRemoved);
+                int sum = m_pairs.Count(x => x.PresenceCache != Model.PresenceType.None);
 
                 return string.Format(GlobalConfig.GetStringResource("lang_StudentsSumFormat"), sum);
             }

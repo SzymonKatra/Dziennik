@@ -70,7 +70,7 @@ namespace Dziennik.ViewModel
                 {
                     foreach (var presence in student.Presence)
                     {
-                        if (presence.RealizedSubject == this && !presence.WasPresent)
+                        if (presence.RealizedSubject == this && !presence.WasPresent && presence.Presence != PresenceType.None)
                         {
                             result += student.Number + ", ";
                         }

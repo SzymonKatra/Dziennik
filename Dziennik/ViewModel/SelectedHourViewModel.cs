@@ -15,6 +15,7 @@ namespace Dziennik.ViewModel
         public SelectedHourViewModel(SelectedHour model)
             : base(model)
         {
+            if (this.Model.Id == null) GlobalConfig.GlobalDatabase.AssignId(model);
         }
 
         public int Hour

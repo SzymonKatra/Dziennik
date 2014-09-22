@@ -155,7 +155,8 @@ namespace Dziennik.View
             }
         }
 
-        private bool m_wasBreak = false;
+        private bool m_idleTimerElapsedRunning = false;
+        private object m_idleTimerElapsedRunningLock = new object();
 
         public string CurrentRemainingDisplayed
         {
@@ -353,27 +354,22 @@ namespace Dziennik.View
             }
         }
 
-        private System.Threading.ManualResetEvent m_idleTimerElapsedWaiter = new System.Threading.ManualResetEvent(false);
         private void m_idleTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            Stopwatch sw = new Stopwatch();
+            System.Diagnostics.Stopwatch sw = new Stopwatch();
 
             DateTime now = DateTime.Now;
             TimeSpan currentRemaining = CurrentRemaining;
 
             bool isBreak;
-            int currentNumber = GlobalConfig.GetCurrentHourNumber(now, m_hoursCopy, out isBreak);
+            int currentNumber = GlobalConfig.GetCurrentHourNumber(now, out isBreak);
             if (IsSaturdayOrSunday(now.DayOfWeek)) currentNumber = -1;
-            bool reset = false;
-            if (CurrentLesson != currentNumber || isBreak != m_wasBreak)
+            if (CurrentLesson != currentNumber)
             {
                 CurrentLesson = currentNumber;
-                m_wasBreak = isBreak;
-                reset = true;
                 if (currentNumber > 0)
                 {
                     bool nowIsLesson = true;
-                    m_idleTimerElapsedWaiter.Reset();
                     InvokeWindow.Invoke(() =>
                     {
                         WeekScheduleViewModel schedule = GlobalConfig.GlobalDatabase.ViewModel.CurrentSchedule;
@@ -390,30 +386,33 @@ namespace Dziennik.View
                         if (day == null) nowIsLesson = false;
                         else
                         {
-                            SelectedHourViewModel hour = null;
-                            if (!isBreak) hour = day.HoursSchedule.FirstOrDefault(x => x.Hour == currentNumber && x.SelectedGroup != null);
+                            SelectedHourViewModel hour = day.HoursSchedule.FirstOrDefault(x => x.Hour == currentNumber && x.SelectedGroup != null);
                             if (hour == null)
                             {
-                                if (isBreak) hour = day.HoursSchedule.FirstOrDefault(x => x.Hour == currentNumber + 1 && x.SelectedGroup != null);
+                                if (isBreak) hour = day.HoursSchedule.FirstOrDefault(x => x.Hour - 1 == currentNumber && x.SelectedGroup != null);
                                 if (hour == null) nowIsLesson = false;
                             }
                         }
-                        m_idleTimerElapsedWaiter.Set();
+
                     });
-                    m_idleTimerElapsedWaiter.WaitOne();
-                    if (!nowIsLesson) currentNumber = -1;
+                    if (!nowIsLesson)
+                    {
+                        CurrentType = CurrentRemainingType.NoLessons;
+                    }
+                    else CurrentType = CurrentRemainingType.Lesson;
                 }
             }
-            if (currentNumber < 0)
+            //if (CurrentType < 0)
+            //{
+            //    if (currentRemaining.Ticks != 0)
+            //    {
+            //        CurrentRemaining = new TimeSpan(0);
+            //        CurrentType = CurrentRemainingType.NoLessons;
+            //    }
+            //}
+            if(CurrentType!= CurrentRemainingType.NoLessons)
             {
-                if (currentRemaining.Ticks != 0)
-                {
-                    CurrentRemaining = new TimeSpan(0);
-                    CurrentType = CurrentRemainingType.NoLessons;
-                }
-            }
-            if (CurrentType != CurrentRemainingType.NoLessons || reset)
-            {
+
                 DateTime start = new DateTime(0);
                 DateTime end = new DateTime(0);
                 DateTime nextStart = new DateTime(0);
@@ -458,10 +457,7 @@ namespace Dziennik.View
                         if ((int)Math.Floor(remaining.TotalSeconds) == GlobalConfig.Notifier.EndBreakNotifySeconds && GlobalConfig.EndBreakSound != null)
                         {
                             Ext.PlaySound(GlobalConfig.EndBreakSound);
-                            InvokeWindow.Invoke(() => 
-                            {
-                                GlobalConfig.Dialogs.GetWindow(this).FlashWindow();
-                            });
+                            InvokeWindow.Invoke(() => GlobalConfig.Dialogs.GetWindow(this).FlashWindow());
                         }
                     }
                 }
@@ -474,7 +470,6 @@ namespace Dziennik.View
                     }
                 }
             }
-            if (reset && !isBreak) InvokeWindow(() => SortOpenedClasses());
 
             sw.Stop();
             m_idleTimer.Interval = Math.Max(1.0, 500.0 - sw.Elapsed.TotalMilliseconds);

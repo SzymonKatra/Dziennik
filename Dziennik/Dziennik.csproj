@@ -94,7 +94,7 @@
       <Link>VersionChecker.cs</Link>
     </Compile>
     <Compile Include="Controls\AbsentTypeToBrushConverter.cs" />
-    <Compile Include="Controls\BooleanFalseToRedBrushConverter.cs" />
+    <Compile Include="Controls\BooleanTrueToRedBrushConverter.cs" />
     <Compile Include="Controls\ChangedStateEventArgs.cs" />
     <Compile Include="Controls\ImageButton.xaml.cs">
       <DependentUpon>ImageButton.xaml</DependentUpon>

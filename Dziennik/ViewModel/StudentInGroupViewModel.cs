@@ -127,7 +127,7 @@ namespace Dziennik.ViewModel
             get
             {
                 if (Presence.Count > 0 && (Presence[0].RealizedSubject == null || OwnerGroup.OwnerClass.Calendar == null)) return null; // to prevent errors while loading database
-                IEnumerable<RealizedSubjectPresenceViewModel> valid = Presence.Where((x) => x.RealizedSubject.RealizedDate >= OwnerGroup.OwnerClass.Calendar.YearBeginning && x.RealizedSubject.RealizedDate < OwnerGroup.OwnerClass.Calendar.SemesterSeparator);
+                IEnumerable<RealizedSubjectPresenceViewModel> valid = Presence.Where((x) => x.RealizedSubject.RealizedDate >= OwnerGroup.OwnerClass.Calendar.YearBeginning && x.RealizedSubject.RealizedDate < OwnerGroup.OwnerClass.Calendar.SemesterSeparator && x.Presence != PresenceType.None);
                 return valid;
             }
         }
@@ -136,7 +136,7 @@ namespace Dziennik.ViewModel
             get
             {
                 if (Presence.Count > 0 && (Presence[0].RealizedSubject == null || OwnerGroup.OwnerClass.Calendar == null)) return null; // to prevent errors while loading database
-                IEnumerable<RealizedSubjectPresenceViewModel> valid = Presence.Where((x) => x.RealizedSubject.RealizedDate >= OwnerGroup.OwnerClass.Calendar.SemesterSeparator && x.RealizedSubject.RealizedDate <= OwnerGroup.OwnerClass.Calendar.YearEnding);
+                IEnumerable<RealizedSubjectPresenceViewModel> valid = Presence.Where((x) => x.RealizedSubject.RealizedDate >= OwnerGroup.OwnerClass.Calendar.SemesterSeparator && x.RealizedSubject.RealizedDate <= OwnerGroup.OwnerClass.Calendar.YearEnding && x.Presence != PresenceType.None);
                 return valid;
             }
         }
@@ -145,7 +145,7 @@ namespace Dziennik.ViewModel
             get
             {
                 if (Presence.Count > 0 && (Presence[0].RealizedSubject == null || OwnerGroup.OwnerClass.Calendar == null)) return null; // to prevent errors while loading database   
-                IEnumerable<RealizedSubjectPresenceViewModel> valid = Presence.Where((x) => x.RealizedSubject.RealizedDate >= OwnerGroup.OwnerClass.Calendar.YearBeginning && x.RealizedSubject.RealizedDate <= OwnerGroup.OwnerClass.Calendar.YearEnding);
+                IEnumerable<RealizedSubjectPresenceViewModel> valid = Presence.Where((x) => x.RealizedSubject.RealizedDate >= OwnerGroup.OwnerClass.Calendar.YearBeginning && x.RealizedSubject.RealizedDate <= OwnerGroup.OwnerClass.Calendar.YearEnding && x.Presence != PresenceType.None);
                 return valid;
             }
         }

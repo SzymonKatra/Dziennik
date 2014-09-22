@@ -7,6 +7,7 @@ namespace Dziennik.Model
 {
     public enum PresenceType
     {
+        None,
         Present,
         Absent,
         Late,
