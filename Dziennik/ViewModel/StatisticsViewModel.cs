@@ -47,7 +47,6 @@ namespace Dziennik.ViewModel
 
                     foreach (var student in m_owner.m_group.Students)
                     {
-                        if (student.IsRemoved) continue;
                         ComputeValidAttendance(ref present, ref total, student.Presence);
                     }
 
@@ -68,7 +67,6 @@ namespace Dziennik.ViewModel
                     decimal valuesSum = 0;
                     foreach (var student in m_owner.m_group.Students)
                     {
-                        if (student.IsRemoved) continue;
                         ComputeValidMarks(ref validMarksWeight, ref valuesSum, student.FirstSemester);
                         ComputeValidMarks(ref validMarksWeight, ref valuesSum, student.SecondSemester);
                     }
