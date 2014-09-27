@@ -79,7 +79,7 @@ namespace Dziennik.View
 
                     Application.Current.Shutdown();
                     return;
-                }               
+                }
             }
 
             InitializeComponent();

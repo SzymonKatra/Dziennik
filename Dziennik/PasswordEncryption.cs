@@ -13,8 +13,6 @@ namespace Dziennik
     {
         private static readonly byte[] s_salt = { 230, 208, 11, 228, 231, 171, 162, 89, 71, 31, 45, 220, 152, 211, 135 };
         private static readonly byte[] s_xorKey = { 90, 83, 224, 28, 249, 135, 162, 239, 207, 147, 114, 132, 4, 208, 115, 58, 247, 43, 185, 99 };
-        //private static readonly byte[] s_aesIV = { 153, 122, 158, 18, 224, 239, 30, 21, 88, 189, 215, 63, 149, 45, 22, 183 };
-        //private static readonly byte[] s_aesKey = { 220, 145, 5, 179, 62, 25, 119, 110, 221, 174, 213, 189, 237, 175, 63, 138, 140, 202, 2, 29, 54, 153, 99, 248, 59, 83, 0, 8, 141, 16, 177, 40 };
 
         public static byte[] Encrypt(SecureString securePassword)
         {
@@ -72,27 +70,6 @@ namespace Dziennik
             }
 
             return hashResult;
-
-            //byte[] aesResult;
-            //using (Aes aes = Aes.Create())
-            //{
-            //    aes.IV = s_aesIV;
-            //    aes.Key = s_aesKey;
-
-            //    ICryptoTransform encryptor = aes.CreateEncryptor();
-
-            //    using(MemoryStream memoryStream = new MemoryStream())
-            //    {
-            //        using (CryptoStream cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
-            //        {
-            //            cryptoStream.Write(hashResult, 0, hashResult.Length);
-            //        }
-
-            //        aesResult = memoryStream.ToArray();
-            //    }
-            //}
-
-            //return aesResult;
         }
 
         public static bool Compare(SecureString securePassword, byte[] encrypted)

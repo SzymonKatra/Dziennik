@@ -34,6 +34,8 @@ namespace Dziennik.View
             m_cancelAllEndingMarksCommand = new RelayCommand<string>(CancelAllEndingMarks);
             m_addMarksSetCommand = new RelayCommand<string>(AddMarksSet);
             m_refreshStatisticsCommand = new RelayCommand(RefreshStatistics, CanRefreshStatictics);
+            m_copyEmailCommand = new RelayCommand(CopyEmail);
+            m_copyAllEmailsCommand = new RelayCommand(CopyAllEmails);
 
             m_database = database;
         }
@@ -141,15 +143,29 @@ namespace Dziennik.View
         {
             get { return m_cancelAllEndingMarksCommand; }
         }
+
         private RelayCommand<string> m_addMarksSetCommand;
         public RelayCommand<string> AddMarksSetCommand
         {
             get { return m_addMarksSetCommand; }
         }
+
         private RelayCommand m_refreshStatisticsCommand;
         public ICommand RefreshStatisticsCommand
         {
             get { return m_refreshStatisticsCommand; }
+        }
+
+        private RelayCommand m_copyEmailCommand;
+        public ICommand CopyEmailCommand
+        {
+            get { return m_copyEmailCommand; }
+        }
+
+        private RelayCommand m_copyAllEmailsCommand;
+        public ICommand CopyAllEmailsCommand
+        {
+            get { return m_copyAllEmailsCommand; }
         }
 
         private void AddMark(string param)
@@ -402,6 +418,37 @@ namespace Dziennik.View
         private bool CanRefreshStatictics(object param)
         {
             return m_selectedGroup != null;
+        }
+        private void CopyEmail(object param)
+        {
+            if (SelectedStudent == null) return;
+
+            Clipboard.SetText(SelectedStudent.GlobalStudent.Email);
+
+            GlobalConfig.MessageBox(GlobalConfig.Main, GlobalConfig.GetStringResource("lang_Copied"), MessageBoxSuperPredefinedButtons.OK);
+        }
+        private void CopyAllEmails(object param)
+        {
+            if (SelectedGroup == null) return;
+
+            StringBuilder allEmails = new StringBuilder();
+            int count = 0;
+            bool firstElapsed = false;
+            foreach (var item in SelectedGroup.Students)
+            {
+                if (!string.IsNullOrWhiteSpace(item.GlobalStudent.Email))
+                {
+                    if (firstElapsed) allEmails.Append(", ");
+                    allEmails.Append(item.GlobalStudent.Email);
+                    firstElapsed = true;
+
+                    count++;
+                }
+            }
+
+            Clipboard.SetText(allEmails.ToString());
+
+            GlobalConfig.MessageBox(GlobalConfig.Main, string.Format(GlobalConfig.GetStringResource("lang_CopiedCountFormat"), count), MessageBoxSuperPredefinedButtons.OK);
         }
         private void SortSelectedGroupRealizedSubjects()
         {

@@ -79,7 +79,30 @@
                         <DataGridTextColumn Header="{DynamicResource lang_NumberShort}" Binding="{Binding Number}"  ElementStyle="{StaticResource dataGridColumnStrikethrough}"/>
                         <DataGridTextColumn Header="{DynamicResource lang_SurnamePerson}" Binding="{Binding GlobalStudent.Surname}" Visibility="{Binding ShowSurname, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}" ElementStyle="{StaticResource dataGridColumnStrikethrough}"/>
                         <DataGridTextColumn Header="{DynamicResource lang_NamePerson}" Binding="{Binding GlobalStudent.Name}" Visibility="{Binding ShowName, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}" ElementStyle="{StaticResource dataGridColumnStrikethrough}"/>
-                        <DataGridTextColumn Header="{DynamicResource lang_Email}" Binding="{Binding GlobalStudent.Email}" Visibility="{Binding ShowEmail, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}"  ElementStyle="{StaticResource dataGridColumnStrikethrough}"/>
+                        <DataGridTemplateColumn Header="{DynamicResource lang_Email}" Visibility="{Binding ShowEmail, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{TemplateBinding Content}">
+                                        <TextBlock.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="{DynamicResource lang_CopyAllEmails}" Command="{Binding DataContext.CopyAllEmailsCommand, Source={x:Reference rootSchoolClassControl}}"/>
+                                            </ContextMenu>
+                                        </TextBlock.ContextMenu>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding GlobalStudent.Email}">
+                                        <TextBlock.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="{DynamicResource lang_CopyEmail}" Command="{Binding DataContext.CopyEmailCommand, Source={x:Reference rootSchoolClassControl}}"/>
+                                            </ContextMenu>
+                                        </TextBlock.ContextMenu>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="{DynamicResource lang_MarksFirst}" Visibility="{Binding ShowFirstMarks, Source={x:Static local:GlobalConfig.Notifier}, Converter={StaticResource convertBoolToVisibility}}">
                             <DataGridTemplateColumn.HeaderTemplate>
                                 <DataTemplate>

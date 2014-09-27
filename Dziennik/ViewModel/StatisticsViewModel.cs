@@ -178,7 +178,7 @@ namespace Dziennik.ViewModel
             {
                 foreach (var item in presence)
                 {
-                    if(CheckIsValidDate(item.RealizedSubject.RealizedDate))
+                    if(item.Presence != Model.PresenceType.None && CheckIsValidDate(item.RealizedSubject.RealizedDate))
                     {
                         totalStudentHours++;
                         if (item.WasPresent) presentStudentHours++;

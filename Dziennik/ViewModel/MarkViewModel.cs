@@ -73,6 +73,7 @@ namespace Dziennik.ViewModel
                 m_category = value;
                 Model.GlobalCategoryId = (m_category == null ? null : m_category.Model.Id);
                 RaisePropertyChanged("Category");
+                RaisePropertyChanged("ToolTipFormatted");
             }
         }
 
@@ -109,11 +110,12 @@ namespace Dziennik.ViewModel
         {
             get
             {
-                return string.Format("{6}: {1}{0}Waga: {2}{0}Opis: {3}{0}Data dodania: {4}{0}Ostatnia zmiana: {5}",
+                return string.Format("{6}: {1}{0}Waga: {2}{0}Opis: {3}{0}Kategoria: {4}{0}Data dodania: {5}{0}Ostatnia zmiana: {6}",
                                      Environment.NewLine,
                                      this.DisplayedMark,
                                      this.Weight,
                                      this.Description,
+                                     (this.Category == null ? string.Empty : this.Category.Name),
                                      this.AddDate.ToString(GlobalConfig.DateTimeFormat),
                                      this.LastChangeDate.ToString(GlobalConfig.DateTimeFormat),
                                      (IsValueValid ? "Ocena" : "Uwaga"));
@@ -146,7 +148,7 @@ namespace Dziennik.ViewModel
         {
             ObjectsPack pack = CopyStack.Pop();
 
-            if(result == WorkingCopyResult.Cancel)
+            if (result == WorkingCopyResult.Cancel)
             {
                 this.Value = (decimal)pack.Read();
                 this.Note = (string)pack.Read();

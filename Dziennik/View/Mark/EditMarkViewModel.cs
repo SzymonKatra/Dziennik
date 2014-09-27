@@ -215,7 +215,6 @@ namespace Dziennik.View
                 {
                     case "ValueInput": return ValidateValueInput();
                     case "NoteInput": return ValidateNoteInput();
-                    //case "WeightInput": return ValidateWeightInput();
                     case "AddDateInput": return ValidateAddDateInput();
                 }
 

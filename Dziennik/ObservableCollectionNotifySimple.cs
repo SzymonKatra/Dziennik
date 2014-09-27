@@ -31,32 +31,41 @@ namespace Dziennik
         protected override void ClearItems()
         {
             List<T> items = new List<T>(this);
-            OnRemoved(new NotifyCollectionChangedSimpleEventArgs<T>(items));
+            
             base.ClearItems();
+
+            OnRemoved(new NotifyCollectionChangedSimpleEventArgs<T>(items));
         }
         protected override void InsertItem(int index, T item)
         {
             List<T> items = new List<T>();
             items.Add(item);
-            OnAdded(new NotifyCollectionChangedSimpleEventArgs<T>(items));
+            
             base.InsertItem(index, item);
+
+            OnAdded(new NotifyCollectionChangedSimpleEventArgs<T>(items));
         }
         protected override void RemoveItem(int index)
         {
             List<T> items = new List<T>();
             items.Add(this[index]);
-            OnRemoved(new NotifyCollectionChangedSimpleEventArgs<T>(items));
+            
             base.RemoveItem(index);
+
+            OnRemoved(new NotifyCollectionChangedSimpleEventArgs<T>(items));
         }
         protected override void SetItem(int index, T item)
         {
-            List<T> items = new List<T>();
-            items.Add(this[index]);
-            OnRemoved(new NotifyCollectionChangedSimpleEventArgs<T>(items));
-            items = new List<T>();
-            items.Add(item);
-            OnRemoved(new NotifyCollectionChangedSimpleEventArgs<T>(items));
+            List<T> removedItems = new List<T>();
+            removedItems.Add(this[index]);
+            
+            List<T> addedItems = new List<T>();
+            addedItems.Add(item);
+            
             base.SetItem(index, item);
+
+            OnRemoved(new NotifyCollectionChangedSimpleEventArgs<T>(removedItems));
+            OnAdded(new NotifyCollectionChangedSimpleEventArgs<T>(addedItems));
         }
         protected override void MoveItem(int oldIndex, int newIndex)
         {
