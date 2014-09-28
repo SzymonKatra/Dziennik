@@ -610,9 +610,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="info.txt">
+    <None Include="readme.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\add.png" />
