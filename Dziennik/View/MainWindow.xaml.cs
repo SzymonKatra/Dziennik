@@ -125,9 +125,9 @@ namespace Dziennik.View
                 if (e.IsTerminating) sb.AppendLine("Dziennik zostanie zamknięty");
                 sb.AppendLine();
                 sb.AppendLine("Czy chcesz rozwinąć szczegóły techniczne? (zostały zapisane w " + GlobalConfig.ErrorLogFileName + ")");
-                if (MessageBox.Show(sb.ToString(), "Dziennik ZSE", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes)
+                if (MessageBox.Show(sb.ToString(), "Dziennik", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes)
                 {
-                    MessageBox.Show("Szczegóły techniczne: " + Environment.NewLine + error, "Dziennik ZSE", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Szczegóły techniczne: " + Environment.NewLine + error, "Dziennik", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch { }
