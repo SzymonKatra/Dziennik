@@ -68,7 +68,7 @@ namespace Dziennik.CommandUtils
         /// </summary>
         public object CommandParameter
         {
-            get { return (object)GetValue(CommandParameterProperty); }
+            get { return GetValue(CommandParameterProperty); }
             set { SetValue(CommandParameterProperty, value); }
         }
 
@@ -89,7 +89,7 @@ namespace Dziennik.CommandUtils
             set { SetValue(ToggleIsEnabledProperty, value); }
         }
 
-        public static DependencyProperty HandleRoutedProperty = DependencyProperty.Register("HandleRouted", typeof(HowHandleRouted), typeof(EventToCommand), new PropertyMetadata(HowHandleRouted.DontHandle));
+        public static readonly DependencyProperty HandleRoutedProperty = DependencyProperty.Register("HandleRouted", typeof(HowHandleRouted), typeof(EventToCommand), new PropertyMetadata(HowHandleRouted.DontHandle));
         /// <summary>
         /// Default HowHandleRouted.DontHandle
         /// </summary>
@@ -99,7 +99,7 @@ namespace Dziennik.CommandUtils
             set { SetValue(HandleRoutedProperty, value); }
         }
 
-        public static DependencyProperty PassEventArgsProperty = DependencyProperty.Register("PassEventArgs", typeof(bool), typeof(EventToCommand), new PropertyMetadata(false));
+        public static readonly DependencyProperty PassEventArgsProperty = DependencyProperty.Register("PassEventArgs", typeof(bool), typeof(EventToCommand), new PropertyMetadata(false));
         /// <summary>
         /// Default false
         /// </summary>

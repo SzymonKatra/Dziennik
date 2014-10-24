@@ -580,11 +580,14 @@ namespace Dziennik
             bool isBreak;
             return GetCurrentHourNumber(now, GlobalConfig.GlobalDatabase.ViewModel.Hours.Hours, out isBreak);
         }
+
         /// <summary>
         /// -2 if day ended
         /// -1 if day not started
         /// </summary>
         /// <param name="now"></param>
+        /// <param name="hours"></param>
+        /// <param name="isBreak"></param>
         /// <returns></returns>
         public static int GetCurrentHourNumber(DateTime now, IList<LessonHourViewModel> hours, out bool isBreak)
         {

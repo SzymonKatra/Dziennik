@@ -150,7 +150,7 @@ namespace Dziennik.View
         }
         private void ShowGlobalSubjectsList(object param)
         {
-            GlobalSubjectsListViewModel dialogViewModel = new GlobalSubjectsListViewModel(m_result.GlobalSubjects);
+            GlobalSubjectsListViewModel dialogViewModel = new GlobalSubjectsListViewModel(m_result.GlobalSubjects, m_result.GetAvailableSubjects());
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
         }
 

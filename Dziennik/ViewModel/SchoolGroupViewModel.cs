@@ -27,7 +27,7 @@ namespace Dziennik.ViewModel
         public SchoolGroupViewModel(SchoolGroup model)
             : base(model)
         {
-            m_students = new SynchronizedPerItemObservableCollection<StudentInGroupViewModel, StudentInGroup>(Model.Students, (m) => { return new StudentInGroupViewModel(m); });;
+            m_students = new SynchronizedPerItemObservableCollection<StudentInGroupViewModel, StudentInGroup>(Model.Students, (m) => new StudentInGroupViewModel(m));;
             m_globalSubjects = new SynchronizedObservableCollection<GlobalSubjectViewModel, GlobalSubject>(Model.Subjects, m => new GlobalSubjectViewModel(m));
             m_realizedSubjects = new SynchronizedObservableCollection<RealizedSubjectViewModel, RealizedSubject>(Model.RealizedSubjects, m => new RealizedSubjectViewModel(m));
 
@@ -304,8 +304,18 @@ namespace Dziennik.ViewModel
             {
                 item.OwnerGroup = null;
             }
-        } 
-        
+        }
+
+        public IEnumerable<GlobalSubjectViewModel> GetAvailableSubjects()
+        {
+            List<GlobalSubjectViewModel> available = new List<GlobalSubjectViewModel>();
+            foreach (GlobalSubjectViewModel subject in this.GlobalSubjects)
+            {
+                if (this.RealizedSubjects.FirstOrDefault(x => x.GlobalSubject == subject) == null) available.Add(subject);
+            }
+            return available;
+        }
+
         private void m_realizedSubjects_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             RaisePropertyChanged("RealizedSubjectsDisplay");

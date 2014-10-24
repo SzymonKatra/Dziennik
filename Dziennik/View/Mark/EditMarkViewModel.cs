@@ -229,7 +229,7 @@ namespace Dziennik.View
 
             decimal result;
             string errorResult = GlobalValidateValue(m_valueInput, out result);
-            if(!string.IsNullOrEmpty(errorResult))
+            if (!string.IsNullOrEmpty(errorResult))
             {
                 m_okCommand.RaiseCanExecuteChanged();
                 return errorResult;

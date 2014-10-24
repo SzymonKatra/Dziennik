@@ -266,7 +266,7 @@ namespace Dziennik.View
         }
         private void RealizeSubject(object e)
         {
-            RealizeSubjectViewModel dialogViewModel = new RealizeSubjectViewModel(null, m_selectedGroup.Students, GetAvailableSubjects(m_selectedGroup), m_selectedGroup.OwnerClass.Calendar, m_selectedGroup.RealizedSubjects,  true);
+            RealizeSubjectViewModel dialogViewModel = new RealizeSubjectViewModel(null, m_selectedGroup.Students, m_selectedGroup.GetAvailableSubjects(), m_selectedGroup.OwnerClass.Calendar, m_selectedGroup.RealizedSubjects,  true);
             if (e is SchoolGroupViewModel.Overdue)
             {
                 SchoolGroupViewModel.Overdue overdue = (SchoolGroupViewModel.Overdue)e;
@@ -290,7 +290,7 @@ namespace Dziennik.View
         }
         private void EditRealizedSubject(object e)
         {
-            RealizeSubjectViewModel dialogViewModel = new RealizeSubjectViewModel(m_selectedSubject, m_selectedGroup.Students, GetAvailableSubjects(m_selectedGroup), m_selectedGroup.OwnerClass.Calendar, m_selectedGroup.RealizedSubjects);
+            RealizeSubjectViewModel dialogViewModel = new RealizeSubjectViewModel(m_selectedSubject, m_selectedGroup.Students, m_selectedGroup.GetAvailableSubjects(), m_selectedGroup.OwnerClass.Calendar, m_selectedGroup.RealizedSubjects);
             GlobalConfig.Dialogs.ShowDialog(GlobalConfig.Main, dialogViewModel);
             if (dialogViewModel.Result == RealizeSubjectViewModel.RealizeSubjectResult.RemoveSubject)
             {
@@ -316,15 +316,15 @@ namespace Dziennik.View
         {
             return m_selectedGroup != null;
         }
-        private IEnumerable<GlobalSubjectViewModel> GetAvailableSubjects(SchoolGroupViewModel group)
-        {
-            List<GlobalSubjectViewModel> available = new List<GlobalSubjectViewModel>();
-            foreach (GlobalSubjectViewModel subject in group.GlobalSubjects)
-            {
-                if (group.RealizedSubjects.FirstOrDefault(x => x.GlobalSubject == subject) == null) available.Add(subject);
-            }
-            return available;
-        }
+        //private IEnumerable<GlobalSubjectViewModel> GetAvailableSubjects(SchoolGroupViewModel group) // moved to SchoolGroupViewModel
+        //{
+        //    List<GlobalSubjectViewModel> available = new List<GlobalSubjectViewModel>();
+        //    foreach (GlobalSubjectViewModel subject in group.GlobalSubjects)
+        //    {
+        //        if (group.RealizedSubjects.FirstOrDefault(x => x.GlobalSubject == subject) == null) available.Add(subject);
+        //    }
+        //    return available;
+        //}
         private void PutAllEndingMarks(string e)
         {
             if (!MessageBoxContinue()) return;

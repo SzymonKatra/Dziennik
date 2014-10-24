@@ -13,7 +13,8 @@ namespace Dziennik
     /// <summary>
     /// 
     /// </summary>
-    /// <typeparam name="T">Base ViewModel type</typeparam>
+    /// <typeparam name="VM">ViewModel type</typeparam>
+    /// <typeparam name="M">Model type</typeparam>
     public class DatabaseContext<VM, M> where VM : IModelExposable<M> where M : ModelBase
     {
         public enum RestoreRelationsGlobalCollectionCheckingModes
@@ -68,10 +69,6 @@ namespace Dziennik
         }
         private class InversePropertyOwnerPairs
         {
-            /// <summary>
-            /// OBE - ObservableCollectionExtended
-            /// </summary>
-            public string SubscribeOwnerOBEMethodName { get; set; }
             public string ChildOwnerPropertyName { get; set; }
             public IModelExposable<ModelBase> Owner { get; set; }
 
@@ -136,7 +133,7 @@ namespace Dziennik
 
         protected void Load(Stream stream)
         {
-            Load(stream, (m) => { return (VM)Activator.CreateInstance(typeof(VM), m); });
+            Load(stream, (m) => (VM)Activator.CreateInstance(typeof(VM), m));
         }
         protected void Load(Stream stream, Func<M, VM> customCreator)
         {
@@ -315,10 +312,12 @@ namespace Dziennik
                     else if (attrib is DatabaseInversePropertyOwnerAttribute)
                     {
                         DatabaseInversePropertyOwnerAttribute ipAttribVal = (DatabaseInversePropertyOwnerAttribute)attrib;
-                        InversePropertyOwnerPairs pair = new InversePropertyOwnerPairs();
-                        pair.ChildOwnerPropertyName = ipAttribVal.OwnerPropertyInChildName;
-                        pair.Owner = viewModel;
-                        pair.SubscribeOwnerOBEMethodName = ipAttribVal.SubscribeObservableCollectionExtendedMethodName;
+                        InversePropertyOwnerPairs pair = new InversePropertyOwnerPairs
+                        {
+                            ChildOwnerPropertyName = ipAttribVal.OwnerPropertyInChildName,
+                            Owner = viewModel
+                        };
+                        //pair.SubscribeOwnerOBEMethodName = ipAttribVal.SubscribeObservableCollectionExtendedMethodName;
                         if (propVal is IEnumerable<IModelExposable<ModelBase>>)
                         {
                             pair.Collection = (IEnumerable<IModelExposable<ModelBase>>)propVal;
@@ -350,7 +349,7 @@ namespace Dziennik
 
                 if (propVal is IEnumerable<IModelExposable<ModelBase>>)
                 {
-                    if (propVal is string) continue; // to prevent foreach'ing string
+                    //if (propVal is string) continue; // to prevent foreach'ing string
 
                     IEnumerable<IModelExposable<ModelBase>> coll = (IEnumerable<IModelExposable<ModelBase>>)propVal;
                     foreach (IModelExposable<ModelBase> item in coll)

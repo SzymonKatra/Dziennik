@@ -43,10 +43,7 @@ namespace Dziennik.CommandUtils
             {
                 return m_canExecute(default(T));
             }
-            else
-            {
-                return m_canExecute((T)parameter);
-            }
+            else return m_canExecute((T)parameter);
         }
         public void Execute(object parameter)
         {

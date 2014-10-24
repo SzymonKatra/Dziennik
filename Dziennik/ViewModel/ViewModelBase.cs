@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Dziennik.ViewModel
 {
@@ -14,7 +11,7 @@ namespace Dziennik.ViewModel
             protected set { m_model = value; }
         }
 
-        public ViewModelBase(M model)
+        protected ViewModelBase(M model)
         {
             m_model = model;
         }

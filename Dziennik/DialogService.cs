@@ -59,7 +59,7 @@ namespace Dziennik
         }
         public void Unregister(Window view)
         {
-            UnregisterViaViewModel(m_registeredViews.First((kvp) => { return (kvp.Value == view); }).Key);
+            UnregisterViaViewModel(m_registeredViews.First((kvp) => (kvp.Value == view)).Key);
         }
         public void UnregisterViaViewModel(object viewModel)
         {
@@ -76,7 +76,7 @@ namespace Dziennik
         public object GetViewModel(Window view)
         {
             if (!m_registeredViews.ContainsValue(view)) throw new ArgumentException("View not registered");
-            return m_registeredViews.First(kvp => { return (kvp.Value == view); }).Key;
+            return m_registeredViews.First(kvp => (kvp.Value == view)).Key;
         }
         public object GetActiveViewModel(object def)
         {

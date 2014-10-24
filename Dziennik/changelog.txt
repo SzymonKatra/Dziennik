@@ -1,0 +1,9 @@
+﻿====================
+WERSJA 1.2.14
+====================
+- dodano możliwość zmiany kolejności tematów w podstawie programowej (o ile nie został któryś z nich zrealizowany) oraz dodawania w dowolne miejsce
+
+====================
+WERSJA 1.2.13
+====================
+- edycja istniejącego tematu już nie powoduje przypisanie nowego numeru

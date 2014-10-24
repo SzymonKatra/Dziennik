@@ -552,4 +552,8 @@ Spróbuj ponownie zainstalować Dziennik, aby rozwiązać problem.</s:String>
     <s:String x:Key="lang_SubjectAlreadyRealizedFormat">Temat w dniu {0} na godzinie {1} został już zrealizowany. Czy chcesz dodać jeszcze jeden?</s:String>
     <s:String x:Key="lang_WasCrashedMessage" xml:space="preserve">Podczas ostatniej sesji Dziennika wystąpił nieznany błąd.
         Co chcesz zrobić?</s:String>
+    <s:String x:Key="lang_CannotRemoveRealizedSubject">Nie można usunąć tematu ponieważ został już zrealizowany</s:String>
+    <s:String x:Key="lang_InvalidValue">Nieprawidłowa wartość</s:String>
+    <s:String x:Key="lang_MustBeInRange">Musi być w zakresie od {0} do {1}</s:String>
+    <s:String x:Key="lang_CannotMoveRealizedSubject">Nie można przesunąć tematu ponieważ został już zrealizowany</s:String>
 </ResourceDictionary>

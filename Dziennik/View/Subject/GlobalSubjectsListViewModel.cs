@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Controls;
 using Dziennik.ViewModel;
 using System.Windows.Input;
 using Dziennik.CommandUtils;
@@ -13,7 +14,7 @@ namespace Dziennik.View
 {
     public sealed class GlobalSubjectsListViewModel : ObservableObject
     {
-        public GlobalSubjectsListViewModel(ObservableCollection<GlobalSubjectViewModel> subjects)
+        public GlobalSubjectsListViewModel(ObservableCollection<GlobalSubjectViewModel> subjects, IEnumerable<GlobalSubjectViewModel> availableSubjects)
         {
             m_addSubjectCommand = new RelayCommand(AddSubject);
             m_autoAddSubjectsClipboardCommand = new RelayCommand(AutoAddSubjectsClipboard);
@@ -21,9 +22,13 @@ namespace Dziennik.View
             m_addFromAnotherGroupCommand = new RelayCommand(AddFromAnotherGroup);
 
             m_subjects = subjects;
+            m_availableSubjects = new List<GlobalSubjectViewModel>(availableSubjects);
         }
 
         private RelayCommand m_addSubjectCommand;
+
+        private List<GlobalSubjectViewModel> m_availableSubjects; 
+
         public ICommand AddSubjectCommand
         {
             get { return m_addSubjectCommand; }
@@ -61,11 +66,27 @@ namespace Dziennik.View
         private void AddSubject(object e)
         {
             GlobalSubjectViewModel subject = new GlobalSubjectViewModel();
-            EditGlobalSubjectViewModel dialogViewModel = new EditGlobalSubjectViewModel(subject, m_subjects, true);
+            EditGlobalSubjectViewModel dialogViewModel = new EditGlobalSubjectViewModel(subject, m_subjects, GetMinNumber(), GetMaxNumber() + 1, true);
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditGlobalSubjectViewModel.EditGlobalSubjectResult.Ok)
             {
-                m_subjects.Add(subject);
+                GlobalSubjectViewModel found = m_subjects.FirstOrDefault(x => x.Number == subject.Number);
+                if (found != null)
+                {
+                    int index = m_subjects.IndexOf(found);
+                    for (int i = index; i < m_subjects.Count; i++)
+                    {
+                        m_subjects[i].Number++;
+                    }
+
+                    m_subjects.Insert(index, subject);
+                    m_availableSubjects.Insert(index, subject);
+                }
+                else
+                {
+                    m_subjects.Add(subject);
+                    m_availableSubjects.Add(subject);
+                }
             }
         }
         private void AutoAddSubjectsClipboard(object e)
@@ -90,6 +111,7 @@ namespace Dziennik.View
                         subject.Number = currentNumber++;
                         subject.Name = line;
                         m_subjects.Add(subject);
+                        m_availableSubjects.Add(subject);
 
                         ++added;
                     }
@@ -104,20 +126,61 @@ namespace Dziennik.View
         }
         private void EditSubject(object e)
         {
+            bool isAvailable = m_availableSubjects.Contains(m_selectedSubject);
+            int oldNumber = m_selectedSubject.Number;
+
             m_selectedSubject.PushCopy();
-            EditGlobalSubjectViewModel dialogViewModel = new EditGlobalSubjectViewModel(m_selectedSubject, m_subjects);
+            EditGlobalSubjectViewModel dialogViewModel = new EditGlobalSubjectViewModel(m_selectedSubject, m_subjects, GetMinNumber(), GetMaxNumber());
             GlobalConfig.Dialogs.ShowDialog(this, dialogViewModel);
             if (dialogViewModel.Result == EditGlobalSubjectViewModel.EditGlobalSubjectResult.Remove)
             {
-                m_selectedSubject.PopCopy(WorkingCopyResult.Ok);
-                m_subjects.Remove(m_selectedSubject);
-                SelectedSubject = null;
+                if (!isAvailable)
+                {
+                    m_selectedSubject.PopCopy(WorkingCopyResult.Cancel);
+                    GlobalConfig.MessageBox(this, GlobalConfig.GetStringResource("lang_CannotRemoveRealizedSubject"), MessageBoxSuperPredefinedButtons.OK);
+                }
+                else
+                {
+                    m_selectedSubject.PopCopy(WorkingCopyResult.Ok);
+                    int index = m_subjects.IndexOf(m_selectedSubject);
+                    int currentNumber = m_selectedSubject.Number;
+                    m_subjects.Remove(m_selectedSubject);
+                    for (int i = index; i < m_subjects.Count; i++)
+                    {
+                        m_subjects[i].Number=currentNumber;
+                        currentNumber++;
+                    }
+                    SelectedSubject = null;
+                }
             }
             else if (dialogViewModel.Result == EditGlobalSubjectViewModel.EditGlobalSubjectResult.Ok)
             {
                 m_selectedSubject.PopCopy(WorkingCopyResult.Ok);
+
+                if (oldNumber != m_selectedSubject.Number)
+                {
+                    if (!isAvailable)
+                    {
+                        m_selectedSubject.Number = oldNumber;
+                        GlobalConfig.MessageBox(this, GlobalConfig.GetStringResource("lang_CannotMoveRealizedSubject"), MessageBoxSuperPredefinedButtons.OK);
+                        return;
+                    }
+
+                    GlobalSubjectViewModel temp = m_selectedSubject;
+
+                    int newIndex = m_subjects.IndexOf(m_subjects.First(x => x.Number == temp.Number));
+                    m_subjects.Remove(temp);
+                    m_subjects.Insert(newIndex, temp);
+
+                    int currentNumber = temp.Number + 1;
+                    for (int i = newIndex + 1; i < m_subjects.Count; i++)
+                    {
+                        m_subjects[i].Number = currentNumber;
+                        currentNumber++;
+                    }
+                }
             }
-            else if(dialogViewModel.Result== EditGlobalSubjectViewModel.EditGlobalSubjectResult.Cancel)
+            else if (dialogViewModel.Result == EditGlobalSubjectViewModel.EditGlobalSubjectResult.Cancel)
             {
                 m_selectedSubject.PopCopy(WorkingCopyResult.Cancel);
             }
@@ -134,15 +197,33 @@ namespace Dziennik.View
             int added = 0;
             foreach (var item in dialogViewModel.SelectedGroup.GlobalSubjects)
             {
-                GlobalSubjectViewModel newSubject = new GlobalSubjectViewModel();
-                newSubject.Number = currentNumber;
-                newSubject.Name = item.Name;
+                GlobalSubjectViewModel newSubject = new GlobalSubjectViewModel
+                {
+                    Number = currentNumber,
+                    Name = item.Name
+                };
                 currentNumber++;
                 m_subjects.Add(newSubject);
+                m_availableSubjects.Add(newSubject);
                 added++;
             }
 
             GlobalConfig.MessageBox(this, string.Format(GlobalConfig.GetStringResource("lang_AddedSubjectsFormat"), added), MessageBoxSuperPredefinedButtons.OK);
+        }
+
+        private int GetMinNumber()
+        {
+            if (m_availableSubjects.Count > 0)
+                return m_availableSubjects[0].Number;
+
+            return GetNextSubjectNumber(m_subjects);
+        }
+        private int GetMaxNumber()
+        {
+            if (m_availableSubjects.Count > 0)
+                return m_availableSubjects[m_availableSubjects.Count - 1].Number;
+
+            return GetNextSubjectNumber(m_subjects);
         }
 
         public static int GetNextSubjectNumber(IEnumerable<GlobalSubjectViewModel> subjects)

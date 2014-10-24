@@ -7,7 +7,7 @@
         Title="{DynamicResource lang_OverdueSubjectsTitle}" Height="300" Width="300"
         WindowStartupLocation="CenterOwner">
     <Grid>
-        <DataGrid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2"
+        <DataGrid Grid.Column="0" Grid.Row="0"
                   ItemsSource="{Binding OverdueSubjects}"
                   SelectedItem="{Binding SelectedSubject}"
                   CanUserAddRows="False"
