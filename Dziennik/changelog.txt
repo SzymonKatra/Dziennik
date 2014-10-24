@@ -1,5 +1,5 @@
 ﻿====================
-WERSJA 1.2.15
+WERSJA 1.2.16
 ====================
 - teraz lista archiwów już sortuje się prawidłowo według daty
 
