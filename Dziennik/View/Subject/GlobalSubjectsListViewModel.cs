@@ -73,14 +73,16 @@ namespace Dziennik.View
                 GlobalSubjectViewModel found = m_subjects.FirstOrDefault(x => x.Number == subject.Number);
                 if (found != null)
                 {
+                    int currentNumber = found.Number + 1;
                     int index = m_subjects.IndexOf(found);
                     for (int i = index; i < m_subjects.Count; i++)
                     {
-                        m_subjects[i].Number++;
+                        m_subjects[i].Number = currentNumber;
+                        currentNumber++;
                     }
 
                     m_subjects.Insert(index, subject);
-                    m_availableSubjects.Insert(index, subject);
+                    m_availableSubjects.Add(subject);
                 }
                 else
                 {
@@ -214,14 +216,28 @@ namespace Dziennik.View
         private int GetMinNumber()
         {
             if (m_availableSubjects.Count > 0)
-                return m_availableSubjects[0].Number;
+            {
+                int min = int.MaxValue;
+                foreach (GlobalSubjectViewModel subj in m_availableSubjects)
+                {
+                    if (subj.Number < min) min = subj.Number;
+                }
+                return min;
+            }
 
             return GetNextSubjectNumber(m_subjects);
         }
         private int GetMaxNumber()
         {
             if (m_availableSubjects.Count > 0)
-                return m_availableSubjects[m_availableSubjects.Count - 1].Number;
+            {
+                int max = int.MinValue;
+                foreach (GlobalSubjectViewModel subj in m_availableSubjects)
+                {
+                    if (subj.Number > max) max = subj.Number;
+                }
+                return max;
+            }
 
             return GetNextSubjectNumber(m_subjects);
         }
