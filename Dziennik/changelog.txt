@@ -1,6 +1,11 @@
 ﻿====================
 WERSJA 1.2.15
 ====================
+- teraz lista archiwów już sortuje się prawidłowo według daty
+
+====================
+WERSJA 1.2.15
+====================
 - poprawiono błąd związany z dodawaniem tematu w dowolne miejsce na liście (program się zamykał)
 
 ====================

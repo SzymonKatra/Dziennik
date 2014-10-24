@@ -176,6 +176,8 @@ namespace Dziennik.View
             }, null, "", GlobalConfig.GetStringResource("lang_LoadingArchives"), GlobalConfig.ActionDialogProgressSize, true);
             GlobalConfig.Dialogs.ShowDialog(progressDialogOwner, dialogViewModel);
 
+            result.Sort((x, y) => x.Date.CompareTo(y.Date));
+
             if (errors.Count > 0)
             {
                 StringBuilder sb = new StringBuilder();

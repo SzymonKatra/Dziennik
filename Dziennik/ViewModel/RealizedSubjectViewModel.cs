@@ -86,6 +86,7 @@ namespace Dziennik.ViewModel
         protected override void OnPushCopy()
         {
             ObjectsPack pack = new ObjectsPack();
+            pack.Write(this.RealizedHour);
             pack.Write(this.RealizedDate);
             pack.Write(this.CustomSubject);
             pack.Write(this.GlobalSubject);
@@ -98,6 +99,7 @@ namespace Dziennik.ViewModel
 
             if(result == WorkingCopyResult.Cancel)
             {
+                this.RealizedHour = (int)pack.Read();
                 this.RealizedDate = (DateTime)pack.Read();
                 this.CustomSubject = (string)pack.Read();
                 this.GlobalSubject = (GlobalSubjectViewModel)pack.Read();
