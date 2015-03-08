@@ -333,7 +333,7 @@ namespace Dziennik.View
                 return GlobalConfig.GetStringResource("lang_InvalidCharacters");
             }
 
-            if (integralResult < 1M || integralResult > 6M)
+            if ((integralResult < 1M || integralResult > 6M) || (hadPlus && integralResult > 5M)) // second condition to not allow 6+
             {
                 return GlobalConfig.GetStringResource("lang_TypeIntegerMarkRange1-6Plus");
             }
