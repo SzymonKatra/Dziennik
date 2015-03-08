@@ -124,7 +124,7 @@ namespace Dziennik.ViewModel
 
         public static string GetValidDisplayedMark(decimal value)
         {
-            if (value < 1M || value > 6M) return string.Empty;
+            //if (value < 1M || value > 6M) return string.Empty;
             decimal truncated = decimal.Truncate(value);
             string result = truncated.ToString(CultureInfo.InvariantCulture);
             if (value - truncated == 0.5M) result += "+";
