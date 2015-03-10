@@ -295,6 +295,7 @@
     <s:String x:Key="lang_Author">Autor</s:String>
     <s:String x:Key="lang_AuthorName">Szymon Katra</s:String>
     <s:String x:Key="lang_AuthorAll">Autor: Szymon Katra</s:String>
+    <s:String x:Key="lang_License">Licencja: GNU GPL v3</s:String>
     <s:String x:Key="lang_VersionFormat">Wersja: {0}</s:String>
     <FlowDocument x:Key="infoDependenciesRichText">
         <Paragraph>

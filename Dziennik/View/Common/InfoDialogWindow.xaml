@@ -18,6 +18,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
@@ -28,11 +29,16 @@
         </Grid>
 
         <Grid Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" FontSize="16" FontWeight="Bold" Text="{DynamicResource lang_License}"/>
+        </Grid>
+
+
+        <Grid Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource textBlockTitleStyle}" FontSize="14" FontWeight="Bold" Text="{Binding VersionDisplay}"/>
         </Grid>
 
-        <RichTextBox x:Name="richTextBox" Grid.Row="2" IsReadOnly="True" VerticalScrollBarVisibility="Auto" Document="{StaticResource infoDependenciesRichText}"/>
+        <RichTextBox x:Name="richTextBox" Grid.Row="3" IsReadOnly="True" VerticalScrollBarVisibility="Auto" Document="{StaticResource infoDependenciesRichText}"/>
         
-        <Button Grid.Column="0" Grid.Row="3" Style="{StaticResource commonButtonStyle}" Command="{Binding CloseCommand}" Content="{DynamicResource lang_Close}"/>
+        <Button Grid.Column="0" Grid.Row="4" Style="{StaticResource commonButtonStyle}" Command="{Binding CloseCommand}" Content="{DynamicResource lang_Close}"/>
     </Grid>
 </Window>
