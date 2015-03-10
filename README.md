@@ -1,0 +1,1 @@
+Dziennik szkolny. Więcej informacji w Dokumentacja/Obsługa Dziennika.pdf
