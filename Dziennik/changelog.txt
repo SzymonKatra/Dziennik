@@ -1,4 +1,9 @@
 ﻿====================
+WERSJA 1.2.17
+====================
+- usunięto możliwość wpisania oceny 6+ która w dodatku nie była wyświetlana
+
+====================
 WERSJA 1.2.16
 ====================
 - teraz lista archiwów już sortuje się prawidłowo według daty
