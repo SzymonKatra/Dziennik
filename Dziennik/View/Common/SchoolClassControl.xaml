@@ -61,6 +61,7 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTextColumn Header="{DynamicResource lang_Absents}" Binding="{Binding AbsentsDisplay}"/>
+                            <DataGridTextColumn Header="{DynamicResource lang_StudentsPresentFormalTitle}" Binding="{Binding StudentsPresentFormalDisplay}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

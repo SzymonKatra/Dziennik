@@ -82,6 +82,31 @@ namespace Dziennik.ViewModel
                 return result;
             }
         }
+        public string StudentsPresentFormalDisplay
+        {
+            get
+            {
+                if (m_ownerGroup == null) return string.Empty;
+
+                List<RealizedSubjectPresenceViewModel> presences = new List<RealizedSubjectPresenceViewModel>();
+                foreach (var student in m_ownerGroup.Students)
+                {
+                    foreach (var presence in student.Presence)
+                    {
+                        if (presence.RealizedSubject == this && presence.Presence != PresenceType.None)
+                        {
+                            presences.Add(presence);
+                        }
+                    }
+                }
+
+                int present = presences.Count(x => x.Presence == PresenceType.Present);
+                int lates = presences.Count(x => x.Presence == PresenceType.Late);
+                int absents = presences.Count(x => x.Presence == PresenceType.Absent || x.Presence == PresenceType.AbsentJustified);
+
+                return string.Format(GlobalConfig.GetStringResource("lang_StudentsPresentFormalFormat"), present + lates, absents, lates);
+            }
+        }
 
         protected override void OnPushCopy()
         {

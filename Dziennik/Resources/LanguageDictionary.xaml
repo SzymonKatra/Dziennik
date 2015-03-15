@@ -36,6 +36,7 @@
     <s:String x:Key="lang_RealizeSubject">Zrealizuj temat</s:String>
     <s:String x:Key="lang_RealizedDate">Data zrealizowania</s:String>
     <s:String x:Key="lang_Absents">Nieobecni</s:String>
+    <s:String x:Key="lang_StudentsPresentFormalTitle">OB / NB / SP</s:String>
     <s:String x:Key="lang_LessonHour">Godzina lekcyjna</s:String>
     <s:String x:Key="lang_Subject">Temat</s:String>
 
