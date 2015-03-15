@@ -36,6 +36,7 @@
     <s:String x:Key="lang_RealizeSubject">Zrealizuj temat</s:String>
     <s:String x:Key="lang_RealizedDate">Data zrealizowania</s:String>
     <s:String x:Key="lang_Absents">Nieobecni</s:String>
+    <s:String x:Key="lang_StudentsPresentFormalTitle">OB / NB / SP</s:String>
     <s:String x:Key="lang_LessonHour">Godzina lekcyjna</s:String>
     <s:String x:Key="lang_Subject">Temat</s:String>
 
@@ -253,7 +254,7 @@
     <s:String x:Key="lang_NewPassword">Nowe hasło</s:String>
     <s:String x:Key="lang_RepeatNewPassword">Powtórz nowe hasło</s:String>
     <s:String x:Key="lang_RemovePassword">Usuń hasło</s:String>
-    <s:String x:Key="lang_CheckToChangePassword">Zaznacz aby zmieńić hasło</s:String>
+    <s:String x:Key="lang_CheckToChangePassword">Zaznacz aby zmienić hasło</s:String>
     <s:String x:Key="lang_BlockAfter">Blokuj po</s:String>
     <s:String x:Key="lang_MinutesFromLastActivity">min od ostatniej aktywności</s:String>
 
