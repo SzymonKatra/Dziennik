@@ -1,4 +1,9 @@
 ﻿====================
+WERSJA 1.2.18
+====================
+- dodano kolumnę z obecnościami (OB / NB / SP) w zakładce Tematy
+
+====================
 WERSJA 1.2.17
 ====================
 - usunięto możliwość wpisania oceny 6+ która w dodatku nie była wyświetlana
