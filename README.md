@@ -1,6 +1,6 @@
 Dziennik szkolny offline. Więcej informacji w Dokumentacja/Obsługa Dziennika.pdf
 
-Najważniejsze funkcje:
+**Najważniejsze funkcje:**
 
 - Kalendarze roku szkolnego
 - Godziny dzwonków
